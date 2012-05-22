@@ -59,10 +59,10 @@ public class funFoodController extends ActivityController
 	
 	private void showFood(ItemFood food)
 	{
-		titleTV.setText(food.getTitle());
+		titleTV.setText(food.getName());
 		addressTV.setText(food.getAddress());
 		lunchPriceTV.setText(food.getLunchPrice());
-		avgPriceTV.setText(food.getPriceInterval());
+		//avgPriceTV.setText(food.getPriceInterval());
 	}
 
 	private ItemFood getFood(int wantedID)

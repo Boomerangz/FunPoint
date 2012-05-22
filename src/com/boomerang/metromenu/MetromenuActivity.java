@@ -50,12 +50,12 @@ public class MetromenuActivity extends Activity {
 				@Override
 				public void onClick(View v) 
 				{
-					Toast toast = Toast.makeText(getBaseContext(), "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", 100);
+					Toast toast = Toast.makeText(getBaseContext(), "Кнопка нажата", 100);
 					toast.show();
 				}
 			});
 		}
-		((TextImageSwitcher)switchers.get(0)).setText("Р РµСЃС‚РѕСЂР°РЅС‹");
+		((TextImageSwitcher)switchers.get(0)).setText("Рестораны");
 		((TextImageSwitcher)switchers.get(0)).setOnClickListener(new OnClickListener() {
 			
 			@Override

@@ -71,7 +71,7 @@ public class funCinemaController extends ActivityController
 
 	private void showCinema(ItemCinema cinema2)
 	{
-		tv1.setText(cinema.getTitle());
+		tv1.setText(cinema.getName());
 		//timeTable.setText(cinema.getAddress()); 
 		android.view.View.OnClickListener listner=new android.view.View.OnClickListener()
 		{

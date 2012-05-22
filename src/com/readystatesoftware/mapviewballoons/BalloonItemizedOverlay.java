@@ -17,6 +17,7 @@ package com.readystatesoftware.mapviewballoons;
 
 import java.util.List;
 
+import kz.crystalspring.funpoint.funMap;
 import kz.crystalspring.pointplus.R;
 
 import android.graphics.drawable.Drawable;
@@ -44,6 +45,8 @@ public abstract class BalloonItemizedOverlay<Item extends OverlayItem> extends I
 
 	private static final long BALLOON_INFLATION_TIME = 300;
 	private static Handler handler = new Handler();
+	
+	public static funMap funmap;
 	
 	private MapView mapView;
 	private BalloonOverlayView<Item> balloonView;
@@ -114,8 +117,14 @@ public abstract class BalloonItemizedOverlay<Item extends OverlayItem> extends I
 	 */
 	@Override
 	//protected final boolean onTap(int index) {
-	public final boolean onTap(int index) {
-		
+	public final boolean onTap(int index) 
+	{
+		funmap.selectItem(index);
+		return true;
+	}
+	
+	public void select(int index)
+	{
 		handler.removeCallbacks(finishBalloonInflation);
 		isInflating = true;
 		handler.postDelayed(finishBalloonInflation, BALLOON_INFLATION_TIME);
@@ -126,12 +135,6 @@ public abstract class BalloonItemizedOverlay<Item extends OverlayItem> extends I
 		
 		onBalloonOpen(index);
 		createAndDisplayBalloonOverlay();
-		
-		if (snapToCenter) {
-			animateTo(index, currentFocusedItem.getPoint());
-		}
-		
-		return true;
 	}
 
 	/**

@@ -54,6 +54,7 @@ public class funMap extends MapActivity implements LocationListener, Refreshable
 	{
 		mapOverlays.clear();
 		myIO=new CustomItemizedOverlay(getResources().getDrawable(R.drawable.c_1),mapView, this);
+		myIO.funmap=this;
 		myItemsArray=new ArrayList();
 		System.gc();
 		mMyLocationOverlay = new CustomMyLocationOverlay(this, mapView);
@@ -190,12 +191,10 @@ public class funMap extends MapActivity implements LocationListener, Refreshable
 	
 	public void selectItem(MapItem item)
 	{
-//		int i=myItemsArray.indexOf(item)+1;
-//		CustomOverlayItem overlay=(CustomOverlayItem) myIO.getItem(i);
-//		myIO.removeOverlay(i);
-//		myIO.addOverlay(overlay);
+		myIO.select(myItemsArray.indexOf(item));
 		mapView.getController().animateTo(item.getGeoPoint());
 	}
+
 
 	@Override
 	public void refreshMapItems()

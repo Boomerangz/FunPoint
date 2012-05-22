@@ -76,7 +76,6 @@ public class funHotelController extends ActivityController implements ViewFactor
 	private void showHotel(ItemHotel hotel)
 	{
 		hotelName.setText(itemHotel.toString());
-		hotelDesc.setText(itemHotel.getDescription());
 		iSwitcher.setFactory(this);
 		iSwitcher.setInAnimation(AnimationUtils.loadAnimation(context,
 				android.R.anim.fade_in));

@@ -9,6 +9,7 @@ import org.json.JSONObject;
 public class FSQItem extends MapItem
 {
 	String name;
+	String address;
 	String category=FSQ_TYPE_FOOD;
 	@Override
 	public String getObjTypeId()
@@ -26,19 +27,18 @@ public class FSQItem extends MapItem
 	{
 		try
 		{
-		//	float lat=j
-			this.name=jObject.getString("name");
+			setName(jObject.getString("name"));
 			JSONObject location=jObject.getJSONObject("location");
 			float lat=(float) location.getDouble("lat");
 			float lng=(float) location.getDouble("lng");
 			if (!location.isNull("address"))	
-				address=location.getString("address");
+				setAddress(location.getString("address"));
 			setLatitude(lat);
 			setLongitude(lng);
 			return this;
-		} catch (JSONException e)
+		} 
+		catch (JSONException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
@@ -49,8 +49,6 @@ public class FSQItem extends MapItem
 	{
 		if (category.equals(FSQ_TYPE_CINEMA))
 			return ItemCinema.CINEMA_IMG;
-			else if (category.equals(FSQ_TYPE_FOOD))
-				return ItemFood.REST_IMG;
 			else 
 				return "m_13";
 	}
@@ -59,6 +57,31 @@ public class FSQItem extends MapItem
 	public String toString()
 	{
 		return name;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public String getAddress()
+	{
+		return address;
+	}
+
+	public void setAddress(String address)
+	{
+		this.address = address;
+	}
+
+	public String getCategory()
+	{
+		return category;
 	}
 
 }

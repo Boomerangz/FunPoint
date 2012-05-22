@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.jar.JarOutputStream;
 
+import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.sbeyer.atmpoint1.types.ItemCinema.CinemaTimeLine;
 
@@ -15,45 +16,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ItemCinema extends MapItem 
+public class ItemCinema extends FSQItem 
 {
 
-	String title;
-	String phone;
-	String worktime;
+
 	List<CinemaHall> hallTable;
 	boolean hallInfoFilled=false;
+	
 	public static final String CINEMA_IMG="m_1";
-	
-	 public ItemCinema()
-	{
-		hallTable=new ArrayList();
-	}
-	
-	public String getTitle()
-	{
-		return title;
-	}
-	public void setTitle(String title)
-	{
-		this.title = title;
-	}
-	public String getPhone()
-	{
-		return phone;
-	}
-	public void setPhone(String phone)
-	{
-		this.phone = phone;
-	}
-	public String getWorktime()
-	{
-		return worktime;
-	}
-	public void setWorktime(String worktime)
-	{
-		this.worktime = worktime;
-	}
 	@Override
 	public String getObjTypeId()
 	{
@@ -62,24 +32,8 @@ public class ItemCinema extends MapItem
 	
 	public ItemCinema loadFromJSON(JSONObject jObject)
 	{
-		try
-		{
-			float lat=Float.parseFloat(jObject.getString("lat"));
-			float lon=Float.parseFloat(jObject.getString("lon"));
-			setId(jObject.getInt("id"));
-			setTitle(jObject.getString("title"));
-			setAddress(jObject.getString("adr"));
-			setPhone(jObject.getString("phone"));
-			setWorktime(jObject.getString("wrktm"));
-			setLatitude(lat);
-			setLongitude(lon);
-			setIsValid(jObject.getInt("valid"));	
-			return this;
-		} catch (JSONException e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+		super.loadFromJSON(jObject);
+		return this;
 	}
 	
 	public ItemCinema loadHallTableFromJSON(JSONArray jArray)
@@ -209,7 +163,7 @@ public class ItemCinema extends MapItem
 	@Override
 	public String toString()
 	{
-		return super.toString()+" "+getTitle();
+		return super.toString()+" "+getName();
 	}
 	
 	public String getIconName()

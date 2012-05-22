@@ -21,7 +21,6 @@ import android.location.Location;
 public abstract class MapItem
 {
 	int id;
-	String address;
 	float longitude;
 	float latitude;
 	int valid;
@@ -61,16 +60,6 @@ public abstract class MapItem
 	public void setId(int id)
 	{
 		this.id = id;
-	}
-
-	public String getAddress()
-	{
-		return address;
-	}
-
-	public void setAddress(String address)
-	{
-		this.address = address;
 	}
 
 	public float getLongitude()
