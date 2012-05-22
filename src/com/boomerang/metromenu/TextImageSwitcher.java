@@ -47,9 +47,9 @@ public class TextImageSwitcher extends FrameLayout implements ViewFactory {
 		switcher = (ImageSwitcher) findViewById(R.id.Switcher);
 		switcher.setFactory(this);
 		switcher.setInAnimation(AnimationUtils.loadAnimation(getContext(),
-				android.R.anim.slide_in_left));
+				android.R.anim.fade_in));
 		switcher.setOutAnimation(AnimationUtils.loadAnimation(getContext(),
-				android.R.anim.slide_out_right));
+				android.R.anim.fade_out));
 	}
 
 	public void updateImage() {

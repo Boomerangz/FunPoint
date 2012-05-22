@@ -23,13 +23,13 @@
 
                 <com.boomerang.metromenu.TextImageSwitcher
                     android:id="@+id/switcher1"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp" />
+                    android:layout_width="170dp"
+                    android:layout_height="170dp" />
 
                 <com.boomerang.metromenu.TextImageSwitcher
                     android:id="@+id/switcher2"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp" />
+                    android:layout_width="170dp"
+                    android:layout_height="170dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -40,13 +40,13 @@
 
                 <com.boomerang.metromenu.TextImageSwitcher
                     android:id="@+id/switcher3"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp" />
+                    android:layout_width="170dp"
+                    android:layout_height="170dp" />
 
                 <com.boomerang.metromenu.TextImageSwitcher
                     android:id="@+id/switcher4"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp" />
+                    android:layout_width="170dp"
+                    android:layout_height="170dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -57,13 +57,13 @@
 
                 <com.boomerang.metromenu.TextImageSwitcher
                     android:id="@+id/switcher5"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp" />
+                    android:layout_width="170dp"
+                    android:layout_height="170dp" />
 
                 <com.boomerang.metromenu.TextImageSwitcher
                     android:id="@+id/switcher6"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp" />
+                    android:layout_width="170dp"
+                    android:layout_height="170dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -74,13 +74,13 @@
 
                 <com.boomerang.metromenu.TextImageSwitcher
                     android:id="@+id/switcher7"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp" />
+                    android:layout_width="170dp"
+                    android:layout_height="170dp" />
 
                 <com.boomerang.metromenu.TextImageSwitcher
                     android:id="@+id/switcher8"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp" />
+                    android:layout_width="170dp"
+                    android:layout_height="170dp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

@@ -23,6 +23,8 @@ public class MetromenuActivity extends Activity
 	List<TextImageSwitcher> switchers = new ArrayList<TextImageSwitcher>();
 	int currButton = -1;
 	Handler mHandler = new Handler();
+	boolean continueUpdating=true;
+	static final int UPDATE_DELAY=1000;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -37,6 +39,7 @@ public class MetromenuActivity extends Activity
 		switchers.add((TextImageSwitcher) findViewById(R.id.switcher5));
 		switchers.add((TextImageSwitcher) findViewById(R.id.switcher6));
 
+		Integer[] a1 = { R.drawable.rest0,R.drawable.rest1,R.drawable.rest2};
 		Integer[] a = { R.drawable.red, R.drawable.blue };
 		Integer[] b = { R.drawable.blue, R.drawable.red };
 
@@ -63,6 +66,7 @@ public class MetromenuActivity extends Activity
 			});
 		}
 		switchers.get(0).setText("Рестораны");
+		switchers.get(0).ImageSource=Arrays.asList(a1);
 		switchers.get(1).setText("Кино");
 		switchers.get(2).setText("Отели");
 		switchers.get(0)
@@ -95,8 +99,16 @@ public class MetromenuActivity extends Activity
 				runMapActivityWithFilter(MapItem.FSQ_TYPE_HOTEL);
 			}
 		});
+
+	}
+	
+	@Override 
+	protected void onResume()
+	{
+		super.onResume();
+		continueUpdating=true;
 		mHandler.removeCallbacks(mUpdateTimeTask);
-		mHandler.postDelayed(mUpdateTimeTask, 1000);
+		mHandler.postDelayed(mUpdateTimeTask, UPDATE_DELAY);
 	}
 
 	private void beginUpdating()
@@ -106,6 +118,8 @@ public class MetromenuActivity extends Activity
 
 	private void updateNext()
 	{
+		if (continueUpdating)
+		{
 		currButton = (int) Math.round((Math.random() * switchers.size() - 1));
 		if (currButton >= switchers.size())
 			currButton = 0;
@@ -113,7 +127,8 @@ public class MetromenuActivity extends Activity
 			currButton = switchers.size() - 1;
 		switchers.get(currButton).updateImage();
 		mHandler.removeCallbacks(mUpdateTimeTask);
-		mHandler.postDelayed(mUpdateTimeTask, 1000);
+		mHandler.postDelayed(mUpdateTimeTask, UPDATE_DELAY);
+		}
 	}
 
 	private Runnable mUpdateTimeTask = new Runnable()
@@ -131,5 +146,6 @@ public class MetromenuActivity extends Activity
 		Intent intent = new Intent(MetromenuActivity.this,
 				MainMenu.class);
 		startActivity(intent);
+		continueUpdating=false;
 	}
 }
