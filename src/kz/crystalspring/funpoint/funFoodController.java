@@ -47,7 +47,8 @@ public class funFoodController extends ActivityController
 		avgPriceTV = (TextView) context.findViewById(R.id.food_avg_price);
 		String sObjID=Prefs.getSelObjId(context.getApplicationContext());
 		int iObjID=Integer.parseInt(sObjID);
-		itemFood=getFood(iObjID);
+		
+		itemFood=(ItemFood)MainApplication.mapItemContainer.getSelectedItem();
 		showFood(itemFood);
 	}
 	
@@ -64,15 +65,6 @@ public class funFoodController extends ActivityController
 		lunchPriceTV.setText(food.getLunchPrice());
 		//avgPriceTV.setText(food.getPriceInterval());
 	}
-
-	private ItemFood getFood(int wantedID)
-	{
-		ItemFood currFood=null;
-		String fileName = "json_rest_1_ru_zip";
-		currFood=getFoodFromJSON(findObjectInJSONZIP(wantedID,fileName));
-		return currFood;
-	}
-	
 	
 	
 	private ItemFood getFoodFromJSON(JSONObject jObject)

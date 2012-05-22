@@ -184,9 +184,8 @@ public class funMap extends MapActivity implements LocationListener, Refreshable
 	
 	public void showInfo(MapItem item)
 	{
-//		MainApplication.mapItemContainer.setSelectedItem(item);
-//		Intent intent = new Intent(this, funObjectDetail.class);
-//		startActivity(intent);
+		MainApplication.mapItemContainer.setSelectedItem(item);
+		MainMenu.tabHost.setCurrentTab(3);
 	}
 	
 	public void selectItem(MapItem item)

@@ -15,14 +15,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
-public class MetromenuActivity extends Activity {
+public class MetromenuActivity extends Activity
+{
 
 	List<TextImageSwitcher> switchers = new ArrayList();
-	int currButton=-1;
-	Handler mHandler=new Handler();
+	int currButton = -1;
+	Handler mHandler = new Handler();
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.metromenu);
 
@@ -36,7 +38,8 @@ public class MetromenuActivity extends Activity {
 		Integer[] a = { R.drawable.red, R.drawable.blue };
 		Integer[] b = { R.drawable.blue, R.drawable.red };
 
-		for (int i = 0; i < switchers.size(); i++) {
+		for (int i = 0; i < switchers.size(); i++)
+		{
 			TextImageSwitcher switcher;
 			switcher = switchers.get(i);
 
@@ -45,50 +48,55 @@ public class MetromenuActivity extends Activity {
 			else
 				switcher.ImageSource = (Arrays.asList(b));
 			switcher.updateImage();
-			switcher.setOnClickListener(new OnClickListener() {
-				
+			switcher.setOnClickListener(new OnClickListener()
+			{
+
 				@Override
-				public void onClick(View v) 
+				public void onClick(View v)
 				{
-					Toast toast = Toast.makeText(getBaseContext(), " нопка нажата", 100);
+					Toast toast = Toast.makeText(getBaseContext(),
+							" нопка нажата", 100);
 					toast.show();
 				}
 			});
 		}
-		((TextImageSwitcher)switchers.get(0)).setText("–естораны");
-		((TextImageSwitcher)switchers.get(0)).setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) 
-			{
-				Intent intent=new Intent(MetromenuActivity.this,MainMenu.class);
-				startActivity(intent);
-			}
-		});
+		((TextImageSwitcher) switchers.get(0)).setText("–естораны");
+		((TextImageSwitcher) switchers.get(0))
+				.setOnClickListener(new OnClickListener()
+				{
+
+					@Override
+					public void onClick(View v)
+					{
+						Intent intent = new Intent(MetromenuActivity.this,
+								MainMenu.class);
+						startActivity(intent);
+					}
+				});
 		mHandler.removeCallbacks(mUpdateTimeTask);
-        mHandler.postDelayed(mUpdateTimeTask, 1000);
+		mHandler.postDelayed(mUpdateTimeTask, 1000);
 	}
 
-	private void beginUpdating() 
+	private void beginUpdating()
 	{
 
 	}
-	
+
 	private void updateNext()
 	{
-		currButton=(int) Math.round((Math.random()*switchers.size()-1));
-		if (currButton>=switchers.size())
-			currButton=0;
-		if (currButton<0)
-			currButton=switchers.size()-1;
+		currButton = (int) Math.round((Math.random() * switchers.size() - 1));
+		if (currButton >= switchers.size())
+			currButton = 0;
+		if (currButton < 0)
+			currButton = switchers.size() - 1;
 		switchers.get(currButton).updateImage();
 		mHandler.removeCallbacks(mUpdateTimeTask);
-        mHandler.postDelayed(mUpdateTimeTask, 1000);
+		mHandler.postDelayed(mUpdateTimeTask, 1000);
 	}
 
-	private Runnable mUpdateTimeTask = new Runnable() 
+	private Runnable mUpdateTimeTask = new Runnable()
 	{
-		public void run() 
+		public void run()
 		{
 			updateNext();
 		}

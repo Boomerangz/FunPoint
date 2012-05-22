@@ -27,6 +27,7 @@ public class FSQConnector
 	public static final String CLIENT_SECRET = "YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO";
 	private static final String API_URL = "https://api.foursquare.com/v2";
 	private static final String TAG = "FoursquareApi";
+	
 
 	public static ArrayList<MapItem> loadItems(GeoPoint point, String category)
 	{

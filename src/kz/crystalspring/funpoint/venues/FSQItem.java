@@ -43,13 +43,11 @@ public class FSQItem extends MapItem
 			return null;
 		}
 	}
+	
 
 	@Override
 	public String getIconName()
 	{
-		if (category.equals(FSQ_TYPE_CINEMA))
-			return ItemCinema.CINEMA_IMG;
-			else 
 				return "m_13";
 	}
 	
