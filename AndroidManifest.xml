@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="kz.crystalspring.pointplus"
+	android:versionCode="2"
+	android:versionName="0.91"
+	android:debuggable="false" >
+
+    <uses-sdk android:minSdkVersion="7" />
+
+	<supports-screens 
+		android:smallScreens="true" 
+	    android:normalScreens="true" 
+	    android:largeScreens="true" 
+	    android:anyDensity="true" /> 
+	    
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> 
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />     
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.CALL_PHONE"/>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.CAMERA"/>
+	<uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <application
+        android:name="kz.crystalspring.funpoint.MainApplication"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Black.NoTitleBar" >
+        
+        <uses-library android:name="com.google.android.maps" />
+        
+        <activity
+            android:name=".Splash"
+            android:label="@string/app_name"
+    		android:screenOrientation="portrait" >
+        </activity>
+        
+        <activity
+            android:name="com.boomerang.metromenu.MetromenuActivity"
+            android:label="@string/app_name"
+    		android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="kz.crystalspring.funpoint.MainMenu"
+            android:label="@string/app_name"
+    		android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="kz.crystalspring.pointplus.MAINMENU" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".UserInfo"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="kz.crystalspring.pointplus.STARTINGPOINT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Helpdesk"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".Comments"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".ObjectsListView"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".ProductsListView"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="kz.crystalspring.funpoint.Map"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="kz.crystalspring.funpoint.funMap"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".Prefs"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="kz.crystalspring.funpoint.funObjectDetail"
+            android:label="@string/app_name" >
+        </activity>
+        
+        
+ 
+		<activity android:name=".C_WidgetConfigActivity" >
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+			</intent-filter>
+		</activity>
+		        
+		<activity android:name="kz.crystalspring.pointplus.C_ARActivityN" 
+	        android:label="@string/app_name"
+	        android:screenOrientation="landscape">
+		</activity>
+		<provider android:name="kz.crystalspring.pointplus.C_ContentProvider" android:authorities="kz.pointplus.db_provider" android:exported="true" />    
+		
+		<service android:enabled="true" android:name="kz.crystalspring.pointplus.C_ServiceHelper"/>
+		
+		<receiver android:name="OnAlarmReceiver" android:process=":remote"/>
+		<receiver android:enabled="true" android:name="OnBootReceiver" android:exported="false">
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED"/>
+			</intent-filter>
+		</receiver>
+	
+		<receiver android:name="kz.crystalspring.pointplus.C_WidgetProvider">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
+		</receiver>
+
+    </application>
+
+</manifest>

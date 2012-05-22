@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#000000"
+    android:orientation="horizontal"
+    android:paddingBottom="20dp"
+    android:weightSum="1" >
+    
+    <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+	 >
+	 
+	    <ScrollView
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:visibility="visible"
+		android:id="@+id/objDetAllInfo"
+		 >
+		    <LinearLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical"
+		    android:visibility="visible"
+		    android:id="@+id/objDetTopPart"
+			 >
+	    
+		    <RelativeLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+				android:background="@drawable/graybgunpressed"
+			    	>
+			    <LinearLayout 
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:id="@+id/objDetLeftSide"
+			        android:orientation="vertical"
+			        >
+			    <RelativeLayout
+			        android:layout_width="96dp"
+			        android:layout_height="96dp"
+				    android:background="@drawable/title_logo"
+				    android:onClick="func"
+				    	>
+				    <ImageView
+				    	android:layout_width="26dp"
+				    	android:layout_height="26dp"
+				    	android:id="@+id/objDetLogo"
+				    	android:src="@drawable/icon"
+				    	android:layout_alignParentLeft="true"
+				    	android:clickable="false"
+						android:layout_marginLeft="19dp"
+						android:layout_marginTop="21dp"
+						>
+				    </ImageView>
+		
+			    </RelativeLayout>
+		
+			    <TextView
+			        android:id="@+id/objDetDistance"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="center"
+			        android:gravity="right"
+			        android:maxLength="10"
+			        android:paddingRight="16dp"
+			        android:text="473 м"
+			        android:textColor="#000"
+			        android:textSize="14dp"
+			        android:textStyle="bold"
+			        android:layout_marginLeft="8dp"
+			        android:layout_marginRight="8dp"
+			        android:layout_marginBottom="5dp"
+			        android:background="#ececec" />
+			    
+			    </LinearLayout>
+			
+			    <TextView
+			        android:paddingLeft="2dp"
+			    	android:textStyle="bold"
+			        android:paddingRight="16dp"
+			    	android:textColor="#000000"
+			    	android:textSize="14dp"
+					android:shadowColor="#fff"
+					android:shadowDy="1.5"
+					android:shadowRadius="1"
+			    	android:layout_height="wrap_content"
+			    	android:layout_width="wrap_content"
+			    	android:id="@+id/objDetTitleMain"
+			    	android:layout_toRightOf="@+id/objDetLeftSide"
+			    	android:layout_marginLeft="2dip"
+			        android:layout_marginTop="10px"
+			    	android:text="ID 1135, bta0012" >
+			    </TextView>
+			
+			    <TextView
+			        android:paddingTop="5dp"
+			        android:paddingLeft="2dp"
+			        android:paddingRight="16dp"
+			    	android:textColor="#000"
+			    	android:textSize="14dp"
+					android:shadowColor="#fff"
+					android:shadowDy="1.5"
+					android:shadowRadius="1"
+			    	android:layout_height="wrap_content"
+			    	android:layout_width="wrap_content"
+			    	android:id="@+id/objDetAddress"
+			    	android:layout_toRightOf="@+id/objDetLeftSide"
+			    	android:layout_below="@+id/objDetTitleMain"
+			    	android:layout_marginLeft="2dip"
+			    	android:text="Казахстан, Алматы, Абая проспект, 127/99 A, уг. ул. Жарокова">
+			    </TextView>
+			
+			    <TextView
+			        android:paddingTop="5dp"
+			    	android:textSize="14dp"
+			        android:paddingLeft="2dp"
+			        android:paddingRight="16dp"
+			    	android:layout_height="wrap_content"
+			    	android:textColor="#a43333"
+					android:shadowColor="#fff"
+					android:shadowDy="1.5"
+					android:shadowRadius="1"
+			    	android:layout_width="wrap_content"
+			    	android:id="@+id/objDetError"
+			    	android:layout_toRightOf="@+id/objDetLeftSide"
+			    	android:layout_below="@+id/objDetAddress"
+			    	android:layout_marginLeft="2dip"
+			    	android:text="" >
+			    </TextView>
+		
+		    </RelativeLayout>
+			
+			<TextView
+				android:paddingTop="5dp"
+				android:paddingLeft="7dp"
+				android:paddingRight="16dp"
+			  	android:textColor="#000"
+			  	android:textSize="14dp"
+				android:shadowColor="#fff"
+				android:shadowDy="1.5"
+				android:shadowRadius="1"
+				android:layout_height="wrap_content"
+				android:layout_width="fill_parent"
+				android:id="@+id/objDetWorktime"
+				android:layout_toRightOf="@+id/objDetLeftSide"
+				android:layout_below="@+id/objDetTitleMain"
+				android:padding="10dip"
+				android:text="пн.-пт. 10:00-19:00, без перерыва сб., вс. 10:00-18:00, без перерыва"
+				android:background="@drawable/graybgunpressed" >
+			</TextView>
+		
+			<LinearLayout
+			    android:id="@+id/objDetAtmtypes"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:background="@drawable/graybgunpressed"
+			    android:orientation="horizontal"
+			    android:padding="7dp" >
+
+			</LinearLayout>
+		
+			<LinearLayout
+			    android:id="@+id/objDetProducts"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:background="@drawable/graybgunpressed"
+			    android:orientation="horizontal"
+			    android:padding="7dp"
+			    android:visibility="gone" >
+		
+			</LinearLayout>
+
+			<LinearLayout
+			    android:id="@+id/objDetExchTable"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="vertical"
+			    android:padding="7dp"
+			    android:background="@drawable/graybgunpressed"
+			    android:visibility="gone" >
+
+				<TableLayout
+				    android:id="@+id/tableLayout1"
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content" >
+					
+
+				    <TableRow
+				        android:id="@+id/tableRow4"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content" >
+					    
+				    	<Button
+				    	    android:id="@+id/btnCursDatetime"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:layout_weight="0.99"
+				    	    android:text="14.03.2012 10:25"
+		          			style="@style/btnLightGrayStyle"
+				    	    android:textSize="12dp"
+	            			android:layout_span="3"
+						    android:paddingRight="10dp"
+						    android:paddingLeft="10dp"
+	            			/>
+
+				    </TableRow>
+
+				    <TableRow
+				        android:id="@+id/tableRow1"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content" >
+					        
+				    <TextView 
+				        android:id="@+id/ImageView04"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_weight="0.33"
+				        android:text="USD"
+		          		style="@style/btnLightGrayStyle"
+					    android:gravity="center_horizontal" />
+				    
+				    <TextView 
+				        android:id="@+id/tvUsdSell"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_weight="0.33"
+				        android:text="-"
+		          		style="@style/btnLightGrayStyle"
+					    android:textColor="#4b9646"
+					    android:gravity="center_horizontal" />
+				    
+				    <TextView 
+				        android:id="@+id/tvUsdBuy"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_weight="0.33"
+				        android:text="-"
+		          		style="@style/btnLightGrayStyle"
+					    android:textColor="#c92323"
+					    android:gravity="center_horizontal" />
+				    </TableRow>
+				    
+
+				    <TableRow
+				        android:id="@+id/tableRow2"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content" >
+				    
+				    <TextView 
+				        android:id="@+id/ImageView04"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_weight="0.33"
+				        android:text="EUR"
+		          		style="@style/btnLightGrayStyle" 
+					    android:gravity="center_horizontal"/>
+				    
+				    <TextView 
+				        android:id="@+id/tvEurSell"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_weight="0.33"
+				        android:text="-"
+		          		style="@style/btnLightGrayStyle"
+					    android:textColor="#4b9646"
+					    android:gravity="center_horizontal" />
+				    
+				    <TextView 
+				        android:id="@+id/tvEurBuy"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_weight="0.33"
+				        android:text="-"
+		          		style="@style/btnLightGrayStyle"
+					    android:textColor="#c92323"
+					    android:gravity="center_horizontal" />
+
+				    </TableRow>
+
+				    <TableRow
+				        android:id="@+id/tableRow3"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content" >
+				    
+				        
+				    <TextView 
+				        android:id="@+id/ImageView04"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_weight="0.33"
+				        android:text="RUR"
+		          		style="@style/btnLightGrayStyle"
+					    android:gravity="center_horizontal" />
+				    
+				    <TextView 
+				        android:id="@+id/tvRurSell"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_weight="0.33"
+				        android:text="-"
+		          		style="@style/btnLightGrayStyle"
+					    android:textColor="#4b9646"
+					    android:gravity="center_horizontal" />
+				    
+				    <TextView 
+				        android:id="@+id/tvRurBuy"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_weight="0.33"
+				        android:text="-"
+		          		style="@style/btnLightGrayStyle"
+				        android:textColor="#c92323"
+						android:gravity="center_horizontal" />
+				    </TableRow>
+
+				    <TableRow
+				        android:id="@+id/tableRow4"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content" >
+					    
+				    	<Button
+				    	    android:id="@+id/btnKursLink"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+		          			style="@style/btnLightGrayStyle"
+				    	    android:drawableRight="@drawable/kurskz_logo"
+				        	android:text="КУРСЫ ДРУГИХ ВАЛЮТ"
+						    android:paddingRight="10dp"
+						    android:paddingLeft="10dp"
+				    	    android:textSize="15dp"
+					        android:layout_weight="0.99"
+				    	    android:layout_span="3"
+	            			/>
+
+				    </TableRow>
+				</TableLayout>
+			</LinearLayout>
+	    
+	    <Button
+		    android:id="@+id/btnMakeObjectFdbck"
+		    android:layout_width="fill_parent"
+		    android:layout_height="50dp"
+		    android:background="@drawable/blackbganim"
+		    android:text="ОСТАВИТЬ ОТЗЫВ"
+		    android:textSize="20dp"
+		    android:gravity="center_vertical"
+		    android:textColor="#FFF"
+		    android:paddingLeft="20dp"
+		    android:paddingRight="20dp"
+			android:shadowColor="#000"
+			android:shadowDy="1.5"
+			android:shadowRadius="1"
+		    android:drawableRight="@drawable/arrow_down" />
+	    <Button
+		    android:id="@+id/btnMakeObjectCall"
+		    android:layout_width="fill_parent"
+		    android:layout_height="50dp"
+		    android:background="@drawable/blackbganim"
+		    android:text="ПОЗВОНИТЬ"
+		    android:textSize="20dp"
+		    android:gravity="center_vertical"
+		    android:textColor="#FFF"
+		    android:paddingLeft="20dp"
+		    android:paddingRight="20dp"
+			android:shadowColor="#000"
+			android:shadowDy="1.5"
+			android:shadowRadius="1"
+		    android:drawableRight="@drawable/arrow_down" />
+	    <Button
+		    android:id="@+id/btnMakeObjectEmail"
+		    android:layout_width="fill_parent"
+		    android:layout_height="50dp"
+		    android:background="@drawable/blackbganim"
+		    android:text="ОТПРАВИТЬ E-MAIL"
+		    android:textSize="20dp"
+		    android:gravity="center_vertical"
+		    android:textColor="#FFF"
+		    android:paddingLeft="20dp"
+		    android:paddingRight="20dp"
+			android:shadowColor="#000"
+			android:shadowDy="1.5"
+			android:shadowRadius="1"
+		    android:drawableRight="@drawable/arrow_down" />
+		</LinearLayout>
+	    
+		</ScrollView>
+		
+	    
+	    <LinearLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical"
+		    android:id="@+id/btnFeedButtons"
+		    android:visibility="gone"
+		    android:background="#000000"
+			 >
+		    <Button
+			    android:id="@+id/btnMakeBackAnim"
+			    android:layout_width="fill_parent"
+			    android:layout_height="50dp"
+			    android:background="@drawable/btnblueanim"
+			    android:text="ОСТАВИТЬ ОТЗЫВ"
+			    android:textSize="20dp"
+			    android:gravity="center_vertical"
+			    android:textColor="#FFF"
+			    android:paddingLeft="20dp"
+			    android:paddingRight="20dp"
+				android:shadowColor="#000"
+				android:shadowDy="1.5"
+				android:shadowRadius="1"
+			    android:drawableRight="@drawable/arrow_up"
+			    android:layout_marginBottom="10dp" />
+	    
+		    <ScrollView
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="vertical"
+				 >
+			    <LinearLayout
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content"
+				    android:orientation="vertical"
+				 	>
+				    <LinearLayout
+					    android:layout_width="fill_parent"
+					    android:layout_height="wrap_content"
+					    android:orientation="vertical"
+					    android:id="@+id/btnFeedbackAtm"
+					    android:visibility="visible"
+						 >
+				    
+					    <Button
+					        android:id="@+id/feedback_button_1"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="НЕ РАБОТАЕТ"
+		          			style="@style/btnBlueStyle" />
+					    <Button
+					        android:id="@+id/feedback_button_2"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="НЕ ВЫДАЛ ДЕНЬГИ"
+		          			style="@style/btnBlueStyle" />
+					    <Button
+					        android:id="@+id/feedback_button_3"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="СЪЕЛ КАРТУ"
+		          			style="@style/btnBlueStyle" />
+					    <Button
+					        android:id="@+id/feedback_button_4"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="СЪЕЛ ДЕНЬГИ"
+		          			style="@style/btnBlueStyle" />
+					    <Button
+					        android:id="@+id/feedback_button_5"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="НЕТ БАНКОМАТА"
+		          			style="@style/btnBlueStyle" />
+					    <Button
+					        android:id="@+id/feedback_button_6"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="НЕТ ДЕНЕГ"
+		          			style="@style/btnBlueStyle" />
+					</LinearLayout>
+			   
+					<LinearLayout
+					    android:layout_width="fill_parent"
+					    android:layout_height="wrap_content"
+					    android:orientation="vertical"
+					    android:id="@+id/btnFeedbackBranch"
+					    android:visibility="visible"
+						 >
+				    
+					    <Button
+					        android:id="@+id/feedback_button_7"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="ХОРОШО ОБСЛУЖИЛИ"
+		          			style="@style/btnBlueStyle" />
+					    <Button
+					        android:id="@+id/feedback_button_8"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="БОЛЬШИЕ ОЧЕРЕДИ"
+		          			style="@style/btnBlueStyle" />
+					    <Button
+					        android:id="@+id/feedback_button_9"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="НАГРУБИЛИ"
+		          			style="@style/btnBlueStyle" />
+					    <Button
+					        android:id="@+id/feedback_button_10"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="НЕКОМПЕТЕНТНЫЕ СОТРУДНИКИ"
+		          			style="@style/btnBlueStyle" />
+					    <Button
+					        android:id="@+id/feedback_button_11"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="НЕТ НУЖНОЙ УСЛУГИ"
+		          			style="@style/btnBlueStyle" />
+					    <Button
+					        android:id="@+id/feedback_button_12"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="ДОЛГО ОБСЛУЖИВАЛИ"
+		          			style="@style/btnBlueStyle" />
+					</LinearLayout>
+			   
+					<LinearLayout
+					    android:layout_width="fill_parent"
+					    android:layout_height="wrap_content"
+					    android:orientation="vertical"
+					    android:id="@+id/btnFeedbackExch"
+					    android:visibility="visible"
+						 >
+				    
+					    <Button
+					        android:id="@+id/feedback_button_13"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="Плохой курс"
+		          			style="@style/btnBlueStyle" />
+					    <Button
+					        android:id="@+id/feedback_button_14"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="Нет нужной валюты"
+		          			style="@style/btnBlueStyle" />
+					    <Button
+					        android:id="@+id/feedback_button_15"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="Хороший обменник"
+		          			style="@style/btnBlueStyle" />
+					</LinearLayout>
+			   
+					<LinearLayout
+					    android:layout_width="fill_parent"
+					    android:layout_height="wrap_content"
+					    android:orientation="vertical"
+					    android:id="@+id/btnFeedbackNotarius"
+					    android:visibility="visible"
+						 >
+				    
+					    <Button
+					        android:id="@+id/feedback_button_16"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="Некомпетентные сотрудники"
+		          			style="@style/btnBlueStyle" />
+					    <Button
+					        android:id="@+id/feedback_button_17"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="Хороший нотариус"
+		          			style="@style/btnBlueStyle" />
+					</LinearLayout>
+				    
+				    <Button
+				        android:id="@+id/feedback_button_other"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:text="ДРУГОЕ"
+		          		style="@style/btnBlueStyle" />
+				    
+				    <LinearLayout
+					    android:layout_width="fill_parent"
+					    android:layout_height="wrap_content"
+					    android:orientation="vertical"
+					    android:id="@+id/btnFeedbackOther"
+					    android:visibility="visible"
+						 >
+		
+					    <EditText
+					        android:id="@+id/feedback_edit_other"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content" 
+					        android:hint="ДРУГОЕ"
+					        android:inputType="text"
+					        android:focusable="true"
+							android:layout_marginLeft="10dp"
+					        android:layout_marginRight="10dp"
+					        android:layout_marginTop="10dp"  />
+			
+					    <Button
+				        	android:id="@+id/feedback_button_cmntsend"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="ОТПРАВИТЬ"
+		          			style="@style/btnBlueStyle" />
+					</LinearLayout>
+				</LinearLayout>
+			</ScrollView>
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>

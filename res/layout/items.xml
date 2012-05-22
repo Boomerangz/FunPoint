@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/relativeLayout1"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/graybganim" >
+
+    <RelativeLayout
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:id="@+id/leftSide"
+	    android:background="@drawable/title_logo"
+	    android:onClick="func"
+	    android:tag="111"
+	    	>
+	    <ImageView
+	    	android:layout_width="26dp"
+	    	android:layout_height="26dp"
+	    	android:id="@+id/imgViewLogo"
+	    	android:src="@drawable/icon"
+	    	android:layout_alignParentLeft="true"
+	    	android:clickable="false"
+			android:layout_marginLeft="19dp"
+			android:layout_marginTop="21dp"
+			>
+	    </ImageView>
+    </RelativeLayout>
+
+    <TextView
+        android:paddingLeft="7dp"
+        android:paddingTop="3dp"
+    	android:textStyle="bold"
+        android:paddingRight="16dp"
+    	android:textColor="#000"
+    	android:textSize="14dp"
+		android:shadowColor="#fff"
+		android:shadowDy="1.5"
+		android:shadowRadius="1"
+    	android:layout_height="wrap_content"
+    	android:text="TextView"
+    	android:layout_width="wrap_content"
+    	android:id="@+id/txtViewTitleMain"
+    	android:layout_toRightOf="@+id/leftSide"
+    	android:layout_marginLeft="2dip"
+    	android:lines="1"
+        android:ellipsize="marquee">
+    </TextView>
+
+    <TextView
+        android:paddingLeft="7dp"
+        android:paddingRight="16dp"
+    	android:textColor="#000"
+    	android:textSize="14dp"
+		android:shadowColor="#fff"
+		android:shadowDy="1.5"
+		android:shadowRadius="1"
+    	android:layout_height="wrap_content"
+    	android:text="TextView"
+    	android:layout_width="wrap_content"
+    	android:id="@+id/txtViewTitle"
+    	android:layout_toRightOf="@+id/leftSide"
+    	android:layout_below="@+id/txtViewTitleMain"
+    	android:layout_marginLeft="2dip"
+    	android:lines="2"
+        android:ellipsize="marquee">
+    </TextView>
+
+    <TextView
+    	android:textSize="14dp"
+        android:paddingLeft="7dp"
+        android:paddingRight="16dp"
+    	android:layout_height="wrap_content"
+    	android:lines="1"
+        android:ellipsize="marquee"
+    	android:textColor="#a43333"
+		android:shadowColor="#fff"
+		android:shadowDy="1.5"
+		android:shadowRadius="1"
+    	android:layout_width="wrap_content"
+    	android:id="@+id/txtViewDescription"
+    	android:layout_toRightOf="@+id/leftSide"
+    	android:layout_below="@+id/txtViewTitle"
+    	android:layout_marginLeft="2dip">
+    </TextView>
+    
+    <TextView
+    	android:textSize="14dp"
+    	android:textStyle="bold"
+        android:paddingRight="16dp"
+    	android:textColor="#000"
+    	android:gravity="right"
+    	android:layout_height="wrap_content"
+    	android:maxLength="10"
+        android:lines="1"
+        android:ellipsize="marquee"
+    	android:layout_width="fill_parent"
+    	android:layout_toRightOf="@+id/leftSide"
+    	android:layout_below="@+id/txtViewDescription"
+    	android:layout_marginLeft="2dip"
+    	android:id="@+id/txtViewDistance">
+    </TextView>
+
+</RelativeLayout>

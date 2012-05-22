@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, Main!</string>
+    <string name="app_name">Point+</string>
+	<string name="prefName"></string>
+	<string name="quit">Выход</string>
+	<string name="sync">Обновить</string>
+	<string name="home">Домой</string>
+	<string name="loading_msg">Загрузка..</string>
+	<string name="debugkey">0zeChg5uBJ1wDg4CwBA5LpmKG1It9MEiyC-OOtg</string>
+	<string name="workkey">0Qn5I60oNp6jGo57Hz9u9kP6usvAO5BzpE8Jk4w</string>
+</resources>

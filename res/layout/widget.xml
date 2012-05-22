@@ -1,0 +1,79 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:focusable="true"
+    >
+
+
+    <RelativeLayout 
+    android:layout_marginLeft="0dip" 
+    android:layout_marginTop="1dip" 
+    android:layout_height="wrap_content" 
+    android:id="@+id/relativeLayout1" 
+    android:layout_width="fill_parent" 
+    android:background="@drawable/widget_bg" 
+    android:duplicateParentState="true" 
+    android:layout_alignParentRight="true">
+    
+        <ImageView
+        android:id="@+id/img"
+ 				android:src="@drawable/icon"        
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" />
+    
+           <TextView 
+			android:layout_height="wrap_content" 
+			android:layout_width="fill_parent" 
+			android:includeFontPadding="false" 
+			android:textColor="#efbf40" 
+			android:text="" 
+			android:id="@+id/widget_line1"
+			android:layout_marginLeft="4dip" 
+			android:layout_toRightOf="@id/img" 
+			android:singleLine="true" 
+			android:ellipsize="end" 
+			android:textStyle="bold" 
+			android:maxLines="1" 
+			android:textSize="17sp">
+			</TextView>
+			
+        <TextView 
+			android:layout_height="wrap_content" 
+			android:layout_width="fill_parent" 
+			android:includeFontPadding="false" 
+			android:textColor="#efbf40" 
+			android:text="" 
+			android:id="@+id/widget_line2"
+			android:layout_below="@id/widget_line1"
+			android:layout_marginLeft="4dip"
+			android:layout_marginTop="0dip"
+			android:layout_toRightOf="@id/img" 
+			android:singleLine="true" 
+			android:ellipsize="end" 
+			android:maxLines="1" 
+			android:textSize="14sp">
+		</TextView>
+		
+        <TextView 
+			android:paddingTop="2dip" 
+			android:layout_height="wrap_content" 
+			android:lineSpacingMultiplier="0.9" 
+			android:layout_width="fill_parent" 
+			android:includeFontPadding="false" 
+			android:textColor="#40ff40" 
+			android:text="" 
+			android:layout_below="@id/widget_line2"
+			android:layout_marginLeft="3dip"  
+			android:layout_marginTop="0dip"
+			android:id="@+id/widget_line3" 
+			android:ellipsize="end" 
+			android:paddingBottom="3dip" 
+			android:maxLines="2" 
+			android:textSize="14sp">
+		</TextView>
+    </RelativeLayout>
+
+</RelativeLayout>
+
+

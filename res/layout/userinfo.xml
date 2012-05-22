@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+ android:layout_width="fill_parent"
+ android:layout_height="fill_parent" >
+	
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical" >
+    
+    <Button
+	    android:id="@+id/btnMainInfo"
+	    android:layout_width="fill_parent"
+	    android:layout_height="50dp"
+	    android:background="@drawable/blackbgunpressed"
+	    android:text="ОСНОВНАЯ ИНФОРМАЦИЯ"
+	    android:textSize="16dp"
+	    android:gravity="center"
+	    android:textColor="#FFF" />
+    
+    <EditText
+        android:id="@+id/txtPseudo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:hint="Псевдоним"
+        android:inputType="text"
+		android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp" />
+
+    <EditText
+        android:id="@+id/txtPhone"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:hint="Телефон"
+		android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    <EditText
+        android:id="@+id/txtEmail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:hint="E-mail"
+		android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    <Button
+	    android:id="@+id/btnAddInfo"
+	    android:layout_width="fill_parent"
+	    android:layout_height="50dp"
+	    android:background="@drawable/blackbgunpressed"
+	    android:text="ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ"
+	    android:textSize="16dp"
+	    android:gravity="center"
+	    android:textColor="#FFF"
+		android:layout_marginTop="10dp" />
+
+    <EditText
+        android:id="@+id/txtSurname"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Фамилия"
+        android:inputType="text"
+		android:layout_marginTop="10dp"
+		android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    <EditText
+        android:id="@+id/txtName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Имя"
+        android:inputType="text"
+		android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    <EditText
+        android:id="@+id/txtMidname"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Отчество"
+        android:inputType="text"
+		android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    <TextView
+        android:id="@+id/lblBdate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Дата рождения"
+	    android:textSize="16dp"
+	    android:gravity="center"
+		android:layout_marginLeft="12dp" />
+
+    <DatePicker
+        android:id="@+id/userBirthdate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/lblGender"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Пол"
+	    android:textSize="16dp"
+	    android:gravity="center"
+		android:layout_marginLeft="12dp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/radMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:checked="true"
+            android:text="Мужской" />
+
+        <RadioButton
+            android:id="@+id/radFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Женский" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="СОХРАНИТЬ"
+	    android:textSize="20dp"
+	    android:textColor="#FFF"
+		android:shadowColor="#000"
+		android:shadowDy="1.5"
+		android:shadowRadius="1"
+        android:padding="10dp"
+		android:layout_margin="10dp"
+		android:layout_marginBottom="20dp"
+		android:background="@drawable/btnblueanim" />
+
+    	</LinearLayout>
+</ScrollView>

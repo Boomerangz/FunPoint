@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+   	android:paddingTop="8dp"
+   	android:paddingLeft="8dp"
+   	android:paddingRight="8dp"
+   	android:paddingBottom="8dp"
+    android:background="@drawable/blackbganim" >
+   
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/setting" />
+	
+		<TextView
+		    android:id="@+id/cmntText"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="Спешим сообщить что в приложение добавлена возможность поиска отделений банков. Для этого необходимо включить соответствующий переключатель в фильтрах."
+		    android:textColor="#ffffff"
+		    android:layout_marginTop="4dp"
+		    android:layout_marginLeft="4dp" />
+        
+    </LinearLayout>
+	
+        <TextView
+            android:id="@+id/cmntDatetime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="20.01.2012 00:00"
+            android:textColor="#ffffff" />
+      
+</LinearLayout>

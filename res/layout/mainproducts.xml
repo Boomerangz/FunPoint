@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:id="@+id/container"
+    android:background="#000000" >
+        
+    
+	    <ScrollView
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical"
+	    android:visibility="visible"
+		android:id="@+id/prodMainScroll"
+		 >
+		    <LinearLayout
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="vertical"
+			    android:visibility="visible"
+				 >
+			    <Button
+				    android:id="@+id/btnTransfer"
+				    android:layout_width="fill_parent"
+				    android:layout_height="50dp"
+				    android:background="@drawable/blackbganim"
+				    android:text="ПЕРЕВОДЫ"
+				    android:textSize="20dp"
+				    android:gravity="center_vertical"
+				    android:textColor="#FFF"
+				    android:paddingLeft="20dp"
+				    android:paddingRight="20dp"
+					android:shadowColor="#000"
+					android:shadowDy="1.5"
+					android:shadowRadius="1"
+				    android:drawableRight="@drawable/arrow_down" />
+			    <Button
+				    android:id="@+id/btnDeposit"
+				    android:layout_width="fill_parent"
+				    android:layout_height="50dp"
+				    android:background="@drawable/blackbganim"
+				    android:text="ДЕПОЗИТЫ"
+				    android:textSize="20dp"
+				    android:gravity="center_vertical"
+				    android:textColor="#FFF"
+				    android:paddingLeft="20dp"
+				    android:paddingRight="20dp"
+					android:shadowColor="#000"
+					android:shadowDy="1.5"
+					android:shadowRadius="1"
+				    android:drawableRight="@drawable/arrow_down" />
+			    <Button
+				    android:id="@+id/btnCards"
+				    android:layout_width="fill_parent"
+				    android:layout_height="50dp"
+				    android:background="@drawable/blackbganim"
+				    android:text="ПЛАТЕЖНЫЕ КАРТОЧКИ"
+				    android:textSize="20dp"
+				    android:gravity="center_vertical"
+				    android:textColor="#FFF"
+				    android:paddingLeft="20dp"
+				    android:paddingRight="20dp"
+					android:shadowColor="#000"
+					android:shadowDy="1.5"
+					android:shadowRadius="1"
+				    android:drawableRight="@drawable/arrow_down"/>
+		    </LinearLayout>
+    </ScrollView>
+    
+    <LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical"
+		android:id="@+id/prodMainDetails"
+		android:visibility="gone"
+		 >
+		    
+	    <Button
+		    android:id="@+id/btnMainBackProd"
+		    android:layout_width="fill_parent"
+		    android:layout_height="50dp"
+		    android:background="@drawable/menubganimsel"
+		    android:text="НОТАРИУСЫ"
+		    android:textSize="20dp"
+		    android:gravity="center_vertical"
+		    android:textColor="#FFF"
+		    android:paddingLeft="20dp"
+		    android:paddingRight="20dp"
+			android:shadowColor="#000"
+			android:shadowDy="1.5"
+			android:shadowRadius="1"
+		    android:drawableRight="@drawable/arrow_up" />
+
+	    
+	    <ScrollView 
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:background="#383d44"
+			android:id="@+id/prodTransfWizard"
+			android:visibility="gone"
+	        >
+		    <LinearLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:orientation="vertical" >
+	        
+		    <LinearLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center"
+		        android:layout_marginLeft="13dp"
+		        android:layout_marginRight="13dp"
+		        android:layout_marginTop="5dp"
+		        android:background="@drawable/shadow"
+		        android:orientation="vertical"
+				android:id="@+id/LinLWizardDest" >
+
+			    <LinearLayout
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="center"
+			        android:layout_margin="2dp"
+			        android:background="#050606"
+			        android:orientation="vertical" >
+
+				    <TextView
+				        android:id="@+id/tvCardIssueTit"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:text="Тип выпуска"
+				        android:paddingLeft="12dp"
+			        	android:paddingTop="5dp"
+			        	android:paddingBottom="5dp"
+				        android:textColor="#ffffff" 
+				        android:textSize="16dp"
+			        	android:background="#000000"/>
+				    
+			        <Spinner 
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:layout_marginLeft="10dp"
+				        android:layout_marginRight="10dp"
+				        android:id="@+id/wizCardIssueType"
+			            ></Spinner>
+
+				    <TextView
+				        android:id="@+id/tvTransfDir"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:text="Направление перевода"
+				        android:paddingLeft="12dp"
+			        	android:paddingTop="5dp"
+			        	android:paddingBottom="5dp"
+				        android:textColor="#ffffff" 
+				        android:textSize="16dp"
+			        	android:background="#000000"/>
+				    
+			        <Spinner 
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:layout_marginLeft="10dp"
+				        android:layout_marginRight="10dp"
+				        android:id="@+id/wizTransfDirection"
+			            ></Spinner>
+
+				    <TextView
+				        android:id="@+id/tvTransfCurr"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:text="Выберите валюту"
+				        android:paddingLeft="12dp"
+			        	android:paddingTop="5dp"
+			        	android:paddingBottom="5dp"
+				        android:textColor="#ffffff" 
+				        android:textSize="16dp"
+			        	android:background="#000000"/>
+				    
+			        <Spinner 
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:layout_marginLeft="10dp"
+				        android:layout_marginRight="10dp"
+				        android:id="@+id/wizCurrencySelection"
+			            ></Spinner>
+	
+				    <TextView
+				        android:id="@+id/tvCardLevTitle"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:text="Уровень карты"
+				        android:paddingLeft="12dp"
+			        	android:paddingTop="5dp"
+			        	android:paddingBottom="5dp"
+				        android:textColor="#ffffff" 
+				        android:textSize="16dp"
+			        	android:background="#000000"/>
+				    
+			        <Spinner 
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:layout_marginLeft="10dp"
+				        android:layout_marginRight="10dp"
+				        android:id="@+id/wizCardLevelSelection"
+			            ></Spinner>
+	
+				    <TextView
+				        android:id="@+id/tvCardMainTypeTit"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:text="Тип карты"
+				        android:paddingLeft="12dp"
+			        	android:paddingTop="5dp"
+			        	android:paddingBottom="5dp"
+				        android:textColor="#ffffff" 
+				        android:textSize="16dp"
+			        	android:background="#000000"/>
+				    
+			        <Spinner 
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:layout_marginLeft="10dp"
+				        android:layout_marginRight="10dp"
+				        android:id="@+id/wizCardMainType"
+			            ></Spinner>
+	
+
+				    <TextView
+				        android:id="@+id/tvSelectDepozTitle"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:text="Срок депозита, в месяцах\n(не обязательно)"
+				        android:paddingLeft="12dp"
+			        	android:paddingTop="5dp"
+			        	android:paddingBottom="5dp"
+				        android:textColor="#ffffff" 
+				        android:textSize="16dp"
+			        	android:background="#000000"/>
+			        <Spinner 
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:layout_marginLeft="10dp"
+				        android:layout_marginRight="10dp"
+				        android:id="@+id/wizPeriodSelect"
+			            />
+
+				    <TextView
+				        android:id="@+id/tvTranfSumm"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:text="Чтобы узнать тариф введите сумму"
+				        android:paddingLeft="12dp"
+			        	android:paddingTop="5dp"
+			        	android:paddingBottom="5dp"
+				        android:textColor="#ffffff" 
+				        android:textSize="16dp"
+			        	android:background="#000000"/>
+			        
+			        <EditText
+				        android:id="@+id/txtTransfSumm"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:inputType="number"
+				        android:hint="Сумма"
+				        android:layout_marginLeft="10dp"
+				        android:layout_marginRight="10dp"
+				         />
+			        
+				    <Button
+				        android:id="@+id/btnTransfReady"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:text="ГОТОВО"
+					    android:textSize="20dp"
+					    android:textColor="#FFF"
+						android:shadowColor="#000"
+						android:shadowDy="1.5"
+						android:shadowRadius="1"
+				        android:padding="13dp"
+				        android:layout_margin="12dp"
+						android:background="@drawable/btnblueanim" />
+				    
+			        
+		       	</LinearLayout>
+	       	</LinearLayout>
+	       	
+	       	</LinearLayout>
+	        
+	        
+	    </ScrollView>
+	    
+	    
+	    <ScrollView 
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:background="#383d44"
+			android:id="@+id/prodTransfWizRes"
+			android:visibility="gone"
+			android:fillViewport="true"
+	        >
+		    <LinearLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:orientation="vertical" >
+			    <LinearLayout
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="center"
+			        android:layout_marginLeft="13dp"
+			        android:layout_marginRight="13dp"
+			        android:layout_marginTop="5dp"
+				    android:padding="2dp"
+			        android:background="@drawable/shadow"
+			        android:orientation="vertical"
+					android:id="@+id/prodTransfWizResDetTransf"
+			         >
+					    
+				    <LinearLayout
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:layout_gravity="center"
+				        android:background="#000000"
+				        android:orientation="vertical"
+					    android:id="@+id/comisResTitle"
+				         >
+	
+					    <TextView
+					        android:id="@+id/tvTransfCommision"
+					        android:layout_width="fill_parent"
+					        android:layout_height="fill_parent"
+					        android:text="Комиссия за платеж"
+					        android:paddingLeft="12dp"
+				        	android:paddingTop="5dp"
+				        	android:paddingBottom="5dp"
+					        android:textColor="#ffffff" 
+					        android:textSize="16dp"/>
+					    
+					    <LinearLayout
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:layout_gravity="center"
+					        android:background="@drawable/btnwhiteanim"
+					        android:orientation="horizontal"
+						    android:id="@+id/comisResWest" >
+					        <ImageView 
+						        android:layout_width="50dp"
+						        android:layout_height="50dp"
+						        android:src="@drawable/transf_c_7"
+					             />
+						    <TextView
+						        android:id="@+id/comisResWestText"
+						        android:layout_width="fill_parent"
+						        android:layout_height="wrap_content"
+						    	android:text="10 000 KZT"
+						        android:paddingLeft="12dp"
+					        	android:paddingTop="5dp"
+					       		android:layout_gravity="center"
+					        	android:paddingBottom="5dp"
+						        android:textColor="#000000" 
+						        android:textSize="16dp"
+								android:shadowColor="#ffffff"
+								android:shadowDy="1.5"
+								android:shadowRadius="1" />
+					        
+					    </LinearLayout>
+					    
+					    <LinearLayout
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:layout_gravity="center"
+					        android:background="@drawable/btnwhiteanim"
+					        android:orientation="horizontal"
+						    android:id="@+id/comisResMoneygram" >
+					        <ImageView 
+						        android:layout_width="50dp"
+						        android:layout_height="50dp"
+						        android:src="@drawable/transf_c_8"
+					             />
+						    <TextView
+						        android:id="@+id/comisResMoneygramText"
+						        android:layout_width="fill_parent"
+						        android:layout_height="wrap_content"
+						    	android:text="10 000 KZT"
+						        android:paddingLeft="12dp"
+					        	android:paddingTop="5dp"
+					       		android:layout_gravity="center"
+					        	android:paddingBottom="5dp"
+						        android:textColor="#000000" 
+						        android:textSize="16dp"
+								android:shadowColor="#ffffff"
+								android:shadowDy="1.5"
+								android:shadowRadius="1" />
+					        
+					    </LinearLayout>
+					    
+					    <LinearLayout
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:layout_gravity="center"
+					        android:background="@drawable/btnwhiteanim"
+					        android:orientation="horizontal"
+						    android:id="@+id/comisResContact" >
+					        <ImageView 
+						        android:layout_width="50dp"
+						        android:layout_height="50dp"
+						        android:src="@drawable/transf_c_9"
+					             />
+						    <TextView
+						        android:id="@+id/comisResContactText"
+						        android:layout_width="fill_parent"
+						        android:layout_height="wrap_content"
+						    	android:text="10 000 KZT"
+						        android:paddingLeft="12dp"
+					        	android:paddingTop="5dp"
+					       		android:layout_gravity="center"
+					        	android:paddingBottom="5dp"
+						        android:textColor="#000000" 
+						        android:textSize="16dp"
+								android:shadowColor="#ffffff"
+								android:shadowDy="1.5"
+								android:shadowRadius="1" />
+					        
+					    </LinearLayout>
+			       	</LinearLayout>
+		       	</LinearLayout>
+		       	
+	        
+			    <LinearLayout
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="center"
+			        android:layout_marginLeft="13dp"
+			        android:layout_marginRight="13dp"
+			        android:layout_marginTop="5dp"
+				    android:padding="2dp"
+			        android:background="@drawable/shadow"
+			        android:orientation="vertical"
+					android:id="@+id/prodTransfWizResDetDepoz"
+			         >
+					    
+				    <LinearLayout
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:layout_gravity="center"
+				        android:background="#000000"
+				        android:orientation="vertical"
+					    android:id="@+id/comisResTitle"
+				         >
+	
+					    <TextView
+					        android:id="@+id/tvTransfEffRate"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="Эффективная ставка"
+					        android:paddingLeft="12dp"
+				        	android:paddingTop="5dp"
+				        	android:paddingBottom="5dp"
+					        android:textColor="#ffffff" 
+					        android:textSize="16dp"/>
+					    
+					    <LinearLayout
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+						    android:orientation="vertical"
+							android:id="@+id/deposListLinL" >
+					    
+					    </LinearLayout>
+			       	</LinearLayout>
+		       	</LinearLayout>
+		       	
+			    
+			    <LinearLayout
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="center"
+			        android:layout_marginLeft="13dp"
+			        android:layout_marginRight="13dp"
+			        android:layout_marginTop="5dp"
+				    android:padding="2dp"
+			        android:background="@drawable/shadow"
+			        android:orientation="vertical"
+					android:id="@+id/prodTransfWizResDetDepozAbout"
+			         >
+					    
+				    <LinearLayout
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:layout_gravity="center"
+				        android:background="#000000"
+				        android:orientation="vertical"
+					    android:id="@+id/comisResTitle"
+				         >
+					    
+					    <LinearLayout
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:layout_gravity="center"
+					        android:orientation="horizontal"
+						    android:id="@+id/comisResContact" >
+						    
+					        <ImageView 
+						        android:layout_width="50dp"
+						        android:layout_height="50dp"
+						    	android:id="@+id/aboutDeposImage"
+						        android:src="@drawable/transf_c_9"
+					             />
+		
+						    <TextView
+						        android:id="@+id/tvDepozInfoTitle"
+						        android:layout_width="fill_parent"
+						        android:layout_height="wrap_content"
+						        android:text="Детальная информация"
+						        android:paddingLeft="12dp"
+					        	android:paddingTop="5dp"
+					        	android:paddingBottom="5dp"
+						        android:textColor="#ffffff" 
+						       	android:layout_gravity="center"
+						        android:textSize="16dp" />
+						    
+					    </LinearLayout>
+					    
+					    <TextView
+					        android:id="@+id/aboutDeposDescription"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					    	android:text="Детальная информация11"
+					        android:paddingLeft="12dp"
+				        	android:paddingTop="5dp"
+				       		android:layout_gravity="center"
+				        	android:paddingBottom="5dp"
+					        android:textColor="#000000" 
+					        android:textSize="16dp"
+							android:shadowColor="#ffffff"
+							android:shadowDy="1.5"
+							android:shadowRadius="1"
+				        	android:background="@drawable/btnwhiteunpressed" />
+					    
+					    
+					    <ImageView
+					    	android:layout_width="fill_parent"
+					    	android:layout_height="wrap_content"
+					    	android:id="@+id/imgViewMore"
+					    	android:src="@android:drawable/ic_menu_more"
+					    	android:layout_alignParentLeft="true"
+				        	android:background="@drawable/btnwhiteunpressed"
+							/>
+						    
+					    <Button
+					        android:id="@+id/btnShowDeposBranches"
+					        android:layout_width="fill_parent"
+					        android:layout_height="wrap_content"
+					        android:text="НАЙТИ ОТДЕЛЕНИЯ"
+						    android:textSize="20dp"
+						    android:textColor="#FFF"
+							android:shadowColor="#000"
+							android:shadowDy="1.5"
+							android:shadowRadius="1"
+					        android:padding="13dp"
+							android:layout_margin="13dp"
+							android:layout_marginBottom="20dp"
+							android:background="@drawable/btnblueanim" />
+					        
+			       	</LinearLayout>
+			       	
+
+			    
+		       	</LinearLayout>
+		       	
+	       	</LinearLayout>
+	        
+	        
+	    </ScrollView>
+	
+		<HorizontalScrollView
+		    android:id="@+id/scrollViewProd"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:visibility="gone"
+		    android:background="@drawable/blackbgunpressed"
+		     >
+	
+		    <LinearLayout
+		        android:id="@+id/linearLayoutProd"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content" >
+		        
+		       
+		    </LinearLayout>
+		</HorizontalScrollView>
+	
+		<ListView
+		    android:id="@+id/listViewProd"
+		    android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+		    android:layout_weight="0.9"
+		    android:background="#c4c5c6"
+		    android:cacheColorHint="#00000000"
+		    android:visibility="gone" >
+		</ListView>
+	
+	</LinearLayout>
+</LinearLayout>

@@ -1,0 +1,40 @@
+[{'id':1,'parent':'','idweb':'obj_list_atm_title','ru':'БАНКОМАТЫ','en':'ATM','kz':''},
+{'id':2,'parent':'','idweb':'obj_list_branch_title','ru':'ОТДЕЛЕНИЯ БАНКОВ','en':'Bank Branch','kz':''},
+{'id':3,'parent':'','idweb':'obj_list_exch_title','ru':'ОБМЕННЫЕ ПУНКТЫ   kurs.kz','en':'Exchange office       kurs.kz','kz':''},
+{'id':4,'parent':'','idweb':'obj_list_notar_title','ru':'НОТАРИУСЫ','en':'Notary','kz':''},
+{'id':6,'parent':'5','idweb':'prod_list_transf_title','ru':'ДЕНЕЖНЫЕ ПЕРЕВОДЫ','en':'Money transfer','kz':''},
+{'id':20,'parent':'','idweb':'obj_list_depos_title','ru':'ДЕПОЗИТЫ','en':'Deposit','kz':''},
+{'id':20,'parent':'','idweb':'obj_list_cards_title','ru':'КАРТОЧКИ','en':'Cards','kz':''},
+{'id':20,'parent':'','idweb':'prefs_lang_entr_1','ru':'Русский','en':'Russian','kz':''},
+{'id':20,'parent':'','idweb':'prefs_lang_entr_2','ru':'Английский','en':'English','kz':''},
+{'id':20,'parent':'','idweb':'prefs_lang_entr_3','ru':'Казахский','en':'Kazakh','kz':''},
+{'id':20,'parent':'','idweb':'prefs_lang_title','ru':'Выберите язык','en':'Select a language','kz':''},
+{'id':20,'parent':'','idweb':'prefs_lang_summary','ru':'Выберите язык приложения','en':'Select the application language','kz':''},
+{'id':20,'parent':'','idweb':'prefs_lang_dlg_title','ru':'Язык','en':'Language','kz':''},
+{'id':20,'parent':'','idweb':'prefs_city_title','ru':'Выберите город','en':'Select the city','kz':''},
+{'id':20,'parent':'','idweb':'prefs_city_summary','ru':'Выберите Ваш город','en':'Select Your city','kz':''},
+{'id':20,'parent':'','idweb':'prefs_city_dlg_title','ru':'Город','en':'City','kz':''},
+{'id':20,'parent':'','idweb':'prefs_no_btn','ru':'Отмена','en':'Cancel','kz':''},
+{'id':20,'parent':'','idweb':'usr_inf_maininf','ru':'ОСНОВНАЯ ИНФОРМАЦИЯ','en':'','kz':''},
+{'id':20,'parent':'','idweb':'usr_inf_txtpseudo','ru':'Псевдоним','en':'','kz':''},
+{'id':20,'parent':'','idweb':'usr_inf_txtphone','ru':'Телефон','en':'','kz':''},
+{'id':20,'parent':'','idweb':'usr_inf_txtemail','ru':'E-mail','en':'','kz':''},
+{'id':20,'parent':'','idweb':'usr_inf_addinf','ru':'ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ','en':'','kz':''},
+{'id':20,'parent':'','idweb':'usr_inf_txtsurname','ru':'Фамилия','en':'','kz':''},
+{'id':20,'parent':'','idweb':'usr_inf_txtname','ru':'Имя','en':'','kz':''},
+{'id':20,'parent':'','idweb':'usr_inf_txtmidname','ru':'Отчество','en':'','kz':''},
+{'id':20,'parent':'','idweb':'usr_inf_lblbdate','ru':'Дата рождения','en':'','kz':''},
+{'id':20,'parent':'','idweb':'usr_inf_lblgender','ru':'Пол','en':'','kz':''},
+{'id':20,'parent':'','idweb':'usr_inf_radmale','ru':'Мужской','en':'','kz':''},
+{'id':20,'parent':'','idweb':'usr_inf_radfemale','ru':'Женский','en':'','kz':''},
+{'id':20,'parent':'','idweb':'usr_inf_btnsave','ru':'Сохранить','en':'','kz':''},
+{'id':20,'parent':'','idweb':'helpdesk_title','ru':'СООБЩЕНИЕ В СЛУЖБУ ПОДДЕРЖКИ','en':'','kz':''},
+{'id':20,'parent':'','idweb':'helpdesk_txtinput','ru':'Текст','en':'','kz':''},
+{'id':20,'parent':'','idweb':'helpdesk_btnsend','ru':'Отправить','en':'','kz':''}]
+		 
+		 
+		 
+		 
+		 
+		 
+		 

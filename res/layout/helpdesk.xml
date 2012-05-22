@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical"
+	    android:background="#000000" >
+	
+    <Button
+	    android:id="@+id/btnHlpdskTitle"
+	    android:layout_width="fill_parent"
+	    android:layout_height="50dp"
+	    android:background="@drawable/blackbgunpressed"
+	    android:text="СООБЩЕНИЕ В СЛУЖБУ ПОДДЕРЖКИ"
+	    android:textSize="16dp"
+	    android:gravity="center"
+	    android:textColor="#FFF" />
+
+    <EditText
+        android:id="@+id/txtHlpdskInp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Текст" 
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+   		android:textSize="20dp"
+       >
+    </EditText>
+
+    <Button
+        android:id="@+id/btnHlpdskSend"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="ОТПРАВИТЬ"
+	    android:textSize="20dp"
+	    android:textColor="#FFF"
+		android:shadowColor="#000"
+		android:shadowDy="1.5"
+		android:shadowRadius="1"
+        android:padding="10dp"
+		android:layout_margin="10dp"
+		android:layout_marginBottom="20dp"
+		android:background="@drawable/btngreenanim" />
+	
+	        <LinearLayout
+	            android:id="@+id/linearLayout1"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent" >
+	            
+	            <ExpandableListView
+	                android:id="@+id/lvFeedback"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:groupIndicator="@drawable/group_indicator" >
+	            </ExpandableListView>
+	            
+				<!-- <ListView
+				    android:id="@+id/lvFeedback"
+				    android:layout_width="fill_parent"
+				    android:layout_height="fill_parent" >
+			        
+	            </ListView>
+	             -->
+	             
+	        </LinearLayout>
+	
+	</LinearLayout>

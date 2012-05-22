@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  
+    <ListPreference
+        android:title="Ваш город"
+        android:summary="Выберите город"
+        android:key="gpsPref"
+        android:defaultValue="1"
+        android:entries="@array/cityOptions"
+        android:entryValues="@array/cityIndex" />
+    <ListPreference
+        android:title="Настройки языка"
+        android:summary="Выберите язык интерфейса"
+        android:key="gpsPref"
+        android:defaultValue="1"
+        android:entries="@array/langOptions"
+        android:entryValues="@array/langIndex" />
+    
+</PreferenceScreen>
