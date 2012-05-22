@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import kz.crystalspring.android_client.C_FileHelper;
+import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.pointplus.Prefs;
 import kz.crystalspring.pointplus.R;
 import kz.sbeyer.atmpoint1.types.ItemFood;
@@ -49,6 +50,9 @@ public class funFoodController extends ActivityController
 		int iObjID=Integer.parseInt(sObjID);
 		
 		itemFood=(ItemFood)MainApplication.mapItemContainer.getSelectedItem();
+		
+		JSONObject jObject=FSQConnector.getVenueInformation(itemFood.getId());
+		
 		showFood(itemFood);
 	}
 	

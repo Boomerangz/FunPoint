@@ -55,7 +55,7 @@ public abstract class ActivityController
 		return context.onKeyDown(keyCode, event);
 	}
 
-	private JSONObject getJSONObjFromText(int wantedID,String JSONString)
+	private JSONObject getJSONObjFromText(String wantedID,String JSONString)
 	{
 		JSONObject returnObject = null;
 		try
@@ -63,13 +63,13 @@ public abstract class ActivityController
 			JSONArray entries = new JSONArray(JSONString);
 			try
 			{
-				int currID = -1;
+				String currID = "-1";
 				int i = 0;
 				JSONObject jObject = null;
-				while (currID != wantedID && i < entries.length())
+				while (!currID.equals(wantedID) && i < entries.length())
 				{
 					jObject = entries.getJSONObject(i);
-					currID = jObject.getInt("id");
+					currID = jObject.getString("id");
 					i++;
 				}
 				if (currID == wantedID)
@@ -92,7 +92,7 @@ public abstract class ActivityController
 		return returnObject;
 	}
 
-	protected JSONObject findObjectInJSON(int wantedID, String fileName)
+	protected JSONObject findObjectInJSON(String wantedID, String fileName)
 	{
 		try
 		{
@@ -107,7 +107,7 @@ public abstract class ActivityController
 		}
 	}
 	
-	protected JSONObject findObjectInJSONZIP(int wantedID, String fileName)
+	protected JSONObject findObjectInJSONZIP(String wantedID, String fileName)
 	{
 		try
 		{

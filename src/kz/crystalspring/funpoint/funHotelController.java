@@ -61,8 +61,7 @@ public class funHotelController extends ActivityController implements ViewFactor
 		btn=(Button)context.findViewById(R.id.button1);
 		
 		String sObjID=Prefs.getSelObjId(context.getApplicationContext());
-		int iObjID=Integer.parseInt(sObjID);
-		itemHotel=getHotel(iObjID);
+		itemHotel=(ItemHotel) MainApplication.mapItemContainer.getSelectedItem();
 		showHotel(itemHotel);
 		
 	}
@@ -99,7 +98,7 @@ public class funHotelController extends ActivityController implements ViewFactor
 		
 	}
 
-	private ItemHotel getHotel(int wantedID)
+	private ItemHotel getHotel(String wantedID)
 	{
 		ItemHotel currHotel=null;
 		String fileName = "json_hotels_1_ru_zip";

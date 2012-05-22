@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ import kz.sbeyer.atmpoint1.types.ItemHotel;
 
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -29,6 +31,7 @@ public class FSQConnector
 	public static final String CLIENT_SECRET = "YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO";
 	private static final String API_URL = "https://api.foursquare.com/v2";
 	private static final String TAG = "FoursquareApi";
+	private static final String API_VERSION = "&v=20120522";
 	
 
 	public static ArrayList<MapItem> loadItems(GeoPoint point, String category)
@@ -64,41 +67,21 @@ public class FSQConnector
 				sUrl+="&categoryId="+category;
 			
 			sUrl += "&client_id=" + CLIENT_ID + "&client_secret="
-					+ CLIENT_SECRET;
-			URL url = new URL(sUrl);
+					+ CLIENT_SECRET+API_VERSION;
 
-			Log.d(TAG, "Opening URL " + url.toString());
+			String response = loadByUrl(sUrl);
+			JSONObject jsonObj = new JSONObject(response);// (JSONObject) new JSONTokener(response).nextValue();
 
-			HttpURLConnection urlConnection = (HttpURLConnection) url
-					.openConnection();
+			JSONArray items = (JSONArray) jsonObj.getJSONObject("response")
+					.getJSONArray("venues");
 
-			urlConnection.setRequestMethod("GET");
-			urlConnection.setDoInput(true);
-			urlConnection.setDoOutput(true);
-
-			urlConnection.connect();
-
-			String response = streamToString(urlConnection.getInputStream());
-			JSONObject jsonObj = (JSONObject) new JSONTokener(response)
-					.nextValue();
-
-			JSONArray groups = (JSONArray) jsonObj.getJSONObject("response")
-					.getJSONArray("groups");
-
-			int length = groups.length();
+			int length = items.length();
 
 			if (length > 0)
 			{
 				for (int i = 0; i < length; i++)
 				{
-					JSONObject group = (JSONObject) groups.get(i);
-					JSONArray items = (JSONArray) group.getJSONArray("items");
-
-					int ilength = items.length();
-
-					for (int j = 0; j < ilength; j++)
-					{
-						JSONObject item = (JSONObject) items.get(j);
+						JSONObject item = (JSONObject) items.get(i);
 						
 						FSQItem venue;
 						if (category.equals(MapItem.FSQ_TYPE_FOOD))
@@ -111,7 +94,6 @@ public class FSQConnector
 						venue.setCategory(category);
 						if (venue != null)
 							venueList.add(venue);
-					}
 				}
 			}
 		} catch (Exception ex)
@@ -151,5 +133,58 @@ public class FSQConnector
 		}
 
 		return str;
+	}
+	
+	
+	
+	public static JSONObject getVenueInformation(String id)
+	{
+		String sUrl = API_URL + "/venues/" + id;
+		
+		
+		sUrl += "?client_id=" + CLIENT_ID + "&client_secret="
+				+ CLIENT_SECRET+API_VERSION;
+
+		String response = loadByUrl(sUrl);
+		JSONObject jsonObj;
+		try
+		{
+			jsonObj = (JSONObject) new JSONObject(response);
+			return jsonObj.getJSONObject("response");
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	
+	}
+		
+	
+	
+	
+	private static String loadByUrl(String sUrl)
+	{
+		
+		try
+		{
+     	URL url = new URL(sUrl);
+		Log.d(TAG, "Opening URL " + url.toString());
+
+		HttpURLConnection urlConnection = (HttpURLConnection) url
+				.openConnection();
+
+		urlConnection.setRequestMethod("GET");
+		urlConnection.setDoInput(true);
+		urlConnection.setDoOutput(true);
+
+		urlConnection.connect();
+		return streamToString(urlConnection.getInputStream());
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

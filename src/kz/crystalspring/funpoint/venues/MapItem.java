@@ -20,7 +20,7 @@ import android.location.Location;
 
 public abstract class MapItem
 {
-	int id;
+	String id;
 	float longitude;
 	float latitude;
 	int valid;
@@ -39,7 +39,7 @@ public abstract class MapItem
 	public static Context context;
 	private static Drawable icon;
 
-	public int getId()
+	public String getId()
 	{
 		return id;
 	}
@@ -57,7 +57,7 @@ public abstract class MapItem
 	}
 	
 
-	public void setId(int id)
+	public void setId(String id)
 	{
 		this.id = id;
 	}
@@ -115,7 +115,7 @@ public abstract class MapItem
 	@Override
 	public String toString()
 	{
-		return "ID " + Integer.toString(getId());
+		return "ID " + getId();
 	}
 
 	public abstract String getIconName();

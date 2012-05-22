@@ -30,3 +30,9 @@ public class ItemFood extends FSQItem
 		return this;
 	}
 }
+
+
+class FoodOptionalInformation
+{
+	
+}

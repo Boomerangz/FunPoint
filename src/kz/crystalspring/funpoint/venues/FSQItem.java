@@ -28,6 +28,7 @@ public class FSQItem extends MapItem
 		try
 		{
 			setName(jObject.getString("name"));
+			setId(jObject.getString("id"));
 			JSONObject location=jObject.getJSONObject("location");
 			float lat=(float) location.getDouble("lat");
 			float lng=(float) location.getDouble("lng");

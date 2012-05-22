@@ -59,8 +59,7 @@ public class funCinemaController extends ActivityController
 		timeList = (ListView) context.findViewById(R.id.time_list_view);
 		hallLayout.removeAllViews();
 		String sObjID = Prefs.getSelObjId(context.getApplicationContext());
-		int iObjID = Integer.parseInt(sObjID);
-		cinema = getCinema(iObjID);
+		cinema = (ItemCinema) MainApplication.mapItemContainer.getSelectedItem();
 		loadCinemaTimeTable();
 		showCinema(cinema);
 		if (cinema.getHallTable().size()>0)
@@ -107,7 +106,7 @@ public class funCinemaController extends ActivityController
 		timeList.setAdapter(new TimeTableAdapter(context, cinema.getHallTable().get(i).getTimeTable()));
 	}
 
-	private ItemCinema getCinema(int iObjID)
+	private ItemCinema getCinema(String iObjID)
 	{
 		ItemCinema currCinema = new ItemCinema();
 		return currCinema.loadFromJSON(findObjectInJSON(iObjID,
