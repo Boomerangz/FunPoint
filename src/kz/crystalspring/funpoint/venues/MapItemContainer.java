@@ -1,6 +1,7 @@
 package kz.crystalspring.funpoint.venues;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,6 +16,9 @@ public class MapItemContainer
 {
 	private List<String> visibleFilterMap=new ArrayList<String>();
 	private List<MapItem> mapItemArray=new ArrayList<MapItem>();
+	
+	private String[] loadingList={MapItem.FSQ_TYPE_CINEMA,MapItem.FSQ_TYPE_FOOD,MapItem.FSQ_TYPE_HOTEL};
+	
 	private Context context;
 	private GeoPoint point=null;
 	private MapItem selectedItem;
@@ -102,7 +106,7 @@ public class MapItemContainer
 		{
 			
 			ArrayList<String> filterArray=new ArrayList();
-			filterArray.addAll(MainApplication.mapItemContainer.visibleFilterMap);
+			filterArray.addAll(Arrays.asList(loadingList));
 			
 			for (String i:filterArray)
 			{
@@ -121,6 +125,13 @@ public class MapItemContainer
 		{
 			task.run();
 		}
+	}
+
+
+	public void setVisibleFilter(String visibleFilter)
+	{
+		visibleFilterMap.clear();
+		addVisibleFilter(visibleFilter);
 	}
 	
 	

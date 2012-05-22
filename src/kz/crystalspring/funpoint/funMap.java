@@ -8,7 +8,6 @@ import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.MyMapView;
 import kz.crystalspring.pointplus.R;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 import com.readystatesoftware.mapviewballoons.CustomItemizedOverlay;
 import com.readystatesoftware.mapviewballoons.CustomOverlayItem;
 
@@ -70,7 +68,6 @@ public class funMap extends MapActivity implements LocationListener, Refreshable
 			clearMap();
 			addItemListOnMap(MainApplication.mapItemContainer.getFilteredItemList());
 		}
-		//new GeoPoint((int)Math.round(43.271893*1e6), (int)Math.round(76.937792*1e6))
 	}
 	
 	private void addItemOnMap(MapItem item)

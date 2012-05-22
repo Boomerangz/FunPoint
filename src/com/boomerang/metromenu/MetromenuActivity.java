@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.MainMenu;
+import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.R;
 
 import android.app.Activity;
@@ -18,7 +20,7 @@ import android.widget.Toast;
 public class MetromenuActivity extends Activity
 {
 
-	List<TextImageSwitcher> switchers = new ArrayList();
+	List<TextImageSwitcher> switchers = new ArrayList<TextImageSwitcher>();
 	int currButton = -1;
 	Handler mHandler = new Handler();
 
@@ -60,19 +62,39 @@ public class MetromenuActivity extends Activity
 				}
 			});
 		}
-		((TextImageSwitcher) switchers.get(0)).setText("Рестораны");
-		((TextImageSwitcher) switchers.get(0))
+		switchers.get(0).setText("Рестораны");
+		switchers.get(1).setText("Кино");
+		switchers.get(2).setText("Отели");
+		switchers.get(0)
 				.setOnClickListener(new OnClickListener()
 				{
 
 					@Override
 					public void onClick(View v)
 					{
-						Intent intent = new Intent(MetromenuActivity.this,
-								MainMenu.class);
-						startActivity(intent);
+						runMapActivityWithFilter(MapItem.FSQ_TYPE_FOOD);
 					}
 				});
+		switchers.get(1)
+		.setOnClickListener(new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
+				runMapActivityWithFilter(MapItem.FSQ_TYPE_CINEMA);
+			}
+		});
+		switchers.get(2)
+		.setOnClickListener(new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
+				runMapActivityWithFilter(MapItem.FSQ_TYPE_HOTEL);
+			}
+		});
 		mHandler.removeCallbacks(mUpdateTimeTask);
 		mHandler.postDelayed(mUpdateTimeTask, 1000);
 	}
@@ -101,4 +123,13 @@ public class MetromenuActivity extends Activity
 			updateNext();
 		}
 	};
+	
+	
+	private void runMapActivityWithFilter(String visibleFilter)
+	{
+		MainApplication.mapItemContainer.setVisibleFilter(visibleFilter);
+		Intent intent = new Intent(MetromenuActivity.this,
+				MainMenu.class);
+		startActivity(intent);
+	}
 }

@@ -23,7 +23,7 @@ public class ItemCinema extends FSQItem
 	List<CinemaHall> hallTable;
 	boolean hallInfoFilled=false;
 	
-	public static final String CINEMA_IMG="m_1";
+	public static final String CINEMA_IMG="m_2";
 	@Override
 	public String getObjTypeId()
 	{

@@ -8,7 +8,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import kz.sbeyer.atmpoint1.types.ItemCinema;
 import kz.sbeyer.atmpoint1.types.ItemFood;
+import kz.sbeyer.atmpoint1.types.ItemHotel;
 
 
 import org.json.JSONArray;
@@ -101,8 +103,10 @@ public class FSQConnector
 						FSQItem venue;
 						if (category.equals(MapItem.FSQ_TYPE_FOOD))
 							venue = new ItemFood();
-						else 
-							venue = new FSQItem();
+						else if (category.equals(MapItem.FSQ_TYPE_HOTEL))
+							venue = new ItemHotel();
+						else
+							venue = new ItemCinema();
 						venue.loadFromJSON(item);
 						venue.setCategory(category);
 						if (venue != null)
