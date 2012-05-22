@@ -17,6 +17,7 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 import com.readystatesoftware.mapviewballoons.CustomItemizedOverlay;
 import com.readystatesoftware.mapviewballoons.CustomOverlayItem;
 
@@ -189,6 +190,10 @@ public class funMap extends MapActivity implements LocationListener, Refreshable
 	
 	public void selectItem(MapItem item)
 	{
+//		int i=myItemsArray.indexOf(item)+1;
+//		CustomOverlayItem overlay=(CustomOverlayItem) myIO.getItem(i);
+//		myIO.removeOverlay(i);
+//		myIO.addOverlay(overlay);
 		mapView.getController().animateTo(item.getGeoPoint());
 	}
 

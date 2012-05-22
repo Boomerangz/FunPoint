@@ -8,7 +8,7 @@
         android:id="@+id/mvMain"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:apiKey="@string/debugkey"
+        android:apiKey="0zeChg5uBJ1y0cE73j_a0srv022wkGB9NjGTwlA"
         android:clickable="true"
         android:enabled="true" />
 

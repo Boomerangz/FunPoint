@@ -45,6 +45,11 @@ public class CustomItemizedOverlay<Item extends OverlayItem> extends BalloonItem
 	public void addOverlay(CustomOverlayItem overlay) {
 	    m_overlays.add(overlay);
 	}
+	
+	public void removeOverlay(int i) {
+	    m_overlays.remove(i);
+	    populate();
+	}
 
 	@Override
 	protected CustomOverlayItem createItem(int i) {
