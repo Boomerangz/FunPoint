@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 import kz.crystalspring.funpoint.MainApplication;
@@ -19,7 +18,6 @@ public class MapItemContainer
 	private List<String> visibleFilterMap=new ArrayList<String>();
 	private List<MapItem> mapItemArray=new ArrayList<MapItem>();
 	
-	private String[] loadingList={MapItem.FSQ_TYPE_CINEMA,MapItem.FSQ_TYPE_FOOD,MapItem.FSQ_TYPE_HOTEL};
 	
 	private Context context;
 	private GeoPoint point=null;
@@ -82,6 +80,12 @@ public class MapItemContainer
 			deleteVisibleFilter(visibleFilter);
 	}
 	
+	public void addVisibleFilterList(List<String> list)
+	{
+		for (String filter:list)
+			addVisibleFilter(filter);
+	}
+	
 	public void deleteVisibleFilter(String visibleFilter)
 	{
 		if (visibleFilterMap.contains(visibleFilter))
@@ -125,7 +129,7 @@ public class MapItemContainer
 		{
 			
 			ArrayList<String> filterArray=new ArrayList();
-			filterArray.addAll(Arrays.asList(loadingList));
+			filterArray.addAll(Arrays.asList(MapItem.TYPES_ARRAY));
 			
 			for (String i:filterArray)
 			{

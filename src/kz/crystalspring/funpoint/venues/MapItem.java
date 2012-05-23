@@ -28,11 +28,14 @@ public abstract class MapItem
 	public static final int TYPE_HOTEL = 2;
 	public static final int TYPE_FOOD = 3;
 	public static final int TYPE_CINEMA = 4;
+	public static final int TYPE_MARKET = 5;
 	
 	public static final String FSQ_TYPE_CINEMA="4bf58dd8d48988d17f941735";
 	public static final String FSQ_TYPE_HOTEL="4bf58dd8d48988d1fa931735";
 	public static final String FSQ_TYPE_FOOD = "4d4b7105d754a06374d81259";//"4bf58dd8d48988d16d941735";
-	public static final HashMap<Integer, String> FsqTable=new HashMap<Integer, String>();
+	public static final String FSQ_TYPE_MARKET = "4d4b7105d754a06378d81259";
+	
+	public static final String[] TYPES_ARRAY={FSQ_TYPE_CINEMA,FSQ_TYPE_HOTEL,FSQ_TYPE_FOOD,FSQ_TYPE_MARKET};
 	
 	
 	public static Context context;
@@ -43,17 +46,6 @@ public abstract class MapItem
 		return id;
 	}
 	
-	public static void loadHashMap()
-	{
-		FsqTable.put(TYPE_CINEMA, FSQ_TYPE_CINEMA);
-		FsqTable.put(TYPE_HOTEL, FSQ_TYPE_HOTEL);
-		FsqTable.put(TYPE_FOOD, FSQ_TYPE_FOOD);
-	}
-	
-	public static String getStrCategory(int intCategory)
-	{
-		return FsqTable.get(new Integer(intCategory));
-	}
 	
 
 	public void setId(String id)

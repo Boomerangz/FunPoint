@@ -88,8 +88,9 @@ public class FSQConnector
 							venue = new ItemFood();
 						else if (category.equals(MapItem.FSQ_TYPE_HOTEL))
 							venue = new ItemHotel();
-						else
+						else if (category.equals(MapItem.FSQ_TYPE_CINEMA))
 							venue = new ItemCinema();
+						else venue= new FSQItem();
 						venue.loadFromJSON(item);
 						venue.setCategory(category);
 						if (venue != null)

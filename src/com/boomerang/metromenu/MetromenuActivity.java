@@ -69,6 +69,7 @@ public class MetromenuActivity extends Activity
 		switchers.get(0).ImageSource=Arrays.asList(a1);
 		switchers.get(1).setText("Кино");
 		switchers.get(2).setText("Отели");
+		switchers.get(3).setText("Магазины");
 		switchers.get(0)
 				.setOnClickListener(new OnClickListener()
 				{
@@ -97,6 +98,16 @@ public class MetromenuActivity extends Activity
 			public void onClick(View v)
 			{
 				runMapActivityWithFilter(MapItem.FSQ_TYPE_HOTEL);
+			}
+		});
+		switchers.get(3)
+		.setOnClickListener(new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
+				runMapActivityWithFilter(MapItem.FSQ_TYPE_MARKET);
 			}
 		});
 

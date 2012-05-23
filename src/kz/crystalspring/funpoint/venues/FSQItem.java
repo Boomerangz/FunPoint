@@ -49,7 +49,7 @@ public class FSQItem extends MapItem
 	@Override
 	public String getIconName()
 	{
-				return "m_13";
+				return "m_4";
 	}
 	
 	@Override

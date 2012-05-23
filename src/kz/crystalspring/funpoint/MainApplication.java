@@ -33,10 +33,6 @@ public class MainApplication extends Application
 		super.onCreate();
 		mDensity=getApplicationContext().getResources().getDisplayMetrics().density;
 		mapItemContainer=new MapItemContainer(getApplicationContext());
-		mapItemContainer.addVisibleFilter(MapItem.FSQ_TYPE_CINEMA);
-		mapItemContainer.addVisibleFilter(MapItem.FSQ_TYPE_FOOD);
-		mapItemContainer.addVisibleFilter(MapItem.FSQ_TYPE_HOTEL);
-		MapItem.loadHashMap();
 	}
 	
 }
