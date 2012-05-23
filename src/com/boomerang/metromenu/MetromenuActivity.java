@@ -36,26 +36,36 @@ public class MetromenuActivity extends Activity
 
 		switchers.add((TextImageSwitcher) findViewById(R.id.switcher1));
 		switchers.add((TextImageSwitcher) findViewById(R.id.switcher2));
-		switchers.add((TextImageSwitcher) findViewById(R.id.switcher4));
 		switchers.add((TextImageSwitcher) findViewById(R.id.switcher3));
+		switchers.add((TextImageSwitcher) findViewById(R.id.switcher4));
 		switchers.add((TextImageSwitcher) findViewById(R.id.switcher5));
 		switchers.add((TextImageSwitcher) findViewById(R.id.switcher6));
 		switchers.add((TextImageSwitcher) findViewById(R.id.switcher7));
 		switchers.add((TextImageSwitcher) findViewById(R.id.switcher8));
 
-		Integer[] a1 = { R.drawable.rest0,R.drawable.rest1,R.drawable.rest2};
+		Integer[] rest = { R.drawable.rest0,R.drawable.rest1,R.drawable.rest2};
+		Integer[] cinema = { R.drawable.cinema1,R.drawable.cinema3,R.drawable.cinema2};
+		Integer[] shopping = { R.drawable.shopping1,R.drawable.shopping3,R.drawable.shopping2};
+		Integer[] hotel = { R.drawable.hotel1,R.drawable.hotel3,R.drawable.hotel2};
 		Integer[] a = { R.drawable.red, R.drawable.blue };
 		Integer[] b = { R.drawable.blue, R.drawable.red };
 
+		
+		switchers.get(0).ImageSource=Arrays.asList(rest);
+		switchers.get(1).ImageSource=Arrays.asList(cinema);
+		switchers.get(2).ImageSource=Arrays.asList(shopping);
+		switchers.get(3).ImageSource=Arrays.asList(hotel);
 		for (int i = 0; i < switchers.size(); i++)
 		{
 			TextImageSwitcher switcher;
 			switcher = switchers.get(i);
 
-			if (i % 2 == 0)
+			if (i>3)
+			{if (i % 2 == 0)
 				switcher.ImageSource = (Arrays.asList(a));
 			else
 				switcher.ImageSource = (Arrays.asList(b));
+			}
 			switcher.updateImage();
 			switcher.setOnClickListener(new OnClickListener()
 			{
@@ -70,10 +80,9 @@ public class MetromenuActivity extends Activity
 			});
 		}
 		switchers.get(0).setText("Рестораны");
-		switchers.get(0).ImageSource=Arrays.asList(a1);
 		switchers.get(1).setText("Кино");   
-		switchers.get(2).setText("Отели");
-		switchers.get(3).setText("Магазины");
+		switchers.get(3).setText("Отели");
+		switchers.get(2).setText("Магазины");
 		switchers.get(4).setText("Акции и скидки");
 		switchers.get(5).setText("Night.KZ");
 		switchers.get(6).setText("Профиль");
