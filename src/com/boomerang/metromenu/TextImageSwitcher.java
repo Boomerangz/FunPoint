@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageSwitcher;
@@ -20,6 +21,7 @@ public class TextImageSwitcher extends FrameLayout implements ViewFactory {
 	TextView text;
 	ImageSwitcher switcher;
 	List<Integer> ImageSource;
+	static final int durationTime=900;
 	int currImage = -1;
 
 	public TextImageSwitcher(Context context, AttributeSet attrs, int defStyle) {
@@ -46,10 +48,15 @@ public class TextImageSwitcher extends FrameLayout implements ViewFactory {
 		text = (TextView) findViewById(R.id.text);
 		switcher = (ImageSwitcher) findViewById(R.id.Switcher);
 		switcher.setFactory(this);
-		switcher.setInAnimation(AnimationUtils.loadAnimation(getContext(),
-				android.R.anim.fade_in));
-		switcher.setOutAnimation(AnimationUtils.loadAnimation(getContext(),
-				android.R.anim.fade_out));
+
+		Animation inAnimation=AnimationUtils.loadAnimation(getContext(),
+				android.R.anim.fade_in);
+		Animation outAnimation=AnimationUtils.loadAnimation(getContext(),
+				android.R.anim.fade_out);
+		inAnimation.setDuration(durationTime);
+		outAnimation.setDuration(durationTime);
+		switcher.setInAnimation(inAnimation);
+		switcher.setOutAnimation(outAnimation);
 	}
 
 	public void updateImage() {

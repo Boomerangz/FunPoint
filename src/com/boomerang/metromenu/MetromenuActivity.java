@@ -24,7 +24,7 @@ public class MetromenuActivity extends Activity
 	int currButton = -1;
 	Handler mHandler = new Handler();
 	boolean continueUpdating=true;
-	static final int UPDATE_DELAY=1000;
+	static final int UPDATE_DELAY=1000+TextImageSwitcher.durationTime;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -38,6 +38,8 @@ public class MetromenuActivity extends Activity
 		switchers.add((TextImageSwitcher) findViewById(R.id.switcher3));
 		switchers.add((TextImageSwitcher) findViewById(R.id.switcher5));
 		switchers.add((TextImageSwitcher) findViewById(R.id.switcher6));
+		switchers.add((TextImageSwitcher) findViewById(R.id.switcher7));
+		switchers.add((TextImageSwitcher) findViewById(R.id.switcher8));
 
 		Integer[] a1 = { R.drawable.rest0,R.drawable.rest1,R.drawable.rest2};
 		Integer[] a = { R.drawable.red, R.drawable.blue };
@@ -60,7 +62,7 @@ public class MetromenuActivity extends Activity
 				public void onClick(View v)
 				{
 					Toast toast = Toast.makeText(getBaseContext(),
-							"Кнопка нажата", 100);
+							"Coming soon", 100);
 					toast.show();
 				}
 			});
@@ -70,6 +72,8 @@ public class MetromenuActivity extends Activity
 		switchers.get(1).setText("Кино");
 		switchers.get(2).setText("Отели");
 		switchers.get(3).setText("Магазины");
+		switchers.get(4).setText("Акции и скидки");
+		switchers.get(5).setText("Night.KZ");
 		switchers.get(0)
 				.setOnClickListener(new OnClickListener()
 				{
@@ -77,7 +81,7 @@ public class MetromenuActivity extends Activity
 					@Override
 					public void onClick(View v)
 					{
-						runMapActivityWithFilter(MapItem.FSQ_TYPE_FOOD);
+						runItemActivityWithFilter(MapItem.FSQ_TYPE_FOOD);
 					}
 				});
 		switchers.get(1)
@@ -87,7 +91,7 @@ public class MetromenuActivity extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				runMapActivityWithFilter(MapItem.FSQ_TYPE_CINEMA);
+				runItemActivityWithFilter(MapItem.FSQ_TYPE_CINEMA);
 			}
 		});
 		switchers.get(2)
@@ -97,7 +101,7 @@ public class MetromenuActivity extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				runMapActivityWithFilter(MapItem.FSQ_TYPE_HOTEL);
+				runItemActivityWithFilter(MapItem.FSQ_TYPE_HOTEL);
 			}
 		});
 		switchers.get(3)
@@ -107,7 +111,7 @@ public class MetromenuActivity extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				runMapActivityWithFilter(MapItem.FSQ_TYPE_MARKET);
+				runItemActivityWithFilter(MapItem.FSQ_TYPE_MARKET);
 			}
 		});
 
@@ -151,7 +155,7 @@ public class MetromenuActivity extends Activity
 	};
 	
 	
-	private void runMapActivityWithFilter(String visibleFilter)
+	private void runItemActivityWithFilter(String visibleFilter)
 	{
 		MainApplication.mapItemContainer.setVisibleFilter(visibleFilter);
 		Intent intent = new Intent(MetromenuActivity.this,
