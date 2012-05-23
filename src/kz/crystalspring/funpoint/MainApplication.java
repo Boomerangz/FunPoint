@@ -10,15 +10,20 @@ import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItemContainer;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 
 public class MainApplication extends Application
 {
+	public static Context context;
 	public static float mDensity;
 	public static MapItemContainer mapItemContainer;
 	public static RefreshableMapList refreshable;
 	public static CustomMyLocationOverlay gMyLocationOverlay;
 	public static GeoPoint currLocation;
+	public static SharedPreferences mPrefs;
 	
 	
 	public static void refreshMap()
@@ -33,6 +38,8 @@ public class MainApplication extends Application
 		super.onCreate();
 		mDensity=getApplicationContext().getResources().getDisplayMetrics().density;
 		mapItemContainer=new MapItemContainer(getApplicationContext());
+		mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		context=getApplicationContext();
 	}
 	
 }

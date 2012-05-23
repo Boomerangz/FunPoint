@@ -64,8 +64,8 @@ public class MainMenu extends TabActivity
 	Button foodTabButton;
 	Button hotelTabButton;
 	Button cinemaTabButton;
+	Button marketTabButton;
 
-	public static SharedPreferences mPrefs;
 
 	public static Context context;
 	/** message frame for update notification */
@@ -98,11 +98,11 @@ public class MainMenu extends TabActivity
 	private static double currLat = 0.0;
 	private static double currLon = 0.0;
 
-	public static final int OBJECT_LIST_TAB=4;
-	public static final int OBJECT_MAP_TAB=0;
-	public static int currentListTab=0;
-	
-	
+	public static final int OBJECT_DETAIL_TAB = 2;
+	public static final int OBJECT_LIST_TAB = 1;
+	public static final int OBJECT_MAP_TAB = 0;
+	public static int currentListTab = 0;
+
 	public static float getCurrentLatitude()
 	{
 		String city = "";
@@ -161,7 +161,6 @@ public class MainMenu extends TabActivity
 		context = getApplicationContext();
 		assetManager = getAssets();
 
-		mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
 		LocationResult locationResult = new LocationResult()
 		{
@@ -194,81 +193,18 @@ public class MainMenu extends TabActivity
 		cinemaTabButton = (Button) findViewById(R.id.cinema_btn);
 		foodTabButton = (Button) findViewById(R.id.food_btn);
 		hotelTabButton = (Button) findViewById(R.id.hotel_btn);
+		marketTabButton = (Button) findViewById(R.id.market_btn);
 
 		tabHost.setBackgroundColor(Color.BLACK);
 
-		
-		
 		UtilTabHost.addTab(tabHost, R.drawable.food_btn, 1, new Intent(this,
 				funMap.class));
-		UtilTabHost.addTab(tabHost, R.drawable.tab_main_notif_selector, 1,
-				new Intent(this, Helpdesk.class));
-		UtilTabHost.addTab(tabHost, R.drawable.tab_main_pers_selector, 2,
-				new Intent(this, UserInfo.class));
-		UtilTabHost.addTab(tabHost, R.drawable.tab_main_pers_selector, 3,
-				new Intent(this, funObjectDetail.class));
 		UtilTabHost.addTab(tabHost, R.drawable.tab_main_pers_selector, 4,
 				new Intent(this, funObjectList.class));
-
-		String filtType = Prefs.getFilterType(context);
-		// if(filtType.contentEquals("0")){
-		// btnSwitchObj.setBackgroundDrawable(getResources().getDrawable(R.drawable.menubganimseltop));
-		// btnSwitchProd.setBackgroundResource(R.drawable.blackbganimtop);
-		//
-		// tabHost.setCurrentTab(0);
-		// tabHost.getTabWidget().getChildAt(1).setVisibility(View.GONE);
-		// tabHost.getTabWidget().getChildAt(0).setVisibility(View.VISIBLE);
-		// }else if(filtType.contentEquals("1")){
-		// btnSwitchProd.setBackgroundDrawable(getResources().getDrawable(R.drawable.menubganimseltop));
-		// btnSwitchObj.setBackgroundResource(R.drawable.blackbganimtop);
-		//
-		// tabHost.setCurrentTab(1);
-		// tabHost.getTabWidget().getChildAt(0).setVisibility(View.GONE);
-		// tabHost.getTabWidget().getChildAt(1).setVisibility(View.VISIBLE);
-		// }
-		//
-		// btnSwitchObj.setOnClickListener(new View.OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View arg0) {
-		// // TODO Auto-generated method stub
-		// String filtTypeTmp = Prefs.getFilterType(context);
-		// if(filtTypeTmp.contentEquals("0")){
-		// }
-		// // }else if(filtTypeTmp.contentEquals("1")){
-		// //
-		// btnSwitchObj.setBackgroundDrawable(getResources().getDrawable(R.drawable.menubganimseltop));
-		// // btnSwitchProd.setBackgroundResource(R.drawable.blackbganimtop);
-		// // Prefs.setFilterType(context, "0");
-		// // tabHost.setCurrentTab(0);
-		// // tabHost.getTabWidget().getChildAt(1).setVisibility(View.GONE);
-		// // tabHost.getTabWidget().getChildAt(0).setVisibility(View.VISIBLE);
-		// // }
-		// }
-		// });
-		// btnSwitchProd.setOnClickListener(new View.OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View arg0) {
-		// // TODO Auto-generated method stub
-		// String filtTypeTmp = Prefs.getFilterType(context);
-		// if(filtTypeTmp.contentEquals("0")){
-		// btnSwitchProd.setBackgroundDrawable(getResources().getDrawable(R.drawable.menubganimseltop));
-		// btnSwitchObj.setBackgroundResource(R.drawable.blackbganimtop);
-		// Prefs.setFilterType(context, "1");
-		// tabHost.setCurrentTab(1);
-		// tabHost.getTabWidget().getChildAt(1).setVisibility(View.VISIBLE);
-		// tabHost.getTabWidget().getChildAt(0).setVisibility(View.GONE);
-		// }else if(filtTypeTmp.contentEquals("1")){
-		// }
-		// }
-		// });
+		UtilTabHost.addTab(tabHost, R.drawable.tab_main_pers_selector, 3,
+				new Intent(this, funObjectDetail.class));
 
 		scale = this.getResources().getDisplayMetrics().density;
-
-		tabHost.getTabWidget().getChildAt(0).setVisibility(View.GONE);
-		tabHost.getTabWidget().getChildAt(3).setVisibility(View.GONE);
-		tabHost.getTabWidget().getChildAt(4).setVisibility(View.GONE);
 
 		foodTabButton.setOnClickListener(new OnClickListener()
 		{
@@ -276,7 +212,8 @@ public class MainMenu extends TabActivity
 			public void onClick(View v)
 			{
 
-				MainApplication.mapItemContainer.addVisibleFilter(MapItem.FSQ_TYPE_FOOD);
+				MainApplication.mapItemContainer
+						.addVisibleFilter(MapItem.FSQ_TYPE_FOOD);
 				goToCurrentTab();
 				currentTab = 0;
 				MainApplication.refreshMap();
@@ -289,7 +226,8 @@ public class MainMenu extends TabActivity
 			public void onClick(View v)
 			{
 
-				MainApplication.mapItemContainer.addVisibleFilter(MapItem.FSQ_TYPE_HOTEL);
+				MainApplication.mapItemContainer
+						.addVisibleFilter(MapItem.FSQ_TYPE_HOTEL);
 				goToCurrentTab();
 				Prefs.setSelObjType(MainMenu.this,
 						Integer.toString(MapItem.TYPE_HOTEL));
@@ -305,7 +243,8 @@ public class MainMenu extends TabActivity
 			public void onClick(View v)
 			{
 
-				MainApplication.mapItemContainer.addVisibleFilter(MapItem.FSQ_TYPE_CINEMA);
+				MainApplication.mapItemContainer
+						.addVisibleFilter(MapItem.FSQ_TYPE_CINEMA);
 				goToCurrentTab();
 				Prefs.setSelObjType(MainMenu.this,
 						Integer.toString(MapItem.TYPE_CINEMA));
@@ -315,51 +254,21 @@ public class MainMenu extends TabActivity
 			}
 		});
 
-		tabHost.getTabWidget().getChildAt(1)
-				.setOnClickListener(new OnClickListener()
-				{
-					@Override
-					public void onClick(View v)
-					{
-						prevTab = tabHost.getCurrentTab();
+		marketTabButton.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
 
-						tabHost.setCurrentTab(1);
-					}
-				});
-		tabHost.getTabWidget().getChildAt(2)
-				.setOnClickListener(new OnClickListener()
-				{
-					@Override
-					public void onClick(View v)
-					{
-
-						// tabHost.getCurrentView().setAnimation(fadeOutAnimationRight);
-						tabHost.setCurrentTab(2);
-						currentTab = 4;
-					}
-				});
-		tabHost.getTabWidget().getChildAt(3)
-				.setOnClickListener(new OnClickListener()
-				{
-					@Override
-					public void onClick(View v)
-					{
-						// tabHost.getCurrentView().setAnimation(fadeOutAnimationRight);
-						tabHost.setCurrentTab(3);
-						currentTab = 5;
-					}
-				});
-		// tabHost.getTabWidget().getChildAt(6)
-		// .setOnClickListener(new OnClickListener()
-		// {
-		// @Override
-		// public void onClick(View v)
-		// {
-		// // tabHost.getCurrentView().setAnimation(fadeOutAnimationRight);
-		// tabHost.setCurrentTab(6);
-		// currentTab = 6;
-		// }
-		// });
+				MainApplication.mapItemContainer
+						.addVisibleFilter(MapItem.FSQ_TYPE_MARKET);
+				goToCurrentTab();
+				Prefs.setSelObjType(MainMenu.this,
+						Integer.toString(MapItem.TYPE_MARKET));
+				currentTab = 3;
+				MainApplication.refreshMap();
+			}
+		});
 
 		pUnderHead = new RelativeLayout.LayoutParams(
 				ViewGroup.LayoutParams.FILL_PARENT,
@@ -378,14 +287,6 @@ public class MainMenu extends TabActivity
 			@Override
 			public void onTabChanged(String tabId)
 			{
-				if (Helpdesk.getMessagesCount(context) != 0)
-				{
-					setMessageOpen();
-				} else
-				{
-					setMessageClose();
-				}
-
 				currTab = tabHost.getCurrentTab();
 
 				pFilterType = Prefs.getFilterType(context);
@@ -398,18 +299,7 @@ public class MainMenu extends TabActivity
 			}
 		});
 
-		// ImageButton ibInfo = (ImageButton) findViewById(R.id.ibInfo);
-		// ibInfo.setOnClickListener(new View.OnClickListener() {
-		// @Override
-		// public void onClick(View v) {
-		// // TODO Auto-generated method stub
-		// //dialog.dismiss();
-		// showDialog(R.id.AboutDlg);
-		// }
-		// });
-		//
 		tabHost.setCurrentTab(0);
-
 		if (Prefs.getFirstRun(context).length() < 2)
 		{
 			final CharSequence[] items = new CharSequence[3];
@@ -445,32 +335,6 @@ public class MainMenu extends TabActivity
 			builder1.create().show();
 			Prefs.setFirstRun(context, "123456");
 		}
-
-		if (Helpdesk.getMessagesCount(context) != 0)
-		{
-			setMessageOpen();
-		} else
-		{
-			setMessageClose();
-		}
-	}
-
-	public static void setMessageOpen()
-	{
-		ViewGroup identifyView = (ViewGroup) tabHost.getTabWidget().getChildAt(
-				1);
-		ImageView iv = (ImageView) identifyView.getChildAt(0);
-		iv.setImageDrawable(context.getResources().getDrawable(
-				R.drawable.tab_main_notif_new_selector));
-	}
-
-	public static void setMessageClose()
-	{
-		ViewGroup identifyView = (ViewGroup) tabHost.getTabWidget().getChildAt(
-				1);
-		ImageView iv = (ImageView) identifyView.getChildAt(0);
-		iv.setImageDrawable(context.getResources().getDrawable(
-				R.drawable.tab_main_notif_selector));
 	}
 
 	Thread t;
@@ -607,128 +471,95 @@ public class MainMenu extends TabActivity
 	@Override
 	protected Dialog onCreateDialog(int id)
 	{
-		/*switch (id)
-		{
-		case R.id.AboutDlg:
-		{
-			// ��������� � ����������
-			int padSize = Math.round(4 * scale);
-			int margTopSize = Math.round(4 * scale);
-			int margLeftSize = Math.round(4 * scale);
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-					LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-			lp.setMargins(margLeftSize, margTopSize, margLeftSize, margTopSize);
-
-			LinearLayout linMain = new LinearLayout(this);
-			linMain.setGravity(Gravity.CENTER_HORIZONTAL);
-			linMain.setOrientation(LinearLayout.VERTICAL);
-			linMain.setBackgroundColor(Color.BLACK);
-			linMain.setPadding(margTopSize, margTopSize, margTopSize,
-					margTopSize);
-
-			LinearLayout linSocialButtons = new LinearLayout(this);
-			linSocialButtons.setLayoutParams(new LayoutParams(
-					LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-			linSocialButtons.setGravity(Gravity.CENTER_HORIZONTAL);
-			linSocialButtons.setBackgroundColor(Color.BLACK);
-
-			ImageButton ivFB = new ImageButton(this);
-			ivFB.setImageDrawable(this.getResources().getDrawable(
-					R.drawable.fb_c));
-			ivFB.setOnClickListener(new View.OnClickListener()
-			{
-				@Override
-				public void onClick(View v)
-				{
-					// TODO Auto-generated method stub
-					String url = "http://m.facebook.com/pages/ATMPoint/256617504387201";
-					Intent i = new Intent(Intent.ACTION_VIEW);
-					i.setData(Uri.parse(url));
-					startActivity(i);
-				}
-			});
-			ImageButton ivTW = new ImageButton(this);
-			ivTW.setImageDrawable(this.getResources().getDrawable(
-					R.drawable.tw_c));
-			ivTW.setOnClickListener(new View.OnClickListener()
-			{
-				@Override
-				public void onClick(View v)
-				{
-					// TODO Auto-generated method stub
-					String url = "https://twitter.com/ATMPoint";
-					Intent i = new Intent(Intent.ACTION_VIEW);
-					i.setData(Uri.parse(url));
-					startActivity(i);
-				}
-			});
-			ImageButton ivVK = new ImageButton(this);
-			ivVK.setImageDrawable(this.getResources().getDrawable(
-					R.drawable.vk_c));
-			ivVK.setOnClickListener(new View.OnClickListener()
-			{
-				@Override
-				public void onClick(View v)
-				{
-					// TODO Auto-generated method stub
-					String url = "http://vkontakte.ru/id153857705";
-					Intent i = new Intent(Intent.ACTION_VIEW);
-					i.setData(Uri.parse(url));
-					startActivity(i);
-				}
-			});
-
-			LinearLayout linMessageAndButtons = new LinearLayout(this);
-			linMessageAndButtons.setOrientation(LinearLayout.VERTICAL);
-
-			ImageView ivLogo = new ImageView(this);
-			ivLogo.setImageDrawable(this.getResources().getDrawable(
-					R.drawable.logo_atm));
-			ivLogo.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-					LayoutParams.FILL_PARENT));
-			ivLogo.setBackgroundColor(Color.BLACK);
-
-			ImageView ivLogoCs = new ImageView(this);
-			ivLogoCs.setImageDrawable(this.getResources().getDrawable(
-					R.drawable.logo_cs));
-			ivLogoCs.setPadding(margTopSize, margTopSize, margTopSize,
-					margTopSize);
-			ivLogoCs.setBackgroundColor(Color.BLACK);
-
-			String msgStr = ProjectUtils.getObjectTextById(context, pLang,
-					"about_txt");
-
-			msgTxtView_ = new TextView(this);
-			msgTxtView_.setTextSize(14);
-			msgTxtView_.setText(msgStr);
-			msgTxtView_.setLayoutParams(new LayoutParams(
-					LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-			msgTxtView_.setTextColor(Color.WHITE);
-			msgTxtView_.setBackgroundColor(Color.BLACK);
-			msgFrame_ = new ScrollView(this);
-			linSocialButtons.addView(ivFB);
-			linSocialButtons.addView(ivTW);
-			linSocialButtons.addView(ivVK);
-
-			linMessageAndButtons.addView(msgTxtView_);
-			linMessageAndButtons.addView(linSocialButtons);
-			linMessageAndButtons.addView(ivLogoCs);
-			msgFrame_.addView(linMessageAndButtons);
-
-			linMain.addView(ivLogo);
-			linMain.addView(msgFrame_);
-
-			final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setView(linMain);
-			/*
-			 * .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			 * 
-			 * @Override public void onClick(DialogInterface dialog, int id) {
-			 * // do something if OK dialog.dismiss(); } });
-			 /
-			builder.create().show();
-		}
-		}*/
+		/*
+		 * switch (id) { case R.id.AboutDlg: { // ���������
+		 * � ���������� int padSize = Math.round(4 *
+		 * scale); int margTopSize = Math.round(4 * scale); int margLeftSize =
+		 * Math.round(4 * scale); LinearLayout.LayoutParams lp = new
+		 * LinearLayout.LayoutParams( LayoutParams.FILL_PARENT,
+		 * LayoutParams.FILL_PARENT); lp.setMargins(margLeftSize, margTopSize,
+		 * margLeftSize, margTopSize);
+		 * 
+		 * LinearLayout linMain = new LinearLayout(this);
+		 * linMain.setGravity(Gravity.CENTER_HORIZONTAL);
+		 * linMain.setOrientation(LinearLayout.VERTICAL);
+		 * linMain.setBackgroundColor(Color.BLACK);
+		 * linMain.setPadding(margTopSize, margTopSize, margTopSize,
+		 * margTopSize);
+		 * 
+		 * LinearLayout linSocialButtons = new LinearLayout(this);
+		 * linSocialButtons.setLayoutParams(new LayoutParams(
+		 * LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		 * linSocialButtons.setGravity(Gravity.CENTER_HORIZONTAL);
+		 * linSocialButtons.setBackgroundColor(Color.BLACK);
+		 * 
+		 * ImageButton ivFB = new ImageButton(this);
+		 * ivFB.setImageDrawable(this.getResources().getDrawable(
+		 * R.drawable.fb_c)); ivFB.setOnClickListener(new View.OnClickListener()
+		 * {
+		 * 
+		 * @Override public void onClick(View v) { // TODO Auto-generated method
+		 * stub String url =
+		 * "http://m.facebook.com/pages/ATMPoint/256617504387201"; Intent i =
+		 * new Intent(Intent.ACTION_VIEW); i.setData(Uri.parse(url));
+		 * startActivity(i); } }); ImageButton ivTW = new ImageButton(this);
+		 * ivTW.setImageDrawable(this.getResources().getDrawable(
+		 * R.drawable.tw_c)); ivTW.setOnClickListener(new View.OnClickListener()
+		 * {
+		 * 
+		 * @Override public void onClick(View v) { // TODO Auto-generated method
+		 * stub String url = "https://twitter.com/ATMPoint"; Intent i = new
+		 * Intent(Intent.ACTION_VIEW); i.setData(Uri.parse(url));
+		 * startActivity(i); } }); ImageButton ivVK = new ImageButton(this);
+		 * ivVK.setImageDrawable(this.getResources().getDrawable(
+		 * R.drawable.vk_c)); ivVK.setOnClickListener(new View.OnClickListener()
+		 * {
+		 * 
+		 * @Override public void onClick(View v) { // TODO Auto-generated method
+		 * stub String url = "http://vkontakte.ru/id153857705"; Intent i = new
+		 * Intent(Intent.ACTION_VIEW); i.setData(Uri.parse(url));
+		 * startActivity(i); } });
+		 * 
+		 * LinearLayout linMessageAndButtons = new LinearLayout(this);
+		 * linMessageAndButtons.setOrientation(LinearLayout.VERTICAL);
+		 * 
+		 * ImageView ivLogo = new ImageView(this);
+		 * ivLogo.setImageDrawable(this.getResources().getDrawable(
+		 * R.drawable.logo_atm)); ivLogo.setLayoutParams(new
+		 * LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		 * ivLogo.setBackgroundColor(Color.BLACK);
+		 * 
+		 * ImageView ivLogoCs = new ImageView(this);
+		 * ivLogoCs.setImageDrawable(this.getResources().getDrawable(
+		 * R.drawable.logo_cs)); ivLogoCs.setPadding(margTopSize, margTopSize,
+		 * margTopSize, margTopSize); ivLogoCs.setBackgroundColor(Color.BLACK);
+		 * 
+		 * String msgStr = ProjectUtils.getObjectTextById(context, pLang,
+		 * "about_txt");
+		 * 
+		 * msgTxtView_ = new TextView(this); msgTxtView_.setTextSize(14);
+		 * msgTxtView_.setText(msgStr); msgTxtView_.setLayoutParams(new
+		 * LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		 * msgTxtView_.setTextColor(Color.WHITE);
+		 * msgTxtView_.setBackgroundColor(Color.BLACK); msgFrame_ = new
+		 * ScrollView(this); linSocialButtons.addView(ivFB);
+		 * linSocialButtons.addView(ivTW); linSocialButtons.addView(ivVK);
+		 * 
+		 * linMessageAndButtons.addView(msgTxtView_);
+		 * linMessageAndButtons.addView(linSocialButtons);
+		 * linMessageAndButtons.addView(ivLogoCs);
+		 * msgFrame_.addView(linMessageAndButtons);
+		 * 
+		 * linMain.addView(ivLogo); linMain.addView(msgFrame_);
+		 * 
+		 * final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		 * builder.setView(linMain); /* .setPositiveButton("Ok", new
+		 * DialogInterface.OnClickListener() {
+		 * 
+		 * @Override public void onClick(DialogInterface dialog, int id) { // do
+		 * something if OK dialog.dismiss(); } }); / builder.create().show(); }
+		 * }
+		 */
 		return null;
 	}
 
@@ -799,15 +630,15 @@ public class MainMenu extends TabActivity
 	public static void goToObjectList()
 	{
 		tabHost.setCurrentTab(OBJECT_LIST_TAB);
-		currentListTab=OBJECT_LIST_TAB;
+		currentListTab = OBJECT_LIST_TAB;
 	}
-	
+
 	public static void goToObjectMap()
 	{
 		tabHost.setCurrentTab(OBJECT_MAP_TAB);
-		currentListTab=OBJECT_MAP_TAB;
+		currentListTab = OBJECT_MAP_TAB;
 	}
-	
+
 	public static void goToCurrentTab()
 	{
 		tabHost.setCurrentTab(currentListTab);

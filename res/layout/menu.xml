@@ -71,14 +71,21 @@
                         android:layout_width="100dp"
                         android:layout_height="fill_parent"
                         android:text="hotel" />
+                    <Button
+                        android:id="@+id/market_btn"
+                        android:layout_width="100dp"
+                        android:layout_height="fill_parent"
+                        android:text="markets" />
 
                     <TabWidget
                         android:id="@android:id/tabs"
-                        android:layout_width="200dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_weight="2"
-                        android:gravity="bottom" />
+                        android:gravity="bottom"
+                        android:visibility="gone"
+                         />
                 </LinearLayout>
             </HorizontalScrollView>
 

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import kz.crystalspring.android_client.C_FileHelper;
 import kz.crystalspring.android_client.C_JavascriptInterface;
 import kz.crystalspring.android_client.C_NetHelper;
-import kz.crystalspring.funpoint.MainMenu;
+import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.pointplus.R;
 import kz.sbeyer.atmpoint1.types.ItemMessage;
 
@@ -67,7 +67,7 @@ public class Helpdesk extends Activity{
         pLangActivity = Prefs.getLangPref(context);
         pCityActivity = Prefs.getCityPref(context);
         
-		mPrefs=MainMenu.mPrefs;
+		mPrefs=MainApplication.mPrefs;
 
         bHlpdskTitle = (Button) findViewById(R.id.btnHlpdskTitle);
         tHlpdskInp = (EditText) findViewById(R.id.txtHlpdskInp);
@@ -112,16 +112,10 @@ public class Helpdesk extends Activity{
 			public void onGroupExpand(int arg0)
 			{
 				setMessageRead(adapter.getGroup(arg0));
-				if(Helpdesk.getMessagesCount(context) != 0){
-					MainMenu.setMessageOpen();
-				}else{
-					MainMenu.setMessageClose();
-				}
 			}
 		});
         setObjectsTextVals();
         prepareMessagesList();
-	
 	}
 
 	
@@ -167,7 +161,7 @@ public class Helpdesk extends Activity{
 			byte[] vIconBytes = C_FileHelper.ReadFile(new File(context.getFilesDir() + "/" + fileName));
 			String text = new String(vIconBytes, "UTF-8");
 			
-			SharedPreferences prefs = MainMenu.mPrefs;
+			SharedPreferences prefs = MainApplication.mPrefs;
 			
 			/*input = assetManager.open(fileName);
 
@@ -328,10 +322,10 @@ public class Helpdesk extends Activity{
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-	    if (keyCode == KeyEvent.KEYCODE_BACK) {
-    		MainMenu.tabHost.setCurrentTab(Integer.valueOf(Prefs.getInitTab(context)));
-    		return true;
-	    }
+//	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+//    		MainMenu.tabHost.setCurrentTab(Integer.valueOf(Prefs.getInitTab(context)));
+//    		return true;
+//	    }
 	    return super.onKeyDown(keyCode, event);
 	}
 

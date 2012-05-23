@@ -214,7 +214,7 @@ public class funMap extends MapActivity implements LocationListener,
 	public void showInfo(MapItem item)
 	{
 		MainApplication.mapItemContainer.setSelectedItem(item);
-		MainMenu.tabHost.setCurrentTab(3);
+		MainMenu.tabHost.setCurrentTab(MainMenu.OBJECT_DETAIL_TAB);
 	}
 
 	public void selectItem(MapItem item)

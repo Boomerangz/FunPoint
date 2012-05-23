@@ -350,10 +350,10 @@ public class UserInfo extends Activity implements OnClickListener {
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-	    if (keyCode == KeyEvent.KEYCODE_BACK) {
-    		MainMenu.tabHost.setCurrentTab(Integer.valueOf(Prefs.getInitTab(context)));
-    		return true;
-	    }
+//	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+//    		MainMenu.tabHost.setCurrentTab(Integer.valueOf(Prefs.getInitTab(context)));
+//    		return true;
+//	    }
 	    return super.onKeyDown(keyCode, event);
 	}
 	

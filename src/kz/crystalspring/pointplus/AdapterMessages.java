@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import kz.crystalspring.android_client.C_FileHelper;
-import kz.crystalspring.funpoint.MainMenu;
+import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.pointplus.R;
 import kz.sbeyer.atmpoint1.types.ItemMessage;
 import android.app.Activity;
@@ -232,7 +232,7 @@ public class AdapterMessages extends BaseExpandableListAdapter{
 		Bitmap image = null;
 		String imgSrcStr = bean.getMsgimg();
 
-		mainContext = MainMenu.context;
+		mainContext = kz.crystalspring.funpoint.MainApplication.context;
 
 		AssetManager assetManager = mainContext.getAssets();
 		coef_dp = mainContext.getResources().getDisplayMetrics().density;
@@ -240,7 +240,7 @@ public class AdapterMessages extends BaseExpandableListAdapter{
 		byte[] vIconBytes;
 		try
 		{
-			vIconBytes = C_FileHelper.ReadFile(new File(MainMenu.context.getFilesDir() + "/" + imgSrcStr + ".png"));
+			vIconBytes = C_FileHelper.ReadFile(new File(MainApplication.context.getFilesDir() + "/" + imgSrcStr + ".png"));
 			image = BitmapFactory.decodeByteArray(vIconBytes, 0, vIconBytes.length);
 			//image = BitmapFactory.decodeStream(ims);
 			image.setDensity((int) (image.getDensity() / coef_dp));
