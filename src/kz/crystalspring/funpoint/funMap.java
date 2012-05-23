@@ -11,6 +11,9 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
@@ -34,9 +37,37 @@ public class funMap extends MapActivity implements LocationListener, Refreshable
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
 		mapView=(MyMapView) findViewById(R.id.mvMain);
+		mapView.displayZoomControls(true);
+		ImageView currLocationButton = (ImageView)findViewById(R.id.ImageView01);
+		currLocationButton.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				toCurrentLocation();
+			}
+		});
+		
+		
+		ImageView objectListButton = (ImageView)findViewById(R.id.ListBtn);
+		objectListButton.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				MainMenu.goToObjectList();
+			}
+		});
+		
 		mapOverlays=mapView.getOverlays();
 	}
 	
+	protected void toCurrentLocation()
+	{
+		if (mMyLocationOverlay.getMyLocation()!=null)
+			mapView.getController().animateTo(mMyLocationOverlay.getMyLocation());
+	}
+
 	@Override
 	protected void onResume()
 	{

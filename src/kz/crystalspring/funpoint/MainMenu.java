@@ -98,6 +98,11 @@ public class MainMenu extends TabActivity
 	private static double currLat = 0.0;
 	private static double currLon = 0.0;
 
+	public static final int OBJECT_LIST_TAB=4;
+	public static final int OBJECT_MAP_TAB=0;
+	public static int currentListTab=0;
+	
+	
 	public static float getCurrentLatitude()
 	{
 		String city = "";
@@ -192,6 +197,8 @@ public class MainMenu extends TabActivity
 
 		tabHost.setBackgroundColor(Color.BLACK);
 
+		
+		
 		UtilTabHost.addTab(tabHost, R.drawable.food_btn, 1, new Intent(this,
 				funMap.class));
 		UtilTabHost.addTab(tabHost, R.drawable.tab_main_notif_selector, 1,
@@ -201,7 +208,7 @@ public class MainMenu extends TabActivity
 		UtilTabHost.addTab(tabHost, R.drawable.tab_main_pers_selector, 3,
 				new Intent(this, funObjectDetail.class));
 		UtilTabHost.addTab(tabHost, R.drawable.tab_main_pers_selector, 4,
-				new Intent(this, ObjectsListView.class));
+				new Intent(this, funObjectList.class));
 
 		String filtType = Prefs.getFilterType(context);
 		// if(filtType.contentEquals("0")){
@@ -270,9 +277,8 @@ public class MainMenu extends TabActivity
 			{
 
 				MainApplication.mapItemContainer.addVisibleFilter(MapItem.FSQ_TYPE_FOOD);
-				
+				goToCurrentTab();
 				currentTab = 0;
-				tabHost.setCurrentTab(0);
 				MainApplication.refreshMap();
 			}
 		});
@@ -284,12 +290,11 @@ public class MainMenu extends TabActivity
 			{
 
 				MainApplication.mapItemContainer.addVisibleFilter(MapItem.FSQ_TYPE_HOTEL);
-
+				goToCurrentTab();
 				Prefs.setSelObjType(MainMenu.this,
 						Integer.toString(MapItem.TYPE_HOTEL));
 
 				currentTab = 1;
-				tabHost.setCurrentTab(0);
 				MainApplication.refreshMap();
 			}
 		});
@@ -301,12 +306,11 @@ public class MainMenu extends TabActivity
 			{
 
 				MainApplication.mapItemContainer.addVisibleFilter(MapItem.FSQ_TYPE_CINEMA);
-
+				goToCurrentTab();
 				Prefs.setSelObjType(MainMenu.this,
 						Integer.toString(MapItem.TYPE_CINEMA));
 
 				currentTab = 2;
-				tabHost.setCurrentTab(0);
 				MainApplication.refreshMap();
 			}
 		});
@@ -588,7 +592,7 @@ public class MainMenu extends TabActivity
 	@Override
 	protected void onResume()
 	{
-
+		goToCurrentTab();
 		pLang = Prefs.getLangPref(context);
 		C_NetHelper.SyncData(this, false, false);
 		if ((!(pLangActivity.equalsIgnoreCase(pLang))))
@@ -790,6 +794,23 @@ public class MainMenu extends TabActivity
 				menuItemText3).setIcon(android.R.drawable.ic_menu_preferences);
 
 		return true;
+	}
+
+	public static void goToObjectList()
+	{
+		tabHost.setCurrentTab(OBJECT_LIST_TAB);
+		currentListTab=OBJECT_LIST_TAB;
+	}
+	
+	public static void goToObjectMap()
+	{
+		tabHost.setCurrentTab(OBJECT_MAP_TAB);
+		currentListTab=OBJECT_MAP_TAB;
+	}
+	
+	public static void goToCurrentTab()
+	{
+		tabHost.setCurrentTab(currentListTab);
 	}
 
 }
