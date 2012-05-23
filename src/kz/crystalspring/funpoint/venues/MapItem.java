@@ -24,7 +24,6 @@ public abstract class MapItem
 	float longitude;
 	float latitude;
 	int valid;
-	GeoPoint currLocation;
 
 	public static final int TYPE_HOTEL = 2;
 	public static final int TYPE_FOOD = 3;
@@ -242,5 +241,11 @@ public abstract class MapItem
 				else 
 					return 0;
 			}});
+	}
+	
+	@Override 
+	public boolean equals(Object o)
+	{
+		return ((MapItem)o).id.equals(this.id);
 	}
 }

@@ -146,7 +146,7 @@ public class MetromenuActivity extends Activity
 		Intent intent = new Intent(MetromenuActivity.this,
 				MainMenu.class);
 		startActivity(intent);
-		MainMenu.currentListTab=MainMenu.OBJECT_LIST_TAB;
+		MainMenu.currentListTab=MainMenu.OBJECT_MAP_TAB;
 		continueUpdating=false;
 	}
 }

@@ -160,11 +160,6 @@ public class ItemCinema extends FSQItem
 		return hallInfoFilled;
 	}
 	
-	@Override
-	public String toString()
-	{
-		return super.toString()+" "+getName();
-	}
 	
 	public String getIconName()
 	{

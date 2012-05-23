@@ -2,6 +2,8 @@ package kz.crystalspring.funpoint.venues;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,6 +47,23 @@ public class MapItemContainer
 		for (MapItem item:mapItemArray)
 		if (visibleFilterMap.contains(item.getObjTypeId()))
 				filteredList.add(item);
+		Comparator comp=new Comparator<MapItem>()
+		{
+
+			@Override
+			public int compare(MapItem lhs, MapItem rhs)
+			{
+				if (lhs.distanceTo(MainApplication.currLocation)>rhs.distanceTo(MainApplication.currLocation))
+					return 1;
+				else
+					if (lhs.distanceTo(MainApplication.currLocation)<rhs.distanceTo(MainApplication.currLocation))
+						return -1;
+					else
+				return 0;
+			}
+		};
+		if (MainApplication.currLocation!=null)
+			Collections.sort(filteredList,comp);
 		return filteredList;
 	}
 	

@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.android.maps.GeoPoint;
+
+import kz.crystalspring.funpoint.funMap.CustomMyLocationOverlay;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItemContainer;
 
@@ -14,6 +17,8 @@ public class MainApplication extends Application
 	public static float mDensity;
 	public static MapItemContainer mapItemContainer;
 	public static RefreshableMapList refreshable;
+	public static CustomMyLocationOverlay gMyLocationOverlay;
+	public static GeoPoint currLocation;
 	
 	
 	public static void refreshMap()
