@@ -99,6 +99,11 @@ public class FSQItem extends MapItem
 			e.printStackTrace();
 		}
 	}
+	
+	public OptionalInfo getOptionalInfo()
+	{
+		return optInfo;
+	}
 
 
 	class OptionalInfo
@@ -119,7 +124,7 @@ public class FSQItem extends MapItem
 			JSONArray tipItems;
 			try
 			{
-				tipItems = jObject.getJSONObject("groups").getJSONArray("items");
+				tipItems = jObject.getJSONArray("groups").getJSONObject(0).getJSONArray("items");
 			} catch (JSONException e)
 			{
 				e.printStackTrace();
