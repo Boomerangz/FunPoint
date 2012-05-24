@@ -33,7 +33,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <ListView
-            android:id="@+id/listView1"
+            android:id="@+id/comment_list"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
         </ListView>

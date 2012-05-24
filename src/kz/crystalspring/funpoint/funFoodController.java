@@ -1,20 +1,31 @@
 package kz.crystalspring.funpoint;
 
 import java.io.File;
+
+import kz.crystalspring.funpoint.TimeTableAdapter.ViewHolder;
+import kz.crystalspring.funpoint.venues.*;
 import java.io.IOException;
+import java.util.List;
 
 import kz.crystalspring.android_client.C_FileHelper;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.pointplus.Prefs;
 import kz.crystalspring.pointplus.R;
 import kz.sbeyer.atmpoint1.types.ItemFood;
+import kz.sbeyer.atmpoint1.types.ItemCinema.CinemaTimeLine;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +36,7 @@ public class funFoodController extends ActivityController
 	TextView addressTV;
 	TextView lunchPriceTV;
 	TextView avgPriceTV;
+	ListView commentsList;
 
 	funFoodController(Activity context)
 	{
@@ -47,6 +59,7 @@ public class funFoodController extends ActivityController
 		lunchPriceTV = (TextView) context.findViewById(R.id.food_lunch_price);
 		avgPriceTV = (TextView) context.findViewById(R.id.food_avg_price);
 		String sObjID=Prefs.getSelObjId(context.getApplicationContext());
+		commentsList=(ListView)context.findViewById(R.id.comment_list);
 		int iObjID=Integer.parseInt(sObjID);
 		
 		itemFood=(ItemFood)MainApplication.mapItemContainer.getSelectedItem();
@@ -68,7 +81,8 @@ public class funFoodController extends ActivityController
 		titleTV.setText(food.getName());
 		addressTV.setText(food.getAddress());
 		lunchPriceTV.setText(food.getLunchPrice());
-		//avgPriceTV.setText(food.getPriceInterval());
+		VenueCommentsAdapter adapter=new VenueCommentsAdapter(context, itemFood.getOptionalInfo().getCommentsList());
+		commentsList.setAdapter(adapter);
 	}
 	
 	
@@ -79,4 +93,62 @@ public class funFoodController extends ActivityController
 	}
 }
 
+class VenueCommentsAdapter extends BaseAdapter
+{
+	List<VenueComment> data;
+	private LayoutInflater mInflater;
 
+	VenueCommentsAdapter(Context context,List<VenueComment> commentList)
+	{
+		this.data=commentList;
+		 mInflater = LayoutInflater.from(context);
+	}
+	
+	@Override
+	public int getCount()
+	{
+		return data.size();
+	}
+
+	@Override
+	public Object getItem(int position)
+	{
+		return data.get(position);
+	}
+
+	@Override
+	public long getItemId(int position)
+	{
+		return position;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent)
+	{
+		ViewHolder holder;
+        if (convertView == null) 
+        {
+            convertView = mInflater.inflate(R.layout.comment_list_item, null);
+            holder = new ViewHolder();
+            holder.text = (TextView) convertView.findViewById(R.id.text);
+            holder.author = (TextView) convertView.findViewById(R.id.author);
+         
+           // convertView.setMinimumHeight(60);
+            convertView.setTag(holder);
+        } 
+        else 
+        {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        holder.text.setText(data.get(position).getText());
+        holder.author.setText(data.get(position).getAuthor());
+        return convertView;
+    }
+
+    static class ViewHolder 
+    {
+        TextView author;
+        TextView text;
+    }
+	
+}
