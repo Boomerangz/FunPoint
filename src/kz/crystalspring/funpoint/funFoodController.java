@@ -52,6 +52,7 @@ public class funFoodController extends ActivityController
 		itemFood=(ItemFood)MainApplication.mapItemContainer.getSelectedItem();
 		
 		JSONObject jObject=FSQConnector.getVenueInformation(itemFood.getId());
+		itemFood.itemFoodLoadOptionalInfo(jObject);
 		
 		showFood(itemFood);
 	}

@@ -151,7 +151,7 @@ public class FSQConnector
 		try
 		{
 			jsonObj = (JSONObject) new JSONObject(response);
-			return jsonObj.getJSONObject("response");
+			return jsonObj.getJSONObject("response").getJSONObject("venue");
 		} catch (JSONException e)
 		{
 			e.printStackTrace();

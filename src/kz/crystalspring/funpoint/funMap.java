@@ -29,7 +29,7 @@ public class funMap extends MapActivity implements LocationListener,
 	List<Overlay> mapOverlays;
 	CustomMyLocationOverlay mMyLocationOverlay;
 	CustomItemizedOverlay myIO;
-	List myItemsArray;
+	List<MapItem> myItemsArray;
 	boolean refreshing = false;
 
 	@Override
@@ -99,6 +99,7 @@ public class funMap extends MapActivity implements LocationListener,
 			clearMap();
 			addItemListOnMap(MainApplication.mapItemContainer
 					.getFilteredItemList());
+			mapView.invalidate();
 		}
 	}
 
