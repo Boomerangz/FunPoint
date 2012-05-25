@@ -188,4 +188,10 @@ public class FSQConnector
 			return null;
 		}
 	}
+	
+	
+	public void checkIn(String venueID)
+	{
+		
+	}
 }

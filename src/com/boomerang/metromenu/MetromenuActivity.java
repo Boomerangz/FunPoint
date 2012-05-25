@@ -6,6 +6,7 @@ import java.util.List;
 
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.MainMenu;
+import kz.crystalspring.funpoint.ProfilePage;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.Helpdesk;
 import kz.crystalspring.pointplus.R;
@@ -256,7 +257,7 @@ public class MetromenuActivity extends Activity
 
 	private void openUserInfo()
 	{
-		openActivity(UserInfo.class);
+		openActivity(ProfilePage.class);
 	}
 
 }

@@ -49,8 +49,8 @@ public class funFoodController extends ActivityController
 		// TODO Auto-generated method stub
 
 	}
-	
-	@Override 
+
+	@Override
 	protected void onResume()
 	{
 		context.setContentView(R.layout.fun_food_detail);
@@ -58,37 +58,38 @@ public class funFoodController extends ActivityController
 		addressTV = (TextView) context.findViewById(R.id.food_address);
 		lunchPriceTV = (TextView) context.findViewById(R.id.food_lunch_price);
 		avgPriceTV = (TextView) context.findViewById(R.id.food_avg_price);
-		String sObjID=Prefs.getSelObjId(context.getApplicationContext());
-		commentsList=(ListView)context.findViewById(R.id.comment_list);
-		int iObjID=Integer.parseInt(sObjID);
-		
-		itemFood=(ItemFood)MainApplication.mapItemContainer.getSelectedItem();
-		
-		JSONObject jObject=FSQConnector.getVenueInformation(itemFood.getId());
+		String sObjID = Prefs.getSelObjId(context.getApplicationContext());
+		commentsList = (ListView) context.findViewById(R.id.comment_list);
+		int iObjID = Integer.parseInt(sObjID);
+
+		itemFood = (ItemFood) MainApplication.mapItemContainer
+				.getSelectedItem();
+
+		JSONObject jObject = FSQConnector.getVenueInformation(itemFood.getId());
 		itemFood.itemFoodLoadOptionalInfo(jObject);
-		
+
 		showFood(itemFood);
 	}
-	
-	@Override 
+
+	@Override
 	protected void onPause()
 	{
-		
+
 	}
-	
+
 	private void showFood(ItemFood food)
 	{
 		titleTV.setText(food.getName());
 		addressTV.setText(food.getAddress());
 		lunchPriceTV.setText(food.getLunchPrice());
-		VenueCommentsAdapter adapter=new VenueCommentsAdapter(context, itemFood.getOptionalInfo().getCommentsList());
+		VenueCommentsAdapter adapter = new VenueCommentsAdapter(context,
+				itemFood.getOptionalInfo().getCommentsList());
 		commentsList.setAdapter(adapter);
 	}
-	
-	
+
 	private ItemFood getFoodFromJSON(JSONObject jObject)
 	{
-		ItemFood food=new ItemFood();
+		ItemFood food = new ItemFood();
 		return food.loadFromJSON(jObject);
 	}
 }
@@ -98,12 +99,12 @@ class VenueCommentsAdapter extends BaseAdapter
 	List<VenueComment> data;
 	private LayoutInflater mInflater;
 
-	VenueCommentsAdapter(Context context,List<VenueComment> commentList)
+	VenueCommentsAdapter(Context context, List<VenueComment> commentList)
 	{
-		this.data=commentList;
-		 mInflater = LayoutInflater.from(context);
+		this.data = commentList;
+		mInflater = LayoutInflater.from(context);
 	}
-	
+
 	@Override
 	public int getCount()
 	{
@@ -126,29 +127,27 @@ class VenueCommentsAdapter extends BaseAdapter
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		ViewHolder holder;
-        if (convertView == null) 
-        {
-            convertView = mInflater.inflate(R.layout.comment_list_item, null);
-            holder = new ViewHolder();
-            holder.text = (TextView) convertView.findViewById(R.id.text);
-            holder.author = (TextView) convertView.findViewById(R.id.author);
-         
-           // convertView.setMinimumHeight(60);
-            convertView.setTag(holder);
-        } 
-        else 
-        {
-            holder = (ViewHolder) convertView.getTag();
-        }
-        holder.text.setText(data.get(position).getText());
-        holder.author.setText(data.get(position).getAuthor());
-        return convertView;
-    }
+		if (convertView == null)
+		{
+			convertView = mInflater.inflate(R.layout.comment_list_item, null);
+			holder = new ViewHolder();
+			holder.text = (TextView) convertView.findViewById(R.id.text);
+			holder.author = (TextView) convertView.findViewById(R.id.author);
+			// convertView.setMinimumHeight(60);
+			convertView.setTag(holder);
+		} else
+		{
+			holder = (ViewHolder) convertView.getTag();
+		}
+		holder.text.setText(data.get(position).getText());
+		holder.author.setText(data.get(position).getAuthor());
+		return convertView;
+	}
 
-    static class ViewHolder 
-    {
-        TextView author;
-        TextView text;
-    }
-	
+	static class ViewHolder
+	{
+		TextView author;
+		TextView text;
+	}
+
 }

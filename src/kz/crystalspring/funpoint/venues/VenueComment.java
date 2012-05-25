@@ -13,7 +13,7 @@ public class VenueComment
 		VenueComment item=this;
 		try
 		{
-			author="John Doe";
+			author="John Doew";
 			text=jObject.getString("text");
 		} catch (JSONException e)
 		{
@@ -26,7 +26,7 @@ public class VenueComment
 	public String getAuthor()
 	{
 		return author;
-	}
+	} 
 	
 	public String getText()
 	{
