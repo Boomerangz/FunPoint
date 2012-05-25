@@ -30,10 +30,9 @@ import android.widget.Toast;
 
 public class funCinemaController extends ActivityController
 {
-	final String CINEMA_TIME_FILE = "json_cinema_info";
-	final String CINEMA_INFO_FILE = "json_cinema_1_ru";
+	final String CINEMA_TIME_FILE = "json_cinema_info_zip";
 	TextView tv1;
-	//TextView timeTable;
+	// TextView timeTable;
 	LinearLayout hallLayout;
 	ListView timeList;
 	ItemCinema cinema;
@@ -54,15 +53,16 @@ public class funCinemaController extends ActivityController
 	{
 		context.setContentView(R.layout.fun_cinema_detail);
 		tv1 = (TextView) context.findViewById(R.id.object_name);
-		//timeTable = (TextView) context.findViewById(R.id.timetable);
+		// timeTable = (TextView) context.findViewById(R.id.timetable);
 		hallLayout = (LinearLayout) context.findViewById(R.id.hall_layout);
 		timeList = (ListView) context.findViewById(R.id.time_list_view);
 		hallLayout.removeAllViews();
 		String sObjID = Prefs.getSelObjId(context.getApplicationContext());
-		cinema = (ItemCinema) MainApplication.mapItemContainer.getSelectedItem();
+		cinema = (ItemCinema) MainApplication.mapItemContainer
+				.getSelectedItem();
 		loadCinemaTimeTable();
 		showCinema(cinema);
-		if (cinema.getHallTable().size()>0)
+		if (cinema.getHallTable() != null && cinema.getHallTable().size() > 0)
 		{
 			setCurrentHall(0);
 		}
@@ -71,13 +71,13 @@ public class funCinemaController extends ActivityController
 	private void showCinema(ItemCinema cinema2)
 	{
 		tv1.setText(cinema.getName());
-		//timeTable.setText(cinema.getAddress()); 
-		android.view.View.OnClickListener listner=new android.view.View.OnClickListener()
+		// timeTable.setText(cinema.getAddress());
+		android.view.View.OnClickListener listner = new android.view.View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				setCurrentHall(Integer.parseInt((String)((Button)v).getTag()));
+				setCurrentHall(Integer.parseInt((String) ((Button) v).getTag()));
 			}
 		};
 		// отображение залов
@@ -103,14 +103,8 @@ public class funCinemaController extends ActivityController
 
 	protected void setCurrentHall(int i)
 	{
-		timeList.setAdapter(new TimeTableAdapter(context, cinema.getHallTable().get(i).getTimeTable()));
-	}
-
-	private ItemCinema getCinema(String iObjID)
-	{
-		ItemCinema currCinema = new ItemCinema();
-		return currCinema.loadFromJSON(findObjectInJSON(iObjID,
-				CINEMA_INFO_FILE));
+		timeList.setAdapter(new TimeTableAdapter(context, cinema.getHallTable()
+				.get(i).getTimeTable()));
 	}
 
 	@Override
@@ -121,10 +115,9 @@ public class funCinemaController extends ActivityController
 
 	private void loadCinemaTimeTable()
 	{
-
 		try
 		{
-			JSONObject jCinemaInfo = findObjectInJSON(cinema.getId(),
+			JSONObject jCinemaInfo = findObjectInJSONZIP(cinema.getId(),
 					CINEMA_TIME_FILE);
 			if (jCinemaInfo != null)
 			{

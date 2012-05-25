@@ -69,18 +69,16 @@ public abstract class ActivityController
 				while (!currID.equals(wantedID) && i < entries.length())
 				{
 					jObject = entries.getJSONObject(i);
-					currID = jObject.getString("id");
+					currID = jObject.getString("fsqid");
 					i++;
 				}
-				if (currID == wantedID)
+				if (currID.equals(wantedID))
 				{
 					returnObject = jObject;
 				} else
 					returnObject = null;
 			} catch (Exception e)
 			{
-				Toast.makeText(context.getApplicationContext(),
-						"ошибка парсинга", Toast.LENGTH_SHORT).show();
 				returnObject = null;
 			}
 		} catch (Exception je)
@@ -111,8 +109,7 @@ public abstract class ActivityController
 	{
 		try
 		{
-			byte[] vIconBytes = C_FileHelper.ReadFile(new File(context
-					.getFilesDir() + "/" + fileName));
+			byte[] vIconBytes = C_FileHelper.ReadFile(new File(context.getFilesDir() + "/" + fileName));
 			byte[] vIconBytesUnzipped = C_FileHelper.decompress(vIconBytes);
 			String text = new String(vIconBytesUnzipped, "UTF-8");
 			return getJSONObjFromText(wantedID,text);

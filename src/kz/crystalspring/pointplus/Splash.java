@@ -1,5 +1,7 @@
 package kz.crystalspring.pointplus;
 
+import com.boomerang.metromenu.MetromenuActivity;
+
 import kz.crystalspring.android_client.C_DBHelper;
 import kz.crystalspring.android_client.C_FileHelper;
 import kz.crystalspring.android_client.C_Log;
@@ -34,7 +36,7 @@ public class Splash extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} finally{
-					Intent openMainPage = new Intent("kz.crystalspring.pointplus.MAINMENU");
+					Intent openMainPage = new Intent(Splash.this,MetromenuActivity.class);
 					startActivity(openMainPage);
 				}
         	}

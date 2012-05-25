@@ -165,4 +165,10 @@ public class ItemCinema extends FSQItem
 	{
 		return CINEMA_IMG;
 	}
+	
+	@Override 
+	public String toString()
+	{
+		return getName()+"______"+getId();
+	}
 }
