@@ -51,7 +51,6 @@ public class FSQConnector
 						point.getLongitudeE6() / 1e6, category);
 			} catch (Exception e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return new ArrayList();
 			}

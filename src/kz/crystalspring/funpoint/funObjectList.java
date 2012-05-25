@@ -106,8 +106,8 @@ class ObjectAdapter extends BaseAdapter
 	        }
 	        
 	        String st=Integer.toString(position)+". "+data.get(position).toString();
-	        if (MainApplication.currLocation!=null)
-	        	st+="   "+Float.toString(data.get(position).distanceTo(MainApplication.currLocation));
+	        if (MainApplication.getCurrentLocation()!=null)
+	        	st+="   "+Float.toString(data.get(position).distanceTo(MainApplication.getCurrentLocation()));
 	        holder.name.setText(st);
 	        return convertView;
 	    }

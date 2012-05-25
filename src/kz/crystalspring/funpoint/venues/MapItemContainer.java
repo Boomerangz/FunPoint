@@ -51,16 +51,16 @@ public class MapItemContainer
 			@Override
 			public int compare(MapItem lhs, MapItem rhs)
 			{
-				if (lhs.distanceTo(MainApplication.currLocation)>rhs.distanceTo(MainApplication.currLocation))
+				if (lhs.distanceTo(MainApplication.getCurrentLocation())>rhs.distanceTo(MainApplication.getCurrentLocation()))
 					return 1;
 				else
-					if (lhs.distanceTo(MainApplication.currLocation)<rhs.distanceTo(MainApplication.currLocation))
+					if (lhs.distanceTo(MainApplication.getCurrentLocation())<rhs.distanceTo(MainApplication.getCurrentLocation()))
 						return -1;
 					else
 				return 0;
 			}
 		};
-		if (MainApplication.currLocation!=null)
+		if (MainApplication.getCurrentLocation()!=null)
 			Collections.sort(filteredList,comp);
 		return filteredList;
 	}

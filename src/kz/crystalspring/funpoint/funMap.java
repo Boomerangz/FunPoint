@@ -192,11 +192,10 @@ public class funMap extends MapActivity implements LocationListener,
 						refreshing = false;
 						MainApplication.refreshMap();
 					}
-
 				};
 				MainApplication.mapItemContainer.loadNearBy(
 						mMyLocationOverlay.getMyLocation(), task);
-				MainApplication.currLocation = new GeoPoint((int) Math.round(location.getLatitude() * 1e6),(int) Math.round(location.getLongitude() * 1e6));
+				MainApplication.setCurrLocation(new GeoPoint((int) Math.round(location.getLatitude() * 1e6),(int) Math.round(location.getLongitude() * 1e6)));
 			}
 		}
 
