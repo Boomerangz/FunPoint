@@ -23,8 +23,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +38,7 @@ public class funFoodController extends ActivityController
 	TextView addressTV;
 	TextView lunchPriceTV;
 	TextView avgPriceTV;
+	Button checkInBtn;
 	ListView commentsList;
 
 	funFoodController(Activity context)
@@ -60,6 +63,23 @@ public class funFoodController extends ActivityController
 		avgPriceTV = (TextView) context.findViewById(R.id.food_avg_price);
 		String sObjID = Prefs.getSelObjId(context.getApplicationContext());
 		commentsList = (ListView) context.findViewById(R.id.comment_list);
+		checkInBtn = (Button) context.findViewById(R.id.check_in_btn);
+
+		if (MainApplication.FsqApp.hasAccessToken())
+		{
+			checkInBtn.setVisibility(View.VISIBLE);
+			checkInBtn.setOnClickListener(new OnClickListener()
+			{
+				@Override
+				public void onClick(View v)
+				{
+					checkInHere();
+				}
+			});
+		}
+		else 
+			checkInBtn.setVisibility(View.GONE);
+
 		int iObjID = Integer.parseInt(sObjID);
 
 		itemFood = (ItemFood) MainApplication.mapItemContainer
@@ -92,6 +112,12 @@ public class funFoodController extends ActivityController
 		ItemFood food = new ItemFood();
 		return food.loadFromJSON(jObject);
 	}
+
+	private void checkInHere()
+	{
+		FSQConnector.checkIn(itemFood.getId());
+	}
+
 }
 
 class VenueCommentsAdapter extends BaseAdapter

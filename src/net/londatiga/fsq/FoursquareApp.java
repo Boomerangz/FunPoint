@@ -65,7 +65,7 @@ public class FoursquareApp {
 
 	}
 	
-	private void getAccessToken(final String code) {
+	private void loadAccessToken(final String code) {
 		mProgress.setMessage("Getting access token ...");
 		mProgress.show();
 		
@@ -188,7 +188,7 @@ public class FoursquareApp {
 		FsqDialogListener listener = new FsqDialogListener() {
 			@Override
 			public void onComplete(String code) {
-				getAccessToken(code);
+				loadAccessToken(code);
 			}
 			
 			@Override
@@ -296,5 +296,12 @@ public class FoursquareApp {
 	public interface FsqAuthListener {
 		public abstract void onSuccess();
 		public abstract void onFail(String error);
+	}
+
+	public String getAccesToken()
+	{
+		if (hasAccessToken())
+			return mAccessToken;
+		else return null;
 	}
 }
