@@ -3,9 +3,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.londatiga.fsq.FoursquareApp;
+
 import com.google.android.maps.GeoPoint;
 
 import kz.crystalspring.funpoint.funMap.CustomMyLocationOverlay;
+import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItemContainer;
 
@@ -24,7 +27,7 @@ public class MainApplication extends Application
 	public static CustomMyLocationOverlay gMyLocationOverlay;
 	public static GeoPoint currLocation;
 	public static SharedPreferences mPrefs;
-	
+	public static FoursquareApp FsqApp;
 	
 	public static void refreshMap()
 	{
@@ -40,6 +43,7 @@ public class MainApplication extends Application
 		mapItemContainer=new MapItemContainer(getApplicationContext());
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		context=getApplicationContext();
+		FsqApp = new FoursquareApp(this, FSQConnector.CLIENT_ID, FSQConnector.CLIENT_SECRET);
 	}
 	
 }

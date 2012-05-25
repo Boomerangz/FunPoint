@@ -23,7 +23,7 @@ public class ProfilePage extends Activity
 		Button button1=(Button)findViewById(R.id.button1);
 		button1.setText("Log In");
 		final TextView text1=(TextView)findViewById(R.id.textView1);
-		final FoursquareApp mFsqApp = new FoursquareApp(this, FSQConnector.CLIENT_ID, FSQConnector.CLIENT_SECRET);
+		final FoursquareApp mFsqApp = MainApplication.FsqApp;
         ProgressDialog mProgress = new ProgressDialog(this);
         
         mProgress.setMessage("Loading data ...");
@@ -50,7 +50,7 @@ public class ProfilePage extends Activity
         button1.setOnClickListener(new OnClickListener() {
         	@Override
         	public void onClick(View v) {
-        		mFsqApp.authorize();
+        		mFsqApp.authorize(ProfilePage.this);
         	}
         }); 
 	}

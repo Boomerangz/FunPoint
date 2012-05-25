@@ -33,7 +33,6 @@ import android.os.Message;
  */
 public class FoursquareApp {
 	private FoursquareSession mSession;
-	private FoursquareDialog mDialog;
 	private FsqAuthListener mListener;
 	private ProgressDialog mProgress;
 	private String mTokenUrl;
@@ -49,6 +48,8 @@ public class FoursquareApp {
 	
 	private static final String TAG = "FoursquareApi";
 	
+	String url;
+	
 	public FoursquareApp(Context context, String clientId, String clientSecret) {
 		mSession		= new FoursquareSession(context);
 		
@@ -57,24 +58,11 @@ public class FoursquareApp {
 		mTokenUrl		= TOKEN_URL + "&client_id=" + clientId + "&client_secret=" + clientSecret
 						+ "&redirect_uri=" + CALLBACK_URL;
 		
-		String url		= AUTH_URL + "&client_id=" + clientId + "&redirect_uri=" + CALLBACK_URL;
+		url		= AUTH_URL + "&client_id=" + clientId + "&redirect_uri=" + CALLBACK_URL;
 		
-		FsqDialogListener listener = new FsqDialogListener() {
-			@Override
-			public void onComplete(String code) {
-				getAccessToken(code);
-			}
-			
-			@Override
-			public void onError(String error) {
-				mListener.onFail("Authorization failed");
-			}
-		};
 		
-		mDialog			= new FoursquareDialog(context, url, listener);
-		mProgress		= new ProgressDialog(context);
 		
-		mProgress.setCancelable(false);
+
 	}
 	
 	private void getAccessToken(final String code) {
@@ -192,7 +180,23 @@ public class FoursquareApp {
 		return mSession.getUsername();
 	}
 	
-	public void authorize() {
+	public void authorize(Context context) 
+	{
+		mProgress		= new ProgressDialog(context);
+		
+		mProgress.setCancelable(false);
+		FsqDialogListener listener = new FsqDialogListener() {
+			@Override
+			public void onComplete(String code) {
+				getAccessToken(code);
+			}
+			
+			@Override
+			public void onError(String error) {
+				mListener.onFail("Authorization failed");
+			}
+		};
+		FoursquareDialog mDialog			= new FoursquareDialog(context, url, listener);
 		mDialog.show();
 	}
 	
