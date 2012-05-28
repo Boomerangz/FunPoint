@@ -119,7 +119,7 @@ public class funFoodController extends ActivityController
 		}
 		if (itemFood.getFoodOptions()!=null)
 		{
-			lunchPriceTV.setText(food.getLunchPrice());
+			lunchPriceTV.setText(food.getKitchen());
 		}
 		
 	}

@@ -32,7 +32,7 @@ public abstract class MapItem
 	
 	public static final String FSQ_TYPE_CINEMA="4bf58dd8d48988d17f941735";
 	public static final String FSQ_TYPE_HOTEL="4bf58dd8d48988d1fa931735";
-	public static final String FSQ_TYPE_FOOD = "4d4b7105d754a06374d81259";//"4bf58dd8d48988d16d941735";
+	public static final String FSQ_TYPE_FOOD = "4d4b7105d754a06374d81259";//"4bf58dd8d48988d145941735";"4d4b7105d754a06374d81259;
 	public static final String FSQ_TYPE_MARKET = "4d4b7105d754a06378d81259";
 	
 	public static final String[] TYPES_ARRAY={FSQ_TYPE_CINEMA,FSQ_TYPE_HOTEL,FSQ_TYPE_FOOD,FSQ_TYPE_MARKET};

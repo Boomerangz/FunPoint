@@ -41,25 +41,28 @@ public class FSQConnector
 	private static final String TAG = "FoursquareApi";
 	private static final String API_VERSION = "&v=20120522";
 
-	public static ArrayList<MapItem> loadItems(GeoPoint point, String category)
+	public static List<MapItem> loadItems(GeoPoint point, String category)
 	{
 		if (point != null)
 		{
 			try
 			{
-				return getNearby(point.getLatitudeE6() / 1e6,
-						point.getLongitudeE6() / 1e6, category);
+				List<MapItem> list=getNearby(point.getLatitudeE6() / 1e6,
+						point.getLongitudeE6() / 1e6, category,1000);
+				list.addAll(getNearby(point.getLatitudeE6() / 1e6,
+						point.getLongitudeE6() / 1e6, category,0));
+				return list;
 			} catch (Exception e)
 			{
 				e.printStackTrace();
-				return new ArrayList();
+				return new ArrayList<MapItem>();
 			}
 		} else
-			return new ArrayList();
+			return new ArrayList<MapItem>();
 	}
 
 	public static ArrayList<MapItem> getNearby(double latitude,
-			double longitude, String category) throws Exception
+			double longitude, String category,int radius) throws Exception
 	{
 		ArrayList<MapItem> venueList = new ArrayList<MapItem>();
 
@@ -71,6 +74,9 @@ public class FSQConnector
 
 			if (category != null)
 				sUrl += "&categoryId=" + category;
+			
+			if (radius>0)
+				sUrl += "&radius=" + Integer.toString(radius);
 
 			sUrl += "&client_id=" + CLIENT_ID + "&client_secret="
 					+ CLIENT_SECRET + API_VERSION;

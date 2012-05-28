@@ -50,6 +50,14 @@ public class ItemFood extends FSQItem
 		foodOptions=new FoodOptionalInformation().loadFromJSON(jObject);
 	}
 
+	public String getKitchen()
+	{
+		if (foodOptions!=null)
+			return foodOptions.getKitchen();
+		else 
+			return "NULL";
+	}
+
 }
 
 class FoodOptionalInformation
