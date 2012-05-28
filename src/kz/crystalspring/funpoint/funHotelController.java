@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import kz.crystalspring.android_client.C_FileHelper;
+import kz.crystalspring.funpoint.venues.FileConnector;
 import kz.crystalspring.pointplus.Prefs;
 import kz.crystalspring.pointplus.R;
 import kz.sbeyer.atmpoint1.types.ItemHotel;
@@ -102,7 +103,7 @@ public class funHotelController extends ActivityController implements ViewFactor
 	{
 		ItemHotel currHotel=null;
 		String fileName = "json_hotels_1_ru_zip";
-		currHotel=getHotelFromJSON(findObjectInJSONZIP(wantedID,fileName));
+		currHotel=getHotelFromJSON(FileConnector.findObjectInJSONZIP(wantedID,fileName));
 		return currHotel;
 	}
 	

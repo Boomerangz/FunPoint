@@ -240,4 +240,11 @@ public abstract class MapItem
 	{
 		return ((MapItem)o).id.equals(this.id);
 	}
+	
+	
+	public void loadInfoFromFile()
+	{
+		
+	}
+	
 }

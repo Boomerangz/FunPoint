@@ -88,12 +88,12 @@ public class FSQItem extends MapItem
 		return category;
 	}
 
-	public void itemFoodLoadOptionalInfo(JSONObject jObject)
+	public void itemFoodLoadOptionalInfo(JSONObject fsqJObject)
 	{
 		optInfo = new OptionalInfo();
 		try
 		{
-			optInfo.loadComments(jObject.getJSONObject("tips"));
+			optInfo.loadComments(fsqJObject.getJSONObject("tips"));
 		} catch (JSONException e)
 		{
 			e.printStackTrace();

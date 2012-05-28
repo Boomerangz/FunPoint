@@ -25,115 +25,89 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class AdapterMessages extends BaseExpandableListAdapter{
+public class AdapterMessages extends BaseExpandableListAdapter
+{
 	/*
-	ArrayList<Object> messagesList;
- 
-    public Activity context;
-    public LayoutInflater inflater;
-    private Context mainContext;
-    float coef_dp;
- 
-    public AdapterMessages(Activity context,ArrayList<Object> objectsVisibleList) {
-        super();
- 
-        this.context = context;
-        this.messagesList = objectsVisibleList;
-        
-        this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
- 
-    @Override
-    public int getCount() {
-        // TODO Auto-generated method stub
-        return messagesList.size();
-    }
- 
-    @Override
-    public Object getItem(int position) {
-        // TODO Auto-generated method stub
-        return messagesList.get(position);
-    }
- 
-    @Override
-    public long getItemId(int position) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-   
-    public static class ViewHolder
-    {
-    	ImageView msgImg;
-    	TextView msgDatetime;
-    	TextView msgText;
-    }
-    
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
- 
-        ViewHolder holder;
-        if(convertView==null)
-        {
-            holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.message_item, null);
-            
-            holder.msgImg = (ImageView) convertView.findViewById(R.id.msgImg);
-            holder.msgDatetime = (TextView) convertView.findViewById(R.id.msgDatetime);
-            holder.msgText = (TextView) convertView.findViewById(R.id.msgText);
- 
-            convertView.setTag(holder);
-        }
-        else
-            holder=(ViewHolder)convertView.getTag();
- 
-        ItemMessage bean = (ItemMessage) messagesList.get(position);
-        
+	 * ArrayList<Object> messagesList;
+	 * 
+	 * public Activity context; public LayoutInflater inflater; private Context
+	 * mainContext; float coef_dp;
+	 * 
+	 * public AdapterMessages(Activity context,ArrayList<Object>
+	 * objectsVisibleList) { super();
+	 * 
+	 * this.context = context; this.messagesList = objectsVisibleList;
+	 * 
+	 * this.inflater =
+	 * (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE
+	 * ); }
+	 * 
+	 * @Override public int getCount() { // TODO Auto-generated method stub
+	 * return messagesList.size(); }
+	 * 
+	 * @Override public Object getItem(int position) { // TODO Auto-generated
+	 * method stub return messagesList.get(position); }
+	 * 
+	 * @Override public long getItemId(int position) { // TODO Auto-generated
+	 * method stub return 0; }
+	 * 
+	 * public static class ViewHolder { ImageView msgImg; TextView msgDatetime;
+	 * TextView msgText; }
+	 * 
+	 * @Override public View getView(int position, View convertView, ViewGroup
+	 * parent) { // TODO Auto-generated method stub
+	 * 
+	 * ViewHolder holder; if(convertView==null) { holder = new ViewHolder();
+	 * convertView = inflater.inflate(R.layout.message_item, null);
+	 * 
+	 * holder.msgImg = (ImageView) convertView.findViewById(R.id.msgImg);
+	 * holder.msgDatetime = (TextView)
+	 * convertView.findViewById(R.id.msgDatetime); holder.msgText = (TextView)
+	 * convertView.findViewById(R.id.msgText);
+	 * 
+	 * convertView.setTag(holder); } else
+	 * holder=(ViewHolder)convertView.getTag();
+	 * 
+	 * ItemMessage bean = (ItemMessage) messagesList.get(position);
+	 * 
+	 * 
+	 * InputStream ims = null; Bitmap image = null; String imgSrcStr =
+	 * bean.getMsgimg();
+	 * 
+	 * mainContext = MainMenu.context;
+	 * 
+	 * AssetManager assetManager = mainContext.getAssets(); coef_dp =
+	 * mainContext.getResources().getDisplayMetrics().density;
+	 * 
+	 * try { ims = assetManager.open(imgSrcStr+".png"); image =
+	 * BitmapFactory.decodeStream(ims); image.setDensity((int)
+	 * (image.getDensity()/coef_dp));
+	 * 
+	 * } catch (IOException e) { // TODO Auto-generated catch block
+	 * e.printStackTrace(); }
+	 * 
+	 * holder.msgImg.setImageBitmap(image);
+	 * //holder.msgImg.setVisibility(View.GONE);
+	 * holder.msgDatetime.setText(bean.getDate());
+	 * holder.msgText.setText(Html.fromHtml(bean.getMsgtxt()));
+	 * 
+	 * /*holder.msgText.setText( Html.fromHtml( "<b>text3:</b>  Text with a " +
+	 * "<a href=\"http://www.google.com\">lin11111111k</a> " +
+	 * "created in the Java source code using HTML."));
+	 */
+	/*
+	 * holder.msgText.setMovementMethod(LinkMovementMethod.getInstance());
+	 * 
+	 * return convertView; }
+	 */
 
-        InputStream ims = null; 
-        Bitmap image = null;
-        String imgSrcStr = bean.getMsgimg();
-        
-        mainContext = MainMenu.context;
-        
-        AssetManager assetManager = mainContext.getAssets();
-        coef_dp = mainContext.getResources().getDisplayMetrics().density;
-    	
-		try {
-			ims = assetManager.open(imgSrcStr+".png");
-			image = BitmapFactory.decodeStream(ims);
-			image.setDensity((int) (image.getDensity()/coef_dp));
-			
-        } catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-
-        holder.msgImg.setImageBitmap(image);
-        //holder.msgImg.setVisibility(View.GONE);
-        holder.msgDatetime.setText(bean.getDate());
-        holder.msgText.setText(Html.fromHtml(bean.getMsgtxt()));
-        
-        /*holder.msgText.setText(
-                Html.fromHtml(
-                    "<b>text3:</b>  Text with a " +
-                    "<a href=\"http://www.google.com\">lin11111111k</a> " +
-                    "created in the Java source code using HTML."));*/
-       /* holder.msgText.setMovementMethod(LinkMovementMethod.getInstance());
- 
-        return convertView;
-    }*/
-	
 	// Sample data set. children[i] contains the children (String[]) for
 	// groups[i].
-	private String[] groups =
-	{ "People Names", "Dog Names", "Cat Names", "Fish Names" };
-	private String[][] children =
-	{
-	{ "Arnold", "Barry", "Chuck", "David" },
-	{ "Ace", "Bandit", "Cha-Cha", "Deuce" },
-	{ "Fluffy", "Snuggles" },
-	{ "Goldy", "Bubbles" } };
+	private String[] groups = { "People Names", "Dog Names", "Cat Names",
+			"Fish Names" };
+	private String[][] children = { { "Arnold", "Barry", "Chuck", "David" },
+			{ "Ace", "Bandit", "Cha-Cha", "Deuce" }, { "Fluffy", "Snuggles" },
+			{ "Goldy", "Bubbles" } };
 	ArrayList<Object> messagesList;
 	public Activity context;
 	public LayoutInflater inflater;
@@ -186,9 +160,8 @@ public class AdapterMessages extends BaseExpandableListAdapter{
 		TextView textView = new TextView(context);
 		textView.setLayoutParams(llp);
 		textView.setTextColor(context.getResources().getColor(R.color.white));
-		textView.setTextSize(10*density);
-		
-		
+		textView.setTextSize(10 * density);
+
 		ll.setBackgroundDrawable(context.getResources().getDrawable(
 				R.drawable.blackbganim));
 		ll.setPadding((int) (50 * density), (int) (10 * density),
@@ -240,14 +213,15 @@ public class AdapterMessages extends BaseExpandableListAdapter{
 		byte[] vIconBytes;
 		try
 		{
-			vIconBytes = C_FileHelper.ReadFile(new File(MainApplication.context.getFilesDir() + "/" + imgSrcStr + ".png"));
-			image = BitmapFactory.decodeByteArray(vIconBytes, 0, vIconBytes.length);
-			//image = BitmapFactory.decodeStream(ims);
+			vIconBytes = C_FileHelper.ReadFile(new File(MainApplication.context
+					.getFilesDir() + "/" + imgSrcStr + ".png"));
+			image = BitmapFactory.decodeByteArray(vIconBytes, 0,
+					vIconBytes.length);
+			// image = BitmapFactory.decodeStream(ims);
 			image.setDensity((int) (image.getDensity() / coef_dp));
 
 		} catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -256,7 +230,6 @@ public class AdapterMessages extends BaseExpandableListAdapter{
 		holder.msgDatetime.setText(bean.getDate());
 		holder.msgText.setText(Html.fromHtml(bean.getMsgtxt()));
 
-		// holder.msgText.setText(
 		// Html.fromHtml(
 		// "<b>text3:</b>  Text with a " +
 		// "<a href=\"http://www.google.com\">lin11111111k</a> " +
@@ -305,5 +278,4 @@ public class AdapterMessages extends BaseExpandableListAdapter{
 		return true;
 	}
 
- 
 }

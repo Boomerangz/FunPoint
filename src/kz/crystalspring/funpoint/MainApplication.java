@@ -1,4 +1,5 @@
 package kz.crystalspring.funpoint;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import com.google.android.maps.GeoPoint;
 
 import kz.crystalspring.funpoint.funMap.CustomMyLocationOverlay;
 import kz.crystalspring.funpoint.venues.FSQConnector;
+import kz.crystalspring.funpoint.venues.FileConnector;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItemContainer;
 
@@ -65,7 +67,7 @@ public class MainApplication extends Application
 		MainApplication.mapItemContainer.loadNearBy(
 				getCurrentLocation(), task);
 		
-		
+		new FileConnector(getApplicationContext());
 	}
 	
 	public static GeoPoint getCurrentLocation()

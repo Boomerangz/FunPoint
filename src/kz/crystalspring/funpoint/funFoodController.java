@@ -76,8 +76,7 @@ public class funFoodController extends ActivityController
 					checkInHere();
 				}
 			});
-		}
-		else 
+		} else
 			checkInBtn.setVisibility(View.GONE);
 
 		int iObjID = Integer.parseInt(sObjID);
@@ -85,8 +84,19 @@ public class funFoodController extends ActivityController
 		itemFood = (ItemFood) MainApplication.mapItemContainer
 				.getSelectedItem();
 
-		JSONObject jObject = FSQConnector.getVenueInformation(itemFood.getId());
-		itemFood.itemFoodLoadOptionalInfo(jObject);
+		if (itemFood.getOptionalInfo() == null)
+		{
+			JSONObject jObject = FSQConnector.getVenueInformation(itemFood
+					.getId());
+			itemFood.itemFoodLoadOptionalInfo(jObject);
+		}
+
+		if (itemFood.getFoodOptions() == null)
+		{
+			JSONObject jObject = FileConnector.getFoodInfoFromFile(itemFood
+					.getId());
+			itemFood.loadFoodOptions(jObject);
+		}
 
 		showFood(itemFood);
 	}
@@ -101,10 +111,17 @@ public class funFoodController extends ActivityController
 	{
 		titleTV.setText(food.getName());
 		addressTV.setText(food.getAddress());
-		lunchPriceTV.setText(food.getLunchPrice());
-		VenueCommentsAdapter adapter = new VenueCommentsAdapter(context,
-				itemFood.getOptionalInfo().getCommentsList());
-		commentsList.setAdapter(adapter);
+		if (itemFood.getOptionalInfo() != null)
+		{
+			VenueCommentsAdapter adapter = new VenueCommentsAdapter(context,
+					itemFood.getOptionalInfo().getCommentsList());
+			commentsList.setAdapter(adapter);
+		}
+		if (itemFood.getFoodOptions()!=null)
+		{
+			lunchPriceTV.setText(food.getLunchPrice());
+		}
+		
 	}
 
 	private ItemFood getFoodFromJSON(JSONObject jObject)

@@ -48,12 +48,9 @@ public class CustomBalloonOverlayView<Item extends OverlayItem> extends BalloonO
 	@Override
 	protected void setupView(Context context, final ViewGroup parent) {
 		
-		// inflate our custom layout into parent
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View v = inflater.inflate(R.layout.balloon_overlay_example2, parent);
-		
-		// setup our fields
 		title = (TextView) v.findViewById(R.id.balloon_item_title);
 		snippet = (TextView) v.findViewById(R.id.balloon_item_snippet);
 		image = (ImageView) v.findViewById(R.id.balloon_item_image);
