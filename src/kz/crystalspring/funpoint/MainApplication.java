@@ -1,4 +1,5 @@
 package kz.crystalspring.funpoint;
+
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +25,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-
 public class MainApplication extends Application
 {
 	public static Context context;
@@ -36,81 +36,82 @@ public class MainApplication extends Application
 	public static SharedPreferences mPrefs;
 	public static FoursquareApp FsqApp;
 	LocationUpdater updater;
-	
-	public static void refreshMap()
+
+	public static void refreshMapItems()
 	{
-		if (refreshable!=null)
+		if (refreshable != null)
 			refreshable.refreshMapItems();
 	}
-	
+
 	@Override
 	public void onCreate()
 	{
 		super.onCreate();
-		mDensity=getApplicationContext().getResources().getDisplayMetrics().density;
-		mapItemContainer=new MapItemContainer(getApplicationContext());
-		mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		context=getApplicationContext();
-		FsqApp = new FoursquareApp(this, FSQConnector.CLIENT_ID, FSQConnector.CLIENT_SECRET);
-		
-		updater=new LocationUpdater(this);
+		mDensity = getApplicationContext().getResources().getDisplayMetrics().density;
+		mapItemContainer = new MapItemContainer(getApplicationContext());
+		mPrefs = PreferenceManager
+				.getDefaultSharedPreferences(getApplicationContext());
+		context = getApplicationContext();
+		FsqApp = new FoursquareApp(this, FSQConnector.CLIENT_ID,
+				FSQConnector.CLIENT_SECRET);
 
-		
-		Runnable task = new Runnable()//«адаем действие, которое надо осуществить после того как закончитс€ процесс загрузки точек. 
+		updater = new LocationUpdater(this);
+
+		Runnable task = new Runnable()// «адаем действие, которое надо
+										// осуществить после того как закончитс€
+										// процесс загрузки точек.
 		{
 			@Override
 			public void run()
 			{
-				MainApplication.refreshMap();
+				MainApplication.refreshMapItems();
 			}
 		};
-		MainApplication.mapItemContainer.loadNearBy(
-				getCurrentLocation(), task);
-		
+		MainApplication.mapItemContainer.loadNearBy(getCurrentLocation(), task);
+
 		new FileConnector(getApplicationContext());
 	}
-	
+
 	public static GeoPoint getCurrentLocation()
 	{
-		if (gMyLocationOverlay!=null)
+		if (gMyLocationOverlay != null)
 			setCurrLocation(gMyLocationOverlay.getMyLocation());
-		else 
+		else
 		{
-			
+
 		}
 		return currLocation;
 	}
-	
+
 	public static void setCurrLocation(GeoPoint point)
 	{
-		currLocation=point;
-		int i=0;
+		currLocation = point;
+		int i = 0;
 	}
-	
-}
 
+}
 
 class LocationUpdater implements LocationListener
 {
 	MainApplication app;
 	LocationManager locationManager;
+
 	LocationUpdater(MainApplication context)
 	{
-		
-		String sContext= Context.LOCATION_SERVICE;
-		locationManager=(LocationManager)context.getSystemService(sContext);
+
+		String sContext = Context.LOCATION_SERVICE;
+		locationManager = (LocationManager) context.getSystemService(sContext);
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_COARSE);
 		criteria.setPowerRequirement(Criteria.POWER_LOW);
 		String provider = locationManager.getBestProvider(criteria, true);
-		
-		Location location= locationManager.getLastKnownLocation(provider);
+
+		Location location = locationManager.getLastKnownLocation(provider);
 		updateWithLocation(location);
-		
-		
+
 		locationManager.requestLocationUpdates(provider, 2000, 100, this);
 	}
-	
+
 	public void disableUpdating()
 	{
 		locationManager.removeUpdates(this);
@@ -118,10 +119,12 @@ class LocationUpdater implements LocationListener
 
 	private void updateWithLocation(Location location)
 	{
-		if (location!=null)
-			MainApplication.setCurrLocation(new GeoPoint((int)(location.getLatitude()*1e6),(int)(location.getLongitude()*1e6)));
+		if (location != null)
+			MainApplication.setCurrLocation(new GeoPoint((int) (location
+					.getLatitude() * 1e6*1),
+					(int) (location.getLongitude() * 1e6)));
 	}
-	
+
 	@Override
 	public void onLocationChanged(Location location)
 	{
@@ -143,8 +146,6 @@ class LocationUpdater implements LocationListener
 	{
 	}
 }
-
-
 
 interface RefreshableMapList
 {

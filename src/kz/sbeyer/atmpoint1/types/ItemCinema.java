@@ -8,13 +8,24 @@ import java.util.Collections;
 import java.util.List;
 import java.util.jar.JarOutputStream;
 
+import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.MapItem;
+import kz.crystalspring.funpoint.venues.MapItem.ViewHolder;
+import kz.crystalspring.pointplus.R;
 import kz.sbeyer.atmpoint1.types.ItemCinema.CinemaTimeLine;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.Transformation;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class ItemCinema extends FSQItem 
 {
@@ -171,4 +182,101 @@ public class ItemCinema extends FSQItem
 	{
 		return getName()+"______"+getId();
 	}
+	
+	
+	@Override 
+	public View getView(View convertView, int position)
+	{
+		final ViewHolderCinema holder;
+    	LayoutInflater mInflater = LayoutInflater.from(context);
+        if (convertView == null) 
+        {
+            convertView = mInflater.inflate(R.layout.object_list_item_cinema, null);
+            holder = new ViewHolderCinema();
+            holder.name1 = (TextView) convertView.findViewById(R.id.name);
+            holder.name2 = (TextView) convertView.findViewById(R.id.name2);
+         
+            convertView.setMinimumHeight(60);
+            convertView.setTag(holder);
+        } 
+        else 
+        {
+            holder = (ViewHolderCinema) convertView.getTag();
+        }
+        
+        String st=Integer.toString(-position)+". "+toString();
+        if (MainApplication.getCurrentLocation()!=null)
+        	st+="   "+Float.toString(distanceTo(MainApplication.getCurrentLocation()));
+        holder.name1.setText(st);
+        holder.name1.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				holder.name1.startAnimation(new MyScaler(1.0f, 0.0f, 1.0f, 1.0f, 500, holder.name1, holder.name2, true));
+				//holder.name2.setVisibility(View.VISIBLE);
+				//holder.name1.setVisibility(View.GONE);
+			}
+		});
+        holder.name2.setText("____");
+        holder.name2.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				holder.name2.startAnimation(new MyScaler(1.0f, 0.0f, 1.0f, 1.0f, 500, holder.name2, holder.name1, true));
+			}
+		});
+        
+        return convertView;
+    }
+	
+	 public static class ViewHolderCinema 
+	 {
+	        public TextView name1;
+	        public TextView name2;
+	 }
+}
+
+
+class MyScaler extends ScaleAnimation {
+
+    private View mView;
+    private View secondView;
+
+    private LinearLayout.LayoutParams mLayoutParams;
+
+    private int mMarginBottomFromY, mMarginBottomToY;
+
+    private boolean mVanishAfter = false;
+
+    public MyScaler(float fromX, float toX, float fromY, float toY, int duration, View view, View secondView,
+            boolean vanishAfter) {
+        super(fromX, toX, fromY, toY);
+        setDuration(duration);
+        mView = view;
+        this.secondView = secondView;
+        
+        mVanishAfter = vanishAfter;
+        mLayoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
+        int height = mView.getHeight();
+        mMarginBottomFromY = (int) (height * fromY) + mLayoutParams.bottomMargin - height;
+        mMarginBottomToY = (int) (0 - ((height * toY) + mLayoutParams.bottomMargin)) - height;
+    }
+
+    @Override
+    protected void applyTransformation(float interpolatedTime, Transformation t) {
+        super.applyTransformation(interpolatedTime, t);
+        if (interpolatedTime < 1.0f) {
+            int newMarginBottom = mMarginBottomFromY
+                    + (int) ((mMarginBottomToY - mMarginBottomFromY) * interpolatedTime);
+            mLayoutParams.setMargins(mLayoutParams.leftMargin, mLayoutParams.topMargin,
+                mLayoutParams.rightMargin, newMarginBottom);
+            mView.getParent().requestLayout();
+        } else if (mVanishAfter) {
+            mView.setVisibility(View.GONE);
+            secondView.setVisibility(View.VISIBLE);
+        }
+    }
+
 }

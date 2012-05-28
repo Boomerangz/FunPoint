@@ -66,13 +66,12 @@ public class funObjectList extends Activity implements RefreshableMapList
 
 class ObjectAdapter extends BaseAdapter 
 {
-	    private LayoutInflater mInflater;
 	    private List<MapItem> data;
 
 	    public ObjectAdapter(Context context, List<MapItem> _data) 
 	    {
 	    	data=_data;
-	        mInflater = LayoutInflater.from(context);
+
 	    }
 
 	    public int getCount() 
@@ -90,31 +89,7 @@ class ObjectAdapter extends BaseAdapter
 
 	    public View getView(int position, View convertView, ViewGroup parent) 
 	    {
-	    	ViewHolder holder;
-	        if (convertView == null) 
-	        {
-	            convertView = mInflater.inflate(R.layout.object_list_item, null);
-	            holder = new ViewHolder();
-	            holder.name = (TextView) convertView.findViewById(R.id.name);
-	         
-	            convertView.setMinimumHeight(60);
-	            convertView.setTag(holder);
-	        } 
-	        else 
-	        {
-	            holder = (ViewHolder) convertView.getTag();
-	        }
-	        
-	        String st=Integer.toString(position)+". "+data.get(position).toString();
-	        if (MainApplication.getCurrentLocation()!=null)
-	        	st+="   "+Float.toString(data.get(position).distanceTo(MainApplication.getCurrentLocation()));
-	        holder.name.setText(st);
-	        return convertView;
-	    }
-
-	    static class ViewHolder {
-	        TextView name;
-	        
+	    	return data.get(position).getView(convertView, position);
 	    }
 }
 

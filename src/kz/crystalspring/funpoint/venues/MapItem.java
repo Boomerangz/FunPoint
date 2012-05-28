@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.pointplus.R;
 
@@ -17,6 +18,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 public abstract class MapItem
 {
@@ -246,5 +250,36 @@ public abstract class MapItem
 	{
 		
 	}
+	
+	
+	public View getView(View convertView, int position)
+	{
+    	ViewHolder holder;
+    	LayoutInflater mInflater = LayoutInflater.from(context);
+        if (convertView == null) 
+        {
+            convertView = mInflater.inflate(R.layout.object_list_item, null);
+            holder = new ViewHolder();
+            holder.name = (TextView) convertView.findViewById(R.id.name);
+         
+            convertView.setMinimumHeight(60);
+            convertView.setTag(holder);
+        } 
+        else 
+        {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        
+        String st=Integer.toString(position)+". "+toString();
+        if (MainApplication.getCurrentLocation()!=null)
+        	st+="   "+Float.toString(distanceTo(MainApplication.getCurrentLocation()));
+        holder.name.setText(st);
+        return convertView;
+    }
+
+    public static class ViewHolder {
+        public TextView name;
+        
+    }
 	
 }

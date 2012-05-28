@@ -216,7 +216,7 @@ public class MainMenu extends TabActivity
 						.addVisibleFilter(MapItem.FSQ_TYPE_FOOD);
 				goToCurrentTab();
 				currentTab = 0;
-				MainApplication.refreshMap();
+				MainApplication.refreshMapItems();
 			}
 		});
 
@@ -233,7 +233,7 @@ public class MainMenu extends TabActivity
 						Integer.toString(MapItem.TYPE_HOTEL));
 
 				currentTab = 1;
-				MainApplication.refreshMap();
+				MainApplication.refreshMapItems();
 			}
 		});
 
@@ -250,7 +250,7 @@ public class MainMenu extends TabActivity
 						Integer.toString(MapItem.TYPE_CINEMA));
 
 				currentTab = 2;
-				MainApplication.refreshMap();
+				MainApplication.refreshMapItems();
 			}
 		});
 
@@ -266,7 +266,7 @@ public class MainMenu extends TabActivity
 				Prefs.setSelObjType(MainMenu.this,
 						Integer.toString(MapItem.TYPE_MARKET));
 				currentTab = 3;
-				MainApplication.refreshMap();
+				MainApplication.refreshMapItems();
 			}
 		});
 

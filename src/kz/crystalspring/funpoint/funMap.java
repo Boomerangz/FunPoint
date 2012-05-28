@@ -85,11 +85,18 @@ public class funMap extends MapActivity implements LocationListener,
 		myIO = new CustomItemizedOverlay(getResources().getDrawable(
 				R.drawable.c_1), mapView, this);
 		myIO.funmap = this;
-		myItemsArray = new ArrayList();
+		myItemsArray = new ArrayList<MapItem>();
 		System.gc();
 		mapOverlays.add(mMyLocationOverlay);
 		mapOverlays.add(myIO);
 		mMyLocationOverlay.enableMyLocation();
+	}
+
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		mMyLocationOverlay.disableMyLocation();
 	}
 
 	public void refreshMap()
@@ -184,18 +191,23 @@ public class funMap extends MapActivity implements LocationListener,
 				refreshing = true;
 				previousLocation = location;
 
-				Runnable task = new Runnable()//«адаем действие, которое надо осуществить после того как закончитс€ процесс загрузки точек. 
+				Runnable task = new Runnable()// «адаем действие, которое надо
+												// осуществить после того как
+												// закончитс€ процесс загрузки
+												// точек.
 				{
 					@Override
 					public void run()
 					{
 						refreshing = false;
-						MainApplication.refreshMap();
+						MainApplication.refreshMapItems();
 					}
 				};
 				MainApplication.mapItemContainer.loadNearBy(
 						mMyLocationOverlay.getMyLocation(), task);
-				MainApplication.setCurrLocation(new GeoPoint((int) Math.round(location.getLatitude() * 1e6),(int) Math.round(location.getLongitude() * 1e6)));
+				MainApplication.setCurrLocation(new GeoPoint((int) Math
+						.round(location.getLatitude() * 1e6), (int) Math
+						.round(location.getLongitude() * 1e6)));
 			}
 		}
 
