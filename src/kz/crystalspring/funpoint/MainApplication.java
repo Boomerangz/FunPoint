@@ -118,7 +118,8 @@ class LocationUpdater implements LocationListener
 
 	private void updateWithLocation(Location location)
 	{
-		MainApplication.setCurrLocation(new GeoPoint((int)(location.getLatitude()*1e6),(int)(location.getLongitude()*1e6)));
+		if (location!=null)
+			MainApplication.setCurrLocation(new GeoPoint((int)(location.getLatitude()*1e6),(int)(location.getLongitude()*1e6)));
 	}
 	
 	@Override
