@@ -22,10 +22,14 @@ import org.json.JSONObject;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.Transformation;
+import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 public class ItemCinema extends FSQItem 
 {
@@ -193,8 +197,10 @@ public class ItemCinema extends FSQItem
         {
             convertView = mInflater.inflate(R.layout.object_list_item_cinema, null);
             holder = new ViewHolderCinema();
-            holder.name1 = (TextView) convertView.findViewById(R.id.name);
-            holder.name2 = (TextView) convertView.findViewById(R.id.name2);
+            holder.name1 = (TextView) convertView.findViewById(R.id.name1);
+            holder.switcher = (ViewSwitcher) convertView.findViewById(R.id.switcher);
+            holder.cancelButton = (Button) convertView.findViewById(R.id.cancelButton);
+            holder.okButton = (Button) convertView.findViewById(R.id.okButton);
          
             convertView.setMinimumHeight(60);
             convertView.setTag(holder);
@@ -208,25 +214,33 @@ public class ItemCinema extends FSQItem
         if (MainApplication.getCurrentLocation()!=null)
         	st+="   "+Float.toString(distanceTo(MainApplication.getCurrentLocation()));
         holder.name1.setText(st);
+        
+        
         holder.name1.setOnClickListener(new OnClickListener()
 		{
+			
 			@Override
 			public void onClick(View v)
 			{
-				holder.name1.startAnimation(new MyScaler(1.0f, 0.0f, 1.0f, 1.0f, 500, holder.name1, holder.name2, true));
-				//holder.name2.setVisibility(View.VISIBLE);
-				//holder.name1.setVisibility(View.GONE);
+				holder.switcher.showNext();
 			}
 		});
-        holder.name2.setText("____");
-        holder.name2.setOnClickListener(new OnClickListener()
+        
+        holder.cancelButton.setOnClickListener(new OnClickListener()
 		{
+			
 			@Override
 			public void onClick(View v)
 			{
-				holder.name2.startAnimation(new MyScaler(1.0f, 0.0f, 1.0f, 1.0f, 500, holder.name2, holder.name1, true));
+				holder.switcher.showPrevious();
 			}
 		});
+        
+        
+
+        
+
+        
         
         return convertView;
     }
@@ -234,7 +248,9 @@ public class ItemCinema extends FSQItem
 	 public static class ViewHolderCinema 
 	 {
 	        public TextView name1;
-	        public TextView name2;
+	        public ViewSwitcher switcher;
+	        public Button okButton;
+	        public Button cancelButton;
 	 }
 }
 

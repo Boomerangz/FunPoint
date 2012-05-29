@@ -53,5 +53,6 @@ public class ProfilePage extends Activity
         		mFsqApp.authorize(ProfilePage.this);
         	}
         }); 
+        FSQConnector.getTips();
 	}
 }

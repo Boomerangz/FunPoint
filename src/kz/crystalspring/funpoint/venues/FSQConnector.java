@@ -38,6 +38,8 @@ public class FSQConnector
 	public static final String CLIENT_SECRET = "YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO";
 	private static final String API_URL = "https://api.foursquare.com/v2";
 	private static final String CHECK_IN_URL = "https://api.foursquare.com/v2/checkins/add";
+	private static final String TIP_ADD_URL = "https://api.foursquare.com/v2/tips/add";
+	private static final String TIPS_GET_URL = "https://api.foursquare.com/v2/users/self/tips";
 	private static final String TAG = "FoursquareApi";
 	private static final String API_VERSION = "&v=20120522";
 
@@ -219,5 +221,60 @@ public class FSQConnector
 			e.printStackTrace();
 		}
 		System.out.println(st);
+	}
+	
+	public static boolean isFSQConnected()
+	{
+		return MainApplication.FsqApp.hasAccessToken();
+	}
+	
+	public static void addToTips(String venueID, String comment)
+	{
+		String st=""; 
+		try
+		{
+			String sUrl = TIP_ADD_URL + "?oauth_token="
+					+ MainApplication.FsqApp.getAccesToken()+ API_VERSION;
+			URL url = new URL(sUrl);
+			Log.d(TAG, "Opening URL " + url.toString());
+
+			HttpClient client = new DefaultHttpClient();
+			HttpPost post = new HttpPost(sUrl);
+			List pairs = new ArrayList();
+			pairs.add(new BasicNameValuePair("venueId", venueID));
+			pairs.add(new BasicNameValuePair("text", comment));
+			post.setEntity(new UrlEncodedFormEntity(pairs));
+			HttpResponse response = client.execute(post);
+			st = streamToString(response.getEntity().getContent());
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(st);
+	}
+	
+	public static List<String> getTips()
+	{
+		List<String> tips=new ArrayList<String>();
+		if (isFSQConnected())
+		{
+		String st=""; 
+		try
+		{
+			String sUrl = TIPS_GET_URL + "?oauth_token="
+					+ MainApplication.FsqApp.getAccesToken() + "&sort=recent" + API_VERSION;
+			st = loadByUrl(sUrl);
+			
+			JSONArray response=new JSONObject(st).getJSONObject("response").getJSONObject("tips").getJSONArray("items");
+			
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(st);
+		}
+		return tips;
 	}
 }
