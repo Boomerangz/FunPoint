@@ -132,14 +132,14 @@ public class MetromenuActivity extends Activity
 				}
 			});
 		}
-		switchers.get(0).setText("Рестораны");
-		switchers.get(1).setText("Кино");
-		switchers.get(3).setText("Отели");
-		switchers.get(2).setText("Магазины");
-		switchers.get(4).setText("Акции и скидки");
+		switchers.get(0).setText("Р РµСЃС‚РѕСЂР°РЅС‹");
+		switchers.get(1).setText("РљРёРЅРѕ");
+		switchers.get(3).setText("РћС‚РµР»Рё");
+		switchers.get(2).setText("РњР°РіР°Р·РёРЅС‹");
+		switchers.get(4).setText("РђРєС†РёРё Рё СЃРєРёРґРєРё");
 		switchers.get(5).setText("Jam.KZ");
-		switchers.get(6).setText("Профиль");
-		switchers.get(7).setText("Сообщения");
+		switchers.get(6).setText("РџСЂРѕС„РёР»СЊ");
+		switchers.get(7).setText("РЎРѕРѕР±С‰РµРЅРёСЏ");
 		switchers.get(0).setOnClickListener(new OnClickListener()
 		{
 
