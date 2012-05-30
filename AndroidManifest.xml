@@ -68,6 +68,12 @@
                 <action android:name="kz.crystalspring.pointplus.STARTINGPOINT" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name="kz.crystalspring.funpoint.funCheckinNow"
+            android:label="@string/app_name" >
+        </activity>
+        
         <activity
             android:name=".Helpdesk"
             android:label="@string/app_name" >

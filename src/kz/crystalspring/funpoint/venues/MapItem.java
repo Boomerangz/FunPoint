@@ -33,15 +33,15 @@ public abstract class MapItem
 	public static final int TYPE_FOOD = 3;
 	public static final int TYPE_CINEMA = 4;
 	public static final int TYPE_MARKET = 5;
-	
-	public static final String FSQ_TYPE_CINEMA="4bf58dd8d48988d17f941735";
-	public static final String FSQ_TYPE_HOTEL="4bf58dd8d48988d1fa931735";
-	public static final String FSQ_TYPE_FOOD = "4d4b7105d754a06374d81259";//"4bf58dd8d48988d145941735";"4d4b7105d754a06374d81259;
+
+	public static final String FSQ_TYPE_CINEMA = "4bf58dd8d48988d17f941735";
+	public static final String FSQ_TYPE_HOTEL = "4bf58dd8d48988d1fa931735";
+	public static final String FSQ_TYPE_FOOD = "4d4b7105d754a06374d81259";// "4bf58dd8d48988d145941735";"4d4b7105d754a06374d81259;
 	public static final String FSQ_TYPE_MARKET = "4d4b7105d754a06378d81259";
-	
-	public static final String[] TYPES_ARRAY={FSQ_TYPE_CINEMA,FSQ_TYPE_HOTEL,FSQ_TYPE_FOOD,FSQ_TYPE_MARKET};
-	
-	
+
+	public static final String[] TYPES_ARRAY = { FSQ_TYPE_CINEMA,
+			FSQ_TYPE_HOTEL, FSQ_TYPE_FOOD, FSQ_TYPE_MARKET };
+
 	public static Context context;
 	private static Drawable icon;
 
@@ -49,8 +49,6 @@ public abstract class MapItem
 	{
 		return id;
 	}
-	
-	
 
 	public void setId(String id)
 	{
@@ -117,10 +115,11 @@ public abstract class MapItem
 
 	public Drawable getIcon()
 	{
-	
-			int id = getImgId(getIconName());
-			Drawable icon = context.getResources().getDrawable(id);
-			icon.setBounds(-icon.getIntrinsicWidth()/2, -icon.getIntrinsicHeight(), icon.getIntrinsicWidth() /2, 0);
+
+		int id = getImgId(getIconName());
+		Drawable icon = context.getResources().getDrawable(id);
+		icon.setBounds(-icon.getIntrinsicWidth() / 2,
+				-icon.getIntrinsicHeight(), icon.getIntrinsicWidth() / 2, 0);
 
 		return icon;
 	}
@@ -219,67 +218,65 @@ public abstract class MapItem
 				(float) (gp.getLongitudeE6() / 1e6));
 	}
 
-	public static void sortMapItemList(List<MapItem> mapItemList, final GeoPoint point)
+	public static void sortMapItemList(List<MapItem> mapItemList,
+			final GeoPoint point)
 	{
 		Collections.sort(mapItemList, new Comparator<MapItem>()
 		{
 			@Override
 			public int compare(MapItem lhs, MapItem rhs)
 			{
-				if (lhs.distanceTo(point)>rhs.distanceTo(point))
+				if (lhs.distanceTo(point) > rhs.distanceTo(point))
 				{
 					return 1;
-				}
-				else if (lhs.distanceTo(point)<rhs.distanceTo(point))
+				} else if (lhs.distanceTo(point) < rhs.distanceTo(point))
 				{
 					return -1;
-				}
-				else 
+				} else
 					return 0;
-			}});
+			}
+		});
 	}
-	
-	@Override 
+
+	@Override
 	public boolean equals(Object o)
 	{
-		return ((MapItem)o).id.equals(this.id);
+		return ((MapItem) o).id.equals(this.id);
 	}
-	
-	
+
 	public void loadInfoFromFile()
 	{
-		
+
 	}
-	
-	
+
 	public View getView(View convertView, int position)
 	{
-    	ViewHolder holder;
-    	LayoutInflater mInflater = LayoutInflater.from(context);
-        if (convertView == null) 
-        {
-            convertView = mInflater.inflate(R.layout.object_list_item, null);
-            holder = new ViewHolder();
-            holder.name = (TextView) convertView.findViewById(R.id.name);
-         
-            convertView.setMinimumHeight(60);
-            convertView.setTag(holder);
-        } 
-        else 
-        {
-            holder = (ViewHolder) convertView.getTag();
-        }
-        
-        String st=Integer.toString(position)+". "+toString();
-        if (MainApplication.getCurrentLocation()!=null)
-        	st+="   "+Float.toString(distanceTo(MainApplication.getCurrentLocation()));
-        holder.name.setText(st);
-        return convertView;
-    }
+		ViewHolder holder;
+		LayoutInflater mInflater = LayoutInflater.from(context);
+		if (convertView == null||convertView.getTag().getClass()!=ViewHolder.class)
+		{
+			convertView = mInflater.inflate(R.layout.object_list_item, null);
+			holder = new ViewHolder();
+			holder.name = (TextView) convertView.findViewById(R.id.name);
 
-    public static class ViewHolder {
-        public TextView name;
-        
-    }
-	
+			convertView.setMinimumHeight(60);
+			convertView.setTag(holder);
+		} 
+		else
+		{
+			holder = (ViewHolder) convertView.getTag();
+		}
+		String st = Integer.toString(position) + ". " + toString();
+		if (MainApplication.getCurrentLocation() != null)
+			st += "   "
+					+ Float.toString(distanceTo(MainApplication
+							.getCurrentLocation()));
+		holder.name.setText(st);
+		return convertView;
+	}
+
+	public static class ViewHolder
+	{
+		public TextView name;
+	}
 }

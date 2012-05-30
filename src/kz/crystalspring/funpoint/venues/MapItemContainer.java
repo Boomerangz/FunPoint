@@ -39,27 +39,31 @@ public class MapItemContainer
 		this.selectedItem = selectedItem;
 	}
 
+	
+	Comparator comp=new Comparator<MapItem>()
+			{
+
+				@Override
+				public int compare(MapItem lhs, MapItem rhs)
+				{
+					if (lhs.distanceTo(MainApplication.getCurrentLocation())>rhs.distanceTo(MainApplication.getCurrentLocation()))
+						return 1;
+					else
+						if (lhs.distanceTo(MainApplication.getCurrentLocation())<rhs.distanceTo(MainApplication.getCurrentLocation()))
+							return -1;
+						else
+					return 0;
+				}
+			};
+	
+	
 	public List<MapItem> getFilteredItemList()
 	{
 		List<MapItem> filteredList=new ArrayList<MapItem>();
 		for (MapItem item:mapItemArray)
 		if (visibleFilterMap.contains(item.getObjTypeId()))
 				filteredList.add(item);
-		Comparator comp=new Comparator<MapItem>()
-		{
-
-			@Override
-			public int compare(MapItem lhs, MapItem rhs)
-			{
-				if (lhs.distanceTo(MainApplication.getCurrentLocation())>rhs.distanceTo(MainApplication.getCurrentLocation()))
-					return 1;
-				else
-					if (lhs.distanceTo(MainApplication.getCurrentLocation())<rhs.distanceTo(MainApplication.getCurrentLocation()))
-						return -1;
-					else
-				return 0;
-			}
-		};
+		
 		if (MainApplication.getCurrentLocation()!=null)
 			Collections.sort(filteredList,comp);
 		return filteredList;
@@ -69,6 +73,8 @@ public class MapItemContainer
 	{
 		List<MapItem> unFilteredList=new ArrayList<MapItem>();
 		unFilteredList.addAll(mapItemArray);
+		if (MainApplication.getCurrentLocation()!=null)
+			Collections.sort(unFilteredList,comp);
 		return unFilteredList;
 	}
 	
@@ -156,6 +162,41 @@ public class MapItemContainer
 		visibleFilterMap.clear();
 		addVisibleFilter(visibleFilter);
 	}
+
+//	public void loadItem(String id)
+//	{
+//		// TODO Auto-generated method stub
+//		
+//	}
+//	
 	
+//	private class SearchItemsTask extends AsyncTask<Runnable, Integer, Runnable>
+//	{
+//
+//		@Override
+//		protected Runnable doInBackground(Runnable... params)
+//		{
+//			
+//			ArrayList<String> filterArray=new ArrayList();
+//			filterArray.addAll(Arrays.asList(MapItem.TYPES_ARRAY));
+//			
+//			for (String i:filterArray)
+//			{
+//				addItemsList(FSQConnector.loadItems(point,i));
+//			}
+//			
+//			
+//			if (params.length>0)
+//				return params[0];
+//			else 
+//				return null;
+//		}
+//		
+//		@Override
+//		protected void onPostExecute(Runnable task)
+//		{
+//			task.run();
+//		}
+//	}
 	
 }

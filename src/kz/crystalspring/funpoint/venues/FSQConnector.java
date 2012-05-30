@@ -39,7 +39,8 @@ public class FSQConnector
 	private static final String API_URL = "https://api.foursquare.com/v2";
 	private static final String CHECK_IN_URL = "https://api.foursquare.com/v2/checkins/add";
 	private static final String TIP_ADD_URL = "https://api.foursquare.com/v2/tips/add";
-	private static final String TIPS_GET_URL = "https://api.foursquare.com/v2/users/self/tips";
+	private static final String TODO_ADD_URL = "https://api.foursquare.com/v2/lists/self/todos/additem";
+	private static final String TODOS_GET_URL = "https://api.foursquare.com/v2/users/self/todos";
 	private static final String TAG = "FoursquareApi";
 	private static final String API_VERSION = "&v=20120522";
 
@@ -200,27 +201,28 @@ public class FSQConnector
 
 	public static void checkIn(String venueID)
 	{
-		String st="";
-		try
-		{
-			String sUrl = CHECK_IN_URL + "?oauth_token="
-					+ MainApplication.FsqApp.getAccesToken();
-			URL url = new URL(sUrl);
-			Log.d(TAG, "Opening URL " + url.toString());
-
-			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost(sUrl);
-			List pairs = new ArrayList();
-			pairs.add(new BasicNameValuePair("venueId", venueID));
-			post.setEntity(new UrlEncodedFormEntity(pairs));
-			HttpResponse response = client.execute(post);
-			st = streamToString(response.getEntity().getContent());
-		} catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(st);
+//		String st="";
+//		try
+//		{
+//			String sUrl = CHECK_IN_URL + "?oauth_token="
+//					+ MainApplication.FsqApp.getAccesToken();
+//			URL url = new URL(sUrl);
+//			Log.d(TAG, "Opening URL " + url.toString());
+//
+//			HttpClient client = new DefaultHttpClient();
+//			HttpPost post = new HttpPost(sUrl);
+//			List pairs = new ArrayList();
+//			pairs.add(new BasicNameValuePair("venueId", venueID));
+//			post.setEntity(new UrlEncodedFormEntity(pairs));
+//			HttpResponse response = client.execute(post);
+//			st = streamToString(response.getEntity().getContent());
+//		} catch (Exception e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		System.out.println(st);
+		addToTodos(venueID);
 	}
 	
 	public static boolean isFSQConnected()
@@ -254,23 +256,56 @@ public class FSQConnector
 		System.out.println(st);
 	}
 	
-	public static List<String> getTips()
+	
+	
+	public static void addToTodos(String venueID)
 	{
-		List<String> tips=new ArrayList<String>();
+		String st=""; 
+		try
+		{
+			String sUrl = TODO_ADD_URL + "?oauth_token="
+					+ MainApplication.FsqApp.getAccesToken()+ API_VERSION;
+			URL url = new URL(sUrl);
+			Log.d(TAG, "Opening URL " + url.toString());
+
+			HttpClient client = new DefaultHttpClient();
+			HttpPost post = new HttpPost(sUrl);
+			List pairs = new ArrayList();
+			//pairs.add(new BasicNameValuePair("LIST_ID", "self/todos"));
+			pairs.add(new BasicNameValuePair("venueId", venueID));
+			post.setEntity(new UrlEncodedFormEntity(pairs));
+			HttpResponse response = client.execute(post);
+			st = streamToString(response.getEntity().getContent());
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(st);
+	}
+	
+	public static List<FSQTodo> getTodos()
+	{
+		List<FSQTodo> tips=new ArrayList<FSQTodo>();
 		if (isFSQConnected())
 		{
 		String st=""; 
 		try
 		{
-			String sUrl = TIPS_GET_URL + "?oauth_token="
+			String sUrl = TODOS_GET_URL + "?oauth_token="
 					+ MainApplication.FsqApp.getAccesToken() + "&sort=recent" + API_VERSION;
 			st = loadByUrl(sUrl);
 			
-			JSONArray response=new JSONObject(st).getJSONObject("response").getJSONObject("tips").getJSONArray("items");
-			
+			JSONArray response=new JSONObject(st).getJSONObject("response").getJSONObject("todos").getJSONArray("items");
+			for (int i=0; i<response.length(); i++)
+			{
+				FSQTodo item=new FSQTodo().loadFromJSON(response.getJSONObject(i));
+				if (item!=null)
+					tips.add(item);
+			}
 		} catch (Exception e)
 		{
-			// TODO Auto-generated catch block
+			tips=new ArrayList<FSQTodo>();
 			e.printStackTrace();
 		}
 		System.out.println(st);

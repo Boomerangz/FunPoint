@@ -193,7 +193,7 @@ public class ItemCinema extends FSQItem
 	{
 		final ViewHolderCinema holder;
     	LayoutInflater mInflater = LayoutInflater.from(context);
-        if (convertView == null) 
+    	if (convertView == null||convertView.getTag().getClass()!=ViewHolderCinema.class) 
         {
             convertView = mInflater.inflate(R.layout.object_list_item_cinema, null);
             holder = new ViewHolderCinema();
@@ -201,14 +201,13 @@ public class ItemCinema extends FSQItem
             holder.switcher = (ViewSwitcher) convertView.findViewById(R.id.switcher);
             holder.cancelButton = (Button) convertView.findViewById(R.id.cancelButton);
             holder.okButton = (Button) convertView.findViewById(R.id.okButton);
-         
             convertView.setMinimumHeight(60);
             convertView.setTag(holder);
         } 
-        else 
-        {
-            holder = (ViewHolderCinema) convertView.getTag();
-        }
+    	else 
+    	{
+    		holder = (ViewHolderCinema) convertView.getTag();
+    	}
         
         String st=Integer.toString(-position)+". "+toString();
         if (MainApplication.getCurrentLocation()!=null)
@@ -235,12 +234,6 @@ public class ItemCinema extends FSQItem
 				holder.switcher.showPrevious();
 			}
 		});
-        
-        
-
-        
-
-        
         
         return convertView;
     }

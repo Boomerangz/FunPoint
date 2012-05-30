@@ -3,13 +3,16 @@ package kz.crystalspring.funpoint;
 import net.londatiga.fsq.FoursquareApp;
 import net.londatiga.fsq.FoursquareApp.FsqAuthListener;
 import kz.crystalspring.funpoint.venues.FSQConnector;
+import kz.crystalspring.funpoint.venues.FSQTodo;
 import kz.crystalspring.pointplus.R;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +56,9 @@ public class ProfilePage extends Activity
         		mFsqApp.authorize(ProfilePage.this);
         	}
         }); 
-        FSQConnector.getTips();
+        
+        ListView list = (ListView) findViewById(R.id.tips_list);
+        ArrayAdapter adapter= new ArrayAdapter<FSQTodo>(getApplicationContext(), android.R.layout.simple_list_item_1,FSQConnector.getTodos() );
+        list.setAdapter(adapter);
 	}
 }
