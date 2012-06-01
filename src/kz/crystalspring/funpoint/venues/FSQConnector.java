@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import kz.sbeyer.atmpoint1.types.ItemHotel;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -179,18 +181,28 @@ public class FSQConnector
 
 		try
 		{
-			URL url = new URL(sUrl);
-			Log.d(TAG, "Opening URL " + url.toString());
-
-			HttpURLConnection urlConnection = (HttpURLConnection) url
-					.openConnection();
-
-			urlConnection.setRequestMethod("GET");
-			urlConnection.setDoInput(true);
-			urlConnection.setDoOutput(true);
-
-			urlConnection.connect();
-			return streamToString(urlConnection.getInputStream());
+//			URL url = new URL(sUrl);
+//			Log.d(TAG, "Opening URL " + url.toString());
+//
+//			HttpURLConnection urlConnection = (HttpURLConnection) url
+//					.openConnection();
+//
+//			urlConnection.setRequestMethod("GET");
+//			urlConnection.setDoInput(true);
+//			urlConnection.setDoOutput(true);
+//
+//			urlConnection.connect();
+//			
+//			return streamToString(urlConnection.getInputStream());
+			
+			
+			
+			HttpClient client = new DefaultHttpClient();
+			HttpGet request = new HttpGet();
+			request.setURI(new URI(sUrl));
+            HttpResponse response = client.execute(request);
+			return streamToString(response.getEntity().getContent());
+			
 		} catch (Exception e)
 		{
 			// TODO Auto-generated catch block

@@ -20,7 +20,9 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -168,27 +170,19 @@ public class funFoodController extends ActivityController
 		List<String> phones = food.getPhones();
 		for (String phone : phones)
 		{
-			TextView phoneTV = new TextView(context);
-			phoneTV.setLayoutParams(addressTV.getLayoutParams());
-			phoneTV.setTextSize(Math.round(addressTV.getTextSize() * 1.2));
-			phoneTV.setTextColor(addressTV.getTextColors());
-			phoneTV.setTypeface(addressTV.getTypeface());
-			phoneTV.setText(phone);
+			final PhoneTextView phoneTV = new PhoneTextView(context);
+			phoneTV.setPhone(phone);
+			phoneTV.setOnClickListener(new OnClickListener()
+			{
+				
+				@Override
+				public void onClick(View v)
+				{
+					Intent intent=new Intent(Intent.ACTION_DIAL,Uri.parse("tel:"+phoneTV.getPhone()));
+					context.startActivity(intent);
+				}
+			});
 			phoneLayout.addView(phoneTV);
-			TextView phoneTV1 = new TextView(context);
-			phoneTV1.setLayoutParams(addressTV.getLayoutParams());
-			phoneTV1.setTextSize(Math.round(addressTV.getTextSize() * 1.2));
-			phoneTV1.setTextColor(addressTV.getTextColors());
-			phoneTV1.setTypeface(addressTV.getTypeface());
-			phoneTV1.setText(phone);
-			phoneLayout.addView(phoneTV1);
-			TextView phoneTV2 = new TextView(context);
-			phoneTV2.setLayoutParams(addressTV.getLayoutParams());
-			phoneTV2.setTextSize(Math.round(addressTV.getTextSize() * 1.2));
-			phoneTV2.setTextColor(addressTV.getTextColors());
-			phoneTV2.setTypeface(addressTV.getTypeface());
-			phoneTV2.setText(phone);
-			phoneLayout.addView(phoneTV2);
 		}
 	}
 
