@@ -165,4 +165,19 @@ public class ProjectUtils {
 		}
 		return sum;
 	}
+	
+
+	public static List<String> separateStrings(String income, String separator)
+	{
+		List<String> list=new ArrayList();
+		String str=new String(income);
+		while (str.contains(separator))
+		{
+			list.add(str.substring(0,str.indexOf(separator)));
+			str=str.substring(str.indexOf(separator)+1, str.length());
+		}
+		list.add(str.substring(0,str.length()));
+		return list;
+	}
+	
 }

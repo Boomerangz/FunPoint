@@ -15,6 +15,7 @@ public class FSQItem extends MapItem
 	String name;
 	String address;
 	String category = FSQ_TYPE_FOOD;
+	int hereNow;
 
 	OptionalInfo optInfo;
 
@@ -43,6 +44,7 @@ public class FSQItem extends MapItem
 				setAddress(location.getString("address"));
 			setLatitude(lat);
 			setLongitude(lng);
+			setHereNow(jObject.getInt("hereNow"));
 			return this;
 		} catch (JSONException e)
 		{
@@ -94,6 +96,8 @@ public class FSQItem extends MapItem
 		try
 		{
 			optInfo.loadComments(fsqJObject.getJSONObject("tips"));
+			optInfo.loadCategories(fsqJObject.getJSONArray("categories"));
+			optInfo.loadPhones(fsqJObject.getJSONObject("contact"));
 		} catch (JSONException e)
 		{
 			e.printStackTrace();
@@ -103,6 +107,26 @@ public class FSQItem extends MapItem
 	public OptionalInfo getOptionalInfo()
 	{
 		return optInfo;
+	}
+
+	public int getHereNow()
+	{
+		return hereNow;
+	}
+
+	public void setHereNow(int hereNow)
+	{
+		this.hereNow = hereNow;
+	}
+	
+	public String getFSQCategoriesString()
+	{
+		return optInfo.getCategoriesString();
+	}
+
+	public List<String> getPhones()
+	{
+		return optInfo.getFSQPhonesList();
 	}
 	
 }

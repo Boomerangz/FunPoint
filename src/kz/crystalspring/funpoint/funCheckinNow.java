@@ -16,6 +16,11 @@ public class funCheckinNow extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.checkin_list);
+	}
+	@Override
+	public void onResume()
+	{
+		super.onResume();
 		ListView list = (ListView)findViewById(R.id.listView1);
 		list.setAdapter(new ObjectAdapter(this, MainApplication.mapItemContainer.getUnFilteredItemList()));
 		list.setOnItemClickListener(new OnItemClickListener()

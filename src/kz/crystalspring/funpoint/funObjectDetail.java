@@ -65,10 +65,10 @@ public class funObjectDetail extends Activity
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
-			return controller.onKeyDown(keyCode, event);
-		} else
+//		if (keyCode == KeyEvent.KEYCODE_BACK)
+//		{
+//			return controller.onKeyDown(keyCode, event);
+//		} else
 			return super.onKeyDown(keyCode, event);
 	}
 

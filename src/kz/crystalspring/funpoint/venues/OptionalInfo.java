@@ -3,6 +3,8 @@ package kz.crystalspring.funpoint.venues;
 import java.util.ArrayList;
 import java.util.List;
 
+import kz.crystalspring.pointplus.ProjectUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,6 +12,9 @@ import org.json.JSONObject;
 public class OptionalInfo
 {
 	List<VenueComment> commentList = new ArrayList<VenueComment>();
+	List<String> categoryList = new ArrayList<String>(); 
+	List<String> FSQPhonesList = new ArrayList();
+	
 	private void addCommentToList(VenueComment comment)
 	{
 		commentList.add(comment);
@@ -49,4 +54,57 @@ public class OptionalInfo
 			}
 		}
 	}
+	
+	public void loadCategories(JSONArray jArray)
+	{
+		for (int i=0; i<jArray.length(); i++)
+		{
+			try
+			{
+				JSONObject jCateg=jArray.getJSONObject(i);
+				String sCateg=jCateg.getString("name");
+				categoryList.add(sCateg);
+			} catch (JSONException e)
+			{
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	
+	public String getCategoriesString()
+	{
+		String st="";
+		for (String s:categoryList)
+		{
+			st+=s+" ,";
+		}
+		return st;
+	}
+
+	public void loadPhones(JSONObject jsonObject)
+	{
+		try
+		{
+			String phones=jsonObject.getString("formattedPhone");
+			setFSQPhonesList(ProjectUtils.separateStrings(phones, ","));
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public List<String> getFSQPhonesList()
+	{
+		return FSQPhonesList;
+	}
+
+	public void setFSQPhonesList(List<String> fSQPhonesList)
+	{
+		FSQPhonesList = fSQPhonesList;
+	}
+	
+	
+
+	
 }

@@ -7,6 +7,7 @@ import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.MyMapView;
 import kz.crystalspring.pointplus.R;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -191,10 +192,10 @@ public class funMap extends MapActivity implements LocationListener,
 				refreshing = true;
 				previousLocation = location;
 
-				Runnable task = new Runnable()// Задаем действие, которое надо
-												// осуществить после того как
-												// закончится процесс загрузки
-												// точек.
+				Runnable task = new Runnable()// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+												// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+												// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+												// пїЅпїЅпїЅпїЅпїЅ.
 				{
 					@Override
 					public void run()
@@ -226,7 +227,8 @@ public class funMap extends MapActivity implements LocationListener,
 	public void showInfo(MapItem item)
 	{
 		MainApplication.mapItemContainer.setSelectedItem(item);
-		MainMenu.tabHost.setCurrentTab(MainMenu.OBJECT_DETAIL_TAB);
+		//MainMenu.tabHost.setCurrentTab(MainMenu.OBJECT_DETAIL_TAB);
+		startActivity(new Intent(this, funObjectDetail.class));
 	}
 
 	public void selectItem(MapItem item)

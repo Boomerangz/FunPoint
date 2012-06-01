@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,8 +41,14 @@ public class funFoodController extends ActivityController
 	TextView addressTV;
 	TextView lunchPriceTV;
 	TextView avgPriceTV;
-	Button checkInBtn;
+	TextView kitchenTV;
+	TextView hereNowTV;
+	RelativeLayout checkInBtn;
+	RelativeLayout mapInBtn;
+	RelativeLayout hereNowBlock;
 	ListView commentsList;
+
+	public static final int ALPHA = 100;
 
 	funFoodController(Activity context)
 	{
@@ -63,7 +72,15 @@ public class funFoodController extends ActivityController
 		avgPriceTV = (TextView) context.findViewById(R.id.food_avg_price);
 		String sObjID = Prefs.getSelObjId(context.getApplicationContext());
 		commentsList = (ListView) context.findViewById(R.id.comment_list);
-		checkInBtn = (Button) context.findViewById(R.id.check_in_btn);
+		checkInBtn = (RelativeLayout) context.findViewById(R.id.checkin_block);
+		mapInBtn = (RelativeLayout) context.findViewById(R.id.map_block);
+		kitchenTV = (TextView) context.findViewById(R.id.food_kitchen);
+		hereNowTV = (TextView) context.findViewById(R.id.here_now_tv);
+
+		int[] arg = { R.id.checkin_block, R.id.map_block, R.id.herenow_block,
+				R.id.todo_block, R.id.avg_price_block, R.id.address_block,
+				R.id.phone_block };
+		setBlocksAlpha(ALPHA, arg);
 
 		if (MainApplication.FsqApp.hasAccessToken())
 		{
@@ -101,6 +118,15 @@ public class funFoodController extends ActivityController
 		showFood(itemFood);
 	}
 
+	private void setBlocksAlpha(int alpha, int[] args)
+	{
+		for (int n : args)
+		{
+			View block = (View) context.findViewById(n);
+			block.getBackground().setAlpha(alpha);
+		}
+	}
+
 	@Override
 	protected void onPause()
 	{
@@ -110,18 +136,60 @@ public class funFoodController extends ActivityController
 	private void showFood(ItemFood food)
 	{
 		titleTV.setText(food.getName());
-		addressTV.setText(food.getAddress());
+		if (food.getAddress() != null && !food.getAddress().equals(""))
+		{
+			addressTV.setText(food.getAddress());
+			addressTV.setVisibility(View.VISIBLE);
+		} else
+			addressTV.setVisibility(View.GONE);
+		hereNowTV.setText(Integer.toString(food.getHereNow()));
 		if (itemFood.getOptionalInfo() != null)
 		{
 			VenueCommentsAdapter adapter = new VenueCommentsAdapter(context,
 					itemFood.getOptionalInfo().getCommentsList());
 			commentsList.setAdapter(adapter);
 		}
-		if (itemFood.getFoodOptions()!=null)
+		lunchPriceTV.setText(food.getLunchPrice());
+		if (itemFood.getFoodOptions() != null)
 		{
-			lunchPriceTV.setText(food.getKitchen());
+			avgPriceTV.setText(food.getAvgPrice() + "тг");
+			kitchenTV.setText(food.getKitchen());
+
+			kitchenTV.setVisibility(View.VISIBLE);
+			avgPriceTV.setVisibility(View.VISIBLE);
+		} else
+		{
+			kitchenTV.setVisibility(View.INVISIBLE);
+			avgPriceTV.setVisibility(View.INVISIBLE);
 		}
-		
+
+		LinearLayout phoneLayout = (LinearLayout) context
+				.findViewById(R.id.phone_block);
+		List<String> phones = food.getPhones();
+		for (String phone : phones)
+		{
+			TextView phoneTV = new TextView(context);
+			phoneTV.setLayoutParams(addressTV.getLayoutParams());
+			phoneTV.setTextSize(Math.round(addressTV.getTextSize() * 1.2));
+			phoneTV.setTextColor(addressTV.getTextColors());
+			phoneTV.setTypeface(addressTV.getTypeface());
+			phoneTV.setText(phone);
+			phoneLayout.addView(phoneTV);
+			TextView phoneTV1 = new TextView(context);
+			phoneTV1.setLayoutParams(addressTV.getLayoutParams());
+			phoneTV1.setTextSize(Math.round(addressTV.getTextSize() * 1.2));
+			phoneTV1.setTextColor(addressTV.getTextColors());
+			phoneTV1.setTypeface(addressTV.getTypeface());
+			phoneTV1.setText(phone);
+			phoneLayout.addView(phoneTV1);
+			TextView phoneTV2 = new TextView(context);
+			phoneTV2.setLayoutParams(addressTV.getLayoutParams());
+			phoneTV2.setTextSize(Math.round(addressTV.getTextSize() * 1.2));
+			phoneTV2.setTextColor(addressTV.getTextColors());
+			phoneTV2.setTypeface(addressTV.getTypeface());
+			phoneTV2.setText(phone);
+			phoneLayout.addView(phoneTV2);
+		}
 	}
 
 	private ItemFood getFoodFromJSON(JSONObject jObject)

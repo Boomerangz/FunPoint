@@ -7,6 +7,7 @@ import java.util.List;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.MainMenu;
 import kz.crystalspring.funpoint.ProfilePage;
+import kz.crystalspring.funpoint.funCheckinNow;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.Helpdesk;
 import kz.crystalspring.pointplus.R;
@@ -136,7 +137,7 @@ public class MetromenuActivity extends Activity
 		switchers.get(1).setText("Кино");
 		switchers.get(3).setText("Отели");
 		switchers.get(2).setText("Магазины");
-		switchers.get(4).setText("Акции и скидки");
+		switchers.get(4).setText("CheckIn Now");
 		switchers.get(5).setText("Jam.KZ");
 		switchers.get(6).setText("Профиль");
 		switchers.get(7).setText("Сообщения");
@@ -174,6 +175,26 @@ public class MetromenuActivity extends Activity
 			public void onClick(View v)
 			{
 				runItemActivityWithFilter(MapItem.FSQ_TYPE_MARKET);
+			}
+		});
+		
+		switchers.get(3).setOnClickListener(new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
+				runItemActivityWithFilter(MapItem.FSQ_TYPE_MARKET);
+			}
+		});
+		
+		switchers.get(4).setOnClickListener(new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
+				openCheckIn();
 			}
 		});
 
@@ -249,6 +270,11 @@ public class MetromenuActivity extends Activity
 		openActivity(Helpdesk.class);
 	}
 
+	private void openCheckIn()
+	{
+		openActivity(funCheckinNow.class);
+	}
+	
 	private <E> void openActivity(Class<E> class1)
 	{
 		Intent intent = new Intent(this, class1);
