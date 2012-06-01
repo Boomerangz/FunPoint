@@ -213,28 +213,28 @@ public class FSQConnector
 
 	public static void checkIn(String venueID)
 	{
-//		String st="";
-//		try
-//		{
-//			String sUrl = CHECK_IN_URL + "?oauth_token="
-//					+ MainApplication.FsqApp.getAccesToken();
-//			URL url = new URL(sUrl);
-//			Log.d(TAG, "Opening URL " + url.toString());
-//
-//			HttpClient client = new DefaultHttpClient();
-//			HttpPost post = new HttpPost(sUrl);
-//			List pairs = new ArrayList();
-//			pairs.add(new BasicNameValuePair("venueId", venueID));
-//			post.setEntity(new UrlEncodedFormEntity(pairs));
-//			HttpResponse response = client.execute(post);
-//			st = streamToString(response.getEntity().getContent());
-//		} catch (Exception e)
-//		{
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		System.out.println(st);
-		addToTodos(venueID);
+		String st="";
+		try
+		{
+			String sUrl = CHECK_IN_URL + "?oauth_token="
+					+ MainApplication.FsqApp.getAccesToken();
+			URL url = new URL(sUrl);
+			Log.d(TAG, "Opening URL " + url.toString());
+
+			HttpClient client = new DefaultHttpClient();
+			HttpPost post = new HttpPost(sUrl);
+			List pairs = new ArrayList();
+			pairs.add(new BasicNameValuePair("venueId", venueID));
+			post.setEntity(new UrlEncodedFormEntity(pairs));
+			HttpResponse response = client.execute(post);
+			st = streamToString(response.getEntity().getContent());
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(st);
+	//	addToTodos(venueID);
 	}
 	
 	public static boolean isFSQConnected()

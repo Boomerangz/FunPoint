@@ -7,6 +7,8 @@ import kz.crystalspring.funpoint.venues.*;
 import java.io.IOException;
 import java.util.List;
 
+import javax.security.auth.Destroyable;
+
 import kz.crystalspring.android_client.C_FileHelper;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.pointplus.Prefs;
@@ -21,6 +23,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -47,7 +50,7 @@ public class funFoodController extends ActivityController
 	TextView hereNowTV;
 	RelativeLayout checkInBtn;
 	RelativeLayout mapInBtn;
-	RelativeLayout hereNowBlock;
+	RelativeLayout todoBtn;
 	ListView commentsList;
 
 	public static final int ALPHA = 100;
@@ -76,6 +79,7 @@ public class funFoodController extends ActivityController
 		commentsList = (ListView) context.findViewById(R.id.comment_list);
 		checkInBtn = (RelativeLayout) context.findViewById(R.id.checkin_block);
 		mapInBtn = (RelativeLayout) context.findViewById(R.id.map_block);
+		todoBtn = (RelativeLayout) context.findViewById(R.id.todo_block);
 		kitchenTV = (TextView) context.findViewById(R.id.food_kitchen);
 		hereNowTV = (TextView) context.findViewById(R.id.here_now_tv);
 
@@ -86,7 +90,6 @@ public class funFoodController extends ActivityController
 
 		if (MainApplication.FsqApp.hasAccessToken())
 		{
-			checkInBtn.setVisibility(View.VISIBLE);
 			checkInBtn.setOnClickListener(new OnClickListener()
 			{
 				@Override
@@ -95,9 +98,25 @@ public class funFoodController extends ActivityController
 					checkInHere();
 				}
 			});
-		} else
-			checkInBtn.setVisibility(View.GONE);
+			todoBtn.setOnClickListener(new OnClickListener()
+			{
+				@Override
+				public void onClick(View v)
+				{
+					checkToDo();
+				}
+			});
+		}
 
+		mapInBtn.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				goToMap();
+			}
+		});
+		
 		int iObjID = Integer.parseInt(sObjID);
 
 		itemFood = (ItemFood) MainApplication.mapItemContainer
@@ -164,6 +183,9 @@ public class funFoodController extends ActivityController
 			kitchenTV.setVisibility(View.INVISIBLE);
 			avgPriceTV.setVisibility(View.INVISIBLE);
 		}
+		
+		if (food.isCheckedIn())
+			setStateChecked();
 
 		LinearLayout phoneLayout = (LinearLayout) context
 				.findViewById(R.id.phone_block);
@@ -195,6 +217,34 @@ public class funFoodController extends ActivityController
 	private void checkInHere()
 	{
 		FSQConnector.checkIn(itemFood.getId());
+		setStateChecked();
+	}
+	
+	private void checkToDo()
+	{
+		FSQConnector.addToTodos(itemFood.getId());
+		setStateTodo();
+	}
+	
+	private void setStateChecked()
+	{
+		checkInBtn.setEnabled(false);
+		checkInBtn.setBackgroundColor(Color.parseColor("#00A859"));
+		itemFood.setCheckedIn(true);
+	}
+	
+	private void setStateTodo()
+	{
+		todoBtn.setEnabled(false);
+		todoBtn.setBackgroundColor(Color.parseColor("#00A859"));
+		itemFood.setCheckedToDo(true);
+	}
+	
+	private void goToMap()
+	{
+		MainApplication.mapItemContainer.setSelectedItem(itemFood);
+		MainMenu.goToObjectMap();
+		context.finish();
 	}
 
 }

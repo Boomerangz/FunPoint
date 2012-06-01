@@ -78,6 +78,8 @@ public class funMap extends MapActivity implements LocationListener,
 		MainApplication.refreshable = this;
 		putItemsOnMap();
 		refreshMap();
+		if (MainApplication.mapItemContainer.getSelectedItem()!=null)
+			selectItem(MainApplication.mapItemContainer.getSelectedItem());
 	}
 
 	private void putItemsOnMap()
