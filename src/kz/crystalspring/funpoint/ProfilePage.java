@@ -48,17 +48,11 @@ public class ProfilePage extends Activity
         };
         
         mFsqApp.setListener(listener);
-        
-        //get access token and user name from foursquare
         button1.setOnClickListener(new OnClickListener() {
         	@Override
         	public void onClick(View v) {
         		mFsqApp.authorize(ProfilePage.this);
         	}
         }); 
-        
-        ListView list = (ListView) findViewById(R.id.tips_list);
-        ArrayAdapter adapter= new ArrayAdapter<FSQTodo>(getApplicationContext(), android.R.layout.simple_list_item_1,FSQConnector.getTodos() );
-        list.setAdapter(adapter);
 	}
 }

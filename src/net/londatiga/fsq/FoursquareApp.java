@@ -95,7 +95,6 @@ public class FoursquareApp {
 		        	Log.i(TAG, "Got access token: " + mAccessToken);
 				} catch (Exception ex) {
 					what = 1;
-					
 					ex.printStackTrace();
 				}
 				

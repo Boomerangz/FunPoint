@@ -36,18 +36,20 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
 /**
- * An abstract extension of ItemizedOverlay for displaying an information balloon
- * upon screen-tap of each marker overlay.
+ * An abstract extension of ItemizedOverlay for displaying an information
+ * balloon upon screen-tap of each marker overlay.
  * 
  * @author Jeff Gilfelt
  */
-public abstract class BalloonItemizedOverlay<Item extends OverlayItem> extends ItemizedOverlay<Item> {
+public abstract class BalloonItemizedOverlay<Item extends OverlayItem> extends
+		ItemizedOverlay<Item>
+{
 
 	private static final long BALLOON_INFLATION_TIME = 300;
 	private static Handler handler = new Handler();
-	
+
 	public static funMap funmap;
-	
+
 	private MapView mapView;
 	private BalloonOverlayView<Item> balloonView;
 	private View clickRegion;
@@ -56,297 +58,360 @@ public abstract class BalloonItemizedOverlay<Item extends OverlayItem> extends I
 	final MapController mc;
 	private Item currentFocusedItem;
 	private int currentFocusedIndex;
-	
+
 	private boolean showClose = true;
 	private boolean showDisclosure = false;
 	private boolean snapToCenter = true;
-	
+
 	private static boolean isInflating = false;
-	
+
 	/**
 	 * Create a new BalloonItemizedOverlay
 	 * 
-	 * @param defaultMarker - A bounded Drawable to be drawn on the map for each item in the overlay.
-	 * @param mapView - The view upon which the overlay items are to be drawn.
+	 * @param defaultMarker
+	 *            - A bounded Drawable to be drawn on the map for each item in
+	 *            the overlay.
+	 * @param mapView
+	 *            - The view upon which the overlay items are to be drawn.
 	 */
-	public BalloonItemizedOverlay(Drawable defaultMarker, MapView mapView) {
+	public BalloonItemizedOverlay(Drawable defaultMarker, MapView mapView)
+	{
 		super(defaultMarker);
 		this.mapView = mapView;
 		viewOffset = 0;
 		mc = mapView.getController();
 	}
-	
+
 	/**
-	 * Set the horizontal distance between the marker and the bottom of the information
-	 * balloon. The default is 0 which works well for center bounded markers. If your
-	 * marker is center-bottom bounded, call this before adding overlay items to ensure
-	 * the balloon hovers exactly above the marker. 
+	 * Set the horizontal distance between the marker and the bottom of the
+	 * information balloon. The default is 0 which works well for center bounded
+	 * markers. If your marker is center-bottom bounded, call this before adding
+	 * overlay items to ensure the balloon hovers exactly above the marker.
 	 * 
-	 * @param pixels - The padding between the center point and the bottom of the
-	 * information balloon.
+	 * @param pixels
+	 *            - The padding between the center point and the bottom of the
+	 *            information balloon.
 	 */
-	public void setBalloonBottomOffset(int pixels) {
+	public void setBalloonBottomOffset(int pixels)
+	{
 		viewOffset = pixels;
 	}
-	public int getBalloonBottomOffset() {
+
+	public int getBalloonBottomOffset()
+	{
 		return viewOffset;
 	}
-	
+
 	/**
-	 * Override this method to handle a "tap" on a balloon. By default, does nothing 
-	 * and returns false.
+	 * Override this method to handle a "tap" on a balloon. By default, does
+	 * nothing and returns false.
 	 * 
-	 * @param index - The index of the item whose balloon is tapped.
-	 * @param item - The item whose balloon is tapped.
+	 * @param index
+	 *            - The index of the item whose balloon is tapped.
+	 * @param item
+	 *            - The item whose balloon is tapped.
 	 * @return true if you handled the tap, otherwise false.
 	 */
-	protected boolean onBalloonTap(int index, Item item) {
+	protected boolean onBalloonTap(int index, Item item)
+	{
 		return false;
 	}
-	
+
 	/**
-	 * Override this method to perform actions upon an item being tapped before 
+	 * Override this method to perform actions upon an item being tapped before
 	 * its balloon is displayed.
 	 * 
-	 * @param index - The index of the item tapped.
+	 * @param index
+	 *            - The index of the item tapped.
 	 */
-	protected void onBalloonOpen(int index) {}
+	protected void onBalloonOpen(int index)
+	{
+	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.google.android.maps.ItemizedOverlay#onTap(int)
 	 */
 	@Override
-	//protected final boolean onTap(int index) {
-	public final boolean onTap(int index) 
+	// protected final boolean onTap(int index) {
+	public final boolean onTap(int index)
 	{
 		funmap.selectItem(index);
 		return true;
 	}
-	
+
 	public void select(int index)
 	{
 		handler.removeCallbacks(finishBalloonInflation);
 		isInflating = true;
 		handler.postDelayed(finishBalloonInflation, BALLOON_INFLATION_TIME);
-		
+
 		currentFocusedIndex = index;
 		currentFocusedItem = createItem(index);
 		setLastFocusedIndex(index);
-		
+
 		onBalloonOpen(index);
 		createAndDisplayBalloonOverlay();
 	}
 
 	/**
-	 * Animates to the given center point. Override to customize how the
-	 * MapView is animated to the given center point
-	 *
-	 * @param index The index of the item to center
-	 * @param center The center point of the item
+	 * Animates to the given center point. Override to customize how the MapView
+	 * is animated to the given center point
+	 * 
+	 * @param index
+	 *            The index of the item to center
+	 * @param center
+	 *            The center point of the item
 	 */
-	protected void animateTo(int index, GeoPoint center) {
+	protected void animateTo(int index, GeoPoint center)
+	{
 		mc.animateTo(center);
 	}
 
 	/**
-	 * Creates the balloon view. Override to create a sub-classed view that
-	 * can populate additional sub-views.
+	 * Creates the balloon view. Override to create a sub-classed view that can
+	 * populate additional sub-views.
 	 */
-	protected BalloonOverlayView<Item> createBalloonOverlayView() {
-		return new BalloonOverlayView<Item>(getMapView().getContext(), getBalloonBottomOffset());
+	protected BalloonOverlayView<Item> createBalloonOverlayView()
+	{
+		return new BalloonOverlayView<Item>(getMapView().getContext(),
+				getBalloonBottomOffset());
 	}
-	
+
 	/**
-	 * Expose map view to subclasses.
-	 * Helps with creation of balloon views. 
+	 * Expose map view to subclasses. Helps with creation of balloon views.
 	 */
-	protected MapView getMapView() {
+	protected MapView getMapView()
+	{
 		return mapView;
 	}
-	
+
 	/**
-	 * Sets the visibility of this overlay's balloon view to GONE and unfocus the item. 
+	 * Sets the visibility of this overlay's balloon view to GONE and unfocus
+	 * the item.
 	 */
-	public void hideBalloon() {
-		if (balloonView != null) {
+	public void hideBalloon()
+	{
+		if (balloonView != null)
+		{
 			balloonView.setVisibility(View.GONE);
 		}
 		currentFocusedItem = null;
 	}
-	
+
 	/**
 	 * Hides the balloon view for any other BalloonItemizedOverlay instances
 	 * that might be present on the MapView.
 	 * 
-	 * @param overlays - list of overlays (including this) on the MapView.
+	 * @param overlays
+	 *            - list of overlays (including this) on the MapView.
 	 */
-	private void hideOtherBalloons(List<Overlay> overlays) {
-		
-		for (Overlay overlay : overlays) {
-			if (overlay instanceof BalloonItemizedOverlay<?> && overlay != this) {
+	private void hideOtherBalloons(List<Overlay> overlays)
+	{
+
+		for (Overlay overlay : overlays)
+		{
+			if (overlay instanceof BalloonItemizedOverlay<?> && overlay != this)
+			{
 				((BalloonItemizedOverlay<?>) overlay).hideBalloon();
 			}
 		}
-		
+
 	}
-	
-	public void hideAllBalloons() {
-		if (!isInflating) {
+
+	public void hideAllBalloons()
+	{
+		if (!isInflating)
+		{
 			List<Overlay> mapOverlays = mapView.getOverlays();
-			if (mapOverlays.size() > 1) {
+			if (mapOverlays.size() > 1)
+			{
 				hideOtherBalloons(mapOverlays);
 			}
 			hideBalloon();
 		}
 	}
-	
+
 	/**
 	 * Sets the onTouchListener for the balloon being displayed, calling the
 	 * overridden {@link #onBalloonTap} method.
 	 */
-	private OnTouchListener createBalloonTouchListener() {
-		return new OnTouchListener() {
-			
+	private OnTouchListener createBalloonTouchListener()
+	{
+		return new OnTouchListener()
+		{
+
 			float startX;
 			float startY;
-			
-			public boolean onTouch(View v, MotionEvent event) {
-				
-				View l =  ((View) v.getParent()).findViewById(R.id.balloon_main_layout);
+
+			public boolean onTouch(View v, MotionEvent event)
+			{
+
+				View l = ((View) v.getParent())
+						.findViewById(R.id.balloon_main_layout);
 				Drawable d = l.getBackground();
-				
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					int[] states = {android.R.attr.state_pressed};
-					if (d.setState(states)) {
+
+				if (event.getAction() == MotionEvent.ACTION_DOWN)
+				{
+					int[] states = { android.R.attr.state_pressed };
+					if (d.setState(states))
+					{
 						d.invalidateSelf();
 					}
 					startX = event.getX();
 					startY = event.getY();
 					return true;
-				} else if (event.getAction() == MotionEvent.ACTION_UP) {
+				} else if (event.getAction() == MotionEvent.ACTION_UP)
+				{
 					int newStates[] = {};
-					if (d.setState(newStates)) {
+					if (d.setState(newStates))
+					{
 						d.invalidateSelf();
 					}
-					if (Math.abs(startX - event.getX()) < 40 && 
-							Math.abs(startY - event.getY()) < 40 ) {
+					if (Math.abs(startX - event.getX()) < 40
+							&& Math.abs(startY - event.getY()) < 40)
+					{
 						// call overridden method
 						onBalloonTap(currentFocusedIndex, currentFocusedItem);
 					}
 					return true;
-				} else {
+				} else
+				{
 					return false;
 				}
-				
+
 			}
 		};
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.google.android.maps.ItemizedOverlay#getFocus()
 	 */
 	@Override
-	public Item getFocus() {
+	public Item getFocus()
+	{
 		return currentFocusedItem;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.google.android.maps.ItemizedOverlay#setFocus(Item)
 	 */
 	@Override
-	public void setFocus(Item item) {
-		super.setFocus(item);	
+	public void setFocus(Item item)
+	{
+		super.setFocus(item);
 		currentFocusedIndex = getLastFocusedIndex();
 		currentFocusedItem = item;
-		if (currentFocusedItem == null) {
+		if (currentFocusedItem == null)
+		{
 			hideBalloon();
-		} else {
+		} else
+		{
 			createAndDisplayBalloonOverlay();
-		}	
+		}
 	}
-	
+
 	/**
-	 * Creates and displays the balloon overlay by recycling the current 
-	 * balloon or by inflating it from xml. 
-	 * @return true if the balloon was recycled false otherwise 
+	 * Creates and displays the balloon overlay by recycling the current balloon
+	 * or by inflating it from xml.
+	 * 
+	 * @return true if the balloon was recycled false otherwise
 	 */
-	private boolean createAndDisplayBalloonOverlay(){
+	private boolean createAndDisplayBalloonOverlay()
+	{
 		boolean isRecycled;
-		if (balloonView == null) {
+		if (balloonView == null)
+		{
 			balloonView = createBalloonOverlayView();
-			clickRegion = (View) balloonView.findViewById(R.id.balloon_inner_layout);
+			clickRegion = (View) balloonView
+					.findViewById(R.id.balloon_inner_layout);
 			clickRegion.setOnTouchListener(createBalloonTouchListener());
 			closeRegion = (View) balloonView.findViewById(R.id.balloon_close);
-			if (closeRegion != null) {
-				if (!showClose) {
+			if (closeRegion != null)
+			{
+				if (!showClose)
+				{
 					closeRegion.setVisibility(View.GONE);
-				} else {
-					closeRegion.setOnClickListener(new OnClickListener() {
+				} else
+				{
+					closeRegion.setOnClickListener(new OnClickListener()
+					{
 						@Override
-						public void onClick(View v) {
-							hideBalloon();	
+						public void onClick(View v)
+						{
+							hideBalloon();
 						}
 					});
 				}
 			}
-			if (showDisclosure && !showClose) {
+			if (showDisclosure && !showClose)
+			{
 				View v = balloonView.findViewById(R.id.balloon_disclosure);
-				if (v != null) {
+				if (v != null)
+				{
 					v.setVisibility(View.VISIBLE);
 				}
 			}
 			isRecycled = false;
-		} else {
+		} else
+		{
 			isRecycled = true;
 		}
-	
 		balloonView.setVisibility(View.GONE);
-		
 		List<Overlay> mapOverlays = mapView.getOverlays();
-		if (mapOverlays.size() > 1) {
+		if (mapOverlays.size() > 1)
+		{
 			hideOtherBalloons(mapOverlays);
 		}
-		
 		if (currentFocusedItem != null)
 			balloonView.setData(currentFocusedItem);
-		
 		GeoPoint point = currentFocusedItem.getPoint();
 		MapView.LayoutParams params = new MapView.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, point,
 				MapView.LayoutParams.BOTTOM_CENTER);
 		params.mode = MapView.LayoutParams.MODE_MAP;
-		
 		balloonView.setVisibility(View.VISIBLE);
-		
-		if (isRecycled) {
+		if (isRecycled)
+		{
 			balloonView.setLayoutParams(params);
-		} else {
+		} else
+		{
 			mapView.addView(balloonView, params);
 		}
-		
 		return isRecycled;
 	}
-	
-	public void setShowClose(boolean showClose) {
+
+	public void setShowClose(boolean showClose)
+	{
 		this.showClose = showClose;
 	}
 
-	public void setShowDisclosure(boolean showDisclosure) {
+	public void setShowDisclosure(boolean showDisclosure)
+	{
 		this.showDisclosure = showDisclosure;
 	}
 
-	public void setSnapToCenter(boolean snapToCenter) {
+	public void setSnapToCenter(boolean snapToCenter)
+	{
 		this.snapToCenter = snapToCenter;
 	}
 
-	public static boolean isInflating() {
+	public static boolean isInflating()
+	{
 		return isInflating;
 	}
-	
-	private static Runnable finishBalloonInflation = new Runnable() {
-		public void run() {
+
+	private static Runnable finishBalloonInflation = new Runnable()
+	{
+		public void run()
+		{
 			isInflating = false;
 		}
 	};
-	
+
 }

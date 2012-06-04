@@ -33,11 +33,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 public class funFoodController extends ActivityController
 {
@@ -135,8 +137,24 @@ public class funFoodController extends ActivityController
 					.getId());
 			itemFood.loadFoodOptions(jObject);
 		}
+		
+		Button switchBtn=(Button) context.findViewById(R.id.switch_btn);
+		switchBtn.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				switchPageToSecond();
+			}
+		});
 
 		showFood(itemFood);
+	}
+	
+	private void switchPageToSecond()
+	{
+		ViewSwitcher switcher=(ViewSwitcher)context.findViewById(R.id.switcher);
+		switcher.showNext();
 	}
 
 	private void setBlocksAlpha(int alpha, int[] args)
@@ -186,6 +204,10 @@ public class funFoodController extends ActivityController
 		
 		if (food.isCheckedIn())
 			setStateChecked();
+		
+		if (food.isCheckedToDo())
+			setStateTodo();
+		
 
 		LinearLayout phoneLayout = (LinearLayout) context
 				.findViewById(R.id.phone_block);
@@ -230,7 +252,6 @@ public class funFoodController extends ActivityController
 	{
 		checkInBtn.setEnabled(false);
 		checkInBtn.setBackgroundColor(Color.parseColor("#00A859"));
-		itemFood.setCheckedIn(true);
 	}
 	
 	private void setStateTodo()

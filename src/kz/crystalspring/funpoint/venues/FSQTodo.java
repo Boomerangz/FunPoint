@@ -60,8 +60,26 @@ public class FSQTodo
 		{
 			setId(jObject.getString("id"));
 			setCreated(jObject.getString("createdAt"));
-			setVenueId(jObject.getJSONObject("tip").getJSONObject("venue").getString("name"));//"id"));
+			setVenueId(jObject.getJSONObject("tip").getJSONObject("venue").getString("id"));//"id"));
 			setBeenHere(jObject.getJSONObject("tip").getJSONObject("venue").getJSONObject("beenHere").getInt("count"));
+		//	MainApplication.mapItemContainer.loadItem(getId());
+		} catch (JSONException e)
+		{
+			todo=null;
+			e.printStackTrace();
+		}
+		return todo;
+	}
+	
+	public FSQTodo loadFromJSON_NewToDo(JSONObject jObject)
+	{
+		FSQTodo todo=this;
+		try
+		{
+			setId(jObject.getString("id"));
+			setCreated(jObject.getString("createdAt"));
+			setVenueId(jObject.getJSONObject("venue").getString("id"));//"id"));
+			setBeenHere(jObject.getJSONObject("venue").getJSONObject("beenHere").getInt("count"));
 		//	MainApplication.mapItemContainer.loadItem(getId());
 		} catch (JSONException e)
 		{

@@ -8,6 +8,7 @@ import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.MainMenu;
 import kz.crystalspring.funpoint.ProfilePage;
 import kz.crystalspring.funpoint.funCheckinNow;
+import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.Helpdesk;
 import kz.crystalspring.pointplus.R;
@@ -225,6 +226,10 @@ public class MetromenuActivity extends Activity
 		continueUpdating = true;
 		mHandler.removeCallbacks(mUpdateTimeTask);
 		mHandler.postDelayed(mUpdateTimeTask, UPDATE_DELAY);
+		if (FSQConnector.isFSQConnected())
+		{
+			MainApplication.loadUserActivity();
+		}
 	}
 
 	private void beginUpdating()

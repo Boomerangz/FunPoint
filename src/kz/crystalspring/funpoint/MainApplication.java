@@ -11,9 +11,11 @@ import com.google.android.maps.GeoPoint;
 
 import kz.crystalspring.funpoint.funMap.CustomMyLocationOverlay;
 import kz.crystalspring.funpoint.venues.FSQConnector;
+import kz.crystalspring.funpoint.venues.FSQTodo;
 import kz.crystalspring.funpoint.venues.FileConnector;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItemContainer;
+import kz.crystalspring.funpoint.venues.UserActivity;
 
 import android.app.Application;
 import android.content.Context;
@@ -22,6 +24,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
@@ -57,9 +60,9 @@ public class MainApplication extends Application
 
 		updater = new LocationUpdater(this);
 
-		Runnable task = new Runnable()// Задаем действие, которое надо
-										// осуществить после того как закончится
-										// процесс загрузки точек.
+		Runnable task = new Runnable()// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+										// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+										// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.
 		{
 			@Override
 			public void run()
@@ -89,6 +92,15 @@ public class MainApplication extends Application
 		int i = 0;
 	}
 
+
+	
+	public static void loadUserActivity()
+	{
+		if (!FSQConnector.getTodosLoaded())
+			FSQConnector.loadTodosAsync();
+		if (!FSQConnector.getCheckinsLoaded())
+			FSQConnector.loadCheckinsAsync();
+	}
 }
 
 class LocationUpdater implements LocationListener

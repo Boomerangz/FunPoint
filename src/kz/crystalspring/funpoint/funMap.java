@@ -112,7 +112,7 @@ public class funMap extends MapActivity implements LocationListener,
 			mapView.invalidate();
 		}
 	}
-
+	
 	private void addItemOnMap(MapItem item)
 	{
 		CustomOverlayItem oi = new CustomOverlayItem(item.getGeoPoint(),

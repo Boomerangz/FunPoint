@@ -15,8 +15,6 @@ public class FSQItem extends MapItem
 	String name;
 	String address;
 	String category = FSQ_TYPE_FOOD;
-	boolean checkedIn;
-	boolean checkedToDo;
 	int hereNow;
 
 	OptionalInfo optInfo;
@@ -47,8 +45,6 @@ public class FSQItem extends MapItem
 			setLatitude(lat);
 			setLongitude(lng);
 			setHereNow(jObject.getInt("hereNow"));
-			setCheckedIn(false);
-			setCheckedToDo(false);
 			return this;
 		} catch (JSONException e)
 		{
@@ -135,23 +131,19 @@ public class FSQItem extends MapItem
 
 	public boolean isCheckedIn()
 	{
-		return checkedIn;
-	}
-
-	public void setCheckedIn(boolean checkedIn)
-	{
-		this.checkedIn = checkedIn;
+		return FSQConnector.isInCheckList(getId());
 	}
 
 	public boolean isCheckedToDo()
 	{
-		return checkedToDo;
-	}
-
-	public void setCheckedToDo(boolean checkedToDo)
-	{
-		this.checkedToDo = checkedToDo;
+			return FSQConnector.isInTodoList(getId());
 	}
 	
+	public void setCheckedToDo(boolean b)
+	{
+		if (b)
+			FSQConnector.addToTodos(getId());
+	}
+
 	
 }

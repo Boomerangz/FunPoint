@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import kz.crystalspring.funpoint.MainApplication;
@@ -30,6 +31,7 @@ import org.json.JSONTokener;
 
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
@@ -43,8 +45,13 @@ public class FSQConnector
 	private static final String TIP_ADD_URL = "https://api.foursquare.com/v2/tips/add";
 	private static final String TODO_ADD_URL = "https://api.foursquare.com/v2/lists/self/todos/additem";
 	private static final String TODOS_GET_URL = "https://api.foursquare.com/v2/users/self/todos";
+	private static final String CHECKINS_GET_URL = "https://api.foursquare.com/v2/users/self/checkins";
 	private static final String TAG = "FoursquareApi";
 	private static final String API_VERSION = "&v=20120522";
+	private static List<FSQTodo> todosList = new ArrayList(0);
+	private static List<String> checkinsList = new ArrayList(0);
+	private static boolean isTodosLoaded=false;
+	private static boolean isCheckinsLoaded=false;
 
 	public static List<MapItem> loadItems(GeoPoint point, String category)
 	{
@@ -52,10 +59,10 @@ public class FSQConnector
 		{
 			try
 			{
-				List<MapItem> list=getNearby(point.getLatitudeE6() / 1e6,
-						point.getLongitudeE6() / 1e6, category,1000);
+				List<MapItem> list = getNearby(point.getLatitudeE6() / 1e6,
+						point.getLongitudeE6() / 1e6, category, 1000);
 				list.addAll(getNearby(point.getLatitudeE6() / 1e6,
-						point.getLongitudeE6() / 1e6, category,0));
+						point.getLongitudeE6() / 1e6, category, 0));
 				return list;
 			} catch (Exception e)
 			{
@@ -67,7 +74,7 @@ public class FSQConnector
 	}
 
 	public static ArrayList<MapItem> getNearby(double latitude,
-			double longitude, String category,int radius) throws Exception
+			double longitude, String category, int radius) throws Exception
 	{
 		ArrayList<MapItem> venueList = new ArrayList<MapItem>();
 
@@ -79,8 +86,8 @@ public class FSQConnector
 
 			if (category != null)
 				sUrl += "&categoryId=" + category;
-			
-			if (radius>0)
+
+			if (radius > 0)
 				sUrl += "&radius=" + Integer.toString(radius);
 
 			sUrl += "&client_id=" + CLIENT_ID + "&client_secret="
@@ -181,28 +188,26 @@ public class FSQConnector
 
 		try
 		{
-//			URL url = new URL(sUrl);
-//			Log.d(TAG, "Opening URL " + url.toString());
-//
-//			HttpURLConnection urlConnection = (HttpURLConnection) url
-//					.openConnection();
-//
-//			urlConnection.setRequestMethod("GET");
-//			urlConnection.setDoInput(true);
-//			urlConnection.setDoOutput(true);
-//
-//			urlConnection.connect();
-//			
-//			return streamToString(urlConnection.getInputStream());
-			
-			
-			
+			// URL url = new URL(sUrl);
+			// Log.d(TAG, "Opening URL " + url.toString());
+			//
+			// HttpURLConnection urlConnection = (HttpURLConnection) url
+			// .openConnection();
+			//
+			// urlConnection.setRequestMethod("GET");
+			// urlConnection.setDoInput(true);
+			// urlConnection.setDoOutput(true);
+			//
+			// urlConnection.connect();
+			//
+			// return streamToString(urlConnection.getInputStream());
+
 			HttpClient client = new DefaultHttpClient();
 			HttpGet request = new HttpGet();
 			request.setURI(new URI(sUrl));
-            HttpResponse response = client.execute(request);
+			HttpResponse response = client.execute(request);
 			return streamToString(response.getEntity().getContent());
-			
+
 		} catch (Exception e)
 		{
 			// TODO Auto-generated catch block
@@ -213,11 +218,11 @@ public class FSQConnector
 
 	public static void checkIn(String venueID)
 	{
-		String st="";
+		String st = "";
 		try
 		{
 			String sUrl = CHECK_IN_URL + "?oauth_token="
-					+ MainApplication.FsqApp.getAccesToken();
+					+ MainApplication.FsqApp.getAccesToken()+API_VERSION;
 			URL url = new URL(sUrl);
 			Log.d(TAG, "Opening URL " + url.toString());
 
@@ -228,27 +233,29 @@ public class FSQConnector
 			post.setEntity(new UrlEncodedFormEntity(pairs));
 			HttpResponse response = client.execute(post);
 			st = streamToString(response.getEntity().getContent());
+			venueID=new JSONObject(st).getJSONObject("response").getJSONObject("checkin").getJSONObject("venue").getString("id");
+			checkinsList.add(venueID);
 		} catch (Exception e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println(st);
-	//	addToTodos(venueID);
+		// addToTodos(venueID);
 	}
-	
+
 	public static boolean isFSQConnected()
 	{
 		return MainApplication.FsqApp.hasAccessToken();
 	}
-	
+
 	public static void addToTips(String venueID, String comment)
 	{
-		String st=""; 
+		String st = "";
 		try
 		{
 			String sUrl = TIP_ADD_URL + "?oauth_token="
-					+ MainApplication.FsqApp.getAccesToken()+ API_VERSION;
+					+ MainApplication.FsqApp.getAccesToken() + API_VERSION;
 			URL url = new URL(sUrl);
 			Log.d(TAG, "Opening URL " + url.toString());
 
@@ -267,27 +274,29 @@ public class FSQConnector
 		}
 		System.out.println(st);
 	}
-	
-	
-	
+
 	public static void addToTodos(String venueID)
 	{
-		String st=""; 
+		String st = "";
 		try
 		{
 			String sUrl = TODO_ADD_URL + "?oauth_token="
-					+ MainApplication.FsqApp.getAccesToken()+ API_VERSION;
+					+ MainApplication.FsqApp.getAccesToken() + API_VERSION;
 			URL url = new URL(sUrl);
 			Log.d(TAG, "Opening URL " + url.toString());
 
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(sUrl);
 			List pairs = new ArrayList();
-			//pairs.add(new BasicNameValuePair("LIST_ID", "self/todos"));
+			// pairs.add(new BasicNameValuePair("LIST_ID", "self/todos"));
 			pairs.add(new BasicNameValuePair("venueId", venueID));
 			post.setEntity(new UrlEncodedFormEntity(pairs));
 			HttpResponse response = client.execute(post);
 			st = streamToString(response.getEntity().getContent());
+			FSQTodo newTodo=new FSQTodo();
+			newTodo=newTodo.loadFromJSON_NewToDo(new JSONObject(st).getJSONObject("response").getJSONObject("item"));
+			if (newTodo!=null)
+				todosList.add(newTodo);
 		} catch (Exception e)
 		{
 			// TODO Auto-generated catch block
@@ -295,33 +304,168 @@ public class FSQConnector
 		}
 		System.out.println(st);
 	}
-	
+
 	public static List<FSQTodo> getTodos()
 	{
-		List<FSQTodo> tips=new ArrayList<FSQTodo>();
-		if (isFSQConnected())
+		return todosList;
+	}
+
+	public static void loadCheckinsAsync()
+	{
+		AsyncTask<Integer, Integer, List<String>> task=new AsyncTask<Integer, Integer, List<String>>()
+				{
+
+					@Override
+					protected List<String> doInBackground(Integer... params)
+					{
+						List<String> checkins = new ArrayList<String>();
+						if (isFSQConnected())
+						{
+							String st = "";
+							try
+							{
+								String sUrl = CHECKINS_GET_URL + "?oauth_token="
+										+ MainApplication.FsqApp.getAccesToken()
+										+ "&sort=recent" + API_VERSION;
+								st = loadByUrl(sUrl);
+
+								JSONArray response = new JSONObject(st)
+										.getJSONObject("response").getJSONObject("checkins")
+										.getJSONArray("items");
+								for (int i = 0; i < response.length(); i++)
+								{
+									int unixTime=response.getJSONObject(i).getInt("createdAt");
+									String item = response.getJSONObject(i).getJSONObject("venue").getString("id");
+									java.util.Date time=new java.util.Date((long)unixTime*1000);
+									Date currTime=new Date();
+									
+									if (currTime.getDate()==time.getDate())
+										checkins.add(item);
+								}
+							} catch (Exception e)
+							{
+								checkins = new ArrayList<String>();
+								e.printStackTrace();
+							}
+							System.out.println(st);
+						}
+						return checkins;
+					}
+					@Override
+					protected void onPostExecute(List<String> todos)
+					{
+						checkinsList=todos;
+						setCheckinsLoaded(true);
+					}
+				};
+				task.execute();	
+	}
+
+	protected static void setCheckinsLoaded(boolean b)
+	{
+		isCheckinsLoaded=b;
+	}
+
+	public static void loadTodosAsync()
+	{
+		AsyncTask<Integer, Integer, List<FSQTodo>> task=new AsyncTask<Integer, Integer, List<FSQTodo>>()
 		{
-		String st=""; 
-		try
-		{
-			String sUrl = TODOS_GET_URL + "?oauth_token="
-					+ MainApplication.FsqApp.getAccesToken() + "&sort=recent" + API_VERSION;
-			st = loadByUrl(sUrl);
-			
-			JSONArray response=new JSONObject(st).getJSONObject("response").getJSONObject("todos").getJSONArray("items");
-			for (int i=0; i<response.length(); i++)
+
+			@Override
+			protected List<FSQTodo> doInBackground(Integer... params)
 			{
-				FSQTodo item=new FSQTodo().loadFromJSON(response.getJSONObject(i));
-				if (item!=null)
-					tips.add(item);
+				List<FSQTodo> todos = new ArrayList<FSQTodo>();
+				if (isFSQConnected())
+				{
+					String st = "";
+					try
+					{
+						String sUrl = TODOS_GET_URL + "?oauth_token="
+								+ MainApplication.FsqApp.getAccesToken()
+								+ "&sort=recent" + API_VERSION;
+						st = loadByUrl(sUrl);
+
+						JSONArray response = new JSONObject(st)
+								.getJSONObject("response").getJSONObject("todos")
+								.getJSONArray("items");
+						for (int i = 0; i < response.length(); i++)
+						{
+							FSQTodo item = new FSQTodo().loadFromJSON(response
+									.getJSONObject(i));
+							if (item != null)
+								todos.add(item);
+						}
+					} catch (Exception e)
+					{
+						todos = new ArrayList<FSQTodo>();
+						e.printStackTrace();
+					}
+					System.out.println(st);
+				}
+				return todos;
 			}
-		} catch (Exception e)
+			
+			@Override
+			protected void onPostExecute(List<FSQTodo> todos)
+			{
+				todosList=todos;
+				setTodosLoaded(true);
+			}
+		};
+		task.execute();		
+		
+	}
+	
+	public static boolean getTodosLoaded()
+	{
+		return isTodosLoaded;
+	}
+	
+	public static boolean getCheckinsLoaded()
+	{
+		return isCheckinsLoaded;
+	}
+	
+	public static void setTodosLoaded(boolean loaded)
+	{
+		isTodosLoaded=loaded;
+	}
+	
+	public static boolean isInTodoList(String itemID)
+	{
+		if (getTodosLoaded())
 		{
-			tips=new ArrayList<FSQTodo>();
-			e.printStackTrace();
+			boolean found=false;
+			for (FSQTodo todo:todosList)
+			{
+				if (todo.getVenueId().equals(itemID))
+				{
+					found=true;
+					break;
+				}
+			}
+			return found;
 		}
-		System.out.println(st);
+		else 
+			return false;
+	}
+
+	public static boolean isInCheckList(String id)
+	{
+		if (getCheckinsLoaded())
+		{
+			boolean found=false;
+			for (String venueID:checkinsList)
+			{
+				if (venueID.equals(id))
+				{
+					found=true;
+					break;
+				}
+			}
+			return found;
 		}
-		return tips;
+		else 
+			return false;
 	}
 }
