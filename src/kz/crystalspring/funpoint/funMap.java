@@ -31,7 +31,6 @@ public class funMap extends MapActivity implements LocationListener,
 	CustomMyLocationOverlay mMyLocationOverlay;
 	CustomItemizedOverlay myIO;
 	List<MapItem> myItemsArray;
-	boolean refreshing = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -104,13 +103,10 @@ public class funMap extends MapActivity implements LocationListener,
 
 	public void refreshMap()
 	{
-		if (!refreshing)
-		{
 			clearMap();
 			addItemListOnMap(MainApplication.mapItemContainer
 					.getFilteredItemList());
 			mapView.invalidate();
-		}
 	}
 	
 	private void addItemOnMap(MapItem item)
@@ -191,7 +187,6 @@ public class funMap extends MapActivity implements LocationListener,
 			if (previousLocation == null
 					|| previousLocation.distanceTo(location) > 500)
 			{
-				refreshing = true;
 				previousLocation = location;
 
 				Runnable task = new Runnable()// ������ ��������, ������� ����
@@ -202,7 +197,6 @@ public class funMap extends MapActivity implements LocationListener,
 					@Override
 					public void run()
 					{
-						refreshing = false;
 						MainApplication.refreshMapItems();
 					}
 				};

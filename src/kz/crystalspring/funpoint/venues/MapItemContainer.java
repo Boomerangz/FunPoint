@@ -57,7 +57,7 @@ public class MapItemContainer
 			};
 	
 	
-	public List<MapItem> getFilteredItemList()
+	public synchronized List<MapItem> getFilteredItemList()
 	{
 		List<MapItem> filteredList=new ArrayList<MapItem>();
 		for (MapItem item:mapItemArray)
@@ -141,8 +141,6 @@ public class MapItemContainer
 			{
 				addItemsList(FSQConnector.loadItems(point,i));
 			}
-			
-			
 			if (params.length>0)
 				return params[0];
 			else 
