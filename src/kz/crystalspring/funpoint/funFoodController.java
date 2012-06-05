@@ -257,7 +257,6 @@ public class funFoodController extends ActivityController
 	{
 		todoBtn.setEnabled(false);
 		todoBtn.setBackgroundColor(Color.parseColor("#00A859"));
-		itemFood.setCheckedToDo(true);
 	}
 	
 	private void goToMap()

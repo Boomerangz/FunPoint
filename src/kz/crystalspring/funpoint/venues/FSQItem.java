@@ -44,7 +44,7 @@ public class FSQItem extends MapItem
 				setAddress(location.getString("address"));
 			setLatitude(lat);
 			setLongitude(lng);
-			setHereNow(jObject.getInt("hereNow"));
+			setHereNow(jObject.getJSONObject("hereNow").getInt("count"));
 			return this;
 		} catch (JSONException e)
 		{
@@ -139,11 +139,6 @@ public class FSQItem extends MapItem
 			return FSQConnector.isInTodoList(getId());
 	}
 	
-	public void setCheckedToDo(boolean b)
-	{
-		if (b)
-			FSQConnector.addToTodos(getId());
-	}
 
 	
 }

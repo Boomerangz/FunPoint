@@ -19,7 +19,6 @@ public class ItemFood extends FSQItem
 	public static final String REST_IMG = "exchange";
 	private FoodOptionalInformation foodOptions;
 
-	
 	@Override
 	public String getIconName()
 	{
@@ -28,9 +27,9 @@ public class ItemFood extends FSQItem
 
 	public String getLunchPrice()
 	{
-		if (foodOptions!=null)
+		if (foodOptions != null)
 			return foodOptions.getLunchPrice();
-		else 
+		else
 			return "-";
 	}
 
@@ -52,38 +51,39 @@ public class ItemFood extends FSQItem
 
 	public void loadFoodOptions(JSONObject jObject)
 	{
-		foodOptions=new FoodOptionalInformation().loadFromJSON(jObject);
-		if (foodOptions!=null) this.setAddress(foodOptions.getAddress());
+		if (jObject != null)
+		{
+			foodOptions = new FoodOptionalInformation().loadFromJSON(jObject);
+			if (foodOptions != null)
+				this.setAddress(foodOptions.getAddress());
+		}
 	}
 
 	public String getKitchen()
 	{
-		if (foodOptions!=null||!foodOptions.getKitchen().equals(""))
+		if (foodOptions != null || !foodOptions.getKitchen().equals(""))
 			return foodOptions.getKitchen();
-		else 
+		else
 			return getFSQCategoriesString();
 	}
 
-
 	public CharSequence getAvgPrice()
 	{
-		if (foodOptions!=null)
+		if (foodOptions != null)
 			return foodOptions.getCheckPrice();
-		else 
+		else
 			return "NULL";
 	}
-	
+
 	@Override
 	public List<String> getPhones()
 	{
-		if (foodOptions!=null&&foodOptions.getPhones()!=null&&foodOptions.getPhones().size()>0)
+		if (foodOptions != null && foodOptions.getPhones() != null
+				&& foodOptions.getPhones().size() > 0)
 			return foodOptions.getPhones();
-		else 
+		else
 			return super.getPhones();
 	}
-
-
-
 
 }
 
@@ -148,7 +148,7 @@ class FoodOptionalInformation
 
 	public List<String> getPhones()
 	{
-			return phones;
+		return phones;
 
 	}
 
@@ -159,30 +159,27 @@ class FoodOptionalInformation
 
 	public FoodOptionalInformation loadFromJSON(JSONObject jObject)
 	{
-		FoodOptionalInformation foi=this;
+		FoodOptionalInformation foi = this;
 		try
 		{
 			setCheckPrice(jObject.getString("chkpr"));
 			setLunchPrice(jObject.getString("lnchpr"));
-			
-			if (getLunchPrice().contains("-")&&!getLunchPrice().equals("-")) 
-				setLunchPrice(getLunchPrice().substring(0,getLunchPrice().indexOf("-")));
-			
+
+			if (getLunchPrice().contains("-") && !getLunchPrice().equals("-"))
+				setLunchPrice(getLunchPrice().substring(0,
+						getLunchPrice().indexOf("-")));
+
 			setKitchen(jObject.getString("kitch"));
 			setWorktime(jObject.getString("wrktm"));
 			setAddress(jObject.getString("adr"));
-			setPhones(ProjectUtils.separateStrings(jObject.getString("phone"),","));
-		}
-		catch
-		(Exception e)
+			setPhones(ProjectUtils.separateStrings(jObject.getString("phone"),
+					","));
+		} catch (Exception e)
 		{
-			foi=null;
+			foi = null;
 			e.printStackTrace();
 		}
 		return foi;
 	}
-	
-	
-	
-	
+
 }

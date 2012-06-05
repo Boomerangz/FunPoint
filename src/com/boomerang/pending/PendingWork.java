@@ -19,7 +19,7 @@ public class PendingWork
 	
 	public void runPostTask()
 	{
-		if (backgroundTask!=null)
-			backgroundTask.run();
+		if (postTask!=null)
+			postTask.run();
 	}
 }

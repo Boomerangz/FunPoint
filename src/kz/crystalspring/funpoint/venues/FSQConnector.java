@@ -216,34 +216,42 @@ public class FSQConnector
 		}
 	}
 
-	public static void checkIn(String venueID)
+	public static void checkIn(final String venueID)
 	{
-		String st = "";
-		try
+		Runnable task = new Runnable()
 		{
-			String sUrl = CHECK_IN_URL + "?oauth_token="
-					+ MainApplication.FsqApp.getAccesToken() + API_VERSION;
-			URL url = new URL(sUrl);
-			Log.d(TAG, "Opening URL " + url.toString());
+			@Override
+			public void run()
+			{
+				String st = "";
+				try
+				{
+					String sUrl = CHECK_IN_URL + "?oauth_token="
+							+ MainApplication.FsqApp.getAccesToken()
+							+ API_VERSION;
+					URL url = new URL(sUrl);
+					Log.d(TAG, "Opening URL " + url.toString());
 
-			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost(sUrl);
-			List pairs = new ArrayList();
-			pairs.add(new BasicNameValuePair("venueId", venueID));
-			post.setEntity(new UrlEncodedFormEntity(pairs));
-			HttpResponse response = client.execute(post);
-			st = streamToString(response.getEntity().getContent());
-			venueID = new JSONObject(st).getJSONObject("response")
-					.getJSONObject("checkin").getJSONObject("venue")
-					.getString("id");
-			checkinsList.add(venueID);
-		} catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(st);
-		// addToTodos(venueID);
+					HttpClient client = new DefaultHttpClient();
+					HttpPost post = new HttpPost(sUrl);
+					List pairs = new ArrayList();
+					pairs.add(new BasicNameValuePair("venueId", venueID));
+					post.setEntity(new UrlEncodedFormEntity(pairs));
+					HttpResponse response = client.execute(post);
+					st = streamToString(response.getEntity().getContent());
+					String ID = new JSONObject(st).getJSONObject("response")
+							.getJSONObject("checkin").getJSONObject("venue")
+							.getString("id");
+					checkinsList.add(ID);
+				} catch (Exception e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.out.println(st);
+			}
+		};
+		MainApplication.pwAggregator.addTaskToQueue(task, null);
 	}
 
 	public static boolean isFSQConnected()
@@ -279,58 +287,49 @@ public class FSQConnector
 
 	public static void addToTodos(final String venueID)
 	{
-		AsyncTask task = new AsyncTask()
+		if (!isInTodoList(venueID))
 		{
-			@Override
-			protected Object doInBackground(Object... params)
+			Runnable task = new Runnable()
 			{
-				String st = "";
-				try
+				@Override
+				public void run()
 				{
 					String sUrl = TODO_ADD_URL + "?oauth_token="
 							+ MainApplication.FsqApp.getAccesToken()
 							+ API_VERSION;
-					URL url = new URL(sUrl);
-					Log.d(TAG, "Opening URL " + url.toString());
+					URL url;
+					FSQTodo newTodo = new FSQTodo();
+					try
+					{
+						url = new URL(sUrl);
+						Log.d(TAG, "Opening URL " + url.toString());
 
-					HttpClient client = new DefaultHttpClient();
-					HttpPost post = new HttpPost(sUrl);
-					List pairs = new ArrayList();
-					// pairs.add(new BasicNameValuePair("LIST_ID",
-					// "self/todos"));
-					pairs.add(new BasicNameValuePair("venueId", venueID));
-					post.setEntity(new UrlEncodedFormEntity(pairs));
-					HttpResponse response = client.execute(post);
-					st = streamToString(response.getEntity().getContent());
+						HttpClient client = new DefaultHttpClient();
+						HttpPost post = new HttpPost(sUrl);
+						List pairs = new ArrayList();
+						// pairs.add(new BasicNameValuePair("LIST_ID",
+						// "self/todos"));
+						pairs.add(new BasicNameValuePair("venueId", venueID));
+						post.setEntity(new UrlEncodedFormEntity(pairs));
+						HttpResponse response = client.execute(post);
+						String st = streamToString(response.getEntity()
+								.getContent());
 
-				} catch (Exception e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+						newTodo = newTodo.loadFromJSON_NewToDo(new JSONObject(
+								(String) st).getJSONObject("response")
+								.getJSONObject("item"));
+						System.out.println(st);
+					} catch (Exception e)
+					{
+						newTodo = null;
+						e.printStackTrace();
+					}
+					if (newTodo != null)
+						todosList.add(newTodo);
 				}
-				return st;
-			}
-
-			@Override
-			protected void onPostExecute(Object st)
-			{
-				FSQTodo newTodo = new FSQTodo();
-				try
-				{
-					newTodo = newTodo.loadFromJSON_NewToDo(new JSONObject(
-							(String) st).getJSONObject("response")
-							.getJSONObject("item"));
-					System.out.println(st);
-				} catch (JSONException e)
-				{
-					newTodo=null;
-					e.printStackTrace();
-				}
-				if (newTodo != null)
-					todosList.add(newTodo);
-			}
-		};
-		MainApplication.pwAggregator.addTaskToQueue(task);
+			};
+			MainApplication.pwAggregator.addTaskToQueue(task, null);
+		}
 	}
 
 	public static List<FSQTodo> getTodos()
@@ -340,11 +339,11 @@ public class FSQConnector
 
 	public static void loadCheckinsAsync()
 	{
-		AsyncTask task = new AsyncTask()
+		Runnable task = new Runnable()
 		{
 
 			@Override
-			protected Object doInBackground(Object... params)
+			public void run()
 			{
 				List<String> checkins = new ArrayList<String>();
 				if (isFSQConnected())
@@ -381,18 +380,14 @@ public class FSQConnector
 					}
 					System.out.println(st);
 				}
-				return checkins;
-			}
-
-			@Override
-			protected void onPostExecute(Object todos)
-			{
-
-				checkinsList = (List<String>) todos;
+				synchronized (checkinsList)
+				{
+					checkinsList = checkins;
+				}
 				setCheckinsLoaded(true);
 			}
 		};
-		MainApplication.pwAggregator.addTaskToQueue(task);
+		MainApplication.pwAggregator.addTaskToQueue(task, null);
 	}
 
 	protected static void setCheckinsLoaded(boolean b)
@@ -402,11 +397,11 @@ public class FSQConnector
 
 	public static void loadTodosAsync()
 	{
-		AsyncTask task = new AsyncTask()
+		Runnable task = new Runnable()
 		{
 
 			@Override
-			protected Object doInBackground(Object... params)
+			public void run()
 			{
 				List<FSQTodo> todos = new ArrayList<FSQTodo>();
 				if (isFSQConnected())
@@ -436,17 +431,14 @@ public class FSQConnector
 					}
 					System.out.println(st);
 				}
-				return todos;
-			}
-
-			@Override
-			protected void onPostExecute(Object todos)
-			{
-				todosList = (List<FSQTodo>) todos;
+				synchronized (todosList)
+				{
+					todosList = todos;
+				}
 				setTodosLoaded(true);
 			}
 		};
-		MainApplication.pwAggregator.addTaskToQueue(task);
+		MainApplication.pwAggregator.addTaskToQueue(task, null);
 	}
 
 	public static boolean getTodosLoaded()
