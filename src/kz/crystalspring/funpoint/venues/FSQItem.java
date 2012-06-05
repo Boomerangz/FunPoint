@@ -103,7 +103,7 @@ public class FSQItem extends MapItem
 			e.printStackTrace();
 		}
 	}
-	
+
 	public OptionalInfo getOptionalInfo()
 	{
 		return optInfo;
@@ -118,7 +118,7 @@ public class FSQItem extends MapItem
 	{
 		this.hereNow = hereNow;
 	}
-	
+
 	public String getFSQCategoriesString()
 	{
 		return optInfo.getCategoriesString();
@@ -136,9 +136,7 @@ public class FSQItem extends MapItem
 
 	public boolean isCheckedToDo()
 	{
-			return FSQConnector.isInTodoList(getId());
+		return FSQConnector.isInTodoList(getId());
 	}
-	
 
-	
 }

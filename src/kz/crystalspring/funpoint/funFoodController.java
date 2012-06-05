@@ -188,16 +188,15 @@ public class funFoodController extends ActivityController
 			commentsList.setAdapter(adapter);
 		}
 		lunchPriceTV.setText(food.getLunchPrice());
+		kitchenTV.setText(food.getKitchen());
+		//kitchenTV.setVisibility(View.VISIBLE);
 		if (itemFood.getFoodOptions() != null)
 		{
 			avgPriceTV.setText(food.getAvgPrice() + "тг");
-			kitchenTV.setText(food.getKitchen());
-
-			kitchenTV.setVisibility(View.VISIBLE);
 			avgPriceTV.setVisibility(View.VISIBLE);
 		} else
 		{
-			kitchenTV.setVisibility(View.INVISIBLE);
+		//	kitchenTV.setVisibility(View.INVISIBLE);
 			avgPriceTV.setVisibility(View.INVISIBLE);
 		}
 		

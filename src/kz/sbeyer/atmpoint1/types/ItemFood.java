@@ -61,7 +61,7 @@ public class ItemFood extends FSQItem
 
 	public String getKitchen()
 	{
-		if (foodOptions != null || !foodOptions.getKitchen().equals(""))
+		if (foodOptions != null && !foodOptions.getKitchen().equals(""))
 			return foodOptions.getKitchen();
 		else
 			return getFSQCategoriesString();
