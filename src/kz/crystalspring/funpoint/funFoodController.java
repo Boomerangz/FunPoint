@@ -147,7 +147,6 @@ public class funFoodController extends ActivityController
 				switchPageToSecond();
 			}
 		});
-
 		showFood(itemFood);
 	}
 	

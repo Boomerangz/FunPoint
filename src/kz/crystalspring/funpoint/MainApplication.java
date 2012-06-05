@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.londatiga.fsq.FoursquareApp;
 
+import com.boomerang.pending.PendingWorkAggregator;
 import com.google.android.maps.GeoPoint;
 
 import kz.crystalspring.funpoint.funMap.CustomMyLocationOverlay;
@@ -38,6 +39,8 @@ public class MainApplication extends Application
 	private static GeoPoint currLocation;
 	public static SharedPreferences mPrefs;
 	public static FoursquareApp FsqApp;
+	public static PendingWorkAggregator pwAggregator;
+	
 	LocationUpdater updater;
 
 	public static void refreshMapItems()
@@ -71,7 +74,9 @@ public class MainApplication extends Application
 			}
 		};
 		MainApplication.mapItemContainer.loadNearBy(getCurrentLocation(), task);
-
+		pwAggregator=new PendingWorkAggregator();
+		
+		
 		new FileConnector(getApplicationContext());
 	}
 
@@ -101,6 +106,7 @@ public class MainApplication extends Application
 		if (!FSQConnector.getCheckinsLoaded())
 			FSQConnector.loadCheckinsAsync();
 	}
+	
 }
 
 class LocationUpdater implements LocationListener
