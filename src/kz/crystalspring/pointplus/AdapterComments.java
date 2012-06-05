@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 import kz.sbeyer.atmpoint1.types.ItemComment;
 import android.app.Activity;
 import android.content.Context;

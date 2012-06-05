@@ -12,7 +12,7 @@ import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItem.ViewHolder;
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 import kz.sbeyer.atmpoint1.types.ItemCinema.CinemaTimeLine;
 
 import org.json.JSONArray;

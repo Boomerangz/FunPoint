@@ -4,7 +4,7 @@ import net.londatiga.fsq.FoursquareApp;
 import net.londatiga.fsq.FoursquareApp.FsqAuthListener;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQTodo;
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;

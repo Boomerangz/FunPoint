@@ -1,6 +1,6 @@
 package kz.crystalspring.funpoint;
 
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;

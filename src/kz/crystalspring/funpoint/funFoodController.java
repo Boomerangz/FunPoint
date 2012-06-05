@@ -12,7 +12,7 @@ import javax.security.auth.Destroyable;
 import kz.crystalspring.android_client.C_FileHelper;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.pointplus.Prefs;
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 import kz.sbeyer.atmpoint1.types.ItemFood;
 import kz.sbeyer.atmpoint1.types.ItemCinema.CinemaTimeLine;
 

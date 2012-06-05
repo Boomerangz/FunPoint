@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package kz.crystalspring.pointplus;
+package kz.crystalspring.funpoint;
 
 public final class R {
     public static final class anim {

@@ -9,7 +9,7 @@ import java.util.Properties;
 
 import javax.crypto.SecretKey;
 
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

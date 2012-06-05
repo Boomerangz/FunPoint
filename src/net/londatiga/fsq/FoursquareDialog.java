@@ -1,6 +1,6 @@
 package net.londatiga.fsq;
 
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 

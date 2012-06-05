@@ -786,15 +786,15 @@ public class C_JavascriptInterface {
      * 
      */
     public void ShowARDialog (Boolean pUseCollisionDetection, String pMarkers) {
-    	try {
-    		C_Log.v(3, C_TAG, "ShowARDialog");
-    		Intent vIntent = new Intent(fContext, C_ARActivity.class);
-    		vIntent.putExtra("Markers", pMarkers);
-    		vIntent.putExtra("UseCollisionDetection", pUseCollisionDetection);
-    		fContext.startActivity(vIntent);
-    	} catch (Exception e) {
-    		C_Log.v(0, C_TAG, "AddMarkers err:" + e.getMessage());
-    	}
+//    	try {
+//    		C_Log.v(3, C_TAG, "ShowARDialog");
+//    		Intent vIntent = new Intent(fContext, C_ARActivity.class);
+//    		vIntent.putExtra("Markers", pMarkers);
+//    		vIntent.putExtra("UseCollisionDetection", pUseCollisionDetection);
+//    		fContext.startActivity(vIntent);
+//    	} catch (Exception e) {
+//    		C_Log.v(0, C_TAG, "AddMarkers err:" + e.getMessage());
+//    	}
     }
     
     /**
@@ -807,19 +807,19 @@ public class C_JavascriptInterface {
      * @param pAltitude - высота позиции центра
      */
     public void ShowARDialog1 (Boolean pUseCollisionDetection, String pMarkers, boolean pUpdateLocation, double pLatitude, double pLongitude, double pAltitude) {
-    	try {
-    		C_Log.v(3, C_TAG, "ShowARDialog");
-    		Intent vIntent = new Intent(fContext, C_ARActivity.class);
-    		vIntent.putExtra("Markers", pMarkers);
-    		vIntent.putExtra("UseCollisionDetection", pUseCollisionDetection);
-    		vIntent.putExtra("UpdateLocation", pUpdateLocation);
-    		vIntent.putExtra("Latitude", pLatitude);
-    		vIntent.putExtra("Longitude", pLongitude);
-    		vIntent.putExtra("Altitude", pAltitude);
-    		fContext.startActivity(vIntent);
-    	} catch (Exception e) {
-    		C_Log.v(0, C_TAG, "AddMarkers err:" + e.getMessage());
-    	}
+//    	try {
+//    		C_Log.v(3, C_TAG, "ShowARDialog");
+//    		Intent vIntent = new Intent(fContext, C_ARActivity.class);
+//    		vIntent.putExtra("Markers", pMarkers);
+//    		vIntent.putExtra("UseCollisionDetection", pUseCollisionDetection);
+//    		vIntent.putExtra("UpdateLocation", pUpdateLocation);
+//    		vIntent.putExtra("Latitude", pLatitude);
+//    		vIntent.putExtra("Longitude", pLongitude);
+//    		vIntent.putExtra("Altitude", pAltitude);
+//    		fContext.startActivity(vIntent);
+//    	} catch (Exception e) {
+//    		C_Log.v(0, C_TAG, "AddMarkers err:" + e.getMessage());
+//    	}
     }
 
 	/**

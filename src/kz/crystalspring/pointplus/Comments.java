@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import kz.crystalspring.android_client.C_FileHelper;
 import kz.crystalspring.funpoint.MainMenu;
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 import kz.sbeyer.atmpoint1.types.ItemComment;
 import kz.sbeyer.atmpoint1.types.ItemLangValues;
 import org.json.JSONArray;

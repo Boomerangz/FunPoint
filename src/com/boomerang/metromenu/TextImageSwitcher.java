@@ -3,7 +3,7 @@ package com.boomerang.metromenu;
 import java.util.ArrayList;
 import java.util.List;
 
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

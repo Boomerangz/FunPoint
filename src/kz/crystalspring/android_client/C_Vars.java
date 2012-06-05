@@ -96,7 +96,7 @@ public class C_Vars {
 	public static final String C_DEFAULT_SYNC_PROC_URL2 = "http://178.89.186.131/~crystals/cs/sync.php";
 	public static final String C_DEFAULT_SYNC_PROC_URL3 = "http://82.200.139.162/cs/sync.php"; //cs old 109.233.240.226
 	
-	public static final String C_PROVIDER_NAME = "kz.pointplus.db_provider";
+	public static final String C_PROVIDER_NAME = "kz.pointplus.db_provider1";
 	public static final String C_PROVIDER_ROOT_URL = "content://" + C_PROVIDER_NAME +"/";	
 	public static final String C_WIDGET_CONFIG_URL = C_PROVIDER_ROOT_URL + "w_config.html";	
 	

@@ -2,7 +2,7 @@ package kz.crystalspring.funpoint;
 
 import java.util.List;
 
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 import kz.sbeyer.atmpoint1.types.ItemCinema.CinemaHall;
 import kz.sbeyer.atmpoint1.types.ItemCinema.CinemaTimeLine;
 

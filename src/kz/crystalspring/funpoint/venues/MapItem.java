@@ -7,7 +7,7 @@ import java.util.List;
 
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.pointplus.ProjectUtils;
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 
 import org.json.JSONObject;
 

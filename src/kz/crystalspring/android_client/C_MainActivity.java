@@ -3,7 +3,7 @@ package kz.crystalspring.android_client;
 import java.security.PrivateKey;
 import javax.crypto.SecretKey;
 
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;

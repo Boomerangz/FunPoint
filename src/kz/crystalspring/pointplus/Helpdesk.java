@@ -9,7 +9,7 @@ import kz.crystalspring.android_client.C_FileHelper;
 import kz.crystalspring.android_client.C_JavascriptInterface;
 import kz.crystalspring.android_client.C_NetHelper;
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 import kz.sbeyer.atmpoint1.types.ItemMessage;
 
 import org.json.JSONArray;

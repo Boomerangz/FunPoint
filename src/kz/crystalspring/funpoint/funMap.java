@@ -5,7 +5,7 @@ import java.util.List;
 
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.MyMapView;
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;

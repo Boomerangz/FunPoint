@@ -18,7 +18,7 @@ package com.readystatesoftware.mapviewballoons;
 import java.util.List;
 
 import kz.crystalspring.funpoint.funMap;
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 
 import android.graphics.drawable.Drawable;
 import android.os.Handler;

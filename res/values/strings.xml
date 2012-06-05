@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hello">Hello World, Main!</string>
-    <string name="app_name">Point+</string>
+    <string name="app_name">FunPoint</string>
 	<string name="prefName"></string>
 	<string name="quit">Выход</string>
 	<string name="sync">Обновить</string>

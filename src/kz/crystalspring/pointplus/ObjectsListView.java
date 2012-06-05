@@ -12,7 +12,7 @@ import kz.crystalspring.funpoint.MainMenu;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.sbeyer.animation.ProjectAnimation;
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 import kz.sbeyer.atmpoint1.types.ItemVisible;
 
 import org.json.JSONArray;

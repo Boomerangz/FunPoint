@@ -10,8 +10,8 @@ import kz.crystalspring.funpoint.ProfilePage;
 import kz.crystalspring.funpoint.funCheckinNow;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.MapItem;
+import kz.crystalspring.funpoint.R;
 import kz.crystalspring.pointplus.Helpdesk;
-import kz.crystalspring.pointplus.R;
 import kz.crystalspring.pointplus.UserInfo;
 
 import android.app.Activity;

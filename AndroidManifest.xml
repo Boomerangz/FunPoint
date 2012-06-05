@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="kz.crystalspring.pointplus"
+    package="kz.crystalspring.funpoint"
 	android:versionCode="2"
 	android:versionName="0.91"
 	android:debuggable="false" >
@@ -28,7 +28,7 @@
 	<uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
-        android:name="kz.crystalspring.funpoint.MainApplication"
+        android:name=".MainApplication"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Black.NoTitleBar" >
@@ -36,7 +36,7 @@
         <uses-library android:name="com.google.android.maps" />
         
         <activity
-            android:name=".Splash"
+            android:name="kz.crystalspring.pointplus.Splash"
             android:label="@string/app_name"
     		android:screenOrientation="portrait" >
     		<intent-filter>
@@ -75,11 +75,11 @@
         </activity>
         
         <activity
-            android:name=".Helpdesk"
+            android:name="kz.crystalspring.pointplus.Helpdesk"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".Comments"
+            android:name="kz.crystalspring.pointplus.Comments"
             android:label="@string/app_name" >
         </activity>
         <activity
@@ -87,7 +87,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".ProductsListView"
+            android:name="kz.crystalspring.pointplus.ProductsListView"
             android:label="@string/app_name" >
         </activity>
         <activity
@@ -99,7 +99,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".Prefs"
+            android:name="kz.crystalspring.pointplus.Prefs"
             android:label="@string/app_name" >
         </activity>
         <activity
@@ -109,17 +109,13 @@
         
         
  
-		<activity android:name=".C_WidgetConfigActivity" >
+		<activity android:name="kz.crystalspring.pointplus.C_WidgetConfigActivity" >
 			<intent-filter>
 				<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
 			</intent-filter>
 		</activity>
 		        
-		<activity android:name="kz.crystalspring.pointplus.C_ARActivityN" 
-	        android:label="@string/app_name"
-	        android:screenOrientation="landscape">
-		</activity>
-		<provider android:name="kz.crystalspring.pointplus.C_ContentProvider" android:authorities="kz.pointplus.db_provider" android:exported="true" />    
+		<provider android:name="kz.crystalspring.pointplus.C_ContentProvider" android:authorities="kz.pointplus.db_provider1" android:exported="true" />    
 		
 		<service android:enabled="true" android:name="kz.crystalspring.pointplus.C_ServiceHelper"/>
 		

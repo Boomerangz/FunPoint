@@ -3,7 +3,7 @@ package kz.crystalspring.funpoint;
 import java.util.List;
 
 import kz.crystalspring.funpoint.venues.MapItem;
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;

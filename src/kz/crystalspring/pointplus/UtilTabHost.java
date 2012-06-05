@@ -1,7 +1,7 @@
 package kz.crystalspring.pointplus;
 
 
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;

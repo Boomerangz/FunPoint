@@ -8,7 +8,7 @@ import kz.crystalspring.android_client.C_Log;
 import kz.crystalspring.android_client.C_NetHelper;
 import kz.crystalspring.android_client.C_Utils;
 import kz.crystalspring.android_client.C_Vars;
-import kz.crystalspring.pointplus.R;
+import kz.crystalspring.funpoint.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
