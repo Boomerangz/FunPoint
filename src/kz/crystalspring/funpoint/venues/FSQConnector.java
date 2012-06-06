@@ -29,6 +29,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -168,6 +172,15 @@ public class FSQConnector
 
 		return str;
 	}
+	
+	private static Drawable streamToDrawable(InputStream is) throws IOException
+	{
+		Bitmap b = BitmapFactory.decodeStream(is);
+		b.setDensity(Bitmap.DENSITY_NONE);
+		Drawable d = new BitmapDrawable(b);
+		return d;
+	}
+
 
 	public static JSONObject getVenueInformation(String id)
 	{
@@ -195,20 +208,6 @@ public class FSQConnector
 
 		try
 		{
-			// URL url = new URL(sUrl);
-			// Log.d(TAG, "Opening URL " + url.toString());
-			//
-			// HttpURLConnection urlConnection = (HttpURLConnection) url
-			// .openConnection();
-			//
-			// urlConnection.setRequestMethod("GET");
-			// urlConnection.setDoInput(true);
-			// urlConnection.setDoOutput(true);
-			//
-			// urlConnection.connect();
-			//
-			// return streamToString(urlConnection.getInputStream());
-
 			HttpClient client = new DefaultHttpClient();
 			HttpGet request = new HttpGet();
 			request.setURI(new URI(sUrl));
@@ -219,6 +218,24 @@ public class FSQConnector
 		} catch (Exception e)
 		{
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Drawable loadPictureByUrl(String sUrl)
+	{
+
+		try
+		{
+			HttpClient client = new DefaultHttpClient();
+			HttpGet request = new HttpGet();
+			request.setURI(new URI(sUrl));
+			request.setHeader("Accept-Language", "ru");
+			HttpResponse response = client.execute(request);
+			return streamToDrawable(response.getEntity().getContent());
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 			return null;
 		}
@@ -551,6 +568,11 @@ public class FSQConnector
 		MainApplication.pwAggregator.addTaskToQueue(task, null);
 	}
 	
+	public static List<FSQBadge> getBadgesList()
+	{
+		return badgesList;
+	}
+	
 	public static boolean getBadgessLoaded()
 	{
 		return isBadgesLoaded;
@@ -559,5 +581,10 @@ public class FSQConnector
 	public static void setBadgesLoaded(boolean loaded)
 	{
 		isBadgesLoaded = loaded;
+	}
+
+	public static void loadBadgesPictureAsync(FSQBadge fsqBadge)
+	{
+		
 	}
 }

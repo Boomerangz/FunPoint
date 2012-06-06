@@ -81,7 +81,7 @@ public class FSQBadge
 	
 	public void loadPictures()
 	{
-		
+		FSQConnector.loadBadgesPictureAsync(this);
 	}
 	
 	
