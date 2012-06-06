@@ -16,6 +16,12 @@
             android:layout_height="wrap_content"
             android:text="TextView" />
 
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/zoom_plate" />
+		
         <ListView
             android:id="@+id/tips_list"
             android:layout_width="fill_parent"

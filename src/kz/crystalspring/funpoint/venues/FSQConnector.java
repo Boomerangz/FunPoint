@@ -45,13 +45,19 @@ public class FSQConnector
 	private static final String TIP_ADD_URL = "https://api.foursquare.com/v2/tips/add";
 	private static final String TODO_ADD_URL = "https://api.foursquare.com/v2/lists/self/todos/additem";
 	private static final String TODOS_GET_URL = "https://api.foursquare.com/v2/users/self/todos";
+	private static final String BADGES_GET_URL = "https://api.foursquare.com/v2/users/self/badges";
 	private static final String CHECKINS_GET_URL = "https://api.foursquare.com/v2/users/self/checkins";
 	private static final String TAG = "FoursquareApi";
 	private static final String API_VERSION = "&v=20120522";
+	private static final int AREA_RADIUS=2000;
+	
 	private static List<FSQTodo> todosList = new ArrayList(0);
 	private static List<String> checkinsList = new ArrayList(0);
+	private static List<FSQBadge> badgesList = new ArrayList(0);
+	
 	private static boolean isTodosLoaded = false;
 	private static boolean isCheckinsLoaded = false;
+	private static boolean isBadgesLoaded = false;
 
 	public static List<MapItem> loadItems(GeoPoint point, String category)
 	{
@@ -60,9 +66,9 @@ public class FSQConnector
 			try
 			{
 				List<MapItem> list = getNearby(point.getLatitudeE6() / 1e6,
-						point.getLongitudeE6() / 1e6, category, 1000);
-				list.addAll(getNearby(point.getLatitudeE6() / 1e6,
-						point.getLongitudeE6() / 1e6, category, 0));
+						point.getLongitudeE6() / 1e6, category, AREA_RADIUS);
+//				list.addAll(getNearby(point.getLatitudeE6() / 1e6,
+//						point.getLongitudeE6() / 1e6, category, 0));
 				return list;
 			} catch (Exception e)
 			{
@@ -94,6 +100,7 @@ public class FSQConnector
 					+ CLIENT_SECRET + API_VERSION;
 
 			String response = loadByUrl(sUrl);
+			System.out.println("получен ответ с точками с сервера");
 			JSONObject jsonObj = new JSONObject(response);// (JSONObject) new
 															// JSONTokener(response).nextValue();
 
@@ -127,7 +134,7 @@ public class FSQConnector
 		{
 			throw ex;
 		}
-
+		System.out.println("Составлен список объектов на основе ответа от сервера");
 		return venueList;
 	}
 
@@ -205,6 +212,7 @@ public class FSQConnector
 			HttpClient client = new DefaultHttpClient();
 			HttpGet request = new HttpGet();
 			request.setURI(new URI(sUrl));
+			request.setHeader("Accept-Language", "ru");
 			HttpResponse response = client.execute(request);
 			return streamToString(response.getEntity().getContent());
 
@@ -490,5 +498,66 @@ public class FSQConnector
 			return found;
 		} else
 			return false;
+	}
+	
+	public static void loadBadgesAsync()
+	{
+		Runnable task = new Runnable()
+		{
+
+			@Override
+			public void run()
+			{
+				List<FSQBadge> todos = new ArrayList<FSQBadge>();
+				if (isFSQConnected())
+				{
+					String st = "";
+					try
+					{
+						String sUrl = BADGES_GET_URL + "?oauth_token="
+								+ MainApplication.FsqApp.getAccesToken()
+								+ "&sort=recent" + API_VERSION;
+						st = loadByUrl(sUrl);
+
+						JSONObject response = new JSONObject(st)
+								.getJSONObject("response")
+								.getJSONObject("badges");
+						
+						JSONArray names=response.names();
+						
+						for (int i = 0; i < response.length(); i++)
+						{
+							if (response.getJSONObject(names.getString(i)).getJSONArray("unlocks").length()>0)//если значок получен
+							{	
+								FSQBadge item = FSQBadge.loadFromJSON(response.getJSONObject(names.getString(i)));
+								if (item != null)
+									todos.add(item);
+							}
+						}
+					} catch (Exception e)
+					{
+						todos = new ArrayList<FSQBadge>(0);
+						e.printStackTrace();
+					}
+					System.out.println(st);
+				}
+				synchronized (badgesList)
+				{
+					badgesList = todos;
+				}
+				setBadgesLoaded(true);
+			}
+		};
+		MainApplication.pwAggregator.addTaskToQueue(task, null);
+	}
+	
+	public static boolean getBadgessLoaded()
+	{
+		return isBadgesLoaded;
+	}
+
+	public static void setBadgesLoaded(boolean loaded)
+	{
+		isBadgesLoaded = loaded;
 	}
 }

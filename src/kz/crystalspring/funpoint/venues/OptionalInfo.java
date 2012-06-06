@@ -68,7 +68,6 @@ public class OptionalInfo
 			{
 				e.printStackTrace();
 			}
-			
 		}
 	}
 	
@@ -77,8 +76,9 @@ public class OptionalInfo
 		String st="";
 		for (String s:categoryList)
 		{
-			st+=s+" ,";
+			st+=", "+s;
 		}
+		st=st.substring(2).trim();
 		return st;
 	}
 

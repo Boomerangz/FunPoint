@@ -105,6 +105,8 @@ public class MainApplication extends Application
 			FSQConnector.loadTodosAsync();
 		if (!FSQConnector.getCheckinsLoaded())
 			FSQConnector.loadCheckinsAsync();
+		if (!FSQConnector.getBadgessLoaded())
+			FSQConnector.loadBadgesAsync();
 	}
 	
 }
