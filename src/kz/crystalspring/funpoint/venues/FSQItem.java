@@ -16,6 +16,7 @@ public class FSQItem extends MapItem
 	String address;
 	String category = FSQ_TYPE_FOOD;
 	int hereNow;
+	List<String> categoryList = new ArrayList<String>(); 
 
 	OptionalInfo optInfo;
 
@@ -45,6 +46,7 @@ public class FSQItem extends MapItem
 			setLatitude(lat);
 			setLongitude(lng);
 			setHereNow(jObject.getJSONObject("hereNow").getInt("count"));
+			loadCategories(jObject.getJSONArray("categories"));
 			return this;
 		} catch (JSONException e)
 		{
@@ -96,7 +98,6 @@ public class FSQItem extends MapItem
 		try
 		{
 			optInfo.loadComments(fsqJObject.getJSONObject("tips"));
-			optInfo.loadCategories(fsqJObject.getJSONArray("categories"));
 			optInfo.loadPhones(fsqJObject.getJSONObject("contact"));
 		} catch (JSONException e)
 		{
@@ -119,10 +120,6 @@ public class FSQItem extends MapItem
 		this.hereNow = hereNow;
 	}
 
-	public String getFSQCategoriesString()
-	{
-		return optInfo.getCategoriesString();
-	}
 
 	public List<String> getPhones()
 	{
@@ -137,6 +134,42 @@ public class FSQItem extends MapItem
 	public boolean isCheckedToDo()
 	{
 		return FSQConnector.isInTodoList(getId());
+	}
+	
+	
+	public void loadCategories(JSONArray jArray)
+	{
+		for (int i=0; i<jArray.length(); i++)
+		{
+			try
+			{
+				JSONObject jCateg=jArray.getJSONObject(i);
+				String sCateg=jCateg.getString("name");
+				categoryList.add(sCateg);
+			} catch (JSONException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		if (ArrayList.class.isInstance(categoryList))
+			((ArrayList)categoryList).trimToSize();
+	}
+	
+	public String getCategoriesString()
+	{
+		String st="";
+		for (String s:categoryList)
+		{
+			st+=", "+s;
+		}
+		st=st.substring(2).trim();
+		return st;
+	}
+	
+	@Override
+	public String getShortCharacteristic()
+	{
+		return getCategoriesString();
 	}
 
 }

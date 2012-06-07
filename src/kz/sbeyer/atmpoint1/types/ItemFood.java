@@ -59,12 +59,12 @@ public class ItemFood extends FSQItem
 		}
 	}
 
-	public String getKitchen()
+	public String getCategoriesString()
 	{
 		if (foodOptions != null && !foodOptions.getKitchen().equals(""))
 			return foodOptions.getKitchen();
 		else
-			return getFSQCategoriesString();
+			return super.getCategoriesString();
 	}
 
 	public CharSequence getAvgPrice()

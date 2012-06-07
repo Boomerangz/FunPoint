@@ -258,6 +258,7 @@ public abstract class MapItem
 			convertView = mInflater.inflate(R.layout.object_list_item, null);
 			holder = new ViewHolder();
 			holder.name = (TextView) convertView.findViewById(R.id.name);
+			holder.shortDescription = (TextView) convertView.findViewById(R.id.short_description);
 
 			convertView.setMinimumHeight(60);
 			convertView.setTag(holder);
@@ -272,11 +273,15 @@ public abstract class MapItem
 					+ Float.toString(distanceTo(MainApplication
 							.getCurrentLocation()));
 		holder.name.setText(st);
+		holder.shortDescription.setText(getShortCharacteristic());
 		return convertView;
 	}
 
 	public static class ViewHolder
 	{
 		public TextView name;
+		public TextView shortDescription;
 	}
+	
+	public abstract String getShortCharacteristic();
 }

@@ -253,7 +253,7 @@ public class funFoodController extends ActivityController
 			adapter.fillLayout(commentsListLayout);
 		}
 		lunchPriceTV.setText(food.getLunchPrice());
-		kitchenTV.setText(food.getKitchen());
+		kitchenTV.setText(food.getCategoriesString());
 		// kitchenTV.setVisibility(View.VISIBLE);
 		if (itemFood.getFoodOptions() != null)
 		{
