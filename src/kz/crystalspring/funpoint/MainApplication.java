@@ -42,6 +42,8 @@ public class MainApplication extends Application
 	public static PendingWorkAggregator pwAggregator;
 	
 	LocationUpdater updater;
+	
+	public static final int ALPHA = 100;
 
 	public static void refreshMapItems()
 	{

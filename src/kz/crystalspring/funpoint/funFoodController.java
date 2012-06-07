@@ -27,6 +27,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,6 +41,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
+import android.widget.RelativeLayout.LayoutParams;
 
 public class funFoodController extends ActivityController
 {
@@ -53,9 +55,11 @@ public class funFoodController extends ActivityController
 	RelativeLayout checkInBtn;
 	RelativeLayout mapInBtn;
 	RelativeLayout todoBtn;
-	ListView commentsList;
+	LinearLayout commentsListLayout;
+	LinearLayout mainInfoLayout;
 
-	public static final int ALPHA = 100;
+	Button switchSecondBtn;
+	Button switchFirstBtn;
 
 	funFoodController(Activity context)
 	{
@@ -78,7 +82,10 @@ public class funFoodController extends ActivityController
 		lunchPriceTV = (TextView) context.findViewById(R.id.food_lunch_price);
 		avgPriceTV = (TextView) context.findViewById(R.id.food_avg_price);
 		String sObjID = Prefs.getSelObjId(context.getApplicationContext());
-		commentsList = (ListView) context.findViewById(R.id.comment_list);
+		commentsListLayout = (LinearLayout) context
+				.findViewById(R.id.comment_list_layout);
+		mainInfoLayout = (LinearLayout) context
+				.findViewById(R.id.main_info_layout);
 		checkInBtn = (RelativeLayout) context.findViewById(R.id.checkin_block);
 		mapInBtn = (RelativeLayout) context.findViewById(R.id.map_block);
 		todoBtn = (RelativeLayout) context.findViewById(R.id.todo_block);
@@ -88,7 +95,7 @@ public class funFoodController extends ActivityController
 		int[] arg = { R.id.checkin_block, R.id.map_block, R.id.herenow_block,
 				R.id.todo_block, R.id.avg_price_block, R.id.address_block,
 				R.id.phone_block };
-		setBlocksAlpha(ALPHA, arg);
+		setBlocksAlpha(MainApplication.ALPHA, arg);
 
 		if (MainApplication.FsqApp.hasAccessToken())
 		{
@@ -118,7 +125,7 @@ public class funFoodController extends ActivityController
 				goToMap();
 			}
 		});
-		
+
 		int iObjID = Integer.parseInt(sObjID);
 
 		itemFood = (ItemFood) MainApplication.mapItemContainer
@@ -137,9 +144,9 @@ public class funFoodController extends ActivityController
 					.getId());
 			itemFood.loadFoodOptions(jObject);
 		}
-		
-		Button switchBtn=(Button) context.findViewById(R.id.switch_btn);
-		switchBtn.setOnClickListener(new OnClickListener()
+
+		switchSecondBtn = (Button) context.findViewById(R.id.switch_btn);
+		switchSecondBtn.setOnClickListener(new OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
@@ -147,13 +154,71 @@ public class funFoodController extends ActivityController
 				switchPageToSecond();
 			}
 		});
+		switchFirstBtn = (Button) context.findViewById(R.id.switch_back_btn);
+		switchFirstBtn.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				switchPageToFirst();
+			}
+		});
+
 		showFood(itemFood);
 	}
-	
+
 	private void switchPageToSecond()
 	{
-		ViewSwitcher switcher=(ViewSwitcher)context.findViewById(R.id.switcher);
+		ViewSwitcher switcher = (ViewSwitcher) context
+				.findViewById(R.id.switcher);
+		switcher.setInAnimation(context, R.anim.slide_in_right);
+		switcher.setOutAnimation(context, R.anim.slide_out_left);
 		switcher.showNext();
+		switchSecondBtn.setVisibility(View.GONE);
+		switchFirstBtn.setVisibility(View.VISIBLE);
+		LinearLayout headerLayout = (LinearLayout) context
+				.findViewById(R.id.minor_header_layout);
+		// headerLayout.setGravity(Gravity.RIGHT);
+		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		lp.setMargins(Math.round(33 * MainApplication.mDensity), 0, 0, 0);
+		headerLayout.setLayoutParams(lp);
+		uncollapseView(commentsListLayout);
+		collapseView(mainInfoLayout);
+	}
+
+	private void switchPageToFirst()
+	{
+		ViewSwitcher switcher = (ViewSwitcher) context
+				.findViewById(R.id.switcher);
+		switcher.setInAnimation(context, R.anim.slide_in_left);
+		switcher.setOutAnimation(context, R.anim.slide_out_right);
+		switcher.showPrevious();
+		switchSecondBtn.setVisibility(View.VISIBLE);
+		switchFirstBtn.setVisibility(View.GONE);
+		LinearLayout headerLayout = (LinearLayout) context
+				.findViewById(R.id.minor_header_layout);
+		// headerLayout.setGravity(Gravity.LEFT);
+		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		lp.setMargins(0, 0, Math.round(33 * MainApplication.mDensity), 0);
+		headerLayout.setLayoutParams(lp);
+		collapseView(commentsListLayout);
+		uncollapseView(mainInfoLayout);
+	}
+	
+	private void collapseView(View v)
+	{
+		v.getLayoutParams().height=0;
+		v.getLayoutParams().width=0;
+	}
+	
+	private void uncollapseView(View v)
+	{
+		v.getLayoutParams().height=v.getLayoutParams().WRAP_CONTENT;
+		v.getLayoutParams().width=v.getLayoutParams().FILL_PARENT;
 	}
 
 	private void setBlocksAlpha(int alpha, int[] args)
@@ -185,27 +250,26 @@ public class funFoodController extends ActivityController
 		{
 			VenueCommentsAdapter adapter = new VenueCommentsAdapter(context,
 					itemFood.getOptionalInfo().getCommentsList());
-			commentsList.setAdapter(adapter);
+			adapter.fillLayout(commentsListLayout);
 		}
 		lunchPriceTV.setText(food.getLunchPrice());
 		kitchenTV.setText(food.getKitchen());
-		//kitchenTV.setVisibility(View.VISIBLE);
+		// kitchenTV.setVisibility(View.VISIBLE);
 		if (itemFood.getFoodOptions() != null)
 		{
 			avgPriceTV.setText(food.getAvgPrice() + "тг");
 			avgPriceTV.setVisibility(View.VISIBLE);
 		} else
 		{
-		//	kitchenTV.setVisibility(View.INVISIBLE);
+			// kitchenTV.setVisibility(View.INVISIBLE);
 			avgPriceTV.setVisibility(View.INVISIBLE);
 		}
-		
+
 		if (food.isCheckedIn())
 			setStateChecked();
-		
+
 		if (food.isCheckedToDo())
 			setStateTodo();
-		
 
 		LinearLayout phoneLayout = (LinearLayout) context
 				.findViewById(R.id.phone_block);
@@ -216,11 +280,11 @@ public class funFoodController extends ActivityController
 			phoneTV.setPhone(phone);
 			phoneTV.setOnClickListener(new OnClickListener()
 			{
-				
 				@Override
 				public void onClick(View v)
 				{
-					Intent intent=new Intent(Intent.ACTION_DIAL,Uri.parse("tel:"+phoneTV.getPhone()));
+					Intent intent = new Intent(Intent.ACTION_DIAL, Uri
+							.parse("tel:" + phoneTV.getPhone()));
 					context.startActivity(intent);
 				}
 			});
@@ -239,25 +303,25 @@ public class funFoodController extends ActivityController
 		FSQConnector.checkIn(itemFood.getId());
 		setStateChecked();
 	}
-	
+
 	private void checkToDo()
 	{
 		FSQConnector.addToTodos(itemFood.getId());
 		setStateTodo();
 	}
-	
+
 	private void setStateChecked()
 	{
 		checkInBtn.setEnabled(false);
 		checkInBtn.setBackgroundColor(Color.parseColor("#00A859"));
 	}
-	
+
 	private void setStateTodo()
 	{
 		todoBtn.setEnabled(false);
 		todoBtn.setBackgroundColor(Color.parseColor("#00A859"));
 	}
-	
+
 	private void goToMap()
 	{
 		MainApplication.mapItemContainer.setSelectedItem(itemFood);
@@ -267,7 +331,7 @@ public class funFoodController extends ActivityController
 
 }
 
-class VenueCommentsAdapter extends BaseAdapter
+class VenueCommentsAdapter
 {
 	List<VenueComment> data;
 	private LayoutInflater mInflater;
@@ -278,49 +342,50 @@ class VenueCommentsAdapter extends BaseAdapter
 		mInflater = LayoutInflater.from(context);
 	}
 
-	@Override
 	public int getCount()
 	{
 		return data.size();
 	}
 
-	@Override
 	public Object getItem(int position)
 	{
 		return data.get(position);
 	}
 
-	@Override
 	public long getItemId(int position)
 	{
 		return position;
 	}
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
+	public View getView(int position)
 	{
 		ViewHolder holder;
-		if (convertView == null)
-		{
-			convertView = mInflater.inflate(R.layout.comment_list_item, null);
-			holder = new ViewHolder();
-			holder.text = (TextView) convertView.findViewById(R.id.text);
-			holder.author = (TextView) convertView.findViewById(R.id.author);
-			// convertView.setMinimumHeight(60);
-			convertView.setTag(holder);
-		} else
-		{
-			holder = (ViewHolder) convertView.getTag();
-		}
+		View convertView = null;
+		convertView = mInflater.inflate(R.layout.comment_list_item, null);
+		holder = new ViewHolder();
+		holder.text = (TextView) convertView.findViewById(R.id.text);
+		holder.author = (TextView) convertView.findViewById(R.id.author);
+		holder.layout = (View) convertView.findViewById(R.id.comment_layout);
+		// convertView.setMinimumHeight(60);
+		convertView.setTag(holder);
 		holder.text.setText(data.get(position).getText());
 		holder.author.setText(data.get(position).getAuthor());
+		holder.layout.getBackground().setAlpha(MainApplication.ALPHA);
 		return convertView;
+	}
+	
+	public void fillLayout(LinearLayout layout)
+	{
+		layout.removeAllViews();
+		for (int i=0;i<getCount();i++)
+			layout.addView(getView(i));
 	}
 
 	static class ViewHolder
 	{
 		TextView author;
 		TextView text;
+		View layout;
 	}
 
 }
