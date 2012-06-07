@@ -58,8 +58,8 @@ public class funFoodController extends ActivityController
 	LinearLayout commentsListLayout;
 	LinearLayout mainInfoLayout;
 
-	Button switchSecondBtn;
-	Button switchFirstBtn;
+	ImageView switchSecondBtn;
+	ImageView switchFirstBtn;
 
 	funFoodController(Activity context)
 	{
@@ -145,7 +145,7 @@ public class funFoodController extends ActivityController
 			itemFood.loadFoodOptions(jObject);
 		}
 
-		switchSecondBtn = (Button) context.findViewById(R.id.switch_btn);
+		switchSecondBtn = (ImageView) context.findViewById(R.id.switch_btn);
 		switchSecondBtn.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -154,7 +154,7 @@ public class funFoodController extends ActivityController
 				switchPageToSecond();
 			}
 		});
-		switchFirstBtn = (Button) context.findViewById(R.id.switch_back_btn);
+		switchFirstBtn = (ImageView) context.findViewById(R.id.switch_back_btn);
 		switchFirstBtn.setOnClickListener(new OnClickListener()
 		{
 			@Override

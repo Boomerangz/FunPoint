@@ -57,24 +57,24 @@
                         android:textColor="@color/white" />
                 </LinearLayout>
 
-                <Button
+                <ImageView
                     android:id="@+id/switch_back_btn"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                           android:layout_width="40dp"
+                        android:layout_height="40dp"
                     android:layout_alignBottom="@id/minor_header_layout"
                     android:layout_alignParentLeft="true"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/previous"
+                    android:padding="5dp"
+                    android:src="@drawable/previous"
                     android:visibility="gone" />
 
-                <Button
+                 <ImageView
                     android:id="@+id/switch_btn"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                     android:layout_alignBottom="@id/minor_header_layout"
                     android:layout_alignParentRight="true"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/next" />
+                    android:padding="5dp"
+                    android:src="@drawable/next" />
             </RelativeLayout>
 
             <ViewSwitcher
@@ -332,12 +332,11 @@
                     android:gravity="right"
                     android:orientation="vertical" >
 
-                    <Button
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_margin="5dp"
-                        android:layout_marginRight="7dp"
-                        android:background="@drawable/plus" />
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="5dp"
+                        android:src="@drawable/plus" />
 
                     <LinearLayout
                         android:id="@+id/comment_list_layout"
