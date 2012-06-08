@@ -39,7 +39,6 @@ public class funObjectList extends Activity implements RefreshableMapList
 		mapBtn=(Button) findViewById(R.id.mapBtn);
 		mapBtn.setOnClickListener(new OnClickListener()
 		{
-			
 			@Override
 			public void onClick(View v)
 			{
@@ -62,21 +61,6 @@ public class funObjectList extends Activity implements RefreshableMapList
 		itemsList=MainApplication.mapItemContainer.getFilteredItemList();
 		ObjectAdapter adapter=new ObjectAdapter(this, itemsList);
 		adapter.fillLayout(list);
-//		listView.setAdapter(adapter);
-//		listView.setOnItemClickListener(new OnItemClickListener()
-//		{
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-//					long arg3)
-//			{
-//				MainApplication.mapItemContainer.setSelectedItem(itemsList.get(arg2));
-//				Intent intent=new Intent(funObjectList.this,funObjectDetail.class);
-//				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//				startActivity(intent);
-//			//	Toast.makeText(funObjectList.this, Integer.toString(arg2), Toast.LENGTH_SHORT).show();
-//			}
-//		});
 	}
 
 	@Override
@@ -123,18 +107,7 @@ class ObjectAdapter
 	    	{
 	    		View v=getView(i);
 	    		final int itemIndex=i;
-	    		v.setOnClickListener(new OnClickListener()
-				{
-					@Override
-					public void onClick(View v)
-					{
-						MainApplication.mapItemContainer.setSelectedItem((MapItem)getItem(itemIndex));
-						Intent intent=new Intent(context,funObjectDetail.class);
-						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						context.startActivity(intent);
-						//Toast.makeText(context, Integer.toString(arg2), Toast.LENGTH_SHORT).show();
-					}
-				});
+	    		
 	    		v.setMinimumHeight(Math.round(70*MainApplication.mDensity));
 	    		viewList.add(v);
 	    	}

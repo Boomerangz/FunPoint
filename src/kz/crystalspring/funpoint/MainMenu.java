@@ -292,6 +292,11 @@ public class MainMenu extends TabActivity
 				logoTvStr = "Point+";
 				pLang = Prefs.getLangPref(context);
 
+				View bottomPanel=findViewById(R.id.bottom_panel);
+				if (tabHost.getCurrentTab()==OBJECT_MAP_TAB)
+					bottomPanel.setVisibility(View.VISIBLE);
+				else
+					bottomPanel.setVisibility(View.GONE);
 				renameObjects();
 			}
 		});

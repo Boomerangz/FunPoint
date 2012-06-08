@@ -283,6 +283,20 @@ public abstract class MapItem
 		holder.shortDescription.setText(getShortCharacteristic());
 		holder.background.getBackground().setAlpha(MainApplication.ALPHA);
 		holder.range.setText(st);
+		
+		
+		holder.background.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				MainApplication.mapItemContainer.setSelectedItem(MapItem.this);
+				Intent intent=new Intent(context,funObjectDetail.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(intent);
+				//Toast.makeText(context, Integer.toString(arg2), Toast.LENGTH_SHORT).show();
+			}
+		});
 		return convertView;
 	}
 
