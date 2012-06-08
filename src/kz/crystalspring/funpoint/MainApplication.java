@@ -39,7 +39,7 @@ public class MainApplication extends Application
 	private static GeoPoint currLocation;
 	public static SharedPreferences mPrefs;
 	public static FoursquareApp FsqApp;
-	public static PendingWorkAggregator pwAggregator;
+	public static PendingWorkAggregator pwAggregator=new PendingWorkAggregator();
 	
 	LocationUpdater updater;
 	
@@ -76,7 +76,7 @@ public class MainApplication extends Application
 			}
 		};
 		MainApplication.mapItemContainer.loadNearBy(getCurrentLocation(), task);
-		pwAggregator=new PendingWorkAggregator();
+		
 		
 		
 		new FileConnector(getApplicationContext());

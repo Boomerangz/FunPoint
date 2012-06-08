@@ -112,10 +112,9 @@ public class MapItemContainer
 	
 	
 	
-	public void loadCategory(int categoryId)
+	public void loadCategory(String sCategoryId, int radius)
 	{
-		String sCategoryId="";
-		addItemsList(FSQConnector.loadItems(point,sCategoryId));
+		addItemsList(FSQConnector.loadItems(point,sCategoryId,radius));
 	}
 	
 	
@@ -123,34 +122,25 @@ public class MapItemContainer
 	{
 		this.point=point;
 		RefreshItemsTask task=new RefreshItemsTask();
-		task.execute(action);
+		MainApplication.pwAggregator.addTaskToQueue(task, action);
+	//	task.execute(action);
 	}
 	
 	
-	private class RefreshItemsTask extends AsyncTask<Runnable, Integer, Runnable>
+	private class RefreshItemsTask implements Runnable
 	{
-
 		@Override
-		protected Runnable doInBackground(Runnable... params)
+		public void run()
 		{
-			
 			ArrayList<String> filterArray=new ArrayList();
 			filterArray.addAll(Arrays.asList(MapItem.TYPES_ARRAY));
-			
-			for (String i:filterArray)
+			for (String st:filterArray)
 			{
-				addItemsList(FSQConnector.loadItems(point,i));
+				if (!st.equals(MapItem.FSQ_TYPE_FOOD))
+					loadCategory(st, 0);
+				else 
+					loadCategory(st,FSQConnector.AREA_RADIUS);
 			}
-			if (params.length>0)
-				return params[0];
-			else 
-				return null;
-		}
-		
-		@Override
-		protected void onPostExecute(Runnable task)
-		{
-			task.run();
 		}
 	}
 

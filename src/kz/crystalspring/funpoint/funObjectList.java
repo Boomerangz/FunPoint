@@ -1,5 +1,6 @@
 package kz.crystalspring.funpoint;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kz.crystalspring.funpoint.venues.MapItem;
@@ -116,15 +117,14 @@ class ObjectAdapter
 	    
 	    public void fillLayout(LinearLayout l)
 	    {
-	    	l.removeAllViews();
+	    	
+	    	ArrayList<View> viewList=new ArrayList<View>(getCount());
 	    	for (int i=0; i<getCount(); i++)
 	    	{
-	    		i++;
 	    		View v=getView(i);
 	    		final int itemIndex=i;
 	    		v.setOnClickListener(new OnClickListener()
 				{
-					
 					@Override
 					public void onClick(View v)
 					{
@@ -136,6 +136,11 @@ class ObjectAdapter
 					}
 				});
 	    		v.setMinimumHeight(Math.round(70*MainApplication.mDensity));
+	    		viewList.add(v);
+	    	}
+	    	l.removeAllViews();
+	    	for (View v:viewList)
+	    	{
 	    		l.addView(v);
 	    	}
 	    }

@@ -53,7 +53,7 @@ public class FSQConnector
 	private static final String CHECKINS_GET_URL = "https://api.foursquare.com/v2/users/self/checkins";
 	private static final String TAG = "FoursquareApi";
 	private static final String API_VERSION = "&v=20120522";
-	private static final int AREA_RADIUS=2000;
+	public static final int AREA_RADIUS=1500;
 	
 	private static List<FSQTodo> todosList = new ArrayList(0);
 	private static List<String> checkinsList = new ArrayList(0);
@@ -63,14 +63,15 @@ public class FSQConnector
 	private static boolean isCheckinsLoaded = false;
 	private static boolean isBadgesLoaded = false;
 
-	public static List<MapItem> loadItems(GeoPoint point, String category)
+	public static List<MapItem> loadItems(GeoPoint point, String category, int radius)
 	{
 		if (point != null)
 		{
 			try
 			{
+				
 				List<MapItem> list = getNearby(point.getLatitudeE6() / 1e6,
-						point.getLongitudeE6() / 1e6, category, AREA_RADIUS);
+						point.getLongitudeE6() / 1e6, category, radius);
 //				list.addAll(getNearby(point.getLatitudeE6() / 1e6,
 //						point.getLongitudeE6() / 1e6, category, 0));
 				return list;
@@ -102,9 +103,9 @@ public class FSQConnector
 
 			sUrl += "&client_id=" + CLIENT_ID + "&client_secret="
 					+ CLIENT_SECRET + API_VERSION;
-
+			System.out.println("на сервер отдан запрос на точки");
 			String response = loadByUrl(sUrl);
-			System.out.println("получен ответ с точками с сервера");
+			System.out.println("получена строка с точками с сервера");
 			JSONObject jsonObj = new JSONObject(response);// (JSONObject) new
 															// JSONTokener(response).nextValue();
 
@@ -212,7 +213,9 @@ public class FSQConnector
 			HttpGet request = new HttpGet();
 			request.setURI(new URI(sUrl));
 			request.setHeader("Accept-Language", "ru");
+			
 			HttpResponse response = client.execute(request);
+			System.out.println("получен поток с сервера");
 			return streamToString(response.getEntity().getContent());
 
 		} catch (Exception e)
