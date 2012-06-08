@@ -257,33 +257,32 @@ public abstract class MapItem
 
 	public View getView(View convertView, int position)
 	{
+		convertView = null;
 		ViewHolder holder;
 		LayoutInflater mInflater = LayoutInflater.from(context);
-		if (convertView == null||convertView.getTag().getClass()!=ViewHolder.class)
-		{
-			convertView = mInflater.inflate(R.layout.object_list_item, null);
-			holder = new ViewHolder();
-			holder.name = (TextView) convertView.findViewById(R.id.name);
-			holder.shortDescription = (TextView) convertView.findViewById(R.id.short_description);
-			holder.goIntoButton = (ImageView) convertView.findViewById(R.id.go_into_btn);
-			holder.background = (View) convertView.findViewById(R.id.list_block);
+		convertView = mInflater.inflate(R.layout.object_list_item, null);
+		holder = new ViewHolder();
+		holder.name = (TextView) convertView.findViewById(R.id.name);
+		holder.range = (TextView) convertView.findViewById(R.id.range);
+		holder.shortDescription = (TextView) convertView
+				.findViewById(R.id.short_description);
+		holder.goIntoButton = (ImageView) convertView
+				.findViewById(R.id.go_into_btn);
+		holder.background = (View) convertView.findViewById(R.id.list_block);
 
-			convertView.setMinimumHeight(60);
-			convertView.setTag(holder);
-		} 
-		else
-		{
-			holder = (ViewHolder) convertView.getTag();
-		}
+		convertView.setMinimumHeight(60);
+		convertView.setTag(holder);
 		String st = Integer.toString(position) + ". " + toString();
-		if (MainApplication.getCurrentLocation() != null)
-			st += "   "
-					+ Float.toString(distanceTo(MainApplication
-							.getCurrentLocation()));
+
 		holder.name.setText(st);
+		if (MainApplication.getCurrentLocation() != null)
+			st = Integer.toString(Math.round(distanceTo(MainApplication
+					.getCurrentLocation()))) + " м";
+		else
+			st = "";
 		holder.shortDescription.setText(getShortCharacteristic());
 		holder.background.getBackground().setAlpha(MainApplication.ALPHA);
-		
+		holder.range.setText(st);
 		return convertView;
 	}
 
@@ -291,10 +290,10 @@ public abstract class MapItem
 	{
 		public TextView name;
 		public TextView shortDescription;
+		public TextView range;
 		public ImageView goIntoButton;
 		public View background;
 	}
-	
+
 	public abstract String getShortCharacteristic();
 }
-

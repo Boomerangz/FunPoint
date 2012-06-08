@@ -188,8 +188,8 @@ public class ItemCinema extends FSQItem
 	}
 	
 	
-	@Override 
-	public View getView(View convertView, int position)
+	//@Override 
+	public View getView1(View convertView, int position)
 	{
 		final ViewHolderCinema holder;
     	LayoutInflater mInflater = LayoutInflater.from(context);

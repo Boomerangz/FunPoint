@@ -22,18 +22,18 @@ public class funCheckinNow extends Activity
 	{
 		super.onResume();
 		ListView list = (ListView)findViewById(R.id.listView1);
-		list.setAdapter(new ObjectAdapter(this, MainApplication.mapItemContainer.getUnFilteredItemList()));
-		list.setOnItemClickListener(new OnItemClickListener()
-		{
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3)
-			{
-				Toast toast = Toast.makeText(getApplicationContext(), "Item clicked", Toast.LENGTH_SHORT);
-				toast.show();
-			}
-		});
+//		list.setAdapter(new ObjectAdapter(this, MainApplication.mapItemContainer.getUnFilteredItemList()));
+//		list.setOnItemClickListener(new OnItemClickListener()
+//		{
+//
+//			@Override
+//			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+//					long arg3)
+//			{
+//				Toast toast = Toast.makeText(getApplicationContext(), "Item clicked", Toast.LENGTH_SHORT);
+//				toast.show();
+//			}
+//		});
 	}
 }
 

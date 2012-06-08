@@ -6,9 +6,9 @@
         android:id="@+id/list_block"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginRight="9dp"
         android:background="#ffffff" >
 
         <ImageView
@@ -33,6 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Шоколадница"
+                android:textColor="@color/white"
                 android:textSize="17dp"
                 android:textStyle="bold" />
 
@@ -41,8 +42,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="кофейня"
+                android:textColor="@color/white"
+                android:typeface="serif"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/range"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3000м"
+                android:gravity="right"
+                android:textColor="@color/white"
                 android:typeface="serif" />
+
         </LinearLayout>
+
     </RelativeLayout>
 
 </LinearLayout>
