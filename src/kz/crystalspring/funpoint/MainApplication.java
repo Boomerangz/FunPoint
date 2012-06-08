@@ -84,7 +84,7 @@ public class MainApplication extends Application
 
 	public static GeoPoint getCurrentLocation()
 	{
-		if (gMyLocationOverlay != null)
+		if (gMyLocationOverlay != null&&gMyLocationOverlay.getMyLocation()!=null)
 			setCurrLocation(gMyLocationOverlay.getMyLocation());
 		else
 		{

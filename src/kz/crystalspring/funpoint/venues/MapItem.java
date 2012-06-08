@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import kz.crystalspring.funpoint.MainApplication;
+import kz.crystalspring.funpoint.funObjectDetail;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.funpoint.R;
 
@@ -14,13 +15,18 @@ import org.json.JSONObject;
 import com.google.android.maps.GeoPoint;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.sax.StartElementListener;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public abstract class MapItem
 {
@@ -259,6 +265,8 @@ public abstract class MapItem
 			holder = new ViewHolder();
 			holder.name = (TextView) convertView.findViewById(R.id.name);
 			holder.shortDescription = (TextView) convertView.findViewById(R.id.short_description);
+			holder.goIntoButton = (ImageView) convertView.findViewById(R.id.go_into_btn);
+			holder.background = (View) convertView.findViewById(R.id.list_block);
 
 			convertView.setMinimumHeight(60);
 			convertView.setTag(holder);
@@ -274,6 +282,8 @@ public abstract class MapItem
 							.getCurrentLocation()));
 		holder.name.setText(st);
 		holder.shortDescription.setText(getShortCharacteristic());
+		holder.background.getBackground().setAlpha(MainApplication.ALPHA);
+		
 		return convertView;
 	}
 
@@ -281,7 +291,10 @@ public abstract class MapItem
 	{
 		public TextView name;
 		public TextView shortDescription;
+		public ImageView goIntoButton;
+		public View background;
 	}
 	
 	public abstract String getShortCharacteristic();
 }
+
