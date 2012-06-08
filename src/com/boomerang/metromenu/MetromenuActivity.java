@@ -8,6 +8,7 @@ import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.MainMenu;
 import kz.crystalspring.funpoint.ProfilePage;
 import kz.crystalspring.funpoint.funCheckinNow;
+import kz.crystalspring.funpoint.funWaitingActivity;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.R;
@@ -264,7 +265,7 @@ public class MetromenuActivity extends Activity
 	private void runItemActivityWithFilter(String visibleFilter)
 	{
 		MainApplication.mapItemContainer.setVisibleFilter(visibleFilter);
-		Intent intent = new Intent(MetromenuActivity.this, MainMenu.class);
+		Intent intent = new Intent(MetromenuActivity.this, funWaitingActivity.class);
 		startActivity(intent);
 		MainMenu.currentListTab = MainMenu.OBJECT_LIST_TAB;
 		continueUpdating = false;

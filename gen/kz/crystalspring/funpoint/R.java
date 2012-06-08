@@ -332,7 +332,7 @@ public final class R {
         public static final int hotel_description=0x7f090030;
         public static final int hotel_title=0x7f09002e;
         public static final int imageView1=0x7f090023;
-        public static final int img=0x7f0900e8;
+        public static final int img=0x7f0900e9;
         public static final int imgViewLogo=0x7f090039;
         public static final int imgViewMore=0x7f090072;
         public static final int ivTabIcon=0x7f0900d4;
@@ -348,9 +348,9 @@ public final class R {
         public static final int logoTv=0x7f09007c;
         public static final int lstComments=0x7f090014;
         public static final int lvFeedback=0x7f090037;
-        public static final int m_home=0x7f0900f0;
-        public static final int m_quit=0x7f0900ee;
-        public static final int m_sync=0x7f0900ef;
+        public static final int m_home=0x7f0900f1;
+        public static final int m_quit=0x7f0900ef;
+        public static final int m_sync=0x7f0900f0;
         public static final int main_ProgressBar=0x7f090041;
         public static final int main_info_layout=0x7f090020;
         public static final int major_header_layout=0x7f090018;
@@ -391,6 +391,7 @@ public final class R {
         public static final int prodTransfWizResDetDepozAbout=0x7f09006e;
         public static final int prodTransfWizResDetTransf=0x7f090062;
         public static final int prodTransfWizard=0x7f090050;
+        public static final int progressBar1=0x7f0900e7;
         public static final int radFemale=0x7f0900e5;
         public static final int radMale=0x7f0900e4;
         public static final int radioGroup1=0x7f0900e3;
@@ -452,13 +453,13 @@ public final class R {
         public static final int txtViewTitle=0x7f09003b;
         public static final int txtViewTitleMain=0x7f09003a;
         public static final int userBirthdate=0x7f0900e1;
-        public static final int wc_ProgressBar=0x7f0900ed;
-        public static final int wc_webview=0x7f0900ec;
+        public static final int wc_ProgressBar=0x7f0900ee;
+        public static final int wc_webview=0x7f0900ed;
         public static final int webview=0x7f090040;
-        public static final int widget_layout=0x7f0900e7;
-        public static final int widget_line1=0x7f0900e9;
-        public static final int widget_line2=0x7f0900ea;
-        public static final int widget_line3=0x7f0900eb;
+        public static final int widget_layout=0x7f0900e8;
+        public static final int widget_line1=0x7f0900ea;
+        public static final int widget_line2=0x7f0900eb;
+        public static final int widget_line3=0x7f0900ec;
         public static final int wizCardIssueType=0x7f090053;
         public static final int wizCardLevelSelection=0x7f090059;
         public static final int wizCardMainType=0x7f09005b;
@@ -500,8 +501,9 @@ public final class R {
         public static final int test=0x7f03001e;
         public static final int text_image_switcher=0x7f03001f;
         public static final int userinfo=0x7f030020;
-        public static final int widget=0x7f030021;
-        public static final int widget_config=0x7f030022;
+        public static final int waiting_layout=0x7f030021;
+        public static final int widget=0x7f030022;
+        public static final int widget_config=0x7f030023;
     }
     public static final class menu {
         public static final int main_options_menu=0x7f0c0000;
