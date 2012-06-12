@@ -20,8 +20,7 @@
                 android:id="@+id/major_header_layout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" >
-
-                <LinearLayout
+                <LinearLayout 
                     android:id="@+id/minor_header_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -37,7 +36,7 @@
                         android:layout_marginLeft="5dp"
                         android:maxLines="2"
                         android:text="Food title"
-                        android:textSize="17pt" />
+                        android:textSize="14pt" />
 
                     <TextView
                         android:id="@+id/food_kitchen"
@@ -59,25 +58,25 @@
 
                 <ImageView
                     android:id="@+id/switch_back_btn"
-                           android:layout_width="40dp"
-                        android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_alignBottom="@id/minor_header_layout"
                     android:layout_alignParentLeft="true"
                     android:padding="5dp"
                     android:src="@drawable/previous"
                     android:visibility="gone" />
 
-                 <ImageView
+                <ImageView
                     android:id="@+id/switch_btn"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_alignBottom="@id/minor_header_layout"
                     android:layout_alignParentRight="true"
                     android:padding="5dp"
                     android:src="@drawable/next" />
             </RelativeLayout>
 
-            <ViewSwitcher
+            <ViewFlipper
                 android:id="@+id/switcher"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -316,9 +315,9 @@
                             android:id="@+id/phone_block"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
-                            android:layout_marginBottom="5dp"
                             android:background="#ffffff"
                             android:gravity="center"
                             android:orientation="vertical" >
@@ -341,11 +340,24 @@
                     <LinearLayout
                         android:id="@+id/comment_list_layout"
                         android:layout_width="fill_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical" >
                     </LinearLayout>
                 </LinearLayout>
-            </ViewSwitcher>
+				<LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:id="@+id/photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/plus" />
+                </LinearLayout>
+               
+            </ViewFlipper>
         </LinearLayout>
     </ScrollView>
 

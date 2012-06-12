@@ -40,7 +40,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewSwitcher;
+import android.widget.ViewFlipper;
 import android.widget.RelativeLayout.LayoutParams;
 
 public class funFoodController extends ActivityController
@@ -58,8 +58,11 @@ public class funFoodController extends ActivityController
 	LinearLayout commentsListLayout;
 	LinearLayout mainInfoLayout;
 
-	ImageView switchSecondBtn;
-	ImageView switchFirstBtn;
+	ImageView switchThirdBtn;
+	ImageView switchPreviousBtn;
+	ImageView switchNextBtn;
+	
+	ViewFlipper switcher;
 
 	funFoodController(Activity context)
 	{
@@ -92,6 +95,9 @@ public class funFoodController extends ActivityController
 		kitchenTV = (TextView) context.findViewById(R.id.food_kitchen);
 		hereNowTV = (TextView) context.findViewById(R.id.here_now_tv);
 
+		switcher = (ViewFlipper) context
+				.findViewById(R.id.switcher);
+		
 		int[] arg = { R.id.checkin_block, R.id.map_block, R.id.herenow_block,
 				R.id.todo_block, R.id.avg_price_block, R.id.address_block,
 				R.id.phone_block };
@@ -145,69 +151,127 @@ public class funFoodController extends ActivityController
 			itemFood.loadFoodOptions(jObject);
 		}
 
-		switchSecondBtn = (ImageView) context.findViewById(R.id.switch_btn);
-		switchSecondBtn.setOnClickListener(new OnClickListener()
+		switchPreviousBtn = (ImageView) context.findViewById(R.id.switch_back_btn);
+		switchPreviousBtn.setOnClickListener(new OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				switchPageToSecond();
+				switchPrevious();
 			}
 		});
-		switchFirstBtn = (ImageView) context.findViewById(R.id.switch_back_btn);
-		switchFirstBtn.setOnClickListener(new OnClickListener()
+		switchNextBtn = (ImageView) context.findViewById(R.id.switch_btn);
+		switchNextBtn.setOnClickListener(new OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				switchPageToFirst();
+				switchNext();
 			}
 		});
 
 		showFood(itemFood);
 	}
 
-	private void switchPageToSecond()
+	
+	private void onSwitch()
 	{
-		ViewSwitcher switcher = (ViewSwitcher) context
-				.findViewById(R.id.switcher);
+		int id=switcher.indexOfChild(switcher.getCurrentView());
+		System.out.println(id);
+		if (id==0)
+		{
+			switchPreviousBtn.setVisibility(View.GONE);
+			switchNextBtn.setVisibility(View.VISIBLE);
+			LinearLayout headerLayout = (LinearLayout) context
+					.findViewById(R.id.minor_header_layout);
+			// headerLayout.setGravity(Gravity.RIGHT);
+			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+					RelativeLayout.LayoutParams.WRAP_CONTENT,
+					RelativeLayout.LayoutParams.WRAP_CONTENT);
+			
+			lp.setMargins(0, 0, Math.round(33 * MainApplication.mDensity), 0);
+			
+			headerLayout.setLayoutParams(lp);
+//			uncollapseView(commentsListLayout);
+//			collapseView(mainInfoLayout);
+		}
+		else 
+		if (id==2)
+		{
+			switchPreviousBtn.setVisibility(View.VISIBLE);
+			switchNextBtn.setVisibility(View.GONE);
+			LinearLayout headerLayout = (LinearLayout) context
+					.findViewById(R.id.minor_header_layout);
+			// headerLayout.setGravity(Gravity.LEFT);
+			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+					RelativeLayout.LayoutParams.WRAP_CONTENT,
+					RelativeLayout.LayoutParams.WRAP_CONTENT);
+			lp.setMargins(Math.round(33 * MainApplication.mDensity), 0, 0, 0);
+			headerLayout.setLayoutParams(lp);
+//			collapseView(commentsListLayout);
+//			uncollapseView(mainInfoLayout);
+		}
+		else 
+		{
+			switchPreviousBtn.setVisibility(View.VISIBLE);
+			switchNextBtn.setVisibility(View.VISIBLE);
+			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+					RelativeLayout.LayoutParams.WRAP_CONTENT,
+					RelativeLayout.LayoutParams.WRAP_CONTENT);
+			lp.setMargins(Math.round(33 * MainApplication.mDensity), 0, 0, 0);
+			LinearLayout headerLayout = (LinearLayout) context
+					.findViewById(R.id.minor_header_layout);
+			headerLayout.setLayoutParams(lp);
+		}
+		
+		for (int i=0;i<switcher.getChildCount();i++)
+		{
+			View v=switcher.getChildAt(i);
+			if (i!=id)
+				collapseView(v);
+			else 
+				uncollapseView(v);
+		}
+	}
+	
+	private void switchNext()
+	{
 		switcher.setInAnimation(context, R.anim.slide_in_right);
 		switcher.setOutAnimation(context, R.anim.slide_out_left);
 		switcher.showNext();
-		switchSecondBtn.setVisibility(View.GONE);
-		switchFirstBtn.setVisibility(View.VISIBLE);
-		LinearLayout headerLayout = (LinearLayout) context
-				.findViewById(R.id.minor_header_layout);
-		// headerLayout.setGravity(Gravity.RIGHT);
-		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-				RelativeLayout.LayoutParams.WRAP_CONTENT,
-				RelativeLayout.LayoutParams.WRAP_CONTENT);
-		lp.setMargins(Math.round(33 * MainApplication.mDensity), 0, 0, 0);
-		headerLayout.setLayoutParams(lp);
-		uncollapseView(commentsListLayout);
-		collapseView(mainInfoLayout);
+		onSwitch();
+		
 	}
-
-	private void switchPageToFirst()
+	
+	private void switchPrevious()
 	{
-		ViewSwitcher switcher = (ViewSwitcher) context
-				.findViewById(R.id.switcher);
 		switcher.setInAnimation(context, R.anim.slide_in_left);
 		switcher.setOutAnimation(context, R.anim.slide_out_right);
 		switcher.showPrevious();
-		switchSecondBtn.setVisibility(View.VISIBLE);
-		switchFirstBtn.setVisibility(View.GONE);
-		LinearLayout headerLayout = (LinearLayout) context
-				.findViewById(R.id.minor_header_layout);
-		// headerLayout.setGravity(Gravity.LEFT);
-		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-				RelativeLayout.LayoutParams.WRAP_CONTENT,
-				RelativeLayout.LayoutParams.WRAP_CONTENT);
-		lp.setMargins(0, 0, Math.round(33 * MainApplication.mDensity), 0);
-		headerLayout.setLayoutParams(lp);
-		collapseView(commentsListLayout);
-		uncollapseView(mainInfoLayout);
+		onSwitch();
 	}
+	
+//	
+//	private void switchPageToThird()
+//	{
+////		switcher.setInAnimation(context, R.anim.slide_in_right);
+////		switcher.setOutAnimation(context, R.anim.slide_out_left);
+////		switcher.showNext();
+////		switchSecondBtn.setVisibility(View.GONE);
+////		switchFirstBtn.setVisibility(View.VISIBLE);
+////		LinearLayout headerLayout = (LinearLayout) context
+////				.findViewById(R.id.minor_header_layout);
+////		// headerLayout.setGravity(Gravity.RIGHT);
+////		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+////				RelativeLayout.LayoutParams.WRAP_CONTENT,
+////				RelativeLayout.LayoutParams.WRAP_CONTENT);
+////		lp.setMargins(Math.round(33 * MainApplication.mDensity), 0, 0, 0);
+////		headerLayout.setLayoutParams(lp);
+////		uncollapseView(commentsListLayout);
+////		collapseView(mainInfoLayout);
+//	}
+
+	
 	
 	private void collapseView(View v)
 	{
@@ -290,6 +354,10 @@ public class funFoodController extends ActivityController
 			});
 			phoneLayout.addView(phoneTV);
 		}
+		
+		ImageView iv=(ImageView) context.findViewById(R.id.photo);
+		if (itemFood.getPhotosCount()>0)
+			iv.setImageDrawable(itemFood.getPhotos(0));
 	}
 
 	private ItemFood getFoodFromJSON(JSONObject jObject)

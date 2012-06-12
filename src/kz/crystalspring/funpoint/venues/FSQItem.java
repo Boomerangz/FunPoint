@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.drawable.Drawable;
+
 public class FSQItem extends MapItem
 {
 	String name;
@@ -99,11 +101,13 @@ public class FSQItem extends MapItem
 		{
 			optInfo.loadComments(fsqJObject.getJSONObject("tips"));
 			optInfo.loadPhones(fsqJObject.getJSONObject("contact"));
+			optInfo.loadPhotos(fsqJObject.getJSONObject("photos"));
 		} catch (JSONException e)
 		{
 			e.printStackTrace();
 		}
 	}
+	
 
 	public OptionalInfo getOptionalInfo()
 	{
@@ -170,6 +174,17 @@ public class FSQItem extends MapItem
 	public String getShortCharacteristic()
 	{
 		return getCategoriesString();
+	}
+	
+
+	public Drawable getPhotos(int i)
+	{
+		return optInfo.getPhoto(i);
+	}
+	
+	public int getPhotosCount()
+	{
+		return optInfo.getPhotosCount();
 	}
 
 }
