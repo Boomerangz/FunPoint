@@ -177,10 +177,10 @@ public class FSQItem extends MapItem
 	}
 	
 
-	public Drawable getPhotos(int i)
-	{
-		return optInfo.getPhoto(i);
-	}
+//	public Drawable getPhotos(int i)
+//	{
+//		return optInfo.getPhoto(i);
+//	}
 	
 	public int getPhotosCount()
 	{

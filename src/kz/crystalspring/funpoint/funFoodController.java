@@ -12,6 +12,7 @@ import javax.security.auth.Destroyable;
 import kz.crystalspring.android_client.C_FileHelper;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.pointplus.Prefs;
+import kz.crystalspring.visualities.LoadingImageView;
 import kz.crystalspring.funpoint.R;
 import kz.sbeyer.atmpoint1.types.ItemFood;
 import kz.sbeyer.atmpoint1.types.ItemCinema.CinemaTimeLine;
@@ -38,6 +39,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -57,11 +60,12 @@ public class funFoodController extends ActivityController
 	RelativeLayout todoBtn;
 	LinearLayout commentsListLayout;
 	LinearLayout mainInfoLayout;
+	TableLayout galleryLayout;
 
 	ImageView switchThirdBtn;
 	ImageView switchPreviousBtn;
 	ImageView switchNextBtn;
-	
+
 	ViewFlipper switcher;
 
 	funFoodController(Activity context)
@@ -94,10 +98,10 @@ public class funFoodController extends ActivityController
 		todoBtn = (RelativeLayout) context.findViewById(R.id.todo_block);
 		kitchenTV = (TextView) context.findViewById(R.id.food_kitchen);
 		hereNowTV = (TextView) context.findViewById(R.id.here_now_tv);
+		galleryLayout = (TableLayout) context.findViewById(R.id.gallery_table);
 
-		switcher = (ViewFlipper) context
-				.findViewById(R.id.switcher);
-		
+		switcher = (ViewFlipper) context.findViewById(R.id.switcher);
+
 		int[] arg = { R.id.checkin_block, R.id.map_block, R.id.herenow_block,
 				R.id.todo_block, R.id.avg_price_block, R.id.address_block,
 				R.id.phone_block };
@@ -151,7 +155,8 @@ public class funFoodController extends ActivityController
 			itemFood.loadFoodOptions(jObject);
 		}
 
-		switchPreviousBtn = (ImageView) context.findViewById(R.id.switch_back_btn);
+		switchPreviousBtn = (ImageView) context
+				.findViewById(R.id.switch_back_btn);
 		switchPreviousBtn.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -173,12 +178,11 @@ public class funFoodController extends ActivityController
 		showFood(itemFood);
 	}
 
-	
 	private void onSwitch()
 	{
-		int id=switcher.indexOfChild(switcher.getCurrentView());
+		int id = switcher.indexOfChild(switcher.getCurrentView());
 		System.out.println(id);
-		if (id==0)
+		if (id == 0)
 		{
 			switchPreviousBtn.setVisibility(View.GONE);
 			switchNextBtn.setVisibility(View.VISIBLE);
@@ -188,15 +192,13 @@ public class funFoodController extends ActivityController
 			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
 					RelativeLayout.LayoutParams.WRAP_CONTENT,
 					RelativeLayout.LayoutParams.WRAP_CONTENT);
-			
+
 			lp.setMargins(0, 0, Math.round(33 * MainApplication.mDensity), 0);
-			
+
 			headerLayout.setLayoutParams(lp);
-//			uncollapseView(commentsListLayout);
-//			collapseView(mainInfoLayout);
-		}
-		else 
-		if (id==2)
+			// uncollapseView(commentsListLayout);
+			// collapseView(mainInfoLayout);
+		} else if (id == 2)
 		{
 			switchPreviousBtn.setVisibility(View.VISIBLE);
 			switchNextBtn.setVisibility(View.GONE);
@@ -208,10 +210,9 @@ public class funFoodController extends ActivityController
 					RelativeLayout.LayoutParams.WRAP_CONTENT);
 			lp.setMargins(Math.round(33 * MainApplication.mDensity), 0, 0, 0);
 			headerLayout.setLayoutParams(lp);
-//			collapseView(commentsListLayout);
-//			uncollapseView(mainInfoLayout);
-		}
-		else 
+			// collapseView(commentsListLayout);
+			// uncollapseView(mainInfoLayout);
+		} else
 		{
 			switchPreviousBtn.setVisibility(View.VISIBLE);
 			switchNextBtn.setVisibility(View.VISIBLE);
@@ -223,26 +224,26 @@ public class funFoodController extends ActivityController
 					.findViewById(R.id.minor_header_layout);
 			headerLayout.setLayoutParams(lp);
 		}
-		
-		for (int i=0;i<switcher.getChildCount();i++)
+
+		for (int i = 0; i < switcher.getChildCount(); i++)
 		{
-			View v=switcher.getChildAt(i);
-			if (i!=id)
+			View v = switcher.getChildAt(i);
+			if (i != id)
 				collapseView(v);
-			else 
+			else
 				uncollapseView(v);
 		}
 	}
-	
+
 	private void switchNext()
 	{
 		switcher.setInAnimation(context, R.anim.slide_in_right);
 		switcher.setOutAnimation(context, R.anim.slide_out_left);
 		switcher.showNext();
 		onSwitch();
-		
+
 	}
-	
+
 	private void switchPrevious()
 	{
 		switcher.setInAnimation(context, R.anim.slide_in_left);
@@ -250,39 +251,37 @@ public class funFoodController extends ActivityController
 		switcher.showPrevious();
 		onSwitch();
 	}
-	
-//	
-//	private void switchPageToThird()
-//	{
-////		switcher.setInAnimation(context, R.anim.slide_in_right);
-////		switcher.setOutAnimation(context, R.anim.slide_out_left);
-////		switcher.showNext();
-////		switchSecondBtn.setVisibility(View.GONE);
-////		switchFirstBtn.setVisibility(View.VISIBLE);
-////		LinearLayout headerLayout = (LinearLayout) context
-////				.findViewById(R.id.minor_header_layout);
-////		// headerLayout.setGravity(Gravity.RIGHT);
-////		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-////				RelativeLayout.LayoutParams.WRAP_CONTENT,
-////				RelativeLayout.LayoutParams.WRAP_CONTENT);
-////		lp.setMargins(Math.round(33 * MainApplication.mDensity), 0, 0, 0);
-////		headerLayout.setLayoutParams(lp);
-////		uncollapseView(commentsListLayout);
-////		collapseView(mainInfoLayout);
-//	}
 
-	
-	
+	//
+	// private void switchPageToThird()
+	// {
+	// // switcher.setInAnimation(context, R.anim.slide_in_right);
+	// // switcher.setOutAnimation(context, R.anim.slide_out_left);
+	// // switcher.showNext();
+	// // switchSecondBtn.setVisibility(View.GONE);
+	// // switchFirstBtn.setVisibility(View.VISIBLE);
+	// // LinearLayout headerLayout = (LinearLayout) context
+	// // .findViewById(R.id.minor_header_layout);
+	// // // headerLayout.setGravity(Gravity.RIGHT);
+	// // RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+	// // RelativeLayout.LayoutParams.WRAP_CONTENT,
+	// // RelativeLayout.LayoutParams.WRAP_CONTENT);
+	// // lp.setMargins(Math.round(33 * MainApplication.mDensity), 0, 0, 0);
+	// // headerLayout.setLayoutParams(lp);
+	// // uncollapseView(commentsListLayout);
+	// // collapseView(mainInfoLayout);
+	// }
+
 	private void collapseView(View v)
 	{
-		v.getLayoutParams().height=0;
-		v.getLayoutParams().width=0;
+		v.getLayoutParams().height = 0;
+		v.getLayoutParams().width = 0;
 	}
-	
+
 	private void uncollapseView(View v)
 	{
-		v.getLayoutParams().height=v.getLayoutParams().WRAP_CONTENT;
-		v.getLayoutParams().width=v.getLayoutParams().FILL_PARENT;
+		v.getLayoutParams().height = v.getLayoutParams().WRAP_CONTENT;
+		v.getLayoutParams().width = v.getLayoutParams().FILL_PARENT;
 	}
 
 	private void setBlocksAlpha(int alpha, int[] args)
@@ -354,14 +353,32 @@ public class funFoodController extends ActivityController
 			});
 			phoneLayout.addView(phoneTV);
 		}
+
+		TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 80);
+		lp.weight=1;
 		
-		ImageView iv=(ImageView) context.findViewById(R.id.photo);
-		if (itemFood.getPhotosCount()>0)
-			iv.setImageDrawable(itemFood.getPhotos(0));
+		TableRow currentRow=null;
+		for (int i = 0; i < itemFood.getPhotosCount(); i++)
+		{
+			LoadingImageView iv = new LoadingImageView(context);
+			iv.setLayoutParams(lp);
+			//iv.setImageDrawable(itemFood.getPhotos(i));
+			if (i % 3 == 0)
+			{
+				TableRow tr = new TableRow(context);
+				tr.setLayoutParams(new TableLayout.LayoutParams(80,
+						80));
+				galleryLayout.addView(tr);
+				
+			}
+			currentRow=(TableRow) galleryLayout.getChildAt(galleryLayout.getChildCount()-1);
+			if (currentRow!=null)
+				currentRow.addView(iv);
+		}
 	}
 
 	private ItemFood getFoodFromJSON(JSONObject jObject)
-	{
+	{  
 		ItemFood food = new ItemFood();
 		return food.loadFromJSON(jObject);
 	}
@@ -441,11 +458,11 @@ class VenueCommentsAdapter
 		holder.layout.getBackground().setAlpha(MainApplication.ALPHA);
 		return convertView;
 	}
-	
+
 	public void fillLayout(LinearLayout layout)
 	{
 		layout.removeAllViews();
-		for (int i=0;i<getCount();i++)
+		for (int i = 0; i < getCount(); i++)
 			layout.addView(getView(i));
 	}
 

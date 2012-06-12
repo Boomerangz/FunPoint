@@ -15,24 +15,37 @@ public class OptionalInfo
 {
 	List<VenueComment> commentList = new ArrayList<VenueComment>();
 	List<String> FSQPhonesList = new ArrayList();
-	List<Drawable> FSQPhotosList = new ArrayList();
+	List<UrlDrawable> FSQPhotosList = new ArrayList();
+
+
+	
+	
+	class UrlDrawable 
+	{
+		String bigUrl="";
+		String smallUrl="";
+		Drawable bigDrawable=null;
+		Drawable smallDrawable=null;
+	}
+	
 	
 	private void addCommentToList(VenueComment comment)
 	{
 		commentList.add(comment);
 	}
-	
+
 	public List<VenueComment> getCommentsList()
 	{
 		return commentList;
 	}
-	
+
 	public void loadComments(JSONObject jObject)
 	{
 		JSONArray tipItems;
 		try
 		{
-			tipItems = jObject.getJSONArray("groups").getJSONObject(0).getJSONArray("items");
+			tipItems = jObject.getJSONArray("groups").getJSONObject(0)
+					.getJSONArray("items");
 		} catch (JSONException e)
 		{
 			e.printStackTrace();
@@ -40,7 +53,7 @@ public class OptionalInfo
 		}
 		if (tipItems != null)
 		{
-			for (int i=0; i < tipItems.length(); i++)
+			for (int i = 0; i < tipItems.length(); i++)
 			{
 				VenueComment comment = new VenueComment();
 				try
@@ -48,7 +61,7 @@ public class OptionalInfo
 					comment.loadFromJSON(tipItems.getJSONObject(i));
 				} catch (JSONException e)
 				{
-					comment=null;
+					comment = null;
 					e.printStackTrace();
 				}
 				if (comment != null)
@@ -57,33 +70,37 @@ public class OptionalInfo
 		}
 	}
 
-
 	public void loadPhones(JSONObject jsonObject)
 	{
 		try
 		{
-			String phones=jsonObject.getString("formattedPhone");
+			String phones = jsonObject.getString("formattedPhone");
 			setFSQPhonesList(ProjectUtils.separateStrings(phones, ","));
 		} catch (JSONException e)
 		{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void loadPhotos(JSONObject jObject)
 	{
 		try
 		{
-			JSONArray jPhotos=jObject.getJSONArray("groups");
-			for (int i=0;i<jPhotos.length();i++)
+			JSONArray jPhotos = jObject.getJSONArray("groups");
+			for (int i = 0; i < jPhotos.length(); i++)
 			{
-				JSONObject jPhoto=jPhotos.getJSONObject(i);
-				if (jPhoto.getInt("count")>0)
+				JSONObject jPhoto = jPhotos.getJSONObject(i);
+				if (jPhoto.getInt("count") > 0)
 				{
-					String sUrl=jPhoto.getJSONArray("items").getJSONObject(0).getString("url");
-					Drawable photo=FSQConnector.loadPictureByUrl(sUrl);
-					if (photo!=null)
-						FSQPhotosList.add(photo);
+					for (int j = 0; j < jPhoto.getJSONArray("items").length(); j++)
+					{
+						String sUrl = jPhoto.getJSONArray("items")
+								.getJSONObject(j).getString("url");
+						UrlDrawable urlDr=new UrlDrawable();
+						urlDr.bigUrl=sUrl;
+						
+						FSQPhotosList.add(urlDr);
+					}
 				}
 			}
 		} catch (JSONException e)
@@ -91,7 +108,7 @@ public class OptionalInfo
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public List<String> getFSQPhonesList()
@@ -104,17 +121,10 @@ public class OptionalInfo
 		FSQPhonesList = fSQPhonesList;
 	}
 
-	public Drawable getPhoto(int i)
-	{
-		return FSQPhotosList.get(i);
-	}
-	
+
 	public int getPhotosCount()
 	{
 		return FSQPhotosList.size();
 	}
-	
-	
 
-	
 }

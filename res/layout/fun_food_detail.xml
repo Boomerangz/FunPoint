@@ -20,7 +20,8 @@
                 android:id="@+id/major_header_layout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" >
-                <LinearLayout 
+
+                <LinearLayout
                     android:id="@+id/minor_header_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -344,19 +345,24 @@
                         android:orientation="vertical" >
                     </LinearLayout>
                 </LinearLayout>
-				<LinearLayout
+
+                <TableLayout
+                    android:id="@+id/gallery_table"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
                     android:orientation="vertical" >
 
-                    <ImageView
-                        android:id="@+id/photo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/plus" />
-                </LinearLayout>
-               
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" >
+
+                        <Button
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="1233456678" />
+                    </TableRow>
+                </TableLayout>
             </ViewFlipper>
         </LinearLayout>
     </ScrollView>
