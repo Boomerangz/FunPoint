@@ -1,7 +1,6 @@
 package kz.crystalspring.funpoint;
 
 import com.boomerang.metromenu.MetromenuActivity;
-import com.commonsware.cwac.swiper.ViewSwiper;
 
 import android.app.Activity;
 import android.content.Intent;
