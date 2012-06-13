@@ -13,7 +13,9 @@ public class VenueComment
 		VenueComment item=this;
 		try
 		{
-			author="John Doew";
+			String userLastName=jObject.getJSONObject("user").getString("lastName");
+			String userFirstName=jObject.getJSONObject("user").getString("firstName");
+			author=userFirstName+" "+userLastName;
 			text=jObject.getString("text");
 		} catch (JSONException e)
 		{
@@ -35,7 +37,7 @@ public class VenueComment
 
 	public String getShortText()
 	{
-		return getText().substring(0, 40)+"...";
+		return getText().substring(0, 15)+"...";
 	}
 	
 	public boolean isLongText()
