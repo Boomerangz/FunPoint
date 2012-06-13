@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.List;
 
 import kz.crystalspring.funpoint.MainApplication;
+import kz.crystalspring.funpoint.venues.OptionalInfo.UrlDrawable;
+import kz.crystalspring.visualities.LoadingImageView;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
 import kz.sbeyer.atmpoint1.types.ItemFood;
 import kz.sbeyer.atmpoint1.types.ItemHotel;
@@ -585,9 +587,45 @@ public class FSQConnector
 	{
 		isBadgesLoaded = loaded;
 	}
+	
+	public static void loadImageAsync(final LoadingImageView iv, final UrlDrawable urlDr, final int big_or_small)
+	{
+		Runnable preTask=new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if (big_or_small==UrlDrawable.BIG_URL&&urlDr.bigDrawable==null)
+				{
+					urlDr.bigDrawable=loadPictureByUrl(urlDr.bigUrl);
+				}
+				else 
+					if (big_or_small==UrlDrawable.SMALL_URL&&urlDr.smallDrawable==null)
+					{
+						urlDr.smallDrawable=loadPictureByUrl(urlDr.smallUrl);
+					}
+			}
+		};
+		
+		Runnable postTask=new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				Drawable pict;
+				if (big_or_small==UrlDrawable.BIG_URL)
+					pict=urlDr.bigDrawable;
+				else
+					pict=urlDr.smallDrawable;
+				iv.setDrawable(pict);
+			}
+		};
+		MainApplication.pwAggregator.addTaskToQueue(preTask,postTask);
+	}
 
 	public static void loadBadgesPictureAsync(FSQBadge fsqBadge)
 	{
+		// TODO Auto-generated method stub
 		
 	}
 }

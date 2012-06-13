@@ -44,6 +44,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
+import kz.crystalspring.funpoint.venues.OptionalInfo.UrlDrawable;
 import android.widget.RelativeLayout.LayoutParams;
 
 public class funFoodController extends ActivityController
@@ -374,6 +375,7 @@ public class funFoodController extends ActivityController
 			currentRow=(TableRow) galleryLayout.getChildAt(galleryLayout.getChildCount()-1);
 			if (currentRow!=null)
 				currentRow.addView(iv);
+			FSQConnector.loadImageAsync(iv, itemFood.getUrlAndPhoto(i), UrlDrawable.SMALL_URL);
 		}
 	}
 

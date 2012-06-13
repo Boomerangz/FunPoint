@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LoadingImageView extends LinearLayout
 {
@@ -39,14 +40,28 @@ public class LoadingImageView extends LinearLayout
 		li.inflate(R.layout.loading_image, this, true);
 		image=(ImageView) findViewById(R.id.image);
 		progressBar=(ProgressBar) findViewById(R.id.progress_bar);
+		setOnClickListener(new OnClickListener()
+		{
+			
+			@Override
+			public void onClick(View v)
+			{
+				LoadingImageView.this.onClick();
+			}
+		});
 	}
 	
 	public void setDrawable(Drawable drawable)
 	{
 		image.setImageDrawable(drawable);
 		image.setVisibility(View.VISIBLE);
-		removeView(progressBar);
+		progressBar.setVisibility(View.GONE);
 		invalidate();
+	}
+	
+	public void onClick()
+	{
+		Toast.makeText(getContext(), "On Click", Toast.LENGTH_SHORT).show();
 	}
 
 }

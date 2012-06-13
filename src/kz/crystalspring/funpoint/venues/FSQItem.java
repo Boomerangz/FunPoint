@@ -3,6 +3,7 @@ package kz.crystalspring.funpoint.venues;
 import java.util.ArrayList;
 import java.util.List;
 
+import kz.crystalspring.funpoint.venues.OptionalInfo.UrlDrawable;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
 import kz.sbeyer.atmpoint1.types.ItemFood;
 
@@ -185,6 +186,11 @@ public class FSQItem extends MapItem
 	public int getPhotosCount()
 	{
 		return optInfo.getPhotosCount();
+	}
+	
+	public UrlDrawable getUrlAndPhoto(int i)
+	{
+		return optInfo.getUrlAndPhoto(i);
 	}
 
 }

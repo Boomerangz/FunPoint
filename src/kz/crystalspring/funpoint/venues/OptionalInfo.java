@@ -20,8 +20,11 @@ public class OptionalInfo
 
 	
 	
-	class UrlDrawable 
+	public class UrlDrawable 
 	{
+		public static final int BIG_URL=1;
+		public static final int SMALL_URL=2;
+		
 		String bigUrl="";
 		String smallUrl="";
 		Drawable bigDrawable=null;
@@ -97,7 +100,7 @@ public class OptionalInfo
 						int count=jPhoto.getJSONArray("items")
 								.getJSONObject(j).getJSONObject("sizes").getJSONArray("items").length();
 						String bigUrl = jPhoto.getJSONArray("items")
-								.getJSONObject(j).getJSONObject("sizes").getJSONArray("items").getJSONObject(count).getString("url");
+								.getJSONObject(j).getJSONObject("sizes").getJSONArray("items").getJSONObject(count-1).getString("url");
 						String smallUrl = jPhoto.getJSONArray("items")
 								.getJSONObject(j).getJSONObject("sizes").getJSONArray("items").getJSONObject(Math.round(count/2)).getString("url");
 						
@@ -114,7 +117,6 @@ public class OptionalInfo
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	public List<String> getFSQPhonesList()
@@ -131,6 +133,11 @@ public class OptionalInfo
 	public int getPhotosCount()
 	{
 		return FSQPhotosList.size();
+	}
+
+	public UrlDrawable getUrlAndPhoto(int i)
+	{
+		return FSQPhotosList.get(i);
 	}
 
 }
