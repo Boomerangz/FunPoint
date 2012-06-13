@@ -82,7 +82,7 @@ public class OptionalInfo
 		}
 	}
 
-	public void loadPhotos(JSONObject jObject)
+	public void loadPhotoUrls(JSONObject jObject)
 	{
 		try
 		{
@@ -94,10 +94,16 @@ public class OptionalInfo
 				{
 					for (int j = 0; j < jPhoto.getJSONArray("items").length(); j++)
 					{
-						String sUrl = jPhoto.getJSONArray("items")
-								.getJSONObject(j).getString("url");
+						int count=jPhoto.getJSONArray("items")
+								.getJSONObject(j).getJSONObject("sizes").getJSONArray("items").length();
+						String bigUrl = jPhoto.getJSONArray("items")
+								.getJSONObject(j).getJSONObject("sizes").getJSONArray("items").getJSONObject(count).getString("url");
+						String smallUrl = jPhoto.getJSONArray("items")
+								.getJSONObject(j).getJSONObject("sizes").getJSONArray("items").getJSONObject(Math.round(count/2)).getString("url");
+						
 						UrlDrawable urlDr=new UrlDrawable();
-						urlDr.bigUrl=sUrl;
+						urlDr.bigUrl=bigUrl;
+						urlDr.smallUrl=smallUrl;
 						
 						FSQPhotosList.add(urlDr);
 					}

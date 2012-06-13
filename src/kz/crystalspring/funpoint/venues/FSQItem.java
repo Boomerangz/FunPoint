@@ -101,7 +101,7 @@ public class FSQItem extends MapItem
 		{
 			optInfo.loadComments(fsqJObject.getJSONObject("tips"));
 			optInfo.loadPhones(fsqJObject.getJSONObject("contact"));
-			optInfo.loadPhotos(fsqJObject.getJSONObject("photos"));
+			optInfo.loadPhotoUrls(fsqJObject.getJSONObject("photos"));
 		} catch (JSONException e)
 		{
 			e.printStackTrace();
