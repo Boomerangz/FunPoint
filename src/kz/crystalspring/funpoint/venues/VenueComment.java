@@ -32,4 +32,14 @@ public class VenueComment
 	{
 		return text;
 	}
+
+	public String getShortText()
+	{
+		return getText().substring(0, 40)+"...";
+	}
+	
+	public boolean isLongText()
+	{
+		return (getText().length()>40);
+	}
 }
