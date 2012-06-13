@@ -84,98 +84,100 @@ public class funFoodController extends ActivityController
 	@Override
 	protected void onResume()
 	{
-		context.setContentView(R.layout.fun_food_detail);
-		titleTV = (TextView) context.findViewById(R.id.food_title);
-		addressTV = (TextView) context.findViewById(R.id.food_address);
-		lunchPriceTV = (TextView) context.findViewById(R.id.food_lunch_price);
-		avgPriceTV = (TextView) context.findViewById(R.id.food_avg_price);
-		String sObjID = Prefs.getSelObjId(context.getApplicationContext());
-		commentsListLayout = (LinearLayout) context
-				.findViewById(R.id.comment_list_layout);
-		mainInfoLayout = (LinearLayout) context
-				.findViewById(R.id.main_info_layout);
-		checkInBtn = (RelativeLayout) context.findViewById(R.id.checkin_block);
-		mapInBtn = (RelativeLayout) context.findViewById(R.id.map_block);
-		todoBtn = (RelativeLayout) context.findViewById(R.id.todo_block);
-		kitchenTV = (TextView) context.findViewById(R.id.food_kitchen);
-		hereNowTV = (TextView) context.findViewById(R.id.here_now_tv);
-		galleryLayout = (TableLayout) context.findViewById(R.id.gallery_table);
+			context.setContentView(R.layout.fun_food_detail);
+			titleTV = (TextView) context.findViewById(R.id.food_title);
+			addressTV = (TextView) context.findViewById(R.id.food_address);
+			lunchPriceTV = (TextView) context
+					.findViewById(R.id.food_lunch_price);
+			avgPriceTV = (TextView) context.findViewById(R.id.food_avg_price);
+			String sObjID = Prefs.getSelObjId(context.getApplicationContext());
+			commentsListLayout = (LinearLayout) context
+					.findViewById(R.id.comment_list_layout);
+			mainInfoLayout = (LinearLayout) context
+					.findViewById(R.id.main_info_layout);
+			checkInBtn = (RelativeLayout) context
+					.findViewById(R.id.checkin_block);
+			mapInBtn = (RelativeLayout) context.findViewById(R.id.map_block);
+			todoBtn = (RelativeLayout) context.findViewById(R.id.todo_block);
+			kitchenTV = (TextView) context.findViewById(R.id.food_kitchen);
+			hereNowTV = (TextView) context.findViewById(R.id.here_now_tv);
+			galleryLayout = (TableLayout) context
+					.findViewById(R.id.gallery_table);
 
-		switcher = (ViewFlipper) context.findViewById(R.id.switcher);
+			switcher = (ViewFlipper) context.findViewById(R.id.switcher);
 
-		int[] arg = { R.id.checkin_block, R.id.map_block, R.id.herenow_block,
-				R.id.todo_block, R.id.avg_price_block, R.id.address_block,
-				R.id.phone_block };
-		setBlocksAlpha(MainApplication.ALPHA, arg);
+			int[] arg = { R.id.checkin_block, R.id.map_block,
+					R.id.herenow_block, R.id.todo_block, R.id.avg_price_block,
+					R.id.address_block, R.id.phone_block };
+			setBlocksAlpha(MainApplication.ALPHA, arg);
 
-		if (MainApplication.FsqApp.hasAccessToken())
-		{
-			checkInBtn.setOnClickListener(new OnClickListener()
+			if (MainApplication.FsqApp.hasAccessToken())
+			{
+				checkInBtn.setOnClickListener(new OnClickListener()
+				{
+					@Override
+					public void onClick(View v)
+					{
+						checkInHere();
+					}
+				});
+				todoBtn.setOnClickListener(new OnClickListener()
+				{
+					@Override
+					public void onClick(View v)
+					{
+						checkToDo();
+					}
+				});
+			}
+
+			mapInBtn.setOnClickListener(new OnClickListener()
 			{
 				@Override
 				public void onClick(View v)
 				{
-					checkInHere();
+					goToMap();
 				}
 			});
-			todoBtn.setOnClickListener(new OnClickListener()
+
+			int iObjID = Integer.parseInt(sObjID);
+
+			itemFood = (ItemFood) MainApplication.mapItemContainer
+					.getSelectedItem();
+
+			if (itemFood.getOptionalInfo() == null)
+			{
+				JSONObject jObject = FSQConnector.getVenueInformation(itemFood
+						.getId());
+				itemFood.itemFoodLoadOptionalInfo(jObject);
+			}
+
+			if (itemFood.getFoodOptions() == null)
+			{
+				JSONObject jObject = FileConnector.getFoodInfoFromFile(itemFood
+						.getId());
+				itemFood.loadFoodOptions(jObject);
+			}
+
+			switchPreviousBtn = (ImageView) context
+					.findViewById(R.id.switch_back_btn);
+			switchPreviousBtn.setOnClickListener(new OnClickListener()
 			{
 				@Override
 				public void onClick(View v)
 				{
-					checkToDo();
+					switchPrevious();
 				}
 			});
-		}
-
-		mapInBtn.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
+			switchNextBtn = (ImageView) context.findViewById(R.id.switch_btn);
+			switchNextBtn.setOnClickListener(new OnClickListener()
 			{
-				goToMap();
-			}
-		});
-
-		int iObjID = Integer.parseInt(sObjID);
-
-		itemFood = (ItemFood) MainApplication.mapItemContainer
-				.getSelectedItem();
-
-		if (itemFood.getOptionalInfo() == null)
-		{
-			JSONObject jObject = FSQConnector.getVenueInformation(itemFood
-					.getId());
-			itemFood.itemFoodLoadOptionalInfo(jObject);
-		}
-
-		if (itemFood.getFoodOptions() == null)
-		{
-			JSONObject jObject = FileConnector.getFoodInfoFromFile(itemFood
-					.getId());
-			itemFood.loadFoodOptions(jObject);
-		}
-
-		switchPreviousBtn = (ImageView) context
-				.findViewById(R.id.switch_back_btn);
-		switchPreviousBtn.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				switchPrevious();
-			}
-		});
-		switchNextBtn = (ImageView) context.findViewById(R.id.switch_btn);
-		switchNextBtn.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				switchNext();
-			}
-		});
-
+				@Override
+				public void onClick(View v)
+				{
+					switchNext();
+				}
+			});
 		showFood(itemFood);
 	}
 
@@ -355,32 +357,54 @@ public class funFoodController extends ActivityController
 			phoneLayout.addView(phoneTV);
 		}
 
-		TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 80);
-		lp.weight=1;
-		
-		TableRow currentRow=null;
+		TableRow.LayoutParams lp = new TableRow.LayoutParams(
+				TableRow.LayoutParams.FILL_PARENT, Math.round(80*MainApplication.mDensity));
+		lp.weight = 1;
+
+		TableRow currentRow = null;
 		for (int i = 0; i < itemFood.getPhotosCount(); i++)
 		{
-			LoadingImageView iv = new LoadingImageView(context);
+			final LoadingImageView iv = new LoadingImageView(context);
 			iv.setLayoutParams(lp);
-			//iv.setImageDrawable(itemFood.getPhotos(i));
+			// iv.setImageDrawable(itemFood.getPhotos(i));
 			if (i % 3 == 0)
 			{
 				TableRow tr = new TableRow(context);
-				tr.setLayoutParams(new TableLayout.LayoutParams(80,
-						80));
+				tr.setLayoutParams(new TableLayout.LayoutParams( Math.round(80*MainApplication.mDensity),  Math.round(80*MainApplication.mDensity)));
 				galleryLayout.addView(tr);
-				
+
 			}
-			currentRow=(TableRow) galleryLayout.getChildAt(galleryLayout.getChildCount()-1);
-			if (currentRow!=null)
+			currentRow = (TableRow) galleryLayout.getChildAt(galleryLayout
+					.getChildCount() - 1);
+			if (currentRow != null)
 				currentRow.addView(iv);
-			FSQConnector.loadImageAsync(iv, itemFood.getUrlAndPhoto(i), UrlDrawable.SMALL_URL);
+			if (itemFood.getUrlAndPhoto(i).getSmallDrawable()==null)
+			{	
+			FSQConnector.loadImageAsync(iv, itemFood.getUrlAndPhoto(i),
+					UrlDrawable.SMALL_URL,false);
+			}
+			else 
+			{
+				iv.setDrawable(itemFood.getUrlAndPhoto(i).getSmallDrawable());
+				final int ii=i;
+				iv.setOnClickListener(new OnClickListener()
+				{
+					@Override
+					public void onClick(View v)
+					{
+						Toast.makeText(iv.getContext(), "On Click", Toast.LENGTH_SHORT).show();
+						Intent intent=new Intent(iv.getContext(),FullScrLoadingImageActivity.class);
+						MainApplication.selectedItemPhoto=itemFood.getUrlAndPhoto(ii);
+						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						iv.getContext().startActivity(intent);
+					}
+				});
+			}
 		}
 	}
 
 	private ItemFood getFoodFromJSON(JSONObject jObject)
-	{  
+	{
 		ItemFood food = new ItemFood();
 		return food.loadFromJSON(jObject);
 	}

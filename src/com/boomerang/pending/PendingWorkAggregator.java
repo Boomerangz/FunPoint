@@ -43,10 +43,26 @@ public class PendingWorkAggregator
 	{
 		prAddTask(new PendingWork(task, postTask));
 	}
-
+	
+	public void addPriorityTask(Runnable task, Runnable postTask)
+	{
+		prAddPriorityTask(new PendingWork(task, postTask));
+	}
+	
 	private synchronized void prAddTask(Object work)
 	{
 		workList.add(work);
+		if (!getRunningNow())
+			runNextTask();
+	}
+	
+	private synchronized void prAddPriorityTask(Object work)
+	{
+		ArrayList newWorkList=new ArrayList();
+		newWorkList.add(work);
+		newWorkList.addAll(workList);
+		workList=newWorkList;
+		
 		if (!getRunningNow())
 			runNextTask();
 	}

@@ -17,6 +17,7 @@ import kz.crystalspring.funpoint.venues.FileConnector;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItemContainer;
 import kz.crystalspring.funpoint.venues.UserActivity;
+import kz.crystalspring.funpoint.venues.OptionalInfo.UrlDrawable;
 
 import android.app.Application;
 import android.content.Context;
@@ -40,6 +41,7 @@ public class MainApplication extends Application
 	public static SharedPreferences mPrefs;
 	public static FoursquareApp FsqApp;
 	public static PendingWorkAggregator pwAggregator=new PendingWorkAggregator();
+	public static UrlDrawable selectedItemPhoto;
 	
 	LocationUpdater updater;
 	

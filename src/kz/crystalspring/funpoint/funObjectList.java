@@ -106,7 +106,6 @@ class ObjectAdapter
 	    	for (int i=0; i<getCount(); i++)
 	    	{
 	    		View v=getView(i);
-	    		final int itemIndex=i;
 	    		
 	    		v.setMinimumHeight(Math.round(70*MainApplication.mDensity));
 	    		viewList.add(v);

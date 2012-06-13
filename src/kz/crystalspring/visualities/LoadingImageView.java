@@ -40,15 +40,6 @@ public class LoadingImageView extends LinearLayout
 		li.inflate(R.layout.loading_image, this, true);
 		image=(ImageView) findViewById(R.id.image);
 		progressBar=(ProgressBar) findViewById(R.id.progress_bar);
-		setOnClickListener(new OnClickListener()
-		{
-			
-			@Override
-			public void onClick(View v)
-			{
-				LoadingImageView.this.onClick();
-			}
-		});
 	}
 	
 	public void setDrawable(Drawable drawable)
@@ -61,7 +52,7 @@ public class LoadingImageView extends LinearLayout
 	
 	public void onClick()
 	{
-		Toast.makeText(getContext(), "On Click", Toast.LENGTH_SHORT).show();
+		
 	}
 
 }

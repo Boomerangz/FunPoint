@@ -1,5 +1,6 @@
 package kz.crystalspring.funpoint.venues;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,15 +21,35 @@ public class OptionalInfo
 
 	
 	
-	public class UrlDrawable 
+	public class UrlDrawable implements Serializable
 	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -703381267268292002L;//generated serialable UID
 		public static final int BIG_URL=1;
 		public static final int SMALL_URL=2;
 		
 		String bigUrl="";
 		String smallUrl="";
-		Drawable bigDrawable=null;
-		Drawable smallDrawable=null;
+		private Drawable bigDrawable=null;
+		private Drawable smallDrawable=null;
+		public synchronized Drawable getBigDrawable()
+		{
+			return bigDrawable;
+		}
+		public synchronized void setBigDrawable(Drawable bigDrawable)
+		{
+			this.bigDrawable = bigDrawable;
+		}
+		public synchronized Drawable getSmallDrawable()
+		{
+			return smallDrawable;
+		}
+		public synchronized void setSmallDrawable(Drawable smallDrawable)
+		{
+			this.smallDrawable = smallDrawable;
+		}
 	}
 	
 	
@@ -100,7 +121,7 @@ public class OptionalInfo
 						int count=jPhoto.getJSONArray("items")
 								.getJSONObject(j).getJSONObject("sizes").getJSONArray("items").length();
 						String bigUrl = jPhoto.getJSONArray("items")
-								.getJSONObject(j).getJSONObject("sizes").getJSONArray("items").getJSONObject(count-1).getString("url");
+								.getJSONObject(j).getJSONObject("sizes").getJSONArray("items").getJSONObject(0).getString("url");
 						String smallUrl = jPhoto.getJSONArray("items")
 								.getJSONObject(j).getJSONObject("sizes").getJSONArray("items").getJSONObject(Math.round(count/2)).getString("url");
 						

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import kz.crystalspring.funpoint.FullScrLoadingImageActivity;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.venues.OptionalInfo.UrlDrawable;
 import kz.crystalspring.visualities.LoadingImageView;
@@ -31,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -39,6 +41,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 
@@ -588,21 +593,22 @@ public class FSQConnector
 		isBadgesLoaded = loaded;
 	}
 	
-	public static void loadImageAsync(final LoadingImageView iv, final UrlDrawable urlDr, final int big_or_small)
+	public static void loadImageAsync(final LoadingImageView iv, final UrlDrawable urlDr, final int big_or_small, boolean prioity)
 	{
 		Runnable preTask=new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				if (big_or_small==UrlDrawable.BIG_URL&&urlDr.bigDrawable==null)
+				if (big_or_small==UrlDrawable.BIG_URL&&urlDr.getBigDrawable()==null)
 				{
-					urlDr.bigDrawable=loadPictureByUrl(urlDr.bigUrl);
+					Drawable dr=loadPictureByUrl(urlDr.bigUrl);
+					urlDr.setBigDrawable(dr);
 				}
 				else 
-					if (big_or_small==UrlDrawable.SMALL_URL&&urlDr.smallDrawable==null)
+					if (big_or_small==UrlDrawable.SMALL_URL&&urlDr.getSmallDrawable()==null)
 					{
-						urlDr.smallDrawable=loadPictureByUrl(urlDr.smallUrl);
+						urlDr.setSmallDrawable(loadPictureByUrl(urlDr.smallUrl));
 					}
 			}
 		};
@@ -614,13 +620,29 @@ public class FSQConnector
 			{
 				Drawable pict;
 				if (big_or_small==UrlDrawable.BIG_URL)
-					pict=urlDr.bigDrawable;
+					pict=urlDr.getBigDrawable();
 				else
-					pict=urlDr.smallDrawable;
+					pict=urlDr.getSmallDrawable();
 				iv.setDrawable(pict);
+				iv.setOnClickListener(new OnClickListener()
+				{
+					@Override
+					public void onClick(View v)
+					{
+						Toast.makeText(iv.getContext(), "On Click", Toast.LENGTH_SHORT).show();
+						Intent intent=new Intent(iv.getContext(),FullScrLoadingImageActivity.class);
+						MainApplication.selectedItemPhoto=urlDr;
+						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						iv.getContext().startActivity(intent);
+					}
+				});
 			}
 		};
-		MainApplication.pwAggregator.addTaskToQueue(preTask,postTask);
+		
+		if (!prioity)
+			MainApplication.pwAggregator.addTaskToQueue(preTask,postTask);
+		else
+			MainApplication.pwAggregator.addPriorityTask(preTask, postTask);
 	}
 
 	public static void loadBadgesPictureAsync(FSQBadge fsqBadge)
