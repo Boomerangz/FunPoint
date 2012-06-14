@@ -82,7 +82,7 @@ public class OptionalInfo
 				VenueComment comment = new VenueComment();
 				try
 				{
-					comment.loadFromJSON(tipItems.getJSONObject(i));
+					comment=comment.loadFromJSON(tipItems.getJSONObject(i));
 				} catch (JSONException e)
 				{
 					comment = null;

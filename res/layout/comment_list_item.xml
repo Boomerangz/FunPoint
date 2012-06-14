@@ -10,34 +10,57 @@
         android:id="@+id/comment_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginBottom="14dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
+        android:paddingBottom="12dp"
         android:background="#ffffff"
         android:gravity="center_horizontal"
         android:orientation="vertical" >
 
         <TextView
+            android:id="@+id/date_time"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:textSize="6pt"
+            android:textColor="@color/white"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="TextView" />
+        
+        <TextView
             android:id="@+id/author"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:layout_marginLeft="5dp"
+            android:textSize="6pt"
+             android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+             android:textColor="@color/white"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="7dp"
+            android:textSize="8pt"
             android:text="Large Text"
             android:gravity="left"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
+            />
+s
         <Button
             android:id="@+id/more_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="7dp"
             android:text="Button" />
     </LinearLayout>
 

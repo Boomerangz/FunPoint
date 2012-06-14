@@ -73,13 +73,13 @@ public class AdapterComments extends BaseAdapter{
         if(convertView==null)
         {
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.comment_item, null);
-
-            holder.leftSide = (RelativeLayout) convertView.findViewById(R.id.leftSideCmnt);
-            holder.cmntImg = (ImageView) convertView.findViewById(R.id.cmntImg);
-            holder.cmntUsrname = (TextView) convertView.findViewById(R.id.cmntUsrname);
-            holder.cmntDatetime = (TextView) convertView.findViewById(R.id.cmntDatetime);
-            holder.cmntText = (TextView) convertView.findViewById(R.id.cmntText);
+//            convertView = inflater.inflate(R.layout.comment_item, null);
+//
+//            holder.leftSide = (RelativeLayout) convertView.findViewById(R.id.leftSideCmnt);
+//            holder.cmntImg = (ImageView) convertView.findViewById(R.id.cmntImg);
+//            holder.cmntUsrname = (TextView) convertView.findViewById(R.id.cmntUsrname);
+//            holder.cmntDatetime = (TextView) convertView.findViewById(R.id.cmntDatetime);
+//            holder.cmntText = (TextView) convertView.findViewById(R.id.cmntText);
  
             convertView.setTag(holder);
         }

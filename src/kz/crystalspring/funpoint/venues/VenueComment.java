@@ -1,6 +1,5 @@
 package kz.crystalspring.funpoint.venues;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,28 +7,34 @@ public class VenueComment
 {
 	String text;
 	String author;
+	java.util.Date createdAt;
+
 	public VenueComment loadFromJSON(JSONObject jObject)
-	{	
-		VenueComment item=this;
+	{
+		VenueComment item = this;
 		try
 		{
-			String userLastName=jObject.getJSONObject("user").getString("lastName");
-			String userFirstName=jObject.getJSONObject("user").getString("firstName");
-			author=userFirstName+" "+userLastName;
-			text=jObject.getString("text");
+			String userLastName = jObject.getJSONObject("user").getString(
+					"lastName");
+			String userFirstName = jObject.getJSONObject("user").getString(
+					"firstName");
+			author = userFirstName + " " + userLastName;
+			int unixTime = jObject.getInt("createdAt");
+			createdAt = new java.util.Date((long) unixTime * 1000);
+			text = jObject.getString("text");
 		} catch (JSONException e)
 		{
 			e.printStackTrace();
-			item=null;
+			item = null;
 		}
 		return item;
 	}
-	
+
 	public String getAuthor()
 	{
 		return author;
-	} 
-	
+	}
+
 	public String getText()
 	{
 		return text;
@@ -37,11 +42,21 @@ public class VenueComment
 
 	public String getShortText()
 	{
-		return getText().substring(0, 15)+"...";
+		return getText().substring(0, 15) + "...";
 	}
-	
+
 	public boolean isLongText()
 	{
-		return (getText().length()>40);
+		return (getText().length() > 40);
 	}
+
+	public java.util.Date getCreatedAt()
+	{
+		return createdAt;
+	}
+
+//	public void setCreatedAt(java.util.Date createdAt)
+//	{
+//		this.createdAt = createdAt;
+//	}
 }

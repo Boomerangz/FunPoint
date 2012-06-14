@@ -5,6 +5,7 @@ import java.io.File;
 import kz.crystalspring.funpoint.TimeTableAdapter.ViewHolder;
 import kz.crystalspring.funpoint.venues.*;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.security.auth.Destroyable;
@@ -481,9 +482,15 @@ class VenueCommentsAdapter
 		holder.layout = (View) convertView.findViewById(R.id.comment_layout);
 		holder.openMoreButton = (Button) convertView
 				.findViewById(R.id.more_button);
+		holder.dateTime = (TextView) convertView
+				.findViewById(R.id.date_time);
 		// convertView.setMinimumHeight(60);
 		convertView.setTag(holder);
 		holder.author.setText(data.get(position).getAuthor());
+		
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+		
+		holder.dateTime.setText(sdf.format(data.get(position).getCreatedAt()));
 		holder.layout.getBackground().setAlpha(MainApplication.ALPHA);
 
 		final String fullText = data.get(position).getText();
@@ -528,6 +535,7 @@ class VenueCommentsAdapter
 	{
 		TextView author;
 		TextView text;
+		TextView dateTime;
 		Button openMoreButton;
 		View layout;
 	}
