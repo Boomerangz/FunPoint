@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import kz.crystalspring.android_client.C_FileHelper;
@@ -179,5 +180,12 @@ public class ProjectUtils {
 		list.add(str.substring(0,str.length()));
 		return list;
 	}
+	
+	public static String dateToRelativeString(Date date)
+	{
+		return "два дня назад";
+	}
+
+	
 	
 }

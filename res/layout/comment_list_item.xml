@@ -26,8 +26,8 @@
             android:textSize="6pt"
             android:textColor="@color/white"
             android:layout_marginTop="7dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:text="TextView" />
         
         <TextView
@@ -39,16 +39,16 @@
              android:textColor="@color/white"
             android:textStyle="bold"
             android:layout_marginTop="5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
              android:textColor="@color/white"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="7dp"

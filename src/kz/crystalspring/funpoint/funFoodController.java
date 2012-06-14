@@ -13,6 +13,7 @@ import javax.security.auth.Destroyable;
 import kz.crystalspring.android_client.C_FileHelper;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.pointplus.Prefs;
+import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.visualities.LoadingImageView;
 import kz.crystalspring.funpoint.R;
 import kz.sbeyer.atmpoint1.types.ItemFood;
@@ -490,7 +491,7 @@ class VenueCommentsAdapter
 		
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 		
-		holder.dateTime.setText(sdf.format(data.get(position).getCreatedAt()));
+		holder.dateTime.setText(ProjectUtils.dateToRelativeString(data.get(position).getCreatedAt()));
 		holder.layout.getBackground().setAlpha(MainApplication.ALPHA);
 
 		final String fullText = data.get(position).getText();
