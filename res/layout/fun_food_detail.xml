@@ -16,10 +16,7 @@
             android:layout_height="fill_parent"
             android:orientation="vertical" >
 
-            <RelativeLayout
-                android:id="@+id/major_header_layout"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+
 
                 <LinearLayout
                     android:id="@+id/minor_header_layout"
@@ -56,7 +53,10 @@
                         android:text="Food lunch price"
                         android:textColor="@color/white" />
                 </LinearLayout>
-
+            <RelativeLayout
+                android:id="@+id/major_header_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
                 <ImageView
                     android:id="@+id/switch_back_btn"
                     android:layout_width="40dp"
@@ -101,8 +101,8 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentTop="true"
                             android:layout_marginBottom="74dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginLeft="@dimen/margin"
+                            android:layout_marginRight="@dimen/margin"
                             android:layout_weight="1"
                             android:background="#ffffff" >
 
@@ -140,7 +140,7 @@
                             android:layout_height="80dp"
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginRight="@dimen/margin"
                             android:layout_weight="1"
                             android:background="#ffffff" >
 
@@ -178,7 +178,7 @@
                             android:layout_height="80dp"
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginRight="@dimen/margin"
                             android:layout_weight="1"
                             android:background="#ffffff" >
 
@@ -214,17 +214,18 @@
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="80dp"
-                        android:layout_marginTop="5dp" >
+                        android:layout_marginTop="@dimen/margin" >
 
                         <RelativeLayout
                             android:id="@+id/herenow_block"
                             android:layout_width="fill_parent"
                             android:layout_height="85dp"
+                            
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentTop="true"
                             android:layout_marginBottom="74dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginLeft="@dimen/margin"
+                            android:layout_marginRight="@dimen/margin"
                             android:layout_weight="1"
                             android:background="#ffffff" >
 
@@ -266,7 +267,7 @@
                             android:id="@+id/avg_price_block"
                             android:layout_width="fill_parent"
                             android:layout_height="85dp"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginRight="@dimen/margin"
                             android:layout_weight="1"
                             android:background="#ffffff" >
 
@@ -308,14 +309,14 @@
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp" >
+                        android:layout_marginTop="@dimen/margin" >
 
                         <LinearLayout
                             android:id="@+id/address_block"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginLeft="@dimen/margin"
+                            android:layout_marginRight="@dimen/margin"
                             android:background="#ffffff"
                             android:gravity="center" >
 
@@ -338,15 +339,15 @@
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp" >
+                        android:layout_marginTop="@dimen/margin" >
 
                         <LinearLayout
                             android:id="@+id/phone_block"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginBottom="@dimen/margin"
+                            android:layout_marginLeft="@dimen/margin"
+                            android:layout_marginRight="@dimen/margin"
                             android:background="#ffffff"
                             android:gravity="center"
                             android:orientation="vertical" >
@@ -380,16 +381,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="top"
                     android:orientation="vertical" >
-
-                    <TableRow
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" >
-
-                        <Button
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:text="1233456678" />
-                    </TableRow>
                 </TableLayout>
             </ViewFlipper>
         </LinearLayout>

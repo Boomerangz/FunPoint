@@ -191,13 +191,7 @@ public class funFoodController extends ActivityController
 			LinearLayout headerLayout = (LinearLayout) context
 					.findViewById(R.id.minor_header_layout);
 			// headerLayout.setGravity(Gravity.RIGHT);
-			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-					RelativeLayout.LayoutParams.WRAP_CONTENT,
-					RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-			lp.setMargins(0, 0, Math.round(33 * MainApplication.mDensity), 0);
-
-			headerLayout.setLayoutParams(lp);
 			// uncollapseView(commentsListLayout);
 			// collapseView(mainInfoLayout);
 		} else if (id == 2)
@@ -207,24 +201,12 @@ public class funFoodController extends ActivityController
 			LinearLayout headerLayout = (LinearLayout) context
 					.findViewById(R.id.minor_header_layout);
 			// headerLayout.setGravity(Gravity.LEFT);
-			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-					RelativeLayout.LayoutParams.WRAP_CONTENT,
-					RelativeLayout.LayoutParams.WRAP_CONTENT);
-			lp.setMargins(Math.round(33 * MainApplication.mDensity), 0, 0, 0);
-			headerLayout.setLayoutParams(lp);
 			// collapseView(commentsListLayout);
 			// uncollapseView(mainInfoLayout);
 		} else
 		{
 			switchPreviousBtn.setVisibility(View.VISIBLE);
 			switchNextBtn.setVisibility(View.VISIBLE);
-			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-					RelativeLayout.LayoutParams.WRAP_CONTENT,
-					RelativeLayout.LayoutParams.WRAP_CONTENT);
-			lp.setMargins(Math.round(33 * MainApplication.mDensity), 0, 0, 0);
-			LinearLayout headerLayout = (LinearLayout) context
-					.findViewById(R.id.minor_header_layout);
-			headerLayout.setLayoutParams(lp);
 		}
 
 		for (int i = 0; i < switcher.getChildCount(); i++)
@@ -481,17 +463,17 @@ class VenueCommentsAdapter
 		holder.text = (TextView) convertView.findViewById(R.id.text);
 		holder.author = (TextView) convertView.findViewById(R.id.author);
 		holder.layout = (View) convertView.findViewById(R.id.comment_layout);
-		holder.openMoreButton = (Button) convertView
+		holder.openMoreButton = (ImageView) convertView
 				.findViewById(R.id.more_button);
-		holder.dateTime = (TextView) convertView
-				.findViewById(R.id.date_time);
+		holder.dateTime = (TextView) convertView.findViewById(R.id.date_time);
 		// convertView.setMinimumHeight(60);
 		convertView.setTag(holder);
 		holder.author.setText(data.get(position).getAuthor());
-		
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-		
-		String sDateTime=ProjectUtils.dateToRelativeString(data.get(position).getCreatedAt());
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+
+		String sDateTime = ProjectUtils.dateToRelativeString(data.get(position)
+				.getCreatedAt());
 		holder.dateTime.setText(sDateTime);
 		holder.layout.getBackground().setAlpha(MainApplication.ALPHA);
 
@@ -501,27 +483,28 @@ class VenueCommentsAdapter
 		{
 			shortText = null;
 			holder.text.setText(fullText);
-			
+
 		} else
 		{
 			shortText = data.get(position).getShortText();
 			holder.text.setText(shortText);
 		}
 		if (data.get(position).isLongText())
-		holder.openMoreButton.setOnClickListener(new OnClickListener()
-		{
-			boolean shrt=false;
-			@Override
-			public void onClick(View v)
+			holder.openMoreButton.setOnClickListener(new OnClickListener()
 			{
-				if (shrt)
-					holder.text.setText(shortText);
-				else 
-					holder.text.setText(fullText);
-				shrt=!shrt;
-			}
-		});
-		else 
+				boolean shrt = false;
+
+				@Override
+				public void onClick(View v)
+				{
+					if (shrt)
+						holder.text.setText(shortText);
+					else
+						holder.text.setText(fullText);
+					shrt = !shrt;
+				}
+			});
+		else
 			holder.openMoreButton.setVisibility(View.GONE);
 		return convertView;
 	}
@@ -538,7 +521,7 @@ class VenueCommentsAdapter
 		TextView author;
 		TextView text;
 		TextView dateTime;
-		Button openMoreButton;
+		ImageView openMoreButton;
 		View layout;
 	}
 

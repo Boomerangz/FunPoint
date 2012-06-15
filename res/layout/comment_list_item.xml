@@ -10,9 +10,9 @@
         android:id="@+id/comment_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginBottom="14dp"
-        android:layout_marginLeft="14dp"
-        android:layout_marginRight="14dp"
+        android:layout_marginBottom="@dimen/margin"
+        android:layout_marginLeft="@dimen/margin"
+        android:layout_marginRight="@dimen/margin"
         android:paddingBottom="12dp"
         android:background="#ffffff"
         android:gravity="center_horizontal"
@@ -56,12 +56,12 @@
             android:text="Large Text"
             android:gravity="left"
             />
-s
-        <Button
+        <ImageView
             android:id="@+id/more_button"
-            android:layout_width="40dp"
-            android:layout_height="12dp"
-            android:background="@drawable/dotes_03_03" />
+            android:layout_width="48dp"
+            android:layout_height="18dp"
+            android:padding="4dp"
+            android:src="@drawable/dotes_03_03" />
     </LinearLayout>
 
 </LinearLayout>
