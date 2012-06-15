@@ -491,7 +491,8 @@ class VenueCommentsAdapter
 		
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 		
-		holder.dateTime.setText(ProjectUtils.dateToRelativeString(data.get(position).getCreatedAt()));
+		String sDateTime=ProjectUtils.dateToRelativeString(data.get(position).getCreatedAt());
+		holder.dateTime.setText(sDateTime);
 		holder.layout.getBackground().setAlpha(MainApplication.ALPHA);
 
 		final String fullText = data.get(position).getText();
