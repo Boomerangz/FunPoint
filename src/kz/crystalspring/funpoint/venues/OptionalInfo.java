@@ -161,4 +161,23 @@ public class OptionalInfo
 		return FSQPhotosList.get(i);
 	}
 
+	public synchronized void addCommentFromResponse(String st)
+	{
+		try
+		{
+			JSONObject jObject=new JSONObject(st);
+			String status= jObject.getJSONObject("response").getJSONObject("tip").getString("status");
+			if (status.equals("done"))
+			{
+				VenueComment comment=new VenueComment();
+				comment=comment.loadFromJSON(jObject.getJSONObject("response").getJSONObject("tip"));
+				ProjectUtils.addToBeginOfArrayList((ArrayList) commentList, comment).add(comment);
+			}
+		} catch (JSONException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }

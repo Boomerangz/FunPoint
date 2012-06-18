@@ -69,6 +69,7 @@ public class funFoodController extends ActivityController
 	ImageView switchThirdBtn;
 	ImageView switchPreviousBtn;
 	ImageView switchNextBtn;
+	ImageView addCommentBtn;
 
 	ViewFlipper switcher;
 
@@ -172,16 +173,23 @@ public class funFoodController extends ActivityController
 				switchNext();
 			}
 		});
+		addCommentBtn = (ImageView) context.findViewById(R.id.add_comment);
+		addCommentBtn.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				openAddCommentActivity();
+			}
+		});
+		
+		
 	}
 
 	@Override
 	protected void onResume()
 	{
-		if (condition != CREATED)
-		{
 			showFood(itemFood);
-			condition = CREATED;
-		}
 	}
 
 	private void onSwitch()
@@ -425,7 +433,14 @@ public class funFoodController extends ActivityController
 		MainMenu.goToObjectMap();
 		context.finish();
 	}
-
+	
+	private void openAddCommentActivity()
+	{
+		Intent intent = new Intent(context,
+				WriteCommentActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(intent);
+	}
 }
 
 class VenueCommentsAdapter

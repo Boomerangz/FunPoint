@@ -423,4 +423,14 @@ public class ProjectUtils
 		return str;
 	}
 
+	
+	
+	
+	public static ArrayList addToBeginOfArrayList(ArrayList list, Object obj)
+	{
+		ArrayList newList=new ArrayList();
+		newList.add(obj);
+		newList.addAll(list);
+		return newList;
+	}
 }

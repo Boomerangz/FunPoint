@@ -23,10 +23,6 @@ import android.widget.Toast;
 public abstract class ActivityController
 {
 	Activity context;
-	int condition=NOT_CREATED;
-	static final int NOT_CREATED=0;
-	static final int CREATED=1;
-	static final int FINISHED=2;
 
 	ActivityController(Activity _context)
 	{
@@ -41,7 +37,6 @@ public abstract class ActivityController
 
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
-		condition=FINISHED;
 		context.finish();
 		return true;
 	}

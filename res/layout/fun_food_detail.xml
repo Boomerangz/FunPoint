@@ -362,6 +362,7 @@
                     android:orientation="vertical" >
 
                     <ImageView
+                        android:id="@+id/add_comment"
                         android:layout_width="@dimen/button_radius"
                         android:layout_height="@dimen/button_radius"
                         android:padding="5dp"

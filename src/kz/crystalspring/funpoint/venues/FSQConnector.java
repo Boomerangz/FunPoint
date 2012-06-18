@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,8 +26,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.AbstractHttpEntity;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -297,6 +302,7 @@ public class FSQConnector
 	public static void addToTips(String venueID, String comment)
 	{
 		String st = "";
+		
 		try
 		{
 			String sUrl = TIP_ADD_URL + "?oauth_token="
@@ -309,15 +315,19 @@ public class FSQConnector
 			List pairs = new ArrayList();
 			pairs.add(new BasicNameValuePair("venueId", venueID));
 			pairs.add(new BasicNameValuePair("text", comment));
-			post.setEntity(new UrlEncodedFormEntity(pairs));
+			AbstractHttpEntity ent=new UrlEncodedFormEntity(pairs, HTTP.UTF_8);
+			ent.setContentEncoding("UTF-8");
+			post.setEntity(ent);
+			
 			HttpResponse response = client.execute(post);
 			st = streamToString(response.getEntity().getContent());
 		} catch (Exception e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println(st);
+		FSQItem item=(FSQItem) MainApplication.mapItemContainer.getItemById(venueID);
+		item.getOptionalInfo().addCommentFromResponse(st);
 	}
 
 	public static void addToTodos(final String venueID)
