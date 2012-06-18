@@ -15,63 +15,64 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical" >
-
-
-
-                <LinearLayout
-                    android:id="@+id/minor_header_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="33dp"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:id="@+id/food_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:maxLines="2"
-                        android:text="Food title"
-                        android:textSize="14pt" />
-
-                    <TextView
-                        android:id="@+id/food_kitchen"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:text="Индийская кухня, Китайская кухня"
-                        android:textColor="#ffffff"
-                        android:textSize="7pt" />
-
-                    <TextView
-                        android:id="@+id/food_avg_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:text="Food lunch price"
-                        android:textColor="@color/white" />
-                </LinearLayout>
             <RelativeLayout
                 android:id="@+id/major_header_layout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" >
+            <LinearLayout
+                android:id="@+id/minor_header_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="33dp"
+                android:layout_marginLeft="33dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/food_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:maxLines="2"
+                    android:text="Food title"
+                    android:textSize="14pt" />
+
+                <TextView
+                    android:id="@+id/food_kitchen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="Индийская кухня, Китайская кухня"
+                    android:textColor="#ffffff"
+                    android:textSize="7pt" />
+
+                <TextView
+                    android:id="@+id/food_avg_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="Food lunch price"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+
+
                 <ImageView
                     android:id="@+id/switch_back_btn"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_alignBottom="@id/minor_header_layout"
                     android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
                     android:padding="5dp"
                     android:src="@drawable/previous"
                     android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/switch_btn"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignBottom="@id/minor_header_layout"
+                    android:layout_width="@dimen/button_radius"
+                    android:layout_height="@dimen/button_radius"
+                    android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:padding="5dp"
                     android:src="@drawable/next" />
@@ -113,14 +114,14 @@
                                 android:layout_alignParentBottom="true"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginBottom="5dp"
+                                android:shadowColor="@color/black"
+                                android:shadowDx="1"
+                                android:shadowDy="1"
+                                android:shadowRadius="1"
                                 android:text="Я здесь"
                                 android:textColor="#ffffff"
                                 android:textSize="15dp"
                                 android:textStyle="bold"
-                                android:shadowColor="@color/black"
-                 				android:shadowDx="1"
-                  				android:shadowDy="1"
-                  				android:shadowRadius="1"
                                 android:typeface="sans" />
 
                             <ImageView
@@ -151,14 +152,14 @@
                                 android:layout_alignParentBottom="true"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginBottom="5dp"
+                                android:shadowColor="@color/black"
+                                android:shadowDx="1"
+                                android:shadowDy="1"
+                                android:shadowRadius="1"
                                 android:text="на карте"
                                 android:textColor="#ffffff"
                                 android:textSize="15dp"
                                 android:textStyle="bold"
-                                android:shadowColor="@color/black"
-                 				android:shadowDx="1"
-                  				android:shadowDy="1"
-                  				android:shadowRadius="1"
                                 android:typeface="sans" />
 
                             <ImageView
@@ -189,14 +190,14 @@
                                 android:layout_alignParentBottom="true"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginBottom="5dp"
+                                android:shadowColor="@color/black"
+                                android:shadowDx="1"
+                                android:shadowDy="1"
+                                android:shadowRadius="1"
                                 android:text="на карте"
                                 android:textColor="#ffffff"
                                 android:textSize="15dp"
                                 android:textStyle="bold"
-                                android:shadowColor="@color/black"
-                 				android:shadowDx="1"
-                  				android:shadowDy="1"
-                  				android:shadowRadius="1"
                                 android:typeface="sans" />
 
                             <ImageView
@@ -220,7 +221,6 @@
                             android:id="@+id/herenow_block"
                             android:layout_width="fill_parent"
                             android:layout_height="85dp"
-                            
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentTop="true"
                             android:layout_marginBottom="74dp"
@@ -236,14 +236,14 @@
                                 android:layout_alignParentBottom="true"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginBottom="5dp"
+                                android:shadowColor="@color/black"
+                                android:shadowDx="1"
+                                android:shadowDy="1"
+                                android:shadowRadius="1"
                                 android:text="здесь сейчас"
                                 android:textColor="#ffffff"
                                 android:textSize="15dp"
                                 android:textStyle="bold"
-                                android:shadowColor="@color/black"
-                 				android:shadowDx="1"
-                  				android:shadowDy="1"
-                  				android:shadowRadius="1"
                                 android:typeface="sans" />
 
                             <TextView
@@ -252,14 +252,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentTop="true"
                                 android:layout_centerHorizontal="true"
+                                android:shadowColor="@color/black"
+                                android:shadowDx="1"
+                                android:shadowDy="1"
+                                android:shadowRadius="1"
                                 android:text="5"
                                 android:textColor="#ffffff"
                                 android:textSize="55dp"
                                 android:textStyle="bold"
-                                android:shadowColor="@color/black"
-                 				android:shadowDx="1"
-                  				android:shadowDy="1"
-                  				android:shadowRadius="1"
                                 android:typeface="sans" />
                         </RelativeLayout>
 
@@ -278,14 +278,14 @@
                                 android:layout_alignParentBottom="true"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginBottom="5dp"
+                                android:shadowColor="@color/black"
+                                android:shadowDx="1"
+                                android:shadowDy="1"
+                                android:shadowRadius="1"
                                 android:text="ланч"
                                 android:textColor="#ffffff"
                                 android:textSize="15dp"
                                 android:textStyle="bold"
-                                android:shadowColor="@color/black"
-                 				android:shadowDx="1"
-                  				android:shadowDy="1"
-                  				android:shadowRadius="1"
                                 android:typeface="sans" />
 
                             <TextView
@@ -294,14 +294,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentTop="true"
                                 android:layout_centerHorizontal="true"
+                                android:shadowColor="@color/black"
+                                android:shadowDx="1"
+                                android:shadowDy="1"
+                                android:shadowRadius="1"
                                 android:text="80000"
                                 android:textColor="#ffffff"
                                 android:textSize="50dp"
                                 android:textStyle="bold"
-                                android:shadowColor="@color/black"
-                 				android:shadowDx="1"
-                  				android:shadowDy="1"
-                  				android:shadowRadius="1"
                                 android:typeface="sans" />
                         </RelativeLayout>
                     </LinearLayout>
@@ -362,8 +362,8 @@
                     android:orientation="vertical" >
 
                     <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="@dimen/button_radius"
+                        android:layout_height="@dimen/button_radius"
                         android:padding="5dp"
                         android:src="@drawable/plus" />
 

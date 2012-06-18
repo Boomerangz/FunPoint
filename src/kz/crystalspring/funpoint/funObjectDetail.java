@@ -28,6 +28,8 @@ public class funObjectDetail extends Activity
 	{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		setcontroller();
+		controller.onCreate();
 	}
 
 	private void setcontroller()
@@ -58,7 +60,7 @@ public class funObjectDetail extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		setcontroller();
+	//	setcontroller();
 		controller.onResume();
 	}
 
@@ -69,7 +71,7 @@ public class funObjectDetail extends Activity
 //		{
 //			return controller.onKeyDown(keyCode, event);
 //		} else
-			return super.onKeyDown(keyCode, event);
+			return controller.onKeyDown(keyCode, event);
 	}
 
 }

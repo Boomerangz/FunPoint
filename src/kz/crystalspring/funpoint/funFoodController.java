@@ -30,6 +30,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,12 +81,6 @@ public class funFoodController extends ActivityController
 	protected void onCreate()
 	{
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void onResume()
-	{
 		context.setContentView(R.layout.fun_food_detail);
 		titleTV = (TextView) context.findViewById(R.id.food_title);
 		addressTV = (TextView) context.findViewById(R.id.food_address);
@@ -177,38 +172,41 @@ public class funFoodController extends ActivityController
 				switchNext();
 			}
 		});
-		showFood(itemFood);
+	}
+
+	@Override
+	protected void onResume()
+	{
+		if (condition != CREATED)
+		{
+			showFood(itemFood);
+			condition = CREATED;
+		}
 	}
 
 	private void onSwitch()
 	{
-		int id = switcher.indexOfChild(switcher.getCurrentView());
+		final int id = switcher.indexOfChild(switcher.getCurrentView());
 		System.out.println(id);
 		if (id == 0)
 		{
 			switchPreviousBtn.setVisibility(View.GONE);
 			switchNextBtn.setVisibility(View.VISIBLE);
-			LinearLayout headerLayout = (LinearLayout) context
-					.findViewById(R.id.minor_header_layout);
-			// headerLayout.setGravity(Gravity.RIGHT);
-
-			// uncollapseView(commentsListLayout);
-			// collapseView(mainInfoLayout);
-		} else if (id == 2)
+		} else if (id == switcher.getChildCount() - 1)
 		{
 			switchPreviousBtn.setVisibility(View.VISIBLE);
 			switchNextBtn.setVisibility(View.GONE);
-			LinearLayout headerLayout = (LinearLayout) context
-					.findViewById(R.id.minor_header_layout);
-			// headerLayout.setGravity(Gravity.LEFT);
-			// collapseView(commentsListLayout);
-			// uncollapseView(mainInfoLayout);
 		} else
 		{
 			switchPreviousBtn.setVisibility(View.VISIBLE);
 			switchNextBtn.setVisibility(View.VISIBLE);
 		}
-
+		collapseViews();
+	}
+	
+	private void collapseViews()
+	{
+		final int id = switcher.indexOfChild(switcher.getCurrentView());
 		for (int i = 0; i < switcher.getChildCount(); i++)
 		{
 			View v = switcher.getChildAt(i);
@@ -216,6 +214,7 @@ public class funFoodController extends ActivityController
 				collapseView(v);
 			else
 				uncollapseView(v);
+			v.invalidate();
 		}
 	}
 
@@ -258,8 +257,8 @@ public class funFoodController extends ActivityController
 
 	private void collapseView(View v)
 	{
-		v.getLayoutParams().height = 0;
-		v.getLayoutParams().width = 0;
+		v.getLayoutParams().height = 10;
+		v.getLayoutParams().width = 10;
 	}
 
 	private void uncollapseView(View v)
@@ -387,6 +386,7 @@ public class funFoodController extends ActivityController
 				});
 			}
 		}
+		onSwitch();
 	}
 
 	private ItemFood getFoodFromJSON(JSONObject jObject)
