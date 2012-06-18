@@ -247,16 +247,20 @@ public class ProjectUtils
 		if (count == 0 && period == PERIOD_MINUTE)
 			return "только что";
 		else
-			return IntegerToWords(count)+" " + periodToWords(count, period) + " " +postWord;
+			return IntegerToWords(count,period)+" " + periodToWords(count, period) + " " +postWord;
 	}
 
 	public static String periodToWords(int n, int period)
 	{
 		String str = "";
 
+		if (((int)(n/10))%10==1)
+			n=10;
+		
+		
 		if (period == PERIOD_YEAR)
 		{
-			switch (n)
+			switch (n%10)
 			{
 			case 1:
 				str = "год"; break;
@@ -271,7 +275,7 @@ public class ProjectUtils
 			}
 		} else if (period == PERIOD_MONTH)
 		{
-			switch (n)
+			switch (n%10)
 			{
 			case 1:
 				str = "месяц"; break;
@@ -286,7 +290,7 @@ public class ProjectUtils
 			}
 		} else if (period == PERIOD_WEEK)
 		{
-			switch (n)
+			switch (n%10)
 			{
 			case 1:
 				str = "неделю"; break;
@@ -301,7 +305,7 @@ public class ProjectUtils
 			}
 		} else if (period == PERIOD_DAY)
 		{
-			switch (n)
+			switch (n%10)
 			{
 			case 1:
 				str = "день"; break;
@@ -310,7 +314,7 @@ public class ProjectUtils
 			}
 		} else if (period == PERIOD_HOUR)
 		{
-			switch (n)
+			switch (n%10)
 			{
 			case 1:
 				str = "час"; break;
@@ -325,10 +329,10 @@ public class ProjectUtils
 			}
 		} else if (period == PERIOD_MINUTE)
 		{
-			switch (n)
+			switch (n%10)
 			{
 			case 1:
-				str = "минута"; break;
+				str = "минуту"; break;
 			case 2:
 				str = "минуты"; break;
 			case 3:
@@ -343,11 +347,13 @@ public class ProjectUtils
 		return str;
 	}
 
-	public static String IntegerToWords(int n)
+	public static String IntegerToWords(int n, int mode)
 	{
 		String str = "";
 		final int COUNT_DEX = 3;// количество разрядов
-		final String[] words_one = { "", "один", "два", "три", "четыре",
+		final String[] words_one_male = { "", "один", "два", "три", "четыре",
+				"пять", "шесть", "семь", "восемь", "девять" };
+		final String[] words_one_female = { "", "одну", "две", "три", "четыре",
 				"пять", "шесть", "семь", "восемь", "девять" };
 		final String[] words_ten = { "", "десять", "двадцать", "тридцать",
 				"сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят",
@@ -355,8 +361,11 @@ public class ProjectUtils
 		final String[] words_hundred = { "", "сто", "двести", "триста",
 				"четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот",
 				"девятьсот" };
-		final String[][] words = { words_one, words_ten, words_hundred };
-
+		final String[][] words;
+		if (mode==PERIOD_MINUTE||mode==PERIOD_WEEK)
+			words = new String[][]{ words_one_female, words_ten, words_hundred };
+		else 
+			words = new String[][]{ words_one_male, words_ten, words_hundred };
 		ArrayList<Integer> numbers = new ArrayList();
 		int x = 1;
 		while ((int) (n / x) > 0)

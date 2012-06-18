@@ -344,7 +344,7 @@ public class funFoodController extends ActivityController
 			});
 			phoneLayout.addView(phoneTV);
 		}
-
+		galleryLayout.removeAllViews();
 		TableRow.LayoutParams lp = new TableRow.LayoutParams(
 				TableRow.LayoutParams.FILL_PARENT,
 				Math.round(80 * MainApplication.mDensity));
@@ -433,6 +433,7 @@ public class funFoodController extends ActivityController
 		MainMenu.goToObjectMap();
 		context.finish();
 	}
+	
 	
 	private void openAddCommentActivity()
 	{
