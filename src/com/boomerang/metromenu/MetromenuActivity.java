@@ -227,10 +227,7 @@ public class MetromenuActivity extends Activity
 		continueUpdating = true;
 		mHandler.removeCallbacks(mUpdateTimeTask);
 		mHandler.postDelayed(mUpdateTimeTask, UPDATE_DELAY);
-		if (FSQConnector.isFSQConnected())
-		{
-			MainApplication.loadUserActivity();
-		}
+		MainApplication.loadAdditionalContent();
 	}
 
 	private void beginUpdating()

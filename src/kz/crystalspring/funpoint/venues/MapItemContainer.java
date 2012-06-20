@@ -66,6 +66,18 @@ public class MapItemContainer
 			Collections.sort(filteredList, comp);
 		return filteredList;
 	}
+	
+	public synchronized List<MapItem> getFilteredItemList(String[] args)
+	{
+		List<MapItem> filteredList = new ArrayList<MapItem>();
+		List visibleFilter=Arrays.asList(args);
+		for (MapItem item : mapItemArray)
+			if (visibleFilter.contains(item.getObjTypeId()))
+				filteredList.add(item);
+		if (MainApplication.getCurrentLocation() != null)
+			Collections.sort(filteredList, comp);
+		return filteredList;
+	}
 
 	public List<MapItem> getUnFilteredItemList()
 	{

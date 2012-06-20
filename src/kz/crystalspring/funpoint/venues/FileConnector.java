@@ -2,23 +2,21 @@ package kz.crystalspring.funpoint.venues;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import kz.crystalspring.android_client.C_FileHelper;
+import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.pointplus.ProjectUtils;
+import kz.sbeyer.atmpoint1.types.ItemCinema;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.thebuzzmedia.sjxp.XMLParser;
-import com.thebuzzmedia.sjxp.rule.DefaultRule;
-import com.thebuzzmedia.sjxp.rule.IRule.Type;
-
 import android.content.Context;
-import android.util.Xml;
+import android.os.AsyncTask;
 import android.widget.Toast;
-import java.io.InputStream;
 
 public class FileConnector
 {
@@ -116,29 +114,54 @@ public class FileConnector
 		}
 
 	}
-	public static void getCinemaTimeTables()
-	{
-		System.out.println("Началась загрузка");
-		String s=ProjectUtils.loadByUrl(JAM_CINEMA_URL);
-		System.out.println("Началось преобразование");
-		JSONObject jObject=XML2JSON(s);
-		System.out.println("Преобразование закончилось");
-	}
 
-	public static JSONObject XML2JSON(String xml)
+	
+	static JSONArray jCinemaCitys;
+	static JSONArray jCinemaEvents;
+	static JSONArray jCinemaPlaces;
+	static JSONArray jCinemaSection;
+	public static void loadCinemaTimeTables()
 	{
-		org.json.JSONObject xmlJSONObj = null;
-		try
+		Runnable task=new Runnable()
 		{
-			xmlJSONObj = org.json.XML.toJSONObject(xml);
-			String jsonPrettyPrintString = xmlJSONObj.toString();
-			JSONObject jObject=new JSONObject(jsonPrettyPrintString);
-			return jObject;
-		} catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
-		return null;
+			@Override
+			public void run()
+			{
+				String cinemaXML = ProjectUtils.loadByUrl(JAM_CINEMA_URL);
+				try
+				{
+					JSONObject jObject = ProjectUtils.XML2JSON(cinemaXML).getJSONObject("schedule");
+					jCinemaCitys   = jObject.getJSONArray("city");
+					jCinemaEvents  = jObject.getJSONArray("event");
+					jCinemaPlaces  = jObject.getJSONArray("place");
+					jCinemaSection = jObject.getJSONArray("section");
+					
+					AsyncTask task=new AsyncTask(){
+						@Override
+						protected Object doInBackground(Object... params)
+						{
+							String[] cinemaFilter={MapItem.FSQ_TYPE_CINEMA};
+							List<MapItem> cinemas=MainApplication.mapItemContainer.getFilteredItemList(cinemaFilter);
+							for (MapItem map_cinema:cinemas)
+							{
+								if (ItemCinema.class.isInstance(map_cinema))
+								{
+									ItemCinema cinema=(ItemCinema) map_cinema;
+									cinema.loadHallTableFromJSON(jCinemaEvents,jCinemaPlaces,jCinemaSection);
+								}
+							}
+							return null;
+						}
+					};
+					task.execute();
+					System.gc();
+				} catch (JSONException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		};
+		MainApplication.pwAggregator.addTaskToQueue(task, null);
 	}
 
 }

@@ -100,6 +100,14 @@ public class MainApplication extends Application
 	}
 
 
+	public static void loadAdditionalContent()
+	{
+		if (FSQConnector.isFSQConnected())
+		{
+			MainApplication.loadUserActivity();
+		}
+		loadJamContent();
+	}
 	
 	public static void loadUserActivity()
 	{
@@ -109,10 +117,13 @@ public class MainApplication extends Application
 			FSQConnector.loadCheckinsAsync();
 		if (!FSQConnector.getBadgessLoaded())
 			FSQConnector.loadBadgesAsync();
-		FileConnector.getCinemaTimeTables();
-		
 	}
 	
+	public static void loadJamContent()
+	{
+		FileConnector.loadCinemaTimeTables();
+	}
+
 }
 
 class LocationUpdater implements LocationListener

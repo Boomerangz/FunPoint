@@ -19,6 +19,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -516,8 +517,24 @@ public class ProjectUtils
 
 			str = sb.toString();
 		}
-
 		return str;
+	}
+	
+	
+	public static JSONObject XML2JSON(String xml)
+	{
+		org.json.JSONObject xmlJSONObj = null;
+		try
+		{
+			xmlJSONObj = org.json.XML.toJSONObject(xml);
+			String jsonPrettyPrintString = xmlJSONObj.toString();
+			JSONObject jObject=new JSONObject(jsonPrettyPrintString);
+			return jObject;
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
 

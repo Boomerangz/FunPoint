@@ -70,6 +70,21 @@ public class ItemCinema extends FSQItem
 		return this;
 	}
 	
+
+	public void loadHallTableFromJSON(JSONArray jCinemaEvents,
+			JSONArray jCinemaPlaces, JSONArray jCinemaSection)
+	{
+		try
+		{
+			JSONObject jPlace=jCinemaPlaces.getJSONObject(0);
+			setAddress(jPlace.getString("address"));
+			setName(jPlace.getString("title"));
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	public List<CinemaHall> getHallTable()
 	{
 		return hallTable;
@@ -120,6 +135,8 @@ public class ItemCinema extends FSQItem
 			hallInfoFilled=true;
 			return this;
 		}
+		
+		
 		
 		public String getName()
 		{
@@ -245,47 +262,7 @@ public class ItemCinema extends FSQItem
 	        public Button okButton;
 	        public Button cancelButton;
 	 }
-}
-
-
-class MyScaler extends ScaleAnimation {
-
-    private View mView;
-    private View secondView;
-
-    private LinearLayout.LayoutParams mLayoutParams;
-
-    private int mMarginBottomFromY, mMarginBottomToY;
-
-    private boolean mVanishAfter = false;
-
-    public MyScaler(float fromX, float toX, float fromY, float toY, int duration, View view, View secondView,
-            boolean vanishAfter) {
-        super(fromX, toX, fromY, toY);
-        setDuration(duration);
-        mView = view;
-        this.secondView = secondView;
-        
-        mVanishAfter = vanishAfter;
-        mLayoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
-        int height = mView.getHeight();
-        mMarginBottomFromY = (int) (height * fromY) + mLayoutParams.bottomMargin - height;
-        mMarginBottomToY = (int) (0 - ((height * toY) + mLayoutParams.bottomMargin)) - height;
-    }
-
-    @Override
-    protected void applyTransformation(float interpolatedTime, Transformation t) {
-        super.applyTransformation(interpolatedTime, t);
-        if (interpolatedTime < 1.0f) {
-            int newMarginBottom = mMarginBottomFromY
-                    + (int) ((mMarginBottomToY - mMarginBottomFromY) * interpolatedTime);
-            mLayoutParams.setMargins(mLayoutParams.leftMargin, mLayoutParams.topMargin,
-                mLayoutParams.rightMargin, newMarginBottom);
-            mView.getParent().requestLayout();
-        } else if (mVanishAfter) {
-            mView.setVisibility(View.GONE);
-            secondView.setVisibility(View.VISIBLE);
-        }
-    }
 
 }
+
+
