@@ -6,7 +6,7 @@
     <EditText
         android:id="@+id/comment_text"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="140dp"
         android:ems="10"
         android:gravity="top|left"
         android:inputType="textMultiLine"

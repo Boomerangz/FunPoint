@@ -16,6 +16,7 @@ import java.util.List;
 import kz.crystalspring.funpoint.FullScrLoadingImageActivity;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.venues.OptionalInfo.UrlDrawable;
+import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.visualities.LoadingImageView;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
 import kz.sbeyer.atmpoint1.types.ItemFood;
@@ -116,7 +117,7 @@ public class FSQConnector
 			sUrl += "&client_id=" + CLIENT_ID + "&client_secret="
 					+ CLIENT_SECRET + API_VERSION;
 			System.out.println("на сервер отдан запрос на точки");
-			String response = loadByUrl(sUrl);
+			String response = ProjectUtils.loadByUrl(sUrl);
 			System.out.println("получена строка с точками с сервера");
 			JSONObject jsonObj = new JSONObject(response);// (JSONObject) new
 															// JSONTokener(response).nextValue();
@@ -155,36 +156,7 @@ public class FSQConnector
 		return venueList;
 	}
 
-	private static String streamToString(InputStream is) throws IOException
-	{
-		String str = "";
-
-		if (is != null)
-		{
-			StringBuilder sb = new StringBuilder();
-			String line;
-
-			try
-			{
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(is));
-
-				while ((line = reader.readLine()) != null)
-				{
-					sb.append(line);
-				}
-
-				reader.close();
-			} finally
-			{
-				is.close();
-			}
-
-			str = sb.toString();
-		}
-
-		return str;
-	}
+	
 	
 	private static Drawable streamToDrawable(InputStream is) throws IOException
 	{
@@ -202,7 +174,7 @@ public class FSQConnector
 		sUrl += "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET
 				+ API_VERSION;
 
-		String response = loadByUrl(sUrl);
+		String response = ProjectUtils.loadByUrl(sUrl);
 		JSONObject jsonObj;
 		try
 		{
@@ -216,27 +188,7 @@ public class FSQConnector
 
 	}
 
-	private static String loadByUrl(String sUrl)
-	{
-
-		try
-		{
-			HttpClient client = new DefaultHttpClient();
-			HttpGet request = new HttpGet();
-			request.setURI(new URI(sUrl));
-			request.setHeader("Accept-Language", "ru");
-			
-			HttpResponse response = client.execute(request);
-			System.out.println("получен поток с сервера");
-			return streamToString(response.getEntity().getContent());
-
-		} catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
+	
 	
 	public static Drawable loadPictureByUrl(String sUrl)
 	{
@@ -278,7 +230,7 @@ public class FSQConnector
 					pairs.add(new BasicNameValuePair("venueId", venueID));
 					post.setEntity(new UrlEncodedFormEntity(pairs));
 					HttpResponse response = client.execute(post);
-					st = streamToString(response.getEntity().getContent());
+					st = ProjectUtils.streamToString(response.getEntity().getContent());
 					String ID = new JSONObject(st).getJSONObject("response")
 							.getJSONObject("checkin").getJSONObject("venue")
 							.getString("id");
@@ -320,7 +272,7 @@ public class FSQConnector
 			post.setEntity(ent);
 			
 			HttpResponse response = client.execute(post);
-			st = streamToString(response.getEntity().getContent());
+			st = ProjectUtils.streamToString(response.getEntity().getContent());
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -357,7 +309,7 @@ public class FSQConnector
 						pairs.add(new BasicNameValuePair("venueId", venueID));
 						post.setEntity(new UrlEncodedFormEntity(pairs));
 						HttpResponse response = client.execute(post);
-						String st = streamToString(response.getEntity()
+						String st = ProjectUtils.streamToString(response.getEntity()
 								.getContent());
 
 						newTodo = newTodo.loadFromJSON_NewToDo(new JSONObject(
@@ -399,7 +351,7 @@ public class FSQConnector
 						String sUrl = CHECKINS_GET_URL + "?oauth_token="
 								+ MainApplication.FsqApp.getAccesToken()
 								+ "&sort=recent" + API_VERSION;
-						st = loadByUrl(sUrl);
+						st = ProjectUtils.loadByUrl(sUrl);
 
 						JSONArray response = new JSONObject(st)
 								.getJSONObject("response")
@@ -457,7 +409,7 @@ public class FSQConnector
 						String sUrl = TODOS_GET_URL + "?oauth_token="
 								+ MainApplication.FsqApp.getAccesToken()
 								+ "&sort=recent" + API_VERSION;
-						st = loadByUrl(sUrl);
+						st = ProjectUtils.loadByUrl(sUrl);
 
 						JSONArray response = new JSONObject(st)
 								.getJSONObject("response")
@@ -554,7 +506,7 @@ public class FSQConnector
 						String sUrl = BADGES_GET_URL + "?oauth_token="
 								+ MainApplication.FsqApp.getAccesToken()
 								+ "&sort=recent" + API_VERSION;
-						st = loadByUrl(sUrl);
+						st = ProjectUtils.loadByUrl(sUrl);
 
 						JSONObject response = new JSONObject(st)
 								.getJSONObject("response")

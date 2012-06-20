@@ -78,9 +78,7 @@ public class MainApplication extends Application
 			}
 		};
 		MainApplication.mapItemContainer.loadNearBy(getCurrentLocation(), task);
-		
-		
-		
+
 		new FileConnector(getApplicationContext());
 	}
 
@@ -111,6 +109,8 @@ public class MainApplication extends Application
 			FSQConnector.loadCheckinsAsync();
 		if (!FSQConnector.getBadgessLoaded())
 			FSQConnector.loadBadgesAsync();
+		FileConnector.getCinemaTimeTables();
+		
 	}
 	
 }
