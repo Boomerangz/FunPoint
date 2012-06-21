@@ -26,9 +26,12 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 
 public class MainApplication extends Application
 {
@@ -42,6 +45,12 @@ public class MainApplication extends Application
 	public static FoursquareApp FsqApp;
 	public static PendingWorkAggregator pwAggregator=new PendingWorkAggregator();
 	public static UrlDrawable selectedItemPhoto;
+	
+	public static final int WIFI=0;
+	public static final int UMTS=1;
+	public static final int EDGE=2;
+	public static int internetConnection=-1;
+	
 	
 	LocationUpdater updater;
 	
@@ -77,6 +86,34 @@ public class MainApplication extends Application
 				MainApplication.refreshMapItems();
 			}
 		};
+		
+		ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+		android.net.NetworkInfo mobile = connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+		NetworkInfo info = connec.getActiveNetworkInfo();
+
+		int netSubType = info.getSubtype();
+
+		            if (wifi.isConnected()) 
+		            {
+		            	internetConnection=WIFI;
+		            }
+		            else if (mobile.isConnected())
+		            { 
+		            	if(netSubType == TelephonyManager.NETWORK_TYPE_UMTS)
+	                {   
+		            		internetConnection=UMTS;
+	                }
+	                else
+	                {
+	                      internetConnection=EDGE;
+	                }
+	            }
+		
+		
+		System.out.println("ЗАГРУЗКА НАЧАТА");
 		MainApplication.mapItemContainer.loadNearBy(getCurrentLocation(), task);
 
 		new FileConnector(getApplicationContext());

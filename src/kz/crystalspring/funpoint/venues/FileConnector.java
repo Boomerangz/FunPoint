@@ -14,6 +14,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.boomerang.database.JamDbAdapter;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -128,6 +130,8 @@ public class FileConnector
 			public void run()
 			{
 				String cinemaXML = ProjectUtils.loadByUrl(JAM_CINEMA_URL);
+				System.out.println("ЗАГРУЗКА ЗАВЕРШЕНА");
+				//Toast.makeText(context, "ЗАГРУЗКА ЗАВЕРШЕНА", Toast.LENGTH_SHORT).show();
 				try
 				{
 					JSONObject jObject = ProjectUtils.XML2JSON(cinemaXML).getJSONObject("schedule");
@@ -140,16 +144,10 @@ public class FileConnector
 						@Override
 						protected Object doInBackground(Object... params)
 						{
-							String[] cinemaFilter={MapItem.FSQ_TYPE_CINEMA};
-							List<MapItem> cinemas=MainApplication.mapItemContainer.getFilteredItemList(cinemaFilter);
-							for (MapItem map_cinema:cinemas)
-							{
-								if (ItemCinema.class.isInstance(map_cinema))
-								{
-									ItemCinema cinema=(ItemCinema) map_cinema;
-									cinema.loadHallTableFromJSON(jCinemaEvents,jCinemaPlaces,jCinemaSection);
-								}
-							}
+							JamDbAdapter dbAdapter=new JamDbAdapter(MainApplication.context);
+							dbAdapter.open();
+							dbAdapter.savePlacesToDB(jCinemaPlaces);
+							dbAdapter.close();
 							return null;
 						}
 					};

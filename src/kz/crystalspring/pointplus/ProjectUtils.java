@@ -10,14 +10,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import kz.crystalspring.android_client.C_FileHelper;
+import kz.crystalspring.funpoint.MainApplication;
 import kz.sbeyer.atmpoint1.types.ItemLangValues;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -255,100 +260,127 @@ public class ProjectUtils
 		if (count == 0 && period == PERIOD_MINUTE)
 			return "только что";
 		else
-			return IntegerToWords(count,period)+" " + periodToWords(count, period) + " " +postWord;
+			return IntegerToWords(count, period) + " "
+					+ periodToWords(count, period) + " " + postWord;
 	}
 
 	public static String periodToWords(int n, int period)
 	{
 		String str = "";
 
-		if (((int)(n/10))%10==1)
-			n=10;
-		
-		
+		if (((int) (n / 10)) % 10 == 1)
+			n = 10;
+
 		if (period == PERIOD_YEAR)
 		{
-			switch (n%10)
+			switch (n % 10)
 			{
 			case 1:
-				str = "год"; break;
+				str = "год";
+				break;
 			case 2:
-				str = "года"; break;
+				str = "года";
+				break;
 			case 3:
-				str = "года"; break;
+				str = "года";
+				break;
 			case 4:
-				str = "года"; break;
+				str = "года";
+				break;
 			default:
-				str = "лет"; break;
+				str = "лет";
+				break;
 			}
 		} else if (period == PERIOD_MONTH)
 		{
-			switch (n%10)
+			switch (n % 10)
 			{
 			case 1:
-				str = "месяц"; break;
+				str = "месяц";
+				break;
 			case 2:
-				str = "месяца"; break;
+				str = "месяца";
+				break;
 			case 3:
-				str = "месяца"; break;
+				str = "месяца";
+				break;
 			case 4:
-				str = "месяца"; break;
+				str = "месяца";
+				break;
 			default:
-				str = "месяцев"; break;
+				str = "месяцев";
+				break;
 			}
 		} else if (period == PERIOD_WEEK)
 		{
-			switch (n%10)
+			switch (n % 10)
 			{
 			case 1:
-				str = "неделю"; break;
+				str = "неделю";
+				break;
 			case 2:
-				str = "недели"; break;
+				str = "недели";
+				break;
 			case 3:
-				str = "недели"; break;
+				str = "недели";
+				break;
 			case 4:
-				str = "недели"; break;
+				str = "недели";
+				break;
 			default:
-				str = "недель"; break;
+				str = "недель";
+				break;
 			}
 		} else if (period == PERIOD_DAY)
 		{
-			switch (n%10)
+			switch (n % 10)
 			{
 			case 1:
-				str = "день"; break;
+				str = "день";
+				break;
 			default:
-				str = "дней"; break;
+				str = "дней";
+				break;
 			}
 		} else if (period == PERIOD_HOUR)
 		{
-			switch (n%10)
+			switch (n % 10)
 			{
 			case 1:
-				str = "час"; break;
+				str = "час";
+				break;
 			case 2:
-				str = "часа"; break;
+				str = "часа";
+				break;
 			case 3:
-				str = "часа"; break;
+				str = "часа";
+				break;
 			case 4:
-				str = "часа"; break;
+				str = "часа";
+				break;
 			default:
-				str = "часов"; break;
+				str = "часов";
+				break;
 			}
 		} else if (period == PERIOD_MINUTE)
 		{
-			switch (n%10)
+			switch (n % 10)
 			{
 			case 1:
-				str = "минуту"; break;
+				str = "минуту";
+				break;
 			case 2:
-				str = "минуты"; break;
+				str = "минуты";
+				break;
 			case 3:
-				str = "минуты"; break;
+				str = "минуты";
+				break;
 			case 4:
-				str = "минуты"; break;
+				str = "минуты";
+				break;
 			default:
-				str = "минут"; break;
+				str = "минут";
+				break;
 			}
 		}
 		;
@@ -370,10 +402,10 @@ public class ProjectUtils
 				"четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот",
 				"девятьсот" };
 		final String[][] words;
-		if (mode==PERIOD_MINUTE||mode==PERIOD_WEEK)
-			words = new String[][]{ words_one_female, words_ten, words_hundred };
-		else 
-			words = new String[][]{ words_one_male, words_ten, words_hundred };
+		if (mode == PERIOD_MINUTE || mode == PERIOD_WEEK)
+			words = new String[][] { words_one_female, words_ten, words_hundred };
+		else
+			words = new String[][] { words_one_male, words_ten, words_hundred };
 		ArrayList<Integer> numbers = new ArrayList();
 		int x = 1;
 		while ((int) (n / x) > 0)
@@ -440,23 +472,22 @@ public class ProjectUtils
 		return str;
 	}
 
-	
-	
-	
 	public static ArrayList addToBeginOfArrayList(ArrayList list, Object obj)
 	{
-		ArrayList newList=new ArrayList();
+		ArrayList newList = new ArrayList();
 		newList.add(obj);
 		newList.addAll(list);
 		return newList;
 	}
-	
-	
-	
+
 	public static String loadByUrl(String sUrl)
 	{
-		InputStream is=loadStreamByUrl(sUrl);
-		if (is!=null)
+		InputStream is;
+		if (MainApplication.internetConnection==MainApplication.EDGE)
+			is = loadGZIPStreamByUrl(sUrl);
+		else
+			is = loadStreamByUrl(sUrl);
+		if (is != null)
 		{
 			try
 			{
@@ -468,18 +499,53 @@ public class ProjectUtils
 		}
 		return null;
 	}
-	
-	public static InputStream loadStreamByUrl(String sUrl)
+
+	private static final String PROXY_URL = "http://www.homeplus.kz/parser/4sq_gzip.php";
+
+	public static InputStream loadGZIPStreamByUrl(String sUrl)
 	{
+
 		try
 		{
 			HttpClient client = new DefaultHttpClient();
-			HttpGet request = new HttpGet();
-			request.setURI(new URI(sUrl));
-			request.setHeader("Accept-Language", "ru");
-			
-			HttpResponse response = client.execute(request);
+			// HttpGet request = new HttpGet();
+			// request.setURI(new URI(sUrl));
+			// request.setHeader("Accept-Language", "ru");
+			HttpPost post = new HttpPost(PROXY_URL);
+			List pairs = new ArrayList();
+			pairs.add(new BasicNameValuePair("url", sUrl));
+			post.setEntity(new UrlEncodedFormEntity(pairs));
+			HttpResponse response = client.execute(post);
+
+			// HttpResponse response = client.execute(request);
 			System.out.println("получен поток с сервера");
+			return new GZIPInputStream(response.getEntity().getContent());
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static InputStream loadStreamByUrl(String sUrl)
+	{
+
+		try
+		{
+			HttpClient client = new DefaultHttpClient();
+			 HttpGet request = new HttpGet();
+			 request.setURI(new URI(sUrl));
+			 request.setHeader("Accept-Language", "ru");
+//			HttpPost post = new HttpPost(PROXY_URL);
+//			List pairs = new ArrayList();
+//			pairs.add(new BasicNameValuePair("url", sUrl));
+//			post.setEntity(new UrlEncodedFormEntity(pairs));
+//			HttpResponse response = client.execute(post);
+
+			 HttpResponse response = client.execute(request);
+			System.out.println("получен поток с сервера");
+			
 			return response.getEntity().getContent();
 		} catch (Exception e)
 		{
@@ -489,38 +555,46 @@ public class ProjectUtils
 		}
 	}
 	
-	
+
 	public static String streamToString(InputStream is) throws IOException
 	{
-		String str = "";
-
+		String zippedSt=null;
 		if (is != null)
 		{
-			StringBuilder sb = new StringBuilder();
-			String line;
-
-			try
-			{
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(is));
-
-				while ((line = reader.readLine()) != null)
-				{
-					sb.append(line);
-				}
-
-				reader.close();
-			} finally
-			{
-				is.close();
-			}
-
-			str = sb.toString();
+			 StringBuilder sb = new StringBuilder();
+			 String line;
+			
+			 try
+			 {
+			 BufferedReader reader = new BufferedReader(
+			 new InputStreamReader(is));
+			
+			 while ((line = reader.readLine()) != null)
+			 {
+			 sb.append(line);
+			 }
+			
+			 reader.close();
+			 } finally
+			 {
+			 is.close();
+			 }
+			
+			zippedSt = sb.toString();
+//
+//			try
+//			{
+//				byte[] unzippedBytes =C_FileHelper.decompress(zippedSt
+//						.getBytes());
+//				unzippedSt = new String(unzippedBytes);
+//			} catch (Exception e)
+//			{
+//				e.printStackTrace();
+//			}
 		}
-		return str;
+		return zippedSt;
 	}
-	
-	
+
 	public static JSONObject XML2JSON(String xml)
 	{
 		org.json.JSONObject xmlJSONObj = null;
@@ -528,7 +602,7 @@ public class ProjectUtils
 		{
 			xmlJSONObj = org.json.XML.toJSONObject(xml);
 			String jsonPrettyPrintString = xmlJSONObj.toString();
-			JSONObject jObject=new JSONObject(jsonPrettyPrintString);
+			JSONObject jObject = new JSONObject(jsonPrettyPrintString);
 			return jObject;
 		} catch (JSONException e)
 		{
@@ -537,7 +611,3 @@ public class ProjectUtils
 		return null;
 	}
 }
-
-
-
-

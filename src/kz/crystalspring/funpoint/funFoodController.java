@@ -2,7 +2,6 @@ package kz.crystalspring.funpoint;
 
 import java.io.File;
 
-import kz.crystalspring.funpoint.TimeTableAdapter.ViewHolder;
 import kz.crystalspring.funpoint.venues.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -17,7 +16,6 @@ import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.visualities.LoadingImageView;
 import kz.crystalspring.funpoint.R;
 import kz.sbeyer.atmpoint1.types.ItemFood;
-import kz.sbeyer.atmpoint1.types.ItemCinema.CinemaTimeLine;
 
 import org.json.JSONArray;
 import org.json.JSONException;
