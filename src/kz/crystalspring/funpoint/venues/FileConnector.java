@@ -147,6 +147,8 @@ public class FileConnector
 							JamDbAdapter dbAdapter=new JamDbAdapter(MainApplication.context);
 							dbAdapter.open();
 							dbAdapter.savePlacesToDB(jCinemaPlaces);
+							dbAdapter.saveEventsToDB(jCinemaEvents);
+							dbAdapter.saveSectionsToDB(jCinemaSection);
 							dbAdapter.close();
 							return null;
 						}

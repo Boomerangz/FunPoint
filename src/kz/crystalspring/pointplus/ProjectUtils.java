@@ -483,10 +483,10 @@ public class ProjectUtils
 	public static String loadByUrl(String sUrl)
 	{
 		InputStream is;
-		if (MainApplication.internetConnection==MainApplication.EDGE)
+		//if (MainApplication.internetConnection==MainApplication.EDGE)
 			is = loadGZIPStreamByUrl(sUrl);
-		else
-			is = loadStreamByUrl(sUrl);
+		//else
+		//	is = loadStreamByUrl(sUrl);
 		if (is != null)
 		{
 			try

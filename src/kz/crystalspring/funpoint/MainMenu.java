@@ -4,7 +4,6 @@ import kz.crystalspring.android_client.C_NetHelper;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.Helpdesk;
 import kz.crystalspring.pointplus.MyLocation;
-import kz.crystalspring.pointplus.ObjectsListView;
 import kz.crystalspring.pointplus.Prefs;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.pointplus.UserInfo;

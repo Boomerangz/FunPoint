@@ -9,7 +9,6 @@ import java.util.zip.ZipInputStream;
 import kz.crystalspring.android_client.C_FileHelper;
 import kz.crystalspring.pointplus.Prefs;
 import kz.crystalspring.funpoint.R;
-import kz.sbeyer.animation.ProjectAnimation;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
