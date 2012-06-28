@@ -78,6 +78,10 @@
             android:label="@string/app_name" >
         </activity>
         <activity
+            android:name="kz.crystalspring.funpoint.funEventActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name="kz.crystalspring.pointplus.Helpdesk"
             android:label="@string/app_name" >
         </activity>

@@ -22,7 +22,7 @@ public class JamDbAdapter
 	private static final String CINEMA_PLACES_TABLE_NAME = "cinemaPlacesTable";
 	private static final String CINEMA_SECTIONPARENT_TABLE_NAME = "cinemaSectionParentTable";
 	private static final String CINEMA_SECTIONCHILD_TABLE_NAME = "cinemaSectionChildTable";
-	private static final int DATABASE_VERSION =14;
+	private static final int DATABASE_VERSION =22;
 
 	private static final String CREATE_CINEMA_EVENT_TABLE = "create table "
 			+ CINEMA_EVENT_TABLE_NAME + " (" + KEY_ID
@@ -150,8 +150,9 @@ public class JamDbAdapter
 				case 949:
 					fsq_id = "4ea8208277c8129d55c2501b";
 					break;
-				case 309  :
-					fsq_id="4e885fca490102a7a3de53a45";
+				case 309:
+					fsq_id = "4e885fca490102a7a3de53a4";
+					break;
 				default:
 					fsq_id = "";
 				}
@@ -318,7 +319,7 @@ public class JamDbAdapter
 				+"select a.* from (";
 		final String end_insert=" ) as a " + "left join "
 				+ CINEMA_SECTIONCHILD_TABLE_NAME + " as b "
-				+ "on a.time_id=b.time_id "
+				+ "on a.section_id=b.section_id and a.time=b.time and a.hash=b.hash "
 				+ "where b.time_id is null ";
 		String insertQuery="";
 		
@@ -333,7 +334,7 @@ public class JamDbAdapter
 				insertQuery+=" select   	"
 						+ Integer.toString(time_id) + " as time_id, " + "			'"
 						+ section_id + "' as section_id, " + "          '"
-						+ hash + "' as date," + " 		   '" + time + "' as day";
+						+ hash + "' as hash," + " 		   '" + time + "' as time";
 				if (i<jArray.length()-1)
 					insertQuery+=" union all ";
 			}
@@ -342,17 +343,17 @@ public class JamDbAdapter
 	
 	public Cursor getCinemaInfo(String FsqId)
 	{
-		Cursor left=db.rawQuery("select * from "+CINEMA_SECTIONPARENT_TABLE_NAME+" where place_id=829", null);
+		Cursor left=db.rawQuery("select * from "+CINEMA_SECTIONPARENT_TABLE_NAME+" where place_id=309 and ticket_flag=1", null);
 		
 		
 		
-		String st="select cinemas.fsq_id, cinemas.title, events.event_id, events.title, secpar.date, secpar.day, sechild.time, secpar.ticket_flag " +
+		String st="select cinemas.fsq_id, cinemas.title, events.event_id, events.title, secpar.date, secpar.day, sechild.time, secpar.ticket_flag,sechild.hash " +
 				  " from "+CINEMA_PLACES_TABLE_NAME+" as cinemas "+
 	              "inner join "+CINEMA_SECTIONPARENT_TABLE_NAME+" as secpar on cinemas.place_id=secpar.place_id "+
 				  "inner join "+CINEMA_SECTIONCHILD_TABLE_NAME+" as sechild on secpar.section_id=sechild.section_id "+
 	              "inner join "+CINEMA_EVENT_TABLE_NAME+" as events on secpar.event_id=events.event_id "+
-				  "where cinemas.fsq_id='"+FsqId+"';"
-				  ;
+				  "where cinemas.fsq_id='"+FsqId+"' and date(secpar.date)>=date('now')" +
+				  "order by secpar.date,events.title, sechild.time ";
 		Cursor cinema_selectCursor=db.rawQuery(st, null);
 		return cinema_selectCursor;
 	}
@@ -382,6 +383,12 @@ public class JamDbAdapter
 			onCreate(db);
 		}
 
+	}
+
+
+	public Cursor getEventById(int id)
+	{
+		return db.rawQuery("select * from "+CINEMA_EVENT_TABLE_NAME+" where event_id="+Integer.toString(id), null);
 	}
 	
 

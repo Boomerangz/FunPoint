@@ -76,6 +76,7 @@ public class ItemCinema extends FSQItem
 		dbAdapter.open();
 		Cursor cursor=dbAdapter.getCinemaInfo(getId());
 		timeTable.loadFromDBCursor(cursor);
+		dbAdapter.close();
 		hallInfoFilled=true;
 	}
 	

@@ -155,7 +155,7 @@ public class FileConnector
 					};
 					task.execute();
 					System.gc();
-				} catch (JSONException e)
+				} catch (Exception e)
 				{
 					e.printStackTrace();
 				}

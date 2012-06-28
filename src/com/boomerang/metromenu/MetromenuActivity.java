@@ -167,26 +167,16 @@ public class MetromenuActivity extends Activity
 			@Override
 			public void onClick(View v)
 			{
+				runItemActivityWithFilter(MapItem.FSQ_TYPE_MARKET);
+			}
+		});
+		switchers.get(3).setOnClickListener(new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
 				runItemActivityWithFilter(MapItem.FSQ_TYPE_HOTEL);
-			}
-		});
-		switchers.get(3).setOnClickListener(new OnClickListener()
-		{
-
-			@Override
-			public void onClick(View v)
-			{
-				runItemActivityWithFilter(MapItem.FSQ_TYPE_MARKET);
-			}
-		});
-		
-		switchers.get(3).setOnClickListener(new OnClickListener()
-		{
-
-			@Override
-			public void onClick(View v)
-			{
-				runItemActivityWithFilter(MapItem.FSQ_TYPE_MARKET);
 			}
 		});
 		

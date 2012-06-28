@@ -11,6 +11,7 @@ import com.boomerang.pending.PendingWorkAggregator;
 import com.google.android.maps.GeoPoint;
 
 import kz.crystalspring.funpoint.funMap.CustomMyLocationOverlay;
+import kz.crystalspring.funpoint.venues.EventContainer;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQTodo;
 import kz.crystalspring.funpoint.venues.FileConnector;
@@ -38,6 +39,7 @@ public class MainApplication extends Application
 	public static Context context;
 	public static float mDensity;
 	public static MapItemContainer mapItemContainer;
+	public static EventContainer eventContainer;
 	public static RefreshableMapList refreshable;
 	public static CustomMyLocationOverlay gMyLocationOverlay;
 	private static GeoPoint currLocation;
@@ -45,10 +47,13 @@ public class MainApplication extends Application
 	public static FoursquareApp FsqApp;
 	public static PendingWorkAggregator pwAggregator=new PendingWorkAggregator();
 	public static UrlDrawable selectedItemPhoto;
+	public static int selectedEventId=-1;
+	
 	
 	public static final int WIFI=0;
 	public static final int UMTS=1;
 	public static final int EDGE=2;
+	public static final int NO_CONNECTION=4;
 	public static int internetConnection=-1;
 	
 	
@@ -68,6 +73,8 @@ public class MainApplication extends Application
 		super.onCreate();
 		mDensity = getApplicationContext().getResources().getDisplayMetrics().density;
 		mapItemContainer = new MapItemContainer(getApplicationContext());
+		eventContainer = new EventContainer(getApplicationContext());
+		
 		mPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
 		context = getApplicationContext();
@@ -94,6 +101,8 @@ public class MainApplication extends Application
 
 		NetworkInfo info = connec.getActiveNetworkInfo();
 
+		if (info!=null)
+		{	
 		int netSubType = info.getSubtype();
 
 		            if (wifi.isConnected()) 
@@ -111,7 +120,11 @@ public class MainApplication extends Application
 	                      internetConnection=EDGE;
 	                }
 	            }
-		
+		}
+		else
+		{
+			internetConnection=NO_CONNECTION;
+		}
 		
 		System.out.println("ЗАГРУЗКА НАЧАТА");
 		MainApplication.mapItemContainer.loadNearBy(getCurrentLocation(), task);

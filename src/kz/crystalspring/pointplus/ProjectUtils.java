@@ -483,10 +483,10 @@ public class ProjectUtils
 	public static String loadByUrl(String sUrl)
 	{
 		InputStream is;
-		//if (MainApplication.internetConnection==MainApplication.EDGE)
-			is = loadGZIPStreamByUrl(sUrl);
-		//else
-		//	is = loadStreamByUrl(sUrl);
+		// if (MainApplication.internetConnection==MainApplication.EDGE)
+		is = loadGZIPStreamByUrl(sUrl);
+		// else
+		// is = loadStreamByUrl(sUrl);
 		if (is != null)
 		{
 			try
@@ -500,7 +500,7 @@ public class ProjectUtils
 		return null;
 	}
 
-	private static final String PROXY_URL = "http://www.homeplus.kz/parser/4sq_gzip.php";
+	private static final String PROXY_URL = "http://www.homeplus.kz/parser/4sq_gzip_curl.php";
 
 	public static InputStream loadGZIPStreamByUrl(String sUrl)
 	{
@@ -527,25 +527,25 @@ public class ProjectUtils
 			return null;
 		}
 	}
-	
+
 	public static InputStream loadStreamByUrl(String sUrl)
 	{
 
 		try
 		{
 			HttpClient client = new DefaultHttpClient();
-			 HttpGet request = new HttpGet();
-			 request.setURI(new URI(sUrl));
-			 request.setHeader("Accept-Language", "ru");
-//			HttpPost post = new HttpPost(PROXY_URL);
-//			List pairs = new ArrayList();
-//			pairs.add(new BasicNameValuePair("url", sUrl));
-//			post.setEntity(new UrlEncodedFormEntity(pairs));
-//			HttpResponse response = client.execute(post);
+			HttpGet request = new HttpGet();
+			request.setURI(new URI(sUrl));
+			request.setHeader("Accept-Language", "ru");
+			// HttpPost post = new HttpPost(PROXY_URL);
+			// List pairs = new ArrayList();
+			// pairs.add(new BasicNameValuePair("url", sUrl));
+			// post.setEntity(new UrlEncodedFormEntity(pairs));
+			// HttpResponse response = client.execute(post);
 
-			 HttpResponse response = client.execute(request);
+			HttpResponse response = client.execute(request);
 			System.out.println("получен поток с сервера");
-			
+
 			return response.getEntity().getContent();
 		} catch (Exception e)
 		{
@@ -554,43 +554,42 @@ public class ProjectUtils
 			return null;
 		}
 	}
-	
 
 	public static String streamToString(InputStream is) throws IOException
 	{
-		String zippedSt=null;
+		String zippedSt = null;
 		if (is != null)
 		{
-			 StringBuilder sb = new StringBuilder();
-			 String line;
-			
-			 try
-			 {
-			 BufferedReader reader = new BufferedReader(
-			 new InputStreamReader(is));
-			
-			 while ((line = reader.readLine()) != null)
-			 {
-			 sb.append(line);
-			 }
-			
-			 reader.close();
-			 } finally
-			 {
-			 is.close();
-			 }
-			
+			StringBuilder sb = new StringBuilder();
+			String line;
+
+			try
+			{
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(is));
+
+				while ((line = reader.readLine()) != null)
+				{
+					sb.append(line);
+				}
+
+				reader.close();
+			} finally
+			{
+				is.close();
+			}
+
 			zippedSt = sb.toString();
-//
-//			try
-//			{
-//				byte[] unzippedBytes =C_FileHelper.decompress(zippedSt
-//						.getBytes());
-//				unzippedSt = new String(unzippedBytes);
-//			} catch (Exception e)
-//			{
-//				e.printStackTrace();
-//			}
+			//
+			// try
+			// {
+			// byte[] unzippedBytes =C_FileHelper.decompress(zippedSt
+			// .getBytes());
+			// unzippedSt = new String(unzippedBytes);
+			// } catch (Exception e)
+			// {
+			// e.printStackTrace();
+			// }
 		}
 		return zippedSt;
 	}
@@ -600,10 +599,13 @@ public class ProjectUtils
 		org.json.JSONObject xmlJSONObj = null;
 		try
 		{
-			xmlJSONObj = org.json.XML.toJSONObject(xml);
-			String jsonPrettyPrintString = xmlJSONObj.toString();
-			JSONObject jObject = new JSONObject(jsonPrettyPrintString);
-			return jObject;
+			if (xml != null)
+			{
+				xmlJSONObj = org.json.XML.toJSONObject(xml);
+				String jsonPrettyPrintString = xmlJSONObj.toString();
+				JSONObject jObject = new JSONObject(jsonPrettyPrintString);
+				return jObject;
+			}
 		} catch (JSONException e)
 		{
 			e.printStackTrace();
