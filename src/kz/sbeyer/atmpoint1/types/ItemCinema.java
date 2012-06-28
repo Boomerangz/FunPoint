@@ -1,5 +1,6 @@
 package kz.sbeyer.atmpoint1.types;
 
+import java.io.ObjectInputStream.GetField;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +13,7 @@ import java.util.jar.JarOutputStream;
 import kz.crystalspring.funpoint.CinemaTimeTable;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.venues.FSQItem;
+import kz.crystalspring.funpoint.venues.FileConnector;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItem.ViewHolder;
 import kz.crystalspring.funpoint.R;
@@ -72,12 +74,21 @@ public class ItemCinema extends FSQItem
 	public void loadAdditionalInfo()
 	{
 		timeTable=new CinemaTimeTable();
-		JamDbAdapter dbAdapter=new JamDbAdapter(MainApplication.context);
-		dbAdapter.open();
-		Cursor cursor=dbAdapter.getCinemaInfo(getId());
-		timeTable.loadFromDBCursor(cursor);
-		dbAdapter.close();
+//		JamDbAdapter dbAdapter=new JamDbAdapter(MainApplication.context);
+//		dbAdapter.open();
+//		Cursor cursor=dbAdapter.getCinemaInfo(getId());
+//		timeTable.loadFromDBCursor(cursor);
+		JSONObject jObject=FileConnector.loadCinemaInfo(getId());
+		try
+		{
+			timeTable.loadFromJSONArray(jObject.getJSONArray("events"));
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+		//dbAdapter.close();
 		hallInfoFilled=true;
+
 	}
 	
 	

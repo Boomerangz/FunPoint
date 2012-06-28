@@ -16,6 +16,7 @@ import java.util.List;
 import kz.crystalspring.funpoint.FullScrLoadingImageActivity;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.venues.OptionalInfo.UrlDrawable;
+import kz.crystalspring.pointplus.HttpHelper;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.visualities.LoadingImageView;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
@@ -117,7 +118,7 @@ public class FSQConnector
 			sUrl += "&client_id=" + CLIENT_ID + "&client_secret="
 					+ CLIENT_SECRET + API_VERSION;
 			System.out.println("на сервер отдан запрос на точки");
-			String response = ProjectUtils.loadByUrl(sUrl);
+			String response = HttpHelper.loadByUrl(sUrl);
 			System.out.println("получена строка с точками с сервера");
 			JSONObject jsonObj = new JSONObject(response);// (JSONObject) new
 															// JSONTokener(response).nextValue();
@@ -167,7 +168,7 @@ public class FSQConnector
 		sUrl += "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET
 				+ API_VERSION;
 
-		String response = ProjectUtils.loadByUrl(sUrl);
+		String response = HttpHelper.loadByUrl(sUrl);
 		JSONObject jsonObj;
 		try
 		{
@@ -204,7 +205,7 @@ public class FSQConnector
 					pairs.add(new BasicNameValuePair("venueId", venueID));
 					post.setEntity(new UrlEncodedFormEntity(pairs));
 					HttpResponse response = client.execute(post);
-					st = ProjectUtils.streamToString(response.getEntity().getContent());
+					st = HttpHelper.streamToString(response.getEntity().getContent());
 					String ID = new JSONObject(st).getJSONObject("response")
 							.getJSONObject("checkin").getJSONObject("venue")
 							.getString("id");
@@ -246,7 +247,7 @@ public class FSQConnector
 			post.setEntity(ent);
 			
 			HttpResponse response = client.execute(post);
-			st = ProjectUtils.streamToString(response.getEntity().getContent());
+			st = HttpHelper.streamToString(response.getEntity().getContent());
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -283,7 +284,7 @@ public class FSQConnector
 						pairs.add(new BasicNameValuePair("venueId", venueID));
 						post.setEntity(new UrlEncodedFormEntity(pairs));
 						HttpResponse response = client.execute(post);
-						String st = ProjectUtils.streamToString(response.getEntity()
+						String st = HttpHelper.streamToString(response.getEntity()
 								.getContent());
 
 						newTodo = newTodo.loadFromJSON_NewToDo(new JSONObject(
@@ -325,7 +326,7 @@ public class FSQConnector
 						String sUrl = CHECKINS_GET_URL + "?oauth_token="
 								+ MainApplication.FsqApp.getAccesToken()
 								+ "&sort=recent" + API_VERSION;
-						st = ProjectUtils.loadByUrl(sUrl);
+						st = HttpHelper.loadByUrl(sUrl);
 
 						JSONArray response = new JSONObject(st)
 								.getJSONObject("response")
@@ -383,7 +384,7 @@ public class FSQConnector
 						String sUrl = TODOS_GET_URL + "?oauth_token="
 								+ MainApplication.FsqApp.getAccesToken()
 								+ "&sort=recent" + API_VERSION;
-						st = ProjectUtils.loadByUrl(sUrl);
+						st = HttpHelper.loadByUrl(sUrl);
 
 						JSONArray response = new JSONObject(st)
 								.getJSONObject("response")
@@ -480,7 +481,7 @@ public class FSQConnector
 						String sUrl = BADGES_GET_URL + "?oauth_token="
 								+ MainApplication.FsqApp.getAccesToken()
 								+ "&sort=recent" + API_VERSION;
-						st = ProjectUtils.loadByUrl(sUrl);
+						st = HttpHelper.loadByUrl(sUrl);
 
 						JSONObject response = new JSONObject(st)
 								.getJSONObject("response")
@@ -538,13 +539,13 @@ public class FSQConnector
 			{
 				if (big_or_small==UrlDrawable.BIG_URL&&urlDr.getBigDrawable()==null)
 				{
-					Drawable dr=ProjectUtils.loadPictureByUrl(urlDr.bigUrl);
+					Drawable dr=HttpHelper.loadPictureByUrl(urlDr.bigUrl);
 					urlDr.setBigDrawable(dr);
 				}
 				else 
 					if (big_or_small==UrlDrawable.SMALL_URL&&urlDr.getSmallDrawable()==null)
 					{
-						urlDr.setSmallDrawable(ProjectUtils.loadPictureByUrl(urlDr.smallUrl));
+						urlDr.setSmallDrawable(HttpHelper.loadPictureByUrl(urlDr.smallUrl));
 					}
 			}
 		};

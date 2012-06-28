@@ -9,6 +9,10 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.database.Cursor;
 
 public class CinemaTimeTable
@@ -17,7 +21,6 @@ public class CinemaTimeTable
 	{
 		int filmId;
 		String filmName;
-		String date;
 		boolean ticketable=false;;
 		List<CinemaTime> times=new ArrayList(0);
 	}
@@ -119,6 +122,57 @@ public class CinemaTimeTable
 			}
 		});
 		System.out.println(0);
+	}
+
+
+	public void loadFromJSONArray(JSONArray jsonArray)
+	{
+		for (int i=0; i<jsonArray.length();i++)
+		{
+			try
+			{
+				JSONObject jEvent=jsonArray.getJSONObject(i);
+				
+				int filmId=jEvent.getInt("events_id");
+				String filmTitle=jEvent.getString("title");
+				String date=jEvent.getString("ts");
+				String sHash="1:71:1340860800";//jEvent.getString("hash");
+				boolean ticketAble=true;
+				
+				TimeLine timeline=null;
+				for (int j=0;j<timeLines.size();j++)
+				{
+					if (timeLines.get(j).filmId==filmId&&timeLines.get(j).date.equals(date))
+					{
+						timeline=timeLines.get(j);
+						break;
+					}
+				}
+				if (timeline==null)
+				{
+					timeline=new TimeLine();
+					timeLines.add(timeline);
+				}
+				timeline.filmId=filmId;
+				timeline.filmName=filmTitle;
+				timeline.times.add(new CinemaTime(date,sHash));
+				timeline.ticketable=ticketAble;
+			} catch (JSONException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		Collections.sort(timeLines, new Comparator<TimeLine>()
+				{
+					@Override
+					public int compare(TimeLine lhs, TimeLine rhs)
+					{
+						if (lhs.date.compareTo(rhs.date)!=0)
+							return lhs.date.compareTo(rhs.date);
+						return lhs.filmName.compareTo(rhs.filmName);
+					}
+				});
+				System.out.println(0);
 	}
 	
 }

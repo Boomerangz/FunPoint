@@ -7,9 +7,11 @@ import java.util.List;
 
 import kz.crystalspring.android_client.C_FileHelper;
 import kz.crystalspring.funpoint.MainApplication;
+import kz.crystalspring.pointplus.HttpHelper;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
 
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -129,7 +131,7 @@ public class FileConnector
 			@Override
 			public void run()
 			{
-				String cinemaXML = ProjectUtils.loadByUrl(JAM_CINEMA_URL);
+				String cinemaXML = HttpHelper.loadByUrl(JAM_CINEMA_URL);
 				System.out.println("ЗАГРУЗКА ЗАВЕРШЕНА");
 				//Toast.makeText(context, "ЗАГРУЗКА ЗАВЕРШЕНА", Toast.LENGTH_SHORT).show();
 				try
@@ -162,6 +164,23 @@ public class FileConnector
 			}
 		};
 		MainApplication.pwAggregator.addTaskToQueue(task, null);
+	}
+	
+	
+	public static JSONObject loadCinemaInfo(String FsqId)
+	{
+		List params=new ArrayList();
+		params.add(new BasicNameValuePair("key", FSQConnector.CLIENT_SECRET));
+		params.add(new BasicNameValuePair("f_sq", FsqId));
+		String sCinemaInfo=HttpHelper.loadPostByUrl("http://192.168.1.50/jam/api_jam_cinema.php", params);
+		try
+		{
+			return new JSONObject(sCinemaInfo);
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

@@ -9,6 +9,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -17,10 +18,12 @@ import kz.crystalspring.funpoint.MainApplication;
 import kz.sbeyer.atmpoint1.types.ItemLangValues;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -484,119 +487,8 @@ public class ProjectUtils
 		return newList;
 	}
 
-	public static String loadByUrl(String sUrl)
-	{
-		InputStream is;
-		// if (MainApplication.internetConnection==MainApplication.EDGE)
-		is = loadGZIPStreamByUrl(sUrl);
-		// else
-		// is = loadStreamByUrl(sUrl);
-		if (is != null)
-		{
-			try
-			{
-				return streamToString(is);
-			} catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
 
-	private static final String PROXY_URL = "http://www.homeplus.kz/parser/4sq_gzip_curl.php";
 
-	public static InputStream loadGZIPStreamByUrl(String sUrl)
-	{
-
-		try
-		{
-			HttpClient client = new DefaultHttpClient();
-			// HttpGet request = new HttpGet();
-			// request.setURI(new URI(sUrl));
-			// request.setHeader("Accept-Language", "ru");
-			HttpPost post = new HttpPost(PROXY_URL);
-			List pairs = new ArrayList();
-			pairs.add(new BasicNameValuePair("url", sUrl));
-			post.setEntity(new UrlEncodedFormEntity(pairs));
-			HttpResponse response = client.execute(post);
-
-			// HttpResponse response = client.execute(request);
-			System.out.println("получен поток с сервера");
-			return new GZIPInputStream(response.getEntity().getContent());
-		} catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static InputStream loadStreamByUrl(String sUrl)
-	{
-
-		try
-		{
-			HttpClient client = new DefaultHttpClient();
-			HttpGet request = new HttpGet();
-			request.setURI(new URI(sUrl));
-			request.setHeader("Accept-Language", "ru");
-			// HttpPost post = new HttpPost(PROXY_URL);
-			// List pairs = new ArrayList();
-			// pairs.add(new BasicNameValuePair("url", sUrl));
-			// post.setEntity(new UrlEncodedFormEntity(pairs));
-			// HttpResponse response = client.execute(post);
-
-			HttpResponse response = client.execute(request);
-			System.out.println("получен поток с сервера");
-
-			return response.getEntity().getContent();
-		} catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static String streamToString(InputStream is) throws IOException
-	{
-		String zippedSt = null;
-		if (is != null)
-		{
-			StringBuilder sb = new StringBuilder();
-			String line;
-
-			try
-			{
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(is));
-
-				while ((line = reader.readLine()) != null)
-				{
-					sb.append(line);
-				}
-
-				reader.close();
-			} finally
-			{
-				is.close();
-			}
-
-			zippedSt = sb.toString();
-			//
-			// try
-			// {
-			// byte[] unzippedBytes =C_FileHelper.decompress(zippedSt
-			// .getBytes());
-			// unzippedSt = new String(unzippedBytes);
-			// } catch (Exception e)
-			// {
-			// e.printStackTrace();
-			// }
-		}
-		return zippedSt;
-	}
 
 	public static JSONObject XML2JSON(String xml)
 	{
@@ -615,35 +507,6 @@ public class ProjectUtils
 			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	
-
-	public static Drawable loadPictureByUrl(String sUrl)
-	{
-
-		try
-		{
-			HttpClient client = new DefaultHttpClient();
-			HttpGet request = new HttpGet();
-			request.setURI(new URI(sUrl));
-			request.setHeader("Accept-Language", "ru");
-			HttpResponse response = client.execute(request);
-			return streamToDrawable(response.getEntity().getContent());
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	
-	private static Drawable streamToDrawable(InputStream is) throws IOException
-	{
-		Bitmap b = BitmapFactory.decodeStream(is);
-		b.setDensity(Bitmap.DENSITY_NONE);
-		Drawable d = new BitmapDrawable(b);
-		return d;
 	}
 
 }
