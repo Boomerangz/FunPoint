@@ -157,14 +157,7 @@ public class FSQConnector
 	}
 
 	
-	
-	private static Drawable streamToDrawable(InputStream is) throws IOException
-	{
-		Bitmap b = BitmapFactory.decodeStream(is);
-		b.setDensity(Bitmap.DENSITY_NONE);
-		Drawable d = new BitmapDrawable(b);
-		return d;
-	}
+
 
 
 	public static JSONObject getVenueInformation(String id)
@@ -189,25 +182,6 @@ public class FSQConnector
 	}
 
 	
-	
-	public static Drawable loadPictureByUrl(String sUrl)
-	{
-
-		try
-		{
-			HttpClient client = new DefaultHttpClient();
-			HttpGet request = new HttpGet();
-			request.setURI(new URI(sUrl));
-			request.setHeader("Accept-Language", "ru");
-			HttpResponse response = client.execute(request);
-			return streamToDrawable(response.getEntity().getContent());
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-	}
-
 	public static void checkIn(final String venueID)
 	{
 		Runnable task = new Runnable()
@@ -564,13 +538,13 @@ public class FSQConnector
 			{
 				if (big_or_small==UrlDrawable.BIG_URL&&urlDr.getBigDrawable()==null)
 				{
-					Drawable dr=loadPictureByUrl(urlDr.bigUrl);
+					Drawable dr=ProjectUtils.loadPictureByUrl(urlDr.bigUrl);
 					urlDr.setBigDrawable(dr);
 				}
 				else 
 					if (big_or_small==UrlDrawable.SMALL_URL&&urlDr.getSmallDrawable()==null)
 					{
-						urlDr.setSmallDrawable(loadPictureByUrl(urlDr.smallUrl));
+						urlDr.setSmallDrawable(ProjectUtils.loadPictureByUrl(urlDr.smallUrl));
 					}
 			}
 		};
@@ -606,6 +580,10 @@ public class FSQConnector
 		else
 			MainApplication.pwAggregator.addPriorityTask(preTask, postTask);
 	}
+	
+	
+	
+	
 
 	public static void loadBadgesPictureAsync(FSQBadge fsqBadge)
 	{

@@ -345,8 +345,6 @@ public class JamDbAdapter
 	{
 		Cursor left=db.rawQuery("select * from "+CINEMA_SECTIONPARENT_TABLE_NAME+" where place_id=309 and ticket_flag=1", null);
 		
-		
-		
 		String st="select cinemas.fsq_id, cinemas.title, events.event_id, events.title, secpar.date, secpar.day, sechild.time, secpar.ticket_flag,sechild.hash " +
 				  " from "+CINEMA_PLACES_TABLE_NAME+" as cinemas "+
 	              "inner join "+CINEMA_SECTIONPARENT_TABLE_NAME+" as secpar on cinemas.place_id=secpar.place_id "+

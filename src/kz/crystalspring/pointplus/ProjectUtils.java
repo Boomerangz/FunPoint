@@ -29,6 +29,10 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 public class ProjectUtils
 {
@@ -612,4 +616,34 @@ public class ProjectUtils
 		}
 		return null;
 	}
+	
+	
+
+	public static Drawable loadPictureByUrl(String sUrl)
+	{
+
+		try
+		{
+			HttpClient client = new DefaultHttpClient();
+			HttpGet request = new HttpGet();
+			request.setURI(new URI(sUrl));
+			request.setHeader("Accept-Language", "ru");
+			HttpResponse response = client.execute(request);
+			return streamToDrawable(response.getEntity().getContent());
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	private static Drawable streamToDrawable(InputStream is) throws IOException
+	{
+		Bitmap b = BitmapFactory.decodeStream(is);
+		b.setDensity(Bitmap.DENSITY_NONE);
+		Drawable d = new BitmapDrawable(b);
+		return d;
+	}
+
 }

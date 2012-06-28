@@ -1,30 +1,46 @@
 package kz.crystalspring.funpoint.venues;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 public class Event
 {
 	private static final String COLUMN_NAME="title";
 	private static final String COLUMN_DESC="description";
+	private static final String COLUMN_IMGURL="image";
 	
 	
 	
 	private String name;
 	private String description;
+	private String imageUrl;
+	private Drawable image;
 	
-	Event(String name, String description)
+	Event(String name, String description, String imageUrl)
 	{
 		setName(name);
 		setDescription(description);
+		setImageUrl(imageUrl);
 	}
 	
 	Event ()
 	{
 	}
 	
+	public String getImageUrl()
+	{
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl)
+	{
+		this.imageUrl = imageUrl;
+	}
+
 	Event (Cursor cursor) throws Exception
 	{
 		String[] columnNames=cursor.getColumnNames();
 		String nm=null;
 		String dsc=null;
+		String imgurl=null;
 		int i=0;
 		for (String columName:columnNames)
 		{
@@ -36,16 +52,21 @@ public class Event
 			{
 				dsc=cursor.getString(i);
 			}
+			if (columName.trim().toUpperCase().equals(COLUMN_IMGURL.toUpperCase().trim()))
+			{
+				imgurl=cursor.getString(i);
+			}
 			i++;
 		}
-		if (nm!=null&&dsc!=null)
+		if (nm!=null&&dsc!=null&&imgurl!=null)
 		{
 			setName(nm);
 			setDescription(dsc);
+			setImageUrl(imgurl);
 		}
 		else 
 		{
-			throw new Exception("Name or Description not found in cursor");
+			throw new Exception("Name or Description or Image URl not found in cursor");
 		}
 	}
 
@@ -67,6 +88,16 @@ public class Event
 	public void setDescription(String description)
 	{
 		this.description = description;
+	}
+
+	public Drawable getImage()
+	{
+		return image;
+	}
+
+	public void setImage(Drawable image)
+	{
+		this.image = image;
 	}
 	
 	

@@ -5,6 +5,7 @@ import net.londatiga.fsq.FoursquareApp.FsqAuthListener;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQTodo;
 import kz.crystalspring.funpoint.R;
+import kz.crystalspring.pointplus.ProjectUtils;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -66,7 +67,7 @@ public class ProfilePage extends Activity
 
 		ImageView iv = (ImageView) findViewById(R.id.imageView1);
 		if (FSQConnector.getBadgessLoaded())
-			iv.setImageDrawable(FSQConnector.loadPictureByUrl(FSQConnector
+			iv.setImageDrawable(ProjectUtils.loadPictureByUrl(FSQConnector
 					.getBadgesList().get(0).getPictureMiddleURL()));
 
 	}

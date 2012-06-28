@@ -1,7 +1,12 @@
 package kz.crystalspring.funpoint;
 
 import kz.crystalspring.funpoint.venues.Event;
+import kz.crystalspring.funpoint.venues.FSQConnector;
+import kz.crystalspring.funpoint.venues.OptionalInfo.UrlDrawable;
+import kz.crystalspring.pointplus.ProjectUtils;
+import kz.crystalspring.visualities.LoadingImageView;
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -10,6 +15,7 @@ public class funEventActivity extends Activity
 	Event event;
 	TextView eventNameText;
 	TextView eventDescriptionText;
+	LoadingImageView lImageView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -22,6 +28,7 @@ public class funEventActivity extends Activity
 		}
 		eventNameText=(TextView) findViewById(R.id.event_name);
 		eventDescriptionText=(TextView) findViewById(R.id.event_desc);
+		lImageView=(LoadingImageView) findViewById(R.id.loading_imageview);
 	}
 	
 	@Override
@@ -30,5 +37,33 @@ public class funEventActivity extends Activity
 		super.onResume();
 		eventNameText.setText(event.getName());
 		eventDescriptionText.setText(event.getDescription());
+		
+		if (event.getImage()!=null)
+		{
+			lImageView.setDrawable(event.getImage());
+		}
+		else
+		{
+			final Event e=event;
+			Runnable preTask=new Runnable()
+			{
+				@Override
+				public void run()
+				{
+						Drawable dr=ProjectUtils.loadPictureByUrl(e.getImageUrl());
+						e.setImage(dr);
+				}
+			};
+			Runnable postTask=new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					lImageView.setDrawable(e.getImage());	
+				}
+			};
+			
+			MainApplication.pwAggregator.addPriorityTask(preTask, postTask);
+		}
 	}
 }
