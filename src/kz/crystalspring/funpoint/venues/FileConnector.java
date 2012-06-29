@@ -183,4 +183,21 @@ public class FileConnector
 		}
 	}
 
+	public static JSONObject loadJSONEventById(
+			int id)
+	{
+		List params=new ArrayList();
+		params.add(new BasicNameValuePair("key", FSQConnector.CLIENT_SECRET));
+		params.add(new BasicNameValuePair("events_id", Integer.toString(id)));
+		String sResponse=HttpHelper.loadPostByUrl("http://192.168.1.50/jam/api_jam_event.php", params);
+		try
+		{
+			return new JSONObject(sResponse);
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }

@@ -9,6 +9,7 @@ import kz.crystalspring.visualities.LoadingImageView;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.widget.TextView;
 
 public class funEventActivity extends Activity
@@ -37,7 +38,7 @@ public class funEventActivity extends Activity
 	{
 		super.onResume();
 		eventNameText.setText(event.getName());
-		eventDescriptionText.setText(event.getDescription());
+		eventDescriptionText.setText(Html.fromHtml(event.getDescription()));
 		
 		if (event.getImage()!=null)
 		{

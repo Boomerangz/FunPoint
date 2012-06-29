@@ -1,4 +1,7 @@
 package kz.crystalspring.funpoint.venues;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 public class Event
@@ -13,9 +16,11 @@ public class Event
 	private String description;
 	private String imageUrl;
 	private Drawable image;
+	int id;
 	
-	Event(String name, String description, String imageUrl)
+	Event(int id,String name, String description, String imageUrl)
 	{
+		this.id=id;
 		setName(name);
 		setDescription(description);
 		setImageUrl(imageUrl);
@@ -70,6 +75,20 @@ public class Event
 		}
 	}
 
+	public Event(JSONObject jEvent)
+	{
+		try
+		{
+			id=jEvent.getInt("events_id");
+			setName(jEvent.getString("title"));
+			setDescription(jEvent.getString("description"));
+			setImageUrl("http://jam.kz/up_img/11-2_adb08c4.jpg");
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
 	public String getName()
 	{
 		return name;
@@ -98,6 +117,11 @@ public class Event
 	public void setImage(Drawable image)
 	{
 		this.image = image;
+	}
+
+	public int getId()
+	{
+		return id;
 	}
 	
 	

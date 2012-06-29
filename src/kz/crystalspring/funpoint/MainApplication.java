@@ -152,11 +152,11 @@ public class MainApplication extends Application
 
 	public static void loadAdditionalContent()
 	{
-//		if (FSQConnector.isFSQConnected())
-//		{
-//			MainApplication.loadUserActivity();
-//		}
-		loadJamContent();
+		if (FSQConnector.isFSQConnected())
+		{
+			MainApplication.loadUserActivity();
+		}
+		//loadJamContent();
 	}
 	
 	public static void loadUserActivity()

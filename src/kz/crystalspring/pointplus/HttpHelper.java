@@ -31,8 +31,11 @@ import android.net.Uri;
 
 public class HttpHelper
 {
-	private static final String PROXY_URL = "http://www.homeplus.kz/parser/4sq_gzip_curl.php";	
-	
+
+	private static final String GLOBAL_PROXY_URL = "http://www.homeplus.kz/parser/4sq_gzip_curl.php";	
+	private static final String LOCAL_PROXY="http://192.168.1.50/jam/4sq_gzip_curl.php";
+	private static final String CURRENT_PROXY = LOCAL_PROXY;
+	private static final boolean USE_PROXY=true;
 	
 	private static HttpResponse loadResponse(HttpUriRequest request)
 	{
@@ -67,7 +70,19 @@ public class HttpHelper
 	{
 		try
 		{
-			InputStream is=loadResponse(get).getEntity().getContent();
+			InputStream is;
+			if (USE_PROXY)
+			{	
+				HttpPost post=new HttpPost(CURRENT_PROXY);
+				post.setHeader("Accept-Language", "ru");
+				ArrayList<BasicNameValuePair> params=new ArrayList();
+				String url=get.getURI().toString();
+				params.add(new BasicNameValuePair("url",url));
+				post.setEntity(new UrlEncodedFormEntity(params));
+				is=new GZIPInputStream(loadResponse(post).getEntity().getContent());
+			}
+			else
+				is=loadResponse(get).getEntity().getContent();
 			return is;
 		} catch (Exception e)
 		{
