@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import com.boomerang.database.JamDbAdapter;
-
 import android.content.Context;
 import android.database.Cursor;
 

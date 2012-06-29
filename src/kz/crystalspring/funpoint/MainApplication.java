@@ -171,7 +171,6 @@ public class MainApplication extends Application
 	
 	public static void loadJamContent()
 	{
-		FileConnector.loadCinemaTimeTables();
 	}
 
 }

@@ -16,8 +16,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.boomerang.database.JamDbAdapter;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -120,51 +118,6 @@ public class FileConnector
 	}
 
 	
-	static JSONArray jCinemaCitys;
-	static JSONArray jCinemaEvents;
-	static JSONArray jCinemaPlaces;
-	static JSONArray jCinemaSection;
-	public static void loadCinemaTimeTables()
-	{
-		Runnable task=new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				String cinemaXML = HttpHelper.loadByUrl(JAM_CINEMA_URL);
-				System.out.println("ЗАГРУЗКА ЗАВЕРШЕНА");
-				//Toast.makeText(context, "ЗАГРУЗКА ЗАВЕРШЕНА", Toast.LENGTH_SHORT).show();
-				try
-				{
-					JSONObject jObject = ProjectUtils.XML2JSON(cinemaXML).getJSONObject("schedule");
-					jCinemaCitys   = jObject.getJSONArray("city");
-					jCinemaEvents  = jObject.getJSONArray("event");
-					jCinemaPlaces  = jObject.getJSONArray("place");
-					jCinemaSection = jObject.getJSONArray("section");
-					
-					AsyncTask task=new AsyncTask(){
-						@Override
-						protected Object doInBackground(Object... params)
-						{
-							JamDbAdapter dbAdapter=new JamDbAdapter(MainApplication.context);
-							dbAdapter.open();
-							dbAdapter.savePlacesToDB(jCinemaPlaces);
-							dbAdapter.saveEventsToDB(jCinemaEvents);
-							dbAdapter.saveSectionsToDB(jCinemaSection);
-							dbAdapter.close();
-							return null;
-						}
-					};
-					task.execute();
-					System.gc();
-				} catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-		};
-		MainApplication.pwAggregator.addTaskToQueue(task, null);
-	}
 	
 	
 	public static JSONObject loadCinemaInfo(String FsqId)
