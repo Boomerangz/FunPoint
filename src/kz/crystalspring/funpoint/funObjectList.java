@@ -9,7 +9,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Layout;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,9 +21,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 public class funObjectList extends Activity implements RefreshableMapList
@@ -28,7 +34,9 @@ public class funObjectList extends Activity implements RefreshableMapList
 	LinearLayout list;
 	List<MapItem> itemsList;
 	Button mapBtn;
-	
+	ImageView openSearchButton;
+	EditText searchEdit;
+	ObjectAdapter adapter;
 	
 	@Override 
 	public void onCreate(Bundle savedInstanceState)
@@ -37,12 +45,54 @@ public class funObjectList extends Activity implements RefreshableMapList
 		setContentView(R.layout.object_list);
 		list=(LinearLayout) findViewById(R.id.objects_list);
 		mapBtn=(Button) findViewById(R.id.mapBtn);
+		adapter=new ObjectAdapter(this);
 		mapBtn.setOnClickListener(new OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
 				MainMenu.goToObjectMap();
+			}
+		});
+		
+		searchEdit=(EditText) findViewById(R.id.search_edit);
+		searchEdit.addTextChangedListener(new TextWatcher()
+		{
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s)
+			{
+				filterByString(s.toString());
+			}
+		});
+		
+		openSearchButton=(ImageView)findViewById(R.id.search_btn);
+		openSearchButton.setOnClickListener(new OnClickListener()
+		{
+			boolean searchVisible=false;
+			@Override
+			public void onClick(View v)
+			{
+				searchVisible=!searchVisible;
+				if (searchVisible)
+					searchEdit.setVisibility(View.VISIBLE);
+				else 
+					searchEdit.setVisibility(View.GONE);
 			}
 		});
 	}
@@ -55,11 +105,18 @@ public class funObjectList extends Activity implements RefreshableMapList
 		refreshList();
 	}
 	
+	private void filterByString(String filter)
+	{
+		adapter.setStringFilter(filter);
+		refreshList();
+	}
+	
 
 	private void refreshList()
 	{
 		itemsList=MainApplication.mapItemContainer.getFilteredItemList();
-		ObjectAdapter adapter=new ObjectAdapter(this, itemsList);
+		adapter.setData(itemsList);
+		adapter.refreshState();
 		adapter.fillLayout(list);
 	}
 
@@ -72,21 +129,28 @@ public class funObjectList extends Activity implements RefreshableMapList
 
 class ObjectAdapter
 {
-	    private List<MapItem> data;
+	    private List<MapItem> data=new ArrayList();
 	    private Context context;
-
-	    public ObjectAdapter(Context context, List<MapItem> _data) 
+	    private String filterString="";
+	    
+	    private List<MapItem> filteredData;
+	    
+	    public ObjectAdapter(Context context) 
+	    {
+	    	this.context=context;
+	    }
+	    
+	    public void setData(List _data)
 	    {
 	    	data=_data;
-	    	this.context=context;
 	    }
 
 	    public int getCount() 
 	    {
-	        return data.size();
+	        return filteredData.size();
 	    }
 	    public Object getItem(int position) {
-	        return data.get(position);
+	        return filteredData.get(position);
 	    }
 
 	    public long getItemId(int position) 
@@ -96,7 +160,7 @@ class ObjectAdapter
 
 	    public View getView(int position) 
 	    {
-	    	return data.get(position).getView(null,position);
+	    	return filteredData.get(position).getView(null,position);
 	    }
 	    
 	    public void fillLayout(LinearLayout l)
@@ -115,6 +179,25 @@ class ObjectAdapter
 	    	{
 	    		l.addView(v);
 	    	}
+	    }
+	    
+	    public void setStringFilter(String s)
+	    {
+	    	filterString=s;
+	    	refreshState();
+	    }
+	    
+	    public void refreshState()
+	    {
+	    	filteredData=new ArrayList();
+	    	if (!filterString.trim().equals(""))
+	    	for (MapItem item:data)
+	    	{
+	    		if (item.toString().toUpperCase().contains(filterString.toUpperCase().trim()))
+	    		filteredData.add(item);
+	    	}
+	    	else
+	    		filteredData.addAll(data);
 	    }
 }
 

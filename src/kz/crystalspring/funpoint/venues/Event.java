@@ -82,7 +82,7 @@ public class Event
 			id=jEvent.getInt("events_id");
 			setName(jEvent.getString("title"));
 			setDescription(jEvent.getString("description"));
-			setImageUrl("http://jam.kz/up_img/11-2_adb08c4.jpg");
+			setImageUrl(jEvent.getString("img_url"));
 		} catch (JSONException e)
 		{
 			e.printStackTrace();

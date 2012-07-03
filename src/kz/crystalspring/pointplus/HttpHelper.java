@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import kz.crystalspring.android_client.C_FileHelper;
 import kz.crystalspring.funpoint.MainApplication;
+import kz.crystalspring.funpoint.venues.FSQConnector;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -32,14 +34,14 @@ import android.net.Uri;
 public class HttpHelper
 {
 
-	private static final String GLOBAL_PROXY_URL = "http://www.homeplus.kz/parser/4sq_gzip_curl.php";	
-	private static final String LOCAL_PROXY="http://192.168.1.50/jam/4sq_gzip_curl.php";
+	private static final String GLOBAL_PROXY_URL = "http://www.homeplus.kz/parser/4sq_gzip_curl.php";
+	private static final String LOCAL_PROXY = "http://192.168.1.50/jam/4sq_gzip_curl.php";
 	private static final String CURRENT_PROXY = LOCAL_PROXY;
-	private static final boolean USE_PROXY=true;
-	
+	private static final boolean USE_PROXY = true;
+	static HttpClient client = new DefaultHttpClient();
 	private static HttpResponse loadResponse(HttpUriRequest request)
 	{
-		HttpClient client= new DefaultHttpClient();
+		
 		try
 		{
 			return client.execute(request);
@@ -52,12 +54,12 @@ public class HttpHelper
 		}
 		return null;
 	}
-	
+
 	private static InputStream loadStream(HttpPost post)
 	{
 		try
 		{
-			InputStream is=loadResponse(post).getEntity().getContent();
+			InputStream is = loadResponse(post).getEntity().getContent();
 			return is;
 		} catch (Exception e)
 		{
@@ -65,24 +67,36 @@ public class HttpHelper
 			return null;
 		}
 	}
-	
+
 	private static InputStream loadStream(HttpGet get)
 	{
 		try
 		{
 			InputStream is;
 			if (USE_PROXY)
-			{	
-				HttpPost post=new HttpPost(CURRENT_PROXY);
+			{
+				HttpPost post = new HttpPost(CURRENT_PROXY);
 				post.setHeader("Accept-Language", "ru");
-				ArrayList<BasicNameValuePair> params=new ArrayList();
-				String url=get.getURI().toString();
-				params.add(new BasicNameValuePair("url",url));
+				ArrayList<BasicNameValuePair> params = new ArrayList();
+				String url = get.getURI().toString();
+				params.add(new BasicNameValuePair("url", url));
+				params.add(new BasicNameValuePair("key", FSQConnector.CLIENT_SECRET));
 				post.setEntity(new UrlEncodedFormEntity(params));
-				is=new GZIPInputStream(loadResponse(post).getEntity().getContent());
-			}
-			else
-				is=loadResponse(get).getEntity().getContent();
+				is= loadResponse(post).getEntity()
+						.getContent();
+				//byte[] bytes =ProjectUtils.getBytes(is);
+				//byte[] unzipped_bytes=C_FileHelper.decompress(bytes);
+				try
+				{ 
+					GZIPInputStream gzip = new GZIPInputStream(is);
+					is=gzip;
+				}
+				catch (IOException e) 
+				{
+					e.printStackTrace();
+				}
+			} else
+				is = loadResponse(get).getEntity().getContent();
 			return is;
 		} catch (Exception e)
 		{
@@ -90,7 +104,7 @@ public class HttpHelper
 			return null;
 		}
 	}
-	
+
 	public static String loadByUrl(String sUrl)
 	{
 		HttpGet request = new HttpGet();
@@ -98,7 +112,7 @@ public class HttpHelper
 		try
 		{
 			request.setURI(new URI(sUrl));
-			InputStream is=loadStream(request);
+			InputStream is = loadStream(request);
 			return streamToString(is);
 		} catch (Exception e)
 		{
@@ -106,15 +120,34 @@ public class HttpHelper
 			return null;
 		}
 	}
-	
-	public static String loadPostByUrl(String sUrl, List<BasicNameValuePair> parameters)
+
+	public static String loadPostByUrl(String sUrl,
+			List<BasicNameValuePair> parameters)
 	{
-		HttpPost post=new HttpPost(sUrl);
-		post.setHeader("Accept-Language", "ru");
+
+		String usedUrl = sUrl;
 		try
 		{
+			if (USE_PROXY)
+			{
+				parameters.add(new BasicNameValuePair("url", sUrl));
+				parameters.add(new BasicNameValuePair("key",
+						FSQConnector.CLIENT_SECRET));
+				usedUrl = CURRENT_PROXY;
+			}
+			HttpPost post = new HttpPost(usedUrl);
+			post.setHeader("Accept-Language", "ru");
 			post.setEntity(new UrlEncodedFormEntity(parameters));
-			InputStream is=loadStream(post);
+			InputStream is = loadStream(post);
+			try
+			{
+				GZIPInputStream gzip = new GZIPInputStream(is);
+				is=gzip;
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+			}
 			return streamToString(is);
 		} catch (Exception e)
 		{
@@ -122,7 +155,7 @@ public class HttpHelper
 			return null;
 		}
 	}
-	
+
 	public static Drawable loadPictureByUrl(String sUrl)
 	{
 
@@ -139,9 +172,7 @@ public class HttpHelper
 			return null;
 		}
 	}
-	
-	
-	
+
 	public static String streamToString(InputStream is) throws IOException
 	{
 		String zippedSt = null;
@@ -167,7 +198,7 @@ public class HttpHelper
 		}
 		return zippedSt;
 	}
-	
+
 	private static Drawable streamToDrawable(InputStream is) throws IOException
 	{
 		Bitmap b = BitmapFactory.decodeStream(is);

@@ -274,7 +274,7 @@ public abstract class MapItem
 				.findViewById(R.id.go_into_btn);
 		holder.background = (View) convertView.findViewById(R.id.list_block);
 
-		convertView.setMinimumHeight(60);
+		convertView.setMinimumHeight(80);
 		convertView.setTag(holder);
 		String st = Integer.toString(position) + ". " + toString();
 
@@ -285,7 +285,7 @@ public abstract class MapItem
 		else
 			st = "";
 		holder.shortDescription.setText(getShortCharacteristic());
-		holder.background.getBackground().setAlpha(MainApplication.ALPHA);
+		//holder.background.getBackground().setAlpha(MainApplication.ALPHA);
 		holder.range.setText(st);
 		
 		holder.background.setOnClickListener(new OnClickListener()

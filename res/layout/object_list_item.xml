@@ -2,62 +2,74 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <RelativeLayout
-        android:id="@+id/list_block"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginBottom="@dimen/margin"
         android:layout_marginLeft="@dimen/margin"
-        android:layout_marginRight="@dimen/margin"
-        android:background="@color/list_bg"
-        android:clickable="true" >
-
-        <ImageView
-            android:id="@+id/go_into_btn"
-            android:layout_width="51dp"
-            android:layout_height="50dp"
-            android:layout_alignParentRight="true"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="11dp"
-            android:src="@drawable/next" />
+        android:layout_marginRight="@dimen/margin" >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="51dp"
-            android:orientation="vertical" >
+            android:layout_weight="0.9"
+            android:background="#00AFEF" />
 
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Шоколадница"
-                android:textColor="@color/white"
-                android:textSize="17dp"
-                android:textStyle="bold" />
+        <RelativeLayout
+            android:id="@+id/list_block"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.05"
+            android:background="@color/list_bg"
+            android:clickable="true" >
 
-            <TextView
-                android:id="@+id/short_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="кофейня"
-                android:textColor="@color/white"
-                android:typeface="serif"
-                android:textStyle="italic" />
+            <ImageView
+                android:id="@+id/go_into_btn"
+                android:layout_width="51dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="11dp"
+                android:src="@drawable/next" />
 
-            <TextView
-                android:id="@+id/range"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="3000м"
-                android:gravity="right"
-                android:textColor="@color/white"
-                android:typeface="serif" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="51dp"
+                android:orientation="vertical" >
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Шоколадница"
+                    android:textColor="@color/black"
+                    android:textSize="19dp"
+                    android:textStyle="bold" />
 
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/short_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="кофейня"
+                    android:textColor="@color/black"
+                    android:textStyle="italic"
+                     android:textSize="15dp"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/range"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="3000м"
+                     android:textSize="14dp"
+                    android:textColor="@color/black"
+                    android:typeface="serif" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
