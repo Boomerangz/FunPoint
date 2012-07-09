@@ -225,6 +225,7 @@ class ObjectAdapter
 		
 		if (!filterString.trim().equals(""))
 		{
+			System.out.println("Фильтрация в списке объектов начата");
 			for (MapItem item : data)
 			{
 				String shortCharacteristic=item.getShortCharacteristic().toUpperCase();
@@ -238,6 +239,7 @@ class ObjectAdapter
 				myRunnable.setSearchString(filterString);
 				handler.postDelayed(myRunnable, 1000);
 			}
+			System.out.println("Фильтрация в списке объектов окончена");
 		} else
 			filteredData.addAll(data);
 	}

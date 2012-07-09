@@ -26,8 +26,8 @@ public class MapItemContainer
 	private Context context;
 	private GeoPoint point = null;
 	private MapItem selectedItem;
-	
-	private final String FILENAME="map_items"; 
+
+	private final String FILENAME = "map_items";
 
 	public MapItemContainer(Context applicationContext)
 	{
@@ -64,12 +64,19 @@ public class MapItemContainer
 
 	public synchronized List<MapItem> getFilteredItemList()
 	{
-		List<MapItem> filteredList = new ArrayList(0);//filterList(mapItemArray);
-		if (filteredList.size()==0)
+		List<MapItem> filteredList = filterList(mapItemArray);
+		if (filteredList.size() == 0)
 		{
-			filteredList=filterList(getMapItemListFromFile());
+			filteredList = filterList(getMapItemListFromFile());
+		}
+		else
+		{
+			itemListFromFile=null;
+			System.gc();
 		}
 		
+		
+
 		if (MainApplication.getCurrentLocation() != null)
 			Collections.sort(filteredList, comp);
 		return filteredList;
@@ -83,7 +90,6 @@ public class MapItemContainer
 				filteredList.add(item);
 		return filteredList;
 	}
-
 
 	public List<MapItem> getUnFilteredItemList()
 	{
@@ -124,69 +130,78 @@ public class MapItemContainer
 	{
 		for (MapItem item : items)
 			addItem(item);
-	//	saveItemListToFile();
+		// saveItemListToFile();
 	}
 
 	private void saveItemListToFile()
 	{
 		try
 		{
-			FileOutputStream fos= context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+			FileOutputStream fos = context.openFileOutput(FILENAME,
+					Context.MODE_PRIVATE);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(mapItemArray);
 			oos.close();
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 	}
-	
+
+	private List<MapItem> itemListFromFile = null;
 
 	private List<MapItem> getMapItemListFromFile()
 	{
-		List<MapItem> itemArray=null;
-		try
+		if (itemListFromFile != null)
+			return itemListFromFile;
+		else
 		{
-			FileInputStream fos= context.openFileInput(FILENAME);
-			ObjectInputStream ois= new ObjectInputStream(fos);
-			itemArray=(List<MapItem>) ois.readObject();
-			ois.close();
+			List<MapItem> itemArray = null;
+			try
+			{
+				FileInputStream fos = context.openFileInput(FILENAME);
+				ObjectInputStream ois = new ObjectInputStream(fos);
+				itemArray = (List<MapItem>) ois.readObject();
+				ois.close();
+			} catch (Exception e)
+			{
+				itemArray = new ArrayList(0);
+				e.printStackTrace();
+			}
+			itemListFromFile = itemArray;
+			return itemArray;
 		}
-		catch (Exception e)
-		{
-			itemArray=new ArrayList(0);
-			e.printStackTrace();
-		}
-		return itemArray;
 	}
-	
-	
+
 	public void loadCategory(String sCategoryId, int radius)
 	{
 		addItemsList(FSQConnector.loadItems(point, sCategoryId, radius));
 	}
-	
+
 	public void loadItemsByNameAsync(final String category, final String name)
 	{
-		Runnable task=new Runnable()
+		Runnable task = new Runnable()
 		{
-			
+
 			@Override
 			public void run()
 			{
 				try
 				{
-					addItemsList(FSQConnector.getByName(MainApplication.getCurrentLocation().getLatitudeE6()/1e6,MainApplication.getCurrentLocation().getLongitudeE6()/1e6,category, name));
+					addItemsList(FSQConnector.getByName(MainApplication
+							.getCurrentLocation().getLatitudeE6() / 1e6,
+							MainApplication.getCurrentLocation()
+									.getLongitudeE6() / 1e6, category, name));
+					saveItemListToFile();
 				} catch (Exception e)
 				{
 					e.printStackTrace();
 				}
 			}
 		};
-		Runnable postTask=new Runnable()
+		Runnable postTask = new Runnable()
 		{
-			
+
 			@Override
 			public void run()
 			{
@@ -244,7 +259,7 @@ public class MapItemContainer
 
 	public String getCategory()
 	{
-		if (visibleFilterMap.size()>0)
+		if (visibleFilterMap.size() > 0)
 			return visibleFilterMap.get(0);
 		return null;
 	}
