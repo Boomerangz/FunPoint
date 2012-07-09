@@ -55,6 +55,16 @@
                 android:layout_marginRight="@dimen/margin"
                 android:background="#000000" />
 
+            <EditText
+                android:id="@+id/search_edit"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/black_line"
+                android:layout_marginBottom="@dimen/margin"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:visibility="gone" />
+
             <ImageView
                 android:id="@+id/search_btn"
                 android:layout_width="@dimen/button_radius"
@@ -63,16 +73,16 @@
                 android:layout_alignParentRight="true"
                 android:padding="8dp"
                 android:src="@drawable/search" />
-        </RelativeLayout>
 
-        <EditText
-            android:id="@+id/search_edit"
-            android:visibility="gone"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin"
-            android:layout_marginLeft="@dimen/margin"
-            android:layout_marginRight="@dimen/margin" />
+            <ProgressBar
+                android:id="@+id/progressBar1"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/black_line"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp" />
+        </RelativeLayout>
 
         <ScrollView
             android:layout_width="fill_parent"
@@ -81,7 +91,7 @@
             <LinearLayout
                 android:id="@+id/objects_list"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical" >
             </LinearLayout>
         </ScrollView>

@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -105,7 +106,7 @@ public class HttpHelper
 		}
 	}
 
-	public static String loadByUrl(String sUrl)
+	public static synchronized String loadByUrl(String sUrl)
 	{
 		HttpGet request = new HttpGet();
 		request.setHeader("Accept-Language", "ru");
@@ -121,7 +122,7 @@ public class HttpHelper
 		}
 	}
 
-	public static String loadPostByUrl(String sUrl,
+	public static synchronized String loadPostByUrl(String sUrl,
 			List<BasicNameValuePair> parameters)
 	{
 
@@ -156,7 +157,7 @@ public class HttpHelper
 		}
 	}
 
-	public static Drawable loadPictureByUrl(String sUrl)
+	public static synchronized Drawable  loadPictureByUrl(String sUrl)
 	{
 
 		try

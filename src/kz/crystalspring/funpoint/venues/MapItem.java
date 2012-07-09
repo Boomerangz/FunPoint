@@ -1,5 +1,6 @@
 package kz.crystalspring.funpoint.venues;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public abstract class MapItem
+public abstract class MapItem implements Serializable
 {
 	String id;
 	float longitude;

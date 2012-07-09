@@ -78,7 +78,7 @@
                     android:src="@drawable/next" />
             </RelativeLayout>
 
-            <ViewFlipper
+            <kz.crystalspring.visualities.GabrielleViewFlipper
                 android:id="@+id/switcher"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -383,7 +383,7 @@
                     android:gravity="top"
                     android:orientation="vertical" >
                 </TableLayout>
-            </ViewFlipper>
+            </kz.crystalspring.visualities.GabrielleViewFlipper>
         </LinearLayout>
     </ScrollView>
 

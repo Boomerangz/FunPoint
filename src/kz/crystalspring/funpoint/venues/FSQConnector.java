@@ -97,6 +97,8 @@ public class FSQConnector
 		} else
 			return new ArrayList<MapItem>();
 	}
+	
+	
 
 	public static ArrayList<MapItem> getNearby(double latitude,
 			double longitude, String category, int radius) throws Exception
@@ -156,6 +158,70 @@ public class FSQConnector
 		System.out.println("Составлен список объектов на основе ответа от сервера");
 		return venueList;
 	}
+	
+	public static ArrayList<MapItem> getByName(double latitude,
+			double longitude,String category, String name) throws Exception
+	{
+		ArrayList<MapItem> venueList = new ArrayList<MapItem>();
+		try
+		{
+			String ll = String.valueOf(latitude) + ","
+					+ String.valueOf(longitude);
+			
+			String sUrl = API_URL + "/venues/search?ll=" + ll;
+
+			if (category != null)
+				sUrl += "&categoryId=" + category;
+			
+			if (name != null)
+				sUrl += "&query=" + URLEncoder.encode(name);
+
+			sUrl += "&client_id=" + CLIENT_ID + "&client_secret="
+					+ CLIENT_SECRET + API_VERSION;
+			System.out.println("на сервер отдан запрос на точки");
+			String response = HttpHelper.loadByUrl(sUrl);
+			System.out.println("получена строка с точками с сервера");
+			JSONObject jsonObj = new JSONObject(response);// (JSONObject) new
+															// JSONTokener(response).nextValue();
+
+			JSONArray items = (JSONArray) jsonObj.getJSONObject("response")
+					.getJSONArray("venues");
+
+			int length = items.length();
+
+			if (length > 0)
+			{
+				for (int i = 0; i < length; i++)
+				{
+					JSONObject item = (JSONObject) items.get(i);
+
+					FSQItem venue;
+					if (category.equals(MapItem.FSQ_TYPE_FOOD))
+						venue = new ItemFood();
+					else if (category.equals(MapItem.FSQ_TYPE_HOTEL))
+						venue = new ItemHotel();
+					else if (category.equals(MapItem.FSQ_TYPE_CINEMA))
+						venue = new ItemCinema();
+					else
+						venue = new FSQItem();
+					venue.loadFromJSON(item);
+					venue.setCategory(category);
+					if (venue != null)
+						venueList.add(venue);
+				}
+			}
+		} catch (Exception ex)
+		{
+			throw ex;
+		}
+		System.out.println("Составлен список объектов на основе ответа от сервера");
+		return venueList;
+	}
+	
+	
+	
+	
+
 
 	
 
@@ -172,6 +238,8 @@ public class FSQConnector
 		JSONObject jsonObj;
 		try
 		{
+			System.out.println("информация о ресторане");
+			System.out.println(response);
 			jsonObj = (JSONObject) new JSONObject(response);
 			return jsonObj.getJSONObject("response").getJSONObject("venue");
 		} catch (JSONException e)
@@ -182,6 +250,7 @@ public class FSQConnector
 
 	}
 
+	
 	
 	public static void checkIn(final String venueID)
 	{

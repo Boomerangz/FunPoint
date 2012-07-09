@@ -1,5 +1,10 @@
 package kz.crystalspring.funpoint.venues;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,6 +26,8 @@ public class MapItemContainer
 	private Context context;
 	private GeoPoint point = null;
 	private MapItem selectedItem;
+	
+	private final String FILENAME="map_items"; 
 
 	public MapItemContainer(Context applicationContext)
 	{
@@ -57,27 +64,26 @@ public class MapItemContainer
 
 	public synchronized List<MapItem> getFilteredItemList()
 	{
-		List<MapItem> filteredList = new ArrayList<MapItem>();
-		for (MapItem item : mapItemArray)
-			if (visibleFilterMap.contains(item.getObjTypeId()))
-				filteredList.add(item);
-
+		List<MapItem> filteredList = new ArrayList(0);//filterList(mapItemArray);
+		if (filteredList.size()==0)
+		{
+			filteredList=filterList(getMapItemListFromFile());
+		}
+		
 		if (MainApplication.getCurrentLocation() != null)
 			Collections.sort(filteredList, comp);
 		return filteredList;
 	}
-	
-	public synchronized List<MapItem> getFilteredItemList(String[] args)
+
+	private List<MapItem> filterList(List<MapItem> itemArray)
 	{
 		List<MapItem> filteredList = new ArrayList<MapItem>();
-		List visibleFilter=Arrays.asList(args);
-		for (MapItem item : mapItemArray)
-			if (visibleFilter.contains(item.getObjTypeId()))
+		for (MapItem item : itemArray)
+			if (visibleFilterMap.contains(item.getObjTypeId()))
 				filteredList.add(item);
-		if (MainApplication.getCurrentLocation() != null)
-			Collections.sort(filteredList, comp);
 		return filteredList;
 	}
+
 
 	public List<MapItem> getUnFilteredItemList()
 	{
@@ -118,11 +124,76 @@ public class MapItemContainer
 	{
 		for (MapItem item : items)
 			addItem(item);
+	//	saveItemListToFile();
 	}
 
+	private void saveItemListToFile()
+	{
+		try
+		{
+			FileOutputStream fos= context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(mapItemArray);
+			oos.close();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+
+	private List<MapItem> getMapItemListFromFile()
+	{
+		List<MapItem> itemArray=null;
+		try
+		{
+			FileInputStream fos= context.openFileInput(FILENAME);
+			ObjectInputStream ois= new ObjectInputStream(fos);
+			itemArray=(List<MapItem>) ois.readObject();
+			ois.close();
+		}
+		catch (Exception e)
+		{
+			itemArray=new ArrayList(0);
+			e.printStackTrace();
+		}
+		return itemArray;
+	}
+	
+	
 	public void loadCategory(String sCategoryId, int radius)
 	{
 		addItemsList(FSQConnector.loadItems(point, sCategoryId, radius));
+	}
+	
+	public void loadItemsByNameAsync(final String category, final String name)
+	{
+		Runnable task=new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				try
+				{
+					addItemsList(FSQConnector.getByName(MainApplication.getCurrentLocation().getLatitudeE6()/1e6,MainApplication.getCurrentLocation().getLongitudeE6()/1e6,category, name));
+				} catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+		};
+		Runnable postTask=new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				MainApplication.refreshMapItems();
+			}
+		};
+		MainApplication.pwAggregator.addPriorityTask(task, postTask);
 	}
 
 	public void loadNearBy(GeoPoint point, Runnable action)
@@ -147,6 +218,7 @@ public class MapItemContainer
 				else
 					loadCategory(st, FSQConnector.AREA_RADIUS);
 			}
+			saveItemListToFile();
 		}
 	}
 
@@ -168,6 +240,13 @@ public class MapItemContainer
 			}
 		}
 		return item;
+	}
+
+	public String getCategory()
+	{
+		if (visibleFilterMap.size()>0)
+			return visibleFilterMap.get(0);
+		return null;
 	}
 
 	// public void loadItem(String id)

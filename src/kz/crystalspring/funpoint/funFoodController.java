@@ -79,7 +79,6 @@ public class funFoodController extends ActivityController
 	@Override
 	protected void onCreate()
 	{
-		// TODO Auto-generated method stub
 		context.setContentView(R.layout.fun_food_detail);
 		titleTV = (TextView) context.findViewById(R.id.food_title);
 		addressTV = (TextView) context.findViewById(R.id.food_address);
