@@ -83,7 +83,6 @@ public class FSQConnector
 		{
 			try
 			{
-				
 				List<MapItem> list = getNearby(point.getLatitudeE6() / 1e6,
 						point.getLongitudeE6() / 1e6, category, radius);
 //				list.addAll(getNearby(point.getLatitudeE6() / 1e6,

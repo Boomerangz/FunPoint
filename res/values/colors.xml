@@ -10,4 +10,8 @@
 	<color name="selected_blue">#29abe2</color>
 	<color name="selected_button_text">#f7f7f7</color>
 	<color name="brown">#D2AE6D</color>
+	        <color name="restaurant">#C8489B</color>
+        <color name="cinema">#0073E0</color>
+        <color name="hotel">#F60</color>
+        <color name="shop">#96D102</color>
 </resources>

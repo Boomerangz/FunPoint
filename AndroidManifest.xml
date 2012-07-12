@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.boomerang.metromenu.MetromenuActivity"
+            android:name="com.boomerang.jam_menu.JamMenuActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>

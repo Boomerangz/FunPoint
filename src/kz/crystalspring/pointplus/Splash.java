@@ -1,5 +1,6 @@
 package kz.crystalspring.pointplus;
 
+import com.boomerang.jam_menu.JamMenuActivity;
 import com.boomerang.metromenu.MetromenuActivity;
 
 import kz.crystalspring.android_client.C_DBHelper;
@@ -15,84 +16,103 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
-public class Splash extends Activity {
-    public static Context context;
-    
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash);
-	    context= getApplicationContext();
-        
-        CheckForFirstStart();
-        
-        Thread t = new Thread(){
-        	@Override
-			public void run(){
-        		try {
+public class Splash extends Activity
+{
+	public static Context context;
+
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.splash);
+		context = getApplicationContext();
+
+		CheckForFirstStart();
+
+		Thread t = new Thread()
+		{
+			@Override
+			public void run()
+			{
+				try
+				{
 					sleep(1500);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+				} catch (InterruptedException e)
+				{
 					e.printStackTrace();
-				} finally{
-					Intent openMainPage = new Intent(Splash.this,MetromenuActivity.class);
+				} finally
+				{
+					Intent openMainPage = new Intent(Splash.this,
+							JamMenuActivity.class);
 					startActivity(openMainPage);
 				}
-        	}
-        };
-        t.start();
-    }
+			}
+		};
+		t.start();
+	}
 
 	static final String C_TAG = "CS_MainActivity";
 
-    /**
-     * �������� �� ������ ������  
-     * ���� ��� ������ ������, �� ������������ ����������� ������ �� Assets � Documents
-     * � �������� ���������� �� ���������� �� ������
-     */
-	private void CheckForFirstStart() {
-		C_Log.v(3, C_TAG, "CheckForFirstStart - start");		
+	/**
+	 * �������� �� ������ ������ ���� ��� ������ ������, �� ������������
+	 * ����������� ������ �� Assets � Documents � �������� ���������� ��
+	 * ���������� �� ������
+	 */
+	private void CheckForFirstStart()
+	{
+		C_Log.v(3, C_TAG, "CheckForFirstStart - start");
 		C_DBHelper dbHelper = new C_DBHelper(context);
 		SQLiteDatabase vDb = dbHelper.getWritableDatabase();
-		if (vDb == null) {
-			C_Log.v(0, C_TAG, "CheckForFirstStart getWritableDatabase is null! - end");
+		if (vDb == null)
+		{
+			C_Log.v(0, C_TAG,
+					"CheckForFirstStart getWritableDatabase is null! - end");
 			return;
 		}
-		try{
-			if (! dbHelper.GetVar(vDb, C_Vars.C_VAR_VERSION, "-").equals(C_Vars.C_VERSION)) {
+		try
+		{
+			if (!dbHelper.GetVar(vDb, C_Vars.C_VAR_VERSION, "-").equals(
+					C_Vars.C_VERSION))
+			{
 				C_Log.v(1, C_TAG, "CheckForFirstStart: first start");
 				C_FileHelper.CopyAssetFiles(context);
-//				C_FileHelper.UnzipAssetFiles(fContext, C_Vars.C_ZIP_ASSET_FILES);
+				// C_FileHelper.UnzipAssetFiles(fContext,
+				// C_Vars.C_ZIP_ASSET_FILES);
 				dbHelper.SetVar(vDb, C_Vars.C_VAR_VERSION, C_Vars.C_VERSION);
-				dbHelper.SetVar(vDb, C_Vars.C_VAR_SERVICE_STATE, "ON");				
-				dbHelper.AddOutDataRec(vDb, C_Vars.C_INFO_DEVICE, C_Utils.GetDeviceInfo().getBytes());
-				dbHelper.AddOutDataRec(vDb, C_Vars.C_INFO_VERSION, C_Vars.C_VERSION.getBytes());
-		   	}			
-//			dbHelper.AddOutDataRec(vDb, C_Vars.C_INFO_DEVICE_TYPE, "A".getBytes());
+				dbHelper.SetVar(vDb, C_Vars.C_VAR_SERVICE_STATE, "ON");
+				dbHelper.AddOutDataRec(vDb, C_Vars.C_INFO_DEVICE, C_Utils
+						.GetDeviceInfo().getBytes());
+				dbHelper.AddOutDataRec(vDb, C_Vars.C_INFO_VERSION,
+						C_Vars.C_VERSION.getBytes());
+			}
+			// dbHelper.AddOutDataRec(vDb, C_Vars.C_INFO_DEVICE_TYPE,
+			// "A".getBytes());
 			vDb.close();
-		} catch (Exception e) {
-    		C_Log.v(0, C_TAG, "CheckForFirstStart err:" + e.getMessage());
-    	}
-		finally {
+		} catch (Exception e)
+		{
+			C_Log.v(0, C_TAG, "CheckForFirstStart err:" + e.getMessage());
+		} finally
+		{
 			dbHelper.close();
 		}
-		
-//		if (vIsFirstStart) {
-//			// ������ �������������:
-//			����� ������ ��������� �������������, ������ ���� ����� �� �������� ������ ������
-//			CS_NetHelper.SyncData(fContext, true, false);
-//			Intent v = new Intent();		
-//			v.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -2);
-//			setResult(RESULT_OK, v);
-//		}
-	
+
+		// if (vIsFirstStart) {
+		// // ������ �������������:
+		// ����� ������ ��������� �������������, ������ ���� ����� �� ��������
+		// ������ ������
+		// CS_NetHelper.SyncData(fContext, true, false);
+		// Intent v = new Intent();
+		// v.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -2);
+		// setResult(RESULT_OK, v);
+		// }
+
 		C_Log.v(3, C_TAG, "CheckForFirstStart - end");
 	}
-    
 
 	@Override
-	protected void onPause() {
+	protected void onPause()
+	{
 		// TODO Auto-generated method stub
 		super.onPause();
 		finish();

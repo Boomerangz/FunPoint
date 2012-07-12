@@ -45,7 +45,7 @@ public class MapItemContainer
 		this.selectedItem = selectedItem;
 	}
 
-	Comparator comp = new Comparator<MapItem>()
+	Comparator<MapItem> comp = new Comparator<MapItem>()
 	{
 
 		@Override
@@ -74,9 +74,6 @@ public class MapItemContainer
 			itemListFromFile=null;
 			System.gc();
 		}
-		
-		
-
 		if (MainApplication.getCurrentLocation() != null)
 			Collections.sort(filteredList, comp);
 		return filteredList;
@@ -130,7 +127,6 @@ public class MapItemContainer
 	{
 		for (MapItem item : items)
 			addItem(item);
-		// saveItemListToFile();
 	}
 
 	private void saveItemListToFile()
@@ -157,7 +153,7 @@ public class MapItemContainer
 		else
 		{
 			List<MapItem> itemArray = null;
-			try
+			try 
 			{
 				FileInputStream fos = context.openFileInput(FILENAME);
 				ObjectInputStream ois = new ObjectInputStream(fos);
@@ -216,7 +212,6 @@ public class MapItemContainer
 		this.point = point;
 		RefreshItemsTask task = new RefreshItemsTask();
 		MainApplication.pwAggregator.addTaskToQueue(task, action);
-		// task.execute(action);
 	}
 
 	private class RefreshItemsTask implements Runnable
@@ -256,49 +251,10 @@ public class MapItemContainer
 		}
 		return item;
 	}
-
 	public String getCategory()
 	{
 		if (visibleFilterMap.size() > 0)
 			return visibleFilterMap.get(0);
 		return null;
 	}
-
-	// public void loadItem(String id)
-	// {
-	// // TODO Auto-generated method stub
-	//
-	// }
-	//
-
-	// private class SearchItemsTask extends AsyncTask<Runnable, Integer,
-	// Runnable>
-	// {
-	//
-	// @Override
-	// protected Runnable doInBackground(Runnable... params)
-	// {
-	//
-	// ArrayList<String> filterArray=new ArrayList();
-	// filterArray.addAll(Arrays.asList(MapItem.TYPES_ARRAY));
-	//
-	// for (String i:filterArray)
-	// {
-	// addItemsList(FSQConnector.loadItems(point,i));
-	// }
-	//
-	//
-	// if (params.length>0)
-	// return params[0];
-	// else
-	// return null;
-	// }
-	//
-	// @Override
-	// protected void onPostExecute(Runnable task)
-	// {
-	// task.run();
-	// }
-	// }
-
 }

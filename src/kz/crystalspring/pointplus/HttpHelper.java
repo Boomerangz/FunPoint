@@ -35,14 +35,15 @@ import android.net.Uri;
 public class HttpHelper
 {
 
-	private static final String GLOBAL_PROXY_URL = "http://www.homeplus.kz/parser/4sq_gzip_curl.php";
+	private static final String GLOBAL_PROXY = "http://www.homeplus.kz/jam/4sq_gzip_curl.php";
 	private static final String LOCAL_PROXY = "http://192.168.1.50/jam/4sq_gzip_curl.php";
-	private static final String CURRENT_PROXY = LOCAL_PROXY;
+	private static final String CURRENT_PROXY = GLOBAL_PROXY;
 	private static final boolean USE_PROXY = true;
 	static HttpClient client = new DefaultHttpClient();
+
 	private static HttpResponse loadResponse(HttpUriRequest request)
 	{
-		
+
 		try
 		{
 			return client.execute(request);
@@ -81,18 +82,15 @@ public class HttpHelper
 				ArrayList<BasicNameValuePair> params = new ArrayList();
 				String url = get.getURI().toString();
 				params.add(new BasicNameValuePair("url", url));
-				params.add(new BasicNameValuePair("key", FSQConnector.CLIENT_SECRET));
+				params.add(new BasicNameValuePair("key",
+						FSQConnector.CLIENT_SECRET));
 				post.setEntity(new UrlEncodedFormEntity(params));
-				is= loadResponse(post).getEntity()
-						.getContent();
-				//byte[] bytes =ProjectUtils.getBytes(is);
-				//byte[] unzipped_bytes=C_FileHelper.decompress(bytes);
+				is = loadResponse(post).getEntity().getContent();
 				try
-				{ 
+				{
 					GZIPInputStream gzip = new GZIPInputStream(is);
-					is=gzip;
-				}
-				catch (IOException e) 
+					is = gzip;
+				} catch (IOException e)
 				{
 					e.printStackTrace();
 				}
@@ -143,9 +141,8 @@ public class HttpHelper
 			try
 			{
 				GZIPInputStream gzip = new GZIPInputStream(is);
-				is=gzip;
-			}
-			catch (Exception e) 
+				is = gzip;
+			} catch (Exception e)
 			{
 				e.printStackTrace();
 			}
@@ -157,7 +154,7 @@ public class HttpHelper
 		}
 	}
 
-	public static synchronized Drawable  loadPictureByUrl(String sUrl)
+	public static synchronized Drawable loadPictureByUrl(String sUrl)
 	{
 
 		try

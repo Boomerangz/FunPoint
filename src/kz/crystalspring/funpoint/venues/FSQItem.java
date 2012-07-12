@@ -3,6 +3,7 @@ package kz.crystalspring.funpoint.venues;
 import java.util.ArrayList;
 import java.util.List;
 
+import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.OptionalInfo.UrlDrawable;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
 import kz.sbeyer.atmpoint1.types.ItemFood;
@@ -191,6 +192,14 @@ public class FSQItem extends MapItem
 	public UrlDrawable getUrlAndPhoto(int i)
 	{
 		return optInfo.getUrlAndPhoto(i);
+	}
+	
+	@Override
+	public int getItemColor()
+	{
+		if (getObjTypeId().equals(FSQ_TYPE_MARKET))
+			return context.getResources().getColor(R.color.shop);
+		return context.getResources().getColor(R.color.selected_blue);
 	}
 
 }

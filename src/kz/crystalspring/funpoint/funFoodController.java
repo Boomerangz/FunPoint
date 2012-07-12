@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -103,25 +104,29 @@ public class funFoodController extends ActivityController
 				R.id.phone_block };
 		setBlocksAlpha(MainApplication.ALPHA, arg);
 
-		if (MainApplication.FsqApp.hasAccessToken())
+		checkInBtn.setOnClickListener(new OnClickListener()
 		{
-			checkInBtn.setOnClickListener(new OnClickListener()
+			@Override
+			public void onClick(View v)
 			{
-				@Override
-				public void onClick(View v)
-				{
+				if (MainApplication.FsqApp.hasAccessToken())
 					checkInHere();
-				}
-			});
-			todoBtn.setOnClickListener(new OnClickListener()
+				else
+					showNeedLogin();
+
+			}
+		});
+		todoBtn.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
 			{
-				@Override
-				public void onClick(View v)
-				{
+				if (MainApplication.FsqApp.hasAccessToken())
 					checkToDo();
-				}
-			});
-		}
+				else
+					showNeedLogin();
+			}
+		});
 
 		mapInBtn.setOnClickListener(new OnClickListener()
 		{
@@ -179,14 +184,44 @@ public class funFoodController extends ActivityController
 				openAddCommentActivity();
 			}
 		});
-		
-		
+
+	}
+
+	protected void showNeedLogin()
+	{
+		final Dialog dialog = new Dialog(context);
+		dialog.setContentView(R.layout.need_to_login);
+		dialog.setTitle("This is my custom dialog box");
+		dialog.setCancelable(true);
+		// set up button
+		Button loginButton = (Button) dialog.findViewById(R.id.ok_button);
+		loginButton.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				Intent intent = new Intent(context, ProfilePage.class);
+				context.startActivity(intent);
+			}
+		});
+
+		Button cancelButton = (Button) dialog.findViewById(R.id.cancel_button);
+		cancelButton.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				dialog.cancel();
+			}
+		});
+		// now that the dialog is set up, it's time to show it
+		dialog.show();
 	}
 
 	@Override
 	protected void onResume()
 	{
-			showFood(itemFood);
+		showFood(itemFood);
 	}
 
 	private void onSwitch()
@@ -208,7 +243,7 @@ public class funFoodController extends ActivityController
 		}
 		collapseViews();
 	}
-	
+
 	private void collapseViews()
 	{
 		final int id = switcher.indexOfChild(switcher.getCurrentView());
@@ -324,11 +359,12 @@ public class funFoodController extends ActivityController
 
 		LinearLayout phoneLayout = (LinearLayout) context
 				.findViewById(R.id.phone_block);
+		phoneLayout.removeAllViews();
 		List<String> phones = food.getPhones();
 		for (String phone : phones)
 		{
 			final PhoneTextView phoneTV = new PhoneTextView(context);
-			phoneTV.setPhone(phone);
+			phoneTV.setPhone(ProjectUtils.formatPhone(phone));
 			phoneTV.setOnClickListener(new OnClickListener()
 			{
 				@Override
@@ -404,6 +440,7 @@ public class funFoodController extends ActivityController
 	{
 		FSQConnector.checkIn(itemFood.getId());
 		setStateChecked();
+		//MainApplication.socialConnector.shareCheckinOnTwitter(itemFood);
 	}
 
 	private void checkToDo()
@@ -430,12 +467,10 @@ public class funFoodController extends ActivityController
 		MainMenu.goToObjectMap();
 		context.finish();
 	}
-	
-	
+
 	private void openAddCommentActivity()
 	{
-		Intent intent = new Intent(context,
-				WriteCommentActivity.class);
+		Intent intent = new Intent(context, WriteCommentActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(intent);
 	}

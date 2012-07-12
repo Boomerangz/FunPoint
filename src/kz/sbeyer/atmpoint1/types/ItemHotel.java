@@ -1,5 +1,6 @@
 package kz.sbeyer.atmpoint1.types;
 
+import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.MapItem;
 
@@ -23,6 +24,13 @@ public class ItemHotel extends FSQItem
 	public String getIconName()
 	{
 		return HOTEL_IMG;
+	}
+	
+	
+	@Override
+	public int getItemColor()
+	{
+		return context.getResources().getColor(R.color.hotel);
 	}
 	
 }

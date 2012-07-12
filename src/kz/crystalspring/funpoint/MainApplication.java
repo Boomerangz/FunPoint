@@ -48,6 +48,7 @@ public class MainApplication extends Application
 	public static PendingWorkAggregator pwAggregator=new PendingWorkAggregator();
 	public static UrlDrawable selectedItemPhoto;
 	public static int selectedEventId=-1;
+	//public static SocialConnector socialConnector;
 	
 	
 	public static final int WIFI=0;
@@ -82,7 +83,10 @@ public class MainApplication extends Application
 				FSQConnector.CLIENT_SECRET);
 
 		updater = new LocationUpdater(this);
-
+		
+	//	socialConnector=new SocialConnector();
+		
+		
 		Runnable task = new Runnable()// ������ ��������, ������� ����
 										// ����������� ����� ���� ��� ����������
 										// ������� �������� �����.

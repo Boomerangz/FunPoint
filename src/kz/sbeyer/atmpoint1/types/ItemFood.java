@@ -3,6 +3,7 @@ package kz.sbeyer.atmpoint1.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.OptionalInfo;
@@ -86,7 +87,12 @@ public class ItemFood extends FSQItem
 			return super.getPhones();
 	}
 
-
+	
+	@Override
+	public int getItemColor()
+	{
+		return context.getResources().getColor(R.color.restaurant);
+	}
 }
 
 class FoodOptionalInformation
@@ -183,5 +189,6 @@ class FoodOptionalInformation
 		}
 		return foi;
 	}
+
 
 }

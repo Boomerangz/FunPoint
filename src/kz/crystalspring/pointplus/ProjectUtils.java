@@ -530,5 +530,17 @@ public class ProjectUtils
 	    }
 	    return buf;
 	  }
+	
+	
+	public static String formatPhone(String phone)
+	{
+		if (phone.length()==10)
+		{
+			phone="+7"+phone;
+		}
+		if (phone.substring(0,1).equals("7")|| phone.substring(0,1).equals("8"))
+		   phone="+7"+phone.substring(1);
+		return phone;
+	}
 
 }

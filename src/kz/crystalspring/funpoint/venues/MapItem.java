@@ -274,6 +274,7 @@ public abstract class MapItem implements Serializable
 		holder.goIntoButton = (ImageView) convertView
 				.findViewById(R.id.go_into_btn);
 		holder.background = (View) convertView.findViewById(R.id.list_block);
+		holder.itemColorView = (View) convertView.findViewById(R.id.item_color_view);
 
 		convertView.setMinimumHeight(80);
 		convertView.setTag(holder);
@@ -301,6 +302,9 @@ public abstract class MapItem implements Serializable
 				//Toast.makeText(context, Integer.toString(arg2), Toast.LENGTH_SHORT).show();
 			}
 		});
+		
+		holder.itemColorView.setBackgroundColor(getItemColor());
+		
 		return convertView;
 	}
 
@@ -311,7 +315,9 @@ public abstract class MapItem implements Serializable
 		public TextView range;
 		public ImageView goIntoButton;
 		public View background;
+		public View itemColorView;
 	}
 
 	public abstract String getShortCharacteristic();
+	public abstract int getItemColor();
 }

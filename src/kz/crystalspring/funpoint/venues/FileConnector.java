@@ -123,9 +123,9 @@ public class FileConnector
 	public static JSONObject loadCinemaInfo(String FsqId)
 	{
 		List params=new ArrayList();
-		//params.add(new BasicNameValuePair("key", FSQConnector.CLIENT_SECRET));
+		//params.add(new BasicNameValuePair("key", FSQConnector.ENT_SECRET));
 		params.add(new BasicNameValuePair("f_sq", FsqId));
-		String sCinemaInfo=HttpHelper.loadPostByUrl("http://192.168.1.50/jam/api_jam_cinema.php", params);
+		String sCinemaInfo=HttpHelper.loadPostByUrl("http://www.homeplus.kz/jam/api_jam_cinema.php", params);
 		try
 		{
 			return new JSONObject(sCinemaInfo);
@@ -142,7 +142,7 @@ public class FileConnector
 		List params=new ArrayList();
 		//params.add(new BasicNameValuePair("key", FSQConnector.CLIENT_SECRET));
 		params.add(new BasicNameValuePair("events_id", Integer.toString(id)));
-		String sResponse=HttpHelper.loadPostByUrl("http://192.168.1.50/jam/api_jam_event.php", params);
+		String sResponse=HttpHelper.loadPostByUrl("http://www.homeplus.kz/jam/api_jam_event.php", params);
 		try
 		{
 			return new JSONObject(sResponse);

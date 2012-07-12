@@ -1,6 +1,7 @@
 package kz.sbeyer.atmpoint1.types;
 
 import kz.crystalspring.funpoint.CinemaTimeTable;
+import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.FileConnector;
 
@@ -87,11 +88,6 @@ public class ItemCinema extends FSQItem
 		return CINEMA_IMG;
 	}
 
-	@Override
-	public String toString()
-	{
-		return getName() + "______" + getId();
-	}
 
 	// @Override
 	// public View getView1(View convertView, int position)
@@ -148,6 +144,12 @@ public class ItemCinema extends FSQItem
 		public ViewSwitcher switcher;
 		public Button okButton;
 		public Button cancelButton;
+	}
+	
+	@Override
+	public int getItemColor()
+	{
+		return context.getResources().getColor(R.color.cinema);
 	}
 
 }

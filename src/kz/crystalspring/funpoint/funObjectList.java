@@ -159,6 +159,9 @@ class ObjectAdapter
 	private canBeRefreshing refresher;
 
 	private List<MapItem> filteredData;
+	
+	private ArrayList<String>  usedSearches=new ArrayList();
+
 
 	public ObjectAdapter(Context context, canBeRefreshing refresher)
 	{
@@ -234,7 +237,7 @@ class ObjectAdapter
 				if (itemName.contains(filterString)||shortCharacteristic.contains(filterString))
 					filteredData.add(item);
 			}
-			if (filteredData.size() == 0)
+			if (filteredData.size() == 0 && !usedSearches.contains(filterString))
 			{
 				myRunnable.setSearchString(filterString);
 				handler.postDelayed(myRunnable, 1000);
@@ -263,7 +266,10 @@ class ObjectAdapter
 		{
 			refresher.startRefreshing();
 			if (searchString!=null)
+			{
 				MainApplication.mapItemContainer.loadItemsByNameAsync(MainApplication.mapItemContainer.getCategory(), searchString);
+				usedSearches.add(searchString);
+			}
 		}
 	}
 	
