@@ -252,7 +252,10 @@ public abstract class MapItem implements Serializable
 	@Override
 	public boolean equals(Object o)
 	{
-		return ((MapItem) o).id.equals(this.id);
+		if (o!=null&&MapItem.class.isInstance(o))
+			return ((MapItem) o).id.equals(this.id);
+		else
+			return false;
 	}
 
 	public void loadInfoFromFile()

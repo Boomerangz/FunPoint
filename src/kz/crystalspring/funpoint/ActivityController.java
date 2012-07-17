@@ -15,15 +15,16 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public abstract class ActivityController
 {
-	Activity context;
+	protected FragmentActivity context;
 
-	ActivityController(Activity _context)
+	protected ActivityController(FragmentActivity _context)
 	{
 		context = _context;
 	}

@@ -12,6 +12,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,7 +40,7 @@ public class funCinemaController extends ActivityController
 	ItemCinema cinema;
 	Activity activitycontext;
 
-	funCinemaController(Activity context)
+	funCinemaController(FragmentActivity context)
 	{
 		super(context);
 		activitycontext=context;

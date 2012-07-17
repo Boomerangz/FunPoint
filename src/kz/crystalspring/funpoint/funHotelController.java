@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -40,7 +41,7 @@ public class funHotelController extends ActivityController implements ViewFactor
 	Button btn;
 	
 
-	funHotelController(Activity context)
+	funHotelController(FragmentActivity context)
 	{
 		super(context);
 
