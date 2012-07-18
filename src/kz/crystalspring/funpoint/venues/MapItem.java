@@ -42,13 +42,10 @@ public abstract class MapItem implements Serializable, ListItem
 	public static final int TYPE_MARKET = 5;
 
 	public static final String FSQ_TYPE_CINEMA = "4bf58dd8d48988d17f941735";
-	public static final String FSQ_TYPE_CLUB =   "4bf58dd8d48988d11f941735";
-	public static final String FSQ_TYPE_HOTEL =  FSQ_TYPE_CLUB;//"4bf58dd8d48988d1fa931735";
-	public static final String FSQ_TYPE_FOOD =   "4d4b7105d754a06374d81259";// "4bf58dd8d48988d145941735";"4d4b7105d754a06374d81259;
+	public static final String FSQ_TYPE_CLUB = "4bf58dd8d48988d11f941735";
+	public static final String FSQ_TYPE_HOTEL = FSQ_TYPE_CLUB;// "4bf58dd8d48988d1fa931735";
+	public static final String FSQ_TYPE_FOOD = "4d4b7105d754a06374d81259";// "4bf58dd8d48988d145941735";"4d4b7105d754a06374d81259;
 	public static final String FSQ_TYPE_MARKET = "4d4b7105d754a06378d81259";
-
-	
-	
 
 	public static final String[] TYPES_ARRAY = { FSQ_TYPE_CINEMA,
 			FSQ_TYPE_HOTEL, FSQ_TYPE_FOOD, FSQ_TYPE_MARKET };
@@ -252,7 +249,7 @@ public abstract class MapItem implements Serializable, ListItem
 	@Override
 	public boolean equals(Object o)
 	{
-		if (o!=null&&MapItem.class.isInstance(o))
+		if (o != null && MapItem.class.isInstance(o))
 			return ((MapItem) o).id.equals(this.id);
 		else
 			return false;
@@ -262,55 +259,62 @@ public abstract class MapItem implements Serializable, ListItem
 	{
 
 	}
-	
-	
-    @Override
+
+	View v = null;
+
+	@Override
 	public View getView(View convertView, int position)
 	{
-		convertView = null;
-		ViewHolder holder;
-		LayoutInflater mInflater = LayoutInflater.from(context);
-		convertView = mInflater.inflate(R.layout.object_list_item, null);
-		holder = new ViewHolder();
-		holder.name = (TextView) convertView.findViewById(R.id.name);
-		holder.range = (TextView) convertView.findViewById(R.id.range);
-		holder.shortDescription = (TextView) convertView
-				.findViewById(R.id.short_description);
-		holder.goIntoButton = (ImageView) convertView
-				.findViewById(R.id.go_into_btn);
-		holder.background = (View) convertView.findViewById(R.id.list_block);
-		holder.itemColorView = (View) convertView.findViewById(R.id.item_color_view);
-
-		convertView.setMinimumHeight(80);
-		convertView.setTag(holder);
-		String st = Integer.toString(position) + ". " + toString();
-
-		holder.name.setText(st);
-		if (MainApplication.getCurrentLocation() != null)
-			st = Integer.toString(Math.round(distanceTo(MainApplication
-					.getCurrentLocation()))) + " м";
-		else
-			st = "";
-		holder.shortDescription.setText(getShortCharacteristic());
-		//holder.background.getBackground().setAlpha(MainApplication.ALPHA);
-		holder.range.setText(st);
-		
-		holder.background.setOnClickListener(new OnClickListener()
+		if (v == null)
 		{
-			@Override
-			public void onClick(View v)
+			convertView = null;
+			ViewHolder holder;
+			LayoutInflater mInflater = LayoutInflater.from(context);
+			convertView = mInflater.inflate(R.layout.object_list_item, null);
+			holder = new ViewHolder();
+			holder.name = (TextView) convertView.findViewById(R.id.name);
+			holder.range = (TextView) convertView.findViewById(R.id.range);
+			holder.shortDescription = (TextView) convertView
+					.findViewById(R.id.short_description);
+			holder.goIntoButton = (ImageView) convertView
+					.findViewById(R.id.go_into_btn);
+			holder.background = (View) convertView
+					.findViewById(R.id.list_block);
+			holder.itemColorView = (View) convertView
+					.findViewById(R.id.item_color_view);
+
+			convertView.setMinimumHeight(80);
+			convertView.setTag(holder);
+			String st = Integer.toString(position) + ". " + toString();
+
+			holder.name.setText(st);
+			if (MainApplication.getCurrentLocation() != null)
+				st = Integer.toString(Math.round(distanceTo(MainApplication
+						.getCurrentLocation()))) + " м";
+			else
+				st = "";
+			holder.shortDescription.setText(getShortCharacteristic());
+			// holder.background.getBackground().setAlpha(MainApplication.ALPHA);
+			holder.range.setText(st);
+
+			holder.background.setOnClickListener(new OnClickListener()
 			{
-				MainApplication.mapItemContainer.setSelectedItem(MapItem.this);
-				Intent intent=new Intent(context,funObjectDetail.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				context.startActivity(intent);
-				//Toast.makeText(context, Integer.toString(arg2), Toast.LENGTH_SHORT).show();
-			}
-		});
-		
-		holder.itemColorView.setBackgroundColor(getItemColor());
-		
-		return convertView;
+				@Override
+				public void onClick(View v)
+				{
+					MainApplication.mapItemContainer
+							.setSelectedItem(MapItem.this);
+					Intent intent = new Intent(context, funObjectDetail.class);
+					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivity(intent);
+				}
+			});
+
+			holder.itemColorView.setBackgroundColor(getItemColor());
+			v = convertView;
+			return convertView;
+		} else
+			return v;
 	}
 
 	public static class ViewHolder
@@ -324,5 +328,6 @@ public abstract class MapItem implements Serializable, ListItem
 	}
 
 	public abstract String getShortCharacteristic();
+
 	public abstract int getItemColor();
 }

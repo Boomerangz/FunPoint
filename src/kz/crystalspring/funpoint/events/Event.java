@@ -167,9 +167,7 @@ public class Event implements ListItem
 		String st = Integer.toString(position) + ". " + getName();
 
 		holder.name.setText(st);
-		holder.shortDescription.setText(getName());
-		//holder.background.getBackground().setAlpha(MainApplication.ALPHA);
-		
+		holder.shortDescription.setText(getShortCharacteristic());
 		holder.background.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -179,7 +177,6 @@ public class Event implements ListItem
 				Intent intent=new Intent(context,funEventActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivity(intent);
-				//Toast.makeText(context, Integer.toString(arg2), Toast.LENGTH_SHORT).show();
 			}
 		});
 		

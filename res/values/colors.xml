@@ -14,4 +14,5 @@
         <color name="cinema">#0073E0</color>
         <color name="hotel">#F60</color>
         <color name="shop">#96D102</color>
+        <drawable name="transperent_color">#00000000</drawable> 
 </resources>

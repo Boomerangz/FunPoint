@@ -63,7 +63,7 @@ public class EventContainer
 			try
 			{
 				JSONObject jEvent=cinemaJSONArray.getJSONObject(i);
-				Event event=new Event(jEvent);
+				FilmEvent event=new FilmEvent(jEvent);
 				addEventToList(event);
 			} 
 			catch (JSONException e)

@@ -124,7 +124,7 @@ public class FileConnector
 	
 	public static JSONObject loadCinemaInfo(String FsqId)
 	{
-		List params=new ArrayList();
+		List<BasicNameValuePair> params=new ArrayList();
 		//params.add(new BasicNameValuePair("key", FSQConnector.ENT_SECRET));
 		params.add(new BasicNameValuePair("f_sq", FsqId));
 		String sCinemaInfo=HttpHelper.loadPostByUrl(JAM_CINEMA_URL, params);
@@ -141,7 +141,7 @@ public class FileConnector
 	public static JSONObject loadJSONEventById(
 			int id)
 	{
-		List params=new ArrayList();
+		List<BasicNameValuePair> params=new ArrayList();
 		//params.add(new BasicNameValuePair("key", FSQConnector.CLIENT_SECRET));
 		params.add(new BasicNameValuePair("events_id", Integer.toString(id)));
 		String sResponse=HttpHelper.loadPostByUrl(JAM_EVENT_URL, params);

@@ -20,18 +20,21 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 
 public class funObjectList extends FragmentActivity implements
 		RefreshableMapList, canBeRefreshing
 {
-	LinearLayout objectListView;
-	LinearLayout eventListView;
+	ListView objectListView;
+	ListView eventListView;
 	
 	List<MapItem> itemsList;
 	List<Event> eventsList;
@@ -121,14 +124,16 @@ public class funObjectList extends FragmentActivity implements
 					searchEdit.setVisibility(View.GONE);
 			}
 		});
-	}
-
-	@Override
-	public void onResume()
-	{
-		super.onResume();
 		MainApplication.refreshable = this;
 		refreshList();
+	}
+
+	
+	@Override
+	public void onBackPressed()
+	{
+	//	super.onPause();
+		finish();
 	}
 
 	private void filterByString(String filter)
@@ -145,11 +150,11 @@ public class funObjectList extends FragmentActivity implements
 		
 		objectAdapter.setData(itemsList);
 		objectAdapter.refreshState();
-		objectAdapter.fillLayout(objectListView);
+		objectListView.setAdapter(objectAdapter);
 		
 		eventAdapter.setData(eventsList);
 		eventAdapter.refreshState();
-		eventAdapter.fillLayout(eventListView);
+		eventListView.setAdapter(eventAdapter);
 		
 		System.gc();
 	}
@@ -158,31 +163,27 @@ public class funObjectList extends FragmentActivity implements
 	{
 		List<ViewFragment> viewList = new ArrayList();
 		
-		objectListView = new LinearLayout(getBaseContext());
+		objectListView = new ListView(getBaseContext());
+		objectListView.setDivider(getResources().getDrawable(R.drawable.transperent_color));
+		objectListView.setDividerHeight(0);
+		objectListView.setCacheColorHint(0);
+		
+		
 		objectListView.setLayoutParams(new ScrollView.LayoutParams(
 				ScrollView.LayoutParams.FILL_PARENT,
 				ScrollView.LayoutParams.WRAP_CONTENT));
-		objectListView.setOrientation(LinearLayout.VERTICAL);
 
-		ScrollView scrlView = new ScrollView(getBaseContext());
-		scrlView.setLayoutParams(new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.FILL_PARENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT));
-		scrlView.addView(objectListView);
-		viewList.add(new ViewFragment(scrlView, "Места"));
+		viewList.add(new ViewFragment(objectListView, "Места"));
 		
-		eventListView = new LinearLayout(getBaseContext());
+		eventListView = new ListView(getBaseContext());
 		eventListView.setLayoutParams(new ScrollView.LayoutParams(
 				ScrollView.LayoutParams.FILL_PARENT,
 				ScrollView.LayoutParams.WRAP_CONTENT));
-		eventListView.setOrientation(LinearLayout.VERTICAL);
+		eventListView.setDivider(getResources().getDrawable(R.drawable.transperent_color));
+		eventListView.setDividerHeight(0);
+		eventListView.setCacheColorHint(0);
 
-		scrlView = new ScrollView(getBaseContext());
-		scrlView.setLayoutParams(new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.FILL_PARENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT));
-		scrlView.addView(eventListView);
-		viewList.add(new ViewFragment(scrlView, "События"));
+		viewList.add(new ViewFragment(eventListView, "События"));
 
 		return viewList;
 	}
@@ -204,9 +205,10 @@ public class funObjectList extends FragmentActivity implements
 	{
 		pgBar.setVisibility(View.GONE);
 	}
+	
 }
 
-class ObjectAdapter
+class ObjectAdapter extends BaseAdapter
 {
 	private Handler handler;
 
@@ -249,6 +251,12 @@ class ObjectAdapter
 	public View getView(int position)
 	{
 		return filteredData.get(position).getView(null, position);
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent)
+	{
+			return getView(position);
 	}
 
 	public void fillLayout(LinearLayout l)
@@ -332,6 +340,7 @@ class ObjectAdapter
 			}
 		}
 	}
+	
 }
 
 interface canBeRefreshing

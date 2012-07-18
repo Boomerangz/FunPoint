@@ -537,6 +537,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int transf_c_7=0x7f0200a8;
         public static final int transf_c_8=0x7f0200a9;
         public static final int transf_c_9=0x7f0200aa;
+        public static final int transperent_color=0x7f0200be;
         public static final int tw_c=0x7f0200ab;
         public static final int vk_c=0x7f0200ac;
         public static final int vpi__tab_indicator=0x7f0200ad;
