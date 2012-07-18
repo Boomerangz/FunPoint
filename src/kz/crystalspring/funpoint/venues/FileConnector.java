@@ -116,16 +116,11 @@ public class FileConnector
 			e.printStackTrace();
 			return null;
 		}
-
 	}
-
-	
-	
 	
 	public static JSONObject loadCinemaInfo(String FsqId)
 	{
 		List<BasicNameValuePair> params=new ArrayList();
-		//params.add(new BasicNameValuePair("key", FSQConnector.ENT_SECRET));
 		params.add(new BasicNameValuePair("f_sq", FsqId));
 		String sCinemaInfo=HttpHelper.loadPostByUrl(JAM_CINEMA_URL, params);
 		try
@@ -138,11 +133,9 @@ public class FileConnector
 		}
 	}
 
-	public static JSONObject loadJSONEventById(
-			int id)
+	public static JSONObject loadJSONEventById(int id)
 	{
 		List<BasicNameValuePair> params=new ArrayList();
-		//params.add(new BasicNameValuePair("key", FSQConnector.CLIENT_SECRET));
 		params.add(new BasicNameValuePair("events_id", Integer.toString(id)));
 		String sResponse=HttpHelper.loadPostByUrl(JAM_EVENT_URL, params);
 		try
@@ -158,8 +151,6 @@ public class FileConnector
 	
 	public static JSONArray loadJSONCinemaEventsList()
 	{
-		//String sResponse="[{\"events_id\":\"11548\",\"title\":\"\u041a\u043e\u0440\u043e\u043b\u0435\u0432\u0441\u0442\u0432\u043e \u043f\u043e\u043b\u043d\u043e\u0439 \u043b\u0443\u043d\u044b\",\"img_url\":\"https://help.github.com/assets/logo-help-5c4aed4e1bef20c4f6b907d1d880f9b5.png\",\"description\":\"\"}]";
-		
 		List<BasicNameValuePair> params=new ArrayList();
 		params.add(new BasicNameValuePair("rubr_id", "4"));
 		String sResponse=HttpHelper.loadPostByUrl(JAM_EVENTS_LIST_URL, params);
