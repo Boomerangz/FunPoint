@@ -41,7 +41,7 @@ public class WriteCommentActivity extends Activity
 	{
 		EditText edit=(EditText) findViewById(R.id.comment_text);
 		String comment=edit.getText().toString();
-		String venueID=MainApplication.mapItemContainer.getSelectedItem().getId();
+		String venueID=MainApplication.mapItemContainer.getSelectedMapItem().getId();
 		FSQConnector.addToTips(venueID, comment);
 	}
 	

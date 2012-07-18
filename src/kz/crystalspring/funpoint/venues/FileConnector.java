@@ -23,9 +23,9 @@ import android.widget.Toast;
 public class FileConnector
 {
 	private static final String FOOD_FILE = "json_rest_1_ru_fsq_zip";
-	private static final String CINEMA_FILE = "";
 
-	private static final String JAM_CINEMA_URL = "http://www.jamaica.jam.kz/jam_export.php?psw=2009ura";
+	private static final String JAM_CINEMA_URL = "http://www.homeplus.kz/jam/api_jam_cinema.php";
+	private static final String JAM_EVENT_URL = "http://www.homeplus.kz/jam/api_jam_event.php";
 
 	private static Context context;
 
@@ -125,7 +125,7 @@ public class FileConnector
 		List params=new ArrayList();
 		//params.add(new BasicNameValuePair("key", FSQConnector.ENT_SECRET));
 		params.add(new BasicNameValuePair("f_sq", FsqId));
-		String sCinemaInfo=HttpHelper.loadPostByUrl("http://www.homeplus.kz/jam/api_jam_cinema.php", params);
+		String sCinemaInfo=HttpHelper.loadPostByUrl(JAM_CINEMA_URL, params);
 		try
 		{
 			return new JSONObject(sCinemaInfo);
@@ -142,10 +142,25 @@ public class FileConnector
 		List params=new ArrayList();
 		//params.add(new BasicNameValuePair("key", FSQConnector.CLIENT_SECRET));
 		params.add(new BasicNameValuePair("events_id", Integer.toString(id)));
-		String sResponse=HttpHelper.loadPostByUrl("http://www.homeplus.kz/jam/api_jam_event.php", params);
+		String sResponse=HttpHelper.loadPostByUrl(JAM_EVENT_URL, params);
 		try
 		{
 			return new JSONObject(sResponse);
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	public static JSONArray loadJSONCinemaEventsList()
+	{
+		String sResponse="[{\"events_id\":\"11548\",\"title\":\"\u041a\u043e\u0440\u043e\u043b\u0435\u0432\u0441\u0442\u0432\u043e \u043f\u043e\u043b\u043d\u043e\u0439 \u043b\u0443\u043d\u044b\",\"img_url\":\"https://help.github.com/assets/logo-help-5c4aed4e1bef20c4f6b907d1d880f9b5.png\",\"description\":\"\"}]";
+		//HttpHelper.loadByUrl(sUrl);
+		try
+		{
+			return new JSONArray(sResponse);
 		} catch (JSONException e)
 		{
 			e.printStackTrace();

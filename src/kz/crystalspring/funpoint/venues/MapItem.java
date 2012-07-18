@@ -29,7 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public abstract class MapItem implements Serializable
+public abstract class MapItem implements Serializable, ListItem
 {
 	String id;
 	float longitude;
@@ -262,7 +262,9 @@ public abstract class MapItem implements Serializable
 	{
 
 	}
-
+	
+	
+    @Override
 	public View getView(View convertView, int position)
 	{
 		convertView = null;

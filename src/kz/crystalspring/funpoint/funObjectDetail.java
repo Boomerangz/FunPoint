@@ -37,7 +37,7 @@ public class funObjectDetail extends FragmentActivity
 	private void setcontroller()
 	{
 		MapItem selectedItem = MainApplication.mapItemContainer
-				.getSelectedItem();
+				.getSelectedMapItem();
 		String objType = ((FSQItem) MainApplication.mapItemContainer
 				.getSelectedItem()).getCategory();
 		if (objType.equals(MapItem.FSQ_TYPE_HOTEL))

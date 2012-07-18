@@ -10,8 +10,8 @@ import net.londatiga.fsq.FoursquareApp;
 import com.boomerang.pending.PendingWorkAggregator;
 import com.google.android.maps.GeoPoint;
 
+import kz.crystalspring.funpoint.events.EventContainer;
 import kz.crystalspring.funpoint.funMap.CustomMyLocationOverlay;
-import kz.crystalspring.funpoint.venues.EventContainer;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQTodo;
 import kz.crystalspring.funpoint.venues.FileConnector;
@@ -160,6 +160,7 @@ public class MainApplication extends Application
 		{
 			MainApplication.loadUserActivity();
 		}
+		eventContainer.loadEventList();
 		//loadJamContent();
 	}
 	

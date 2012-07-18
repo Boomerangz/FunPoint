@@ -186,6 +186,7 @@ public class JamMenuActivity extends Activity
 				openHelpdesk();
 			}
 		});
+		MainApplication.loadAdditionalContent();
 	}
 
 	@Override
@@ -195,7 +196,7 @@ public class JamMenuActivity extends Activity
 		continueUpdating = true;
 		mHandler.removeCallbacks(mUpdateTimeTask);
 		mHandler.postDelayed(mUpdateTimeTask, UPDATE_DELAY);
-		MainApplication.loadAdditionalContent();
+
 	}
 
 	private void beginUpdating()

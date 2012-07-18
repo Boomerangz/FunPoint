@@ -1,8 +1,12 @@
-package kz.crystalspring.funpoint.venues;
+package kz.crystalspring.funpoint.events;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import kz.crystalspring.funpoint.venues.FileConnector;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -50,4 +54,43 @@ public class EventContainer
 //		}
 //		jamDb.close();
 	}
+	
+	public void loadEventList()
+	{
+		JSONArray cinemaJSONArray=FileConnector.loadJSONCinemaEventsList();
+		for (int i=0;i<cinemaJSONArray.length();i++)
+		{
+			try
+			{
+				JSONObject jEvent=cinemaJSONArray.getJSONObject(i);
+				Event event=new Event(jEvent);
+				addEventToList(event);
+			} 
+			catch (JSONException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void addEventToList(Event event)
+	{
+		if (!eventsList.contains(event))
+		{
+			eventsList.add(event);
+		}
+	}
+
+	public List<Event> getFilteredEventsList()
+	{
+		return getUnFilteredEventsList();
+	}
+	
+	public List<Event> getUnFilteredEventsList()
+	{
+		return eventsList;
+	}
+	
+	
+	
 }

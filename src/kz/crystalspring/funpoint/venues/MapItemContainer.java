@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import kz.crystalspring.funpoint.MainApplication;
+import kz.crystalspring.funpoint.events.Event;
 
 import com.google.android.maps.GeoPoint;
 
@@ -25,7 +26,7 @@ public class MapItemContainer
 
 	private Context context;
 	private GeoPoint point = null;
-	private MapItem selectedItem;
+	private Object selectedItem;
 
 	private final String FILENAME = "map_items";
 
@@ -35,12 +36,28 @@ public class MapItemContainer
 		MapItem.context = context;
 	}
 
-	public MapItem getSelectedItem()
+	public Object getSelectedItem()
 	{
 		return selectedItem;
 	}
+	
+	public MapItem getSelectedMapItem()
+	{
+		if (MapItem.class.isInstance(selectedItem))
+			return (MapItem)selectedItem;
+		else
+			return null;
+	}
+	
+	public Event getSelectedEventItem()
+	{
+		if (Event.class.isInstance(selectedItem))
+			return (Event)selectedItem;
+		else
+			return null;
+	}
 
-	public void setSelectedItem(MapItem selectedItem)
+	public void setSelectedItem(Object selectedItem)
 	{
 		this.selectedItem = selectedItem;
 	}

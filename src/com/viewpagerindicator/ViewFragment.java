@@ -32,6 +32,12 @@ public class ViewFragment extends Fragment
 	{
 		super.onCreate(savedInstanceState);
 	}
+	
+	@Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        setUserVisibleHint(true);
+    }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

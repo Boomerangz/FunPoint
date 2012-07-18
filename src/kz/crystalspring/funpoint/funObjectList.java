@@ -3,44 +3,48 @@ package kz.crystalspring.funpoint;
 import java.util.ArrayList;
 import java.util.List;
 
-import kz.crystalspring.funpoint.venues.FSQConnector;
+import com.viewpagerindicator.TabPageIndicator;
+import com.viewpagerindicator.ViewFragment;
+import com.viewpagerindicator.ViewFragmentAdapter;
+
+import kz.crystalspring.funpoint.events.Event;
+import kz.crystalspring.funpoint.venues.ListItem;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.R;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.sax.StartElementListener;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
+import android.widget.ScrollView;
 
-public class funObjectList extends Activity implements RefreshableMapList, canBeRefreshing
+public class funObjectList extends FragmentActivity implements
+		RefreshableMapList, canBeRefreshing
 {
-	LinearLayout list;
+	LinearLayout objectListView;
+	LinearLayout eventListView;
+	
 	List<MapItem> itemsList;
+	List<Event> eventsList;
+	ObjectAdapter objectAdapter;
+	ObjectAdapter eventAdapter;
+	
+	ViewPager viewPager;
+	TabPageIndicator tabIndicator;
+
 	Button mapBtn;
 	ImageView openSearchButton;
 	EditText searchEdit;
-	ObjectAdapter adapter;
+
 	ProgressBar pgBar;
 
 	@Override
@@ -48,11 +52,24 @@ public class funObjectList extends Activity implements RefreshableMapList, canBe
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.object_list);
-		list = (LinearLayout) findViewById(R.id.objects_list);
+
+		viewPager = (ViewPager) findViewById(R.id.pager);
+		tabIndicator = (TabPageIndicator) findViewById(R.id.indicator);
 		mapBtn = (Button) findViewById(R.id.mapBtn);
 		pgBar = (ProgressBar) findViewById(R.id.progressBar1);
+
 		
-		adapter = new ObjectAdapter(this,this);
+		List<ViewFragment> viewList = fillObjectAndEventLists(); 
+		ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
+				getSupportFragmentManager(), viewList);
+		viewPager.setAdapter(pagerAdapter);
+		viewPager.setCurrentItem(0);
+
+		tabIndicator.setViewPager(viewPager);
+
+		objectAdapter = new ObjectAdapter(this, this);
+		eventAdapter = new ObjectAdapter(this, this);
+		
 		mapBtn.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -116,7 +133,7 @@ public class funObjectList extends Activity implements RefreshableMapList, canBe
 
 	private void filterByString(String filter)
 	{
-		adapter.setStringFilter(filter);
+		objectAdapter.setStringFilter(filter);
 		refreshList();
 	}
 
@@ -124,9 +141,48 @@ public class funObjectList extends Activity implements RefreshableMapList, canBe
 	{
 		stopRefreshing();
 		itemsList = MainApplication.mapItemContainer.getFilteredItemList();
-		adapter.setData(itemsList);
-		adapter.refreshState();
-		adapter.fillLayout(list);
+		eventsList = MainApplication.eventContainer.getFilteredEventsList();
+		
+		objectAdapter.setData(itemsList);
+		objectAdapter.refreshState();
+		objectAdapter.fillLayout(objectListView);
+		
+		eventAdapter.setData(eventsList);
+		eventAdapter.refreshState();
+		eventAdapter.fillLayout(eventListView);
+	}
+
+	private List<ViewFragment> fillObjectAndEventLists()
+	{
+		List<ViewFragment> viewList = new ArrayList();
+		
+		objectListView = new LinearLayout(getBaseContext());
+		objectListView.setLayoutParams(new ScrollView.LayoutParams(
+				ScrollView.LayoutParams.FILL_PARENT,
+				ScrollView.LayoutParams.WRAP_CONTENT));
+		objectListView.setOrientation(LinearLayout.VERTICAL);
+
+		ScrollView scrlView = new ScrollView(getBaseContext());
+		scrlView.setLayoutParams(new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.FILL_PARENT,
+				LinearLayout.LayoutParams.WRAP_CONTENT));
+		scrlView.addView(objectListView);
+		viewList.add(new ViewFragment(scrlView, "Места"));
+		
+		eventListView = new LinearLayout(getBaseContext());
+		eventListView.setLayoutParams(new ScrollView.LayoutParams(
+				ScrollView.LayoutParams.FILL_PARENT,
+				ScrollView.LayoutParams.WRAP_CONTENT));
+		eventListView.setOrientation(LinearLayout.VERTICAL);
+
+		scrlView = new ScrollView(getBaseContext());
+		scrlView.setLayoutParams(new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.FILL_PARENT,
+				LinearLayout.LayoutParams.WRAP_CONTENT));
+		scrlView.addView(eventListView);
+		viewList.add(new ViewFragment(scrlView, "События"));
+
+		return viewList;
 	}
 
 	@Override
@@ -150,24 +206,22 @@ public class funObjectList extends Activity implements RefreshableMapList, canBe
 
 class ObjectAdapter
 {
-	
 	private Handler handler;
-	
-	private List<MapItem> data = new ArrayList();
+
+	private List<ListItem> data = new ArrayList();
 	private Context context;
 	private String filterString = "";
 	private canBeRefreshing refresher;
 
-	private List<MapItem> filteredData;
-	
-	private ArrayList<String>  usedSearches=new ArrayList();
+	private List<ListItem> filteredData;
 
+	private ArrayList<String> usedSearches = new ArrayList();
 
 	public ObjectAdapter(Context context, canBeRefreshing refresher)
 	{
 		this.context = context;
 		this.handler = new Handler();
-		this.refresher=refresher;
+		this.refresher = refresher;
 	}
 
 	public void setData(List _data)
@@ -197,7 +251,6 @@ class ObjectAdapter
 
 	public void fillLayout(LinearLayout l)
 	{
-
 		ArrayList<View> viewList = new ArrayList<View>(getCount());
 		for (int i = 0; i < getCount(); i++)
 		{
@@ -223,21 +276,22 @@ class ObjectAdapter
 	{
 		handler.removeCallbacks(myRunnable);
 		filteredData = new ArrayList();
-		
 
-		
 		if (!filterString.trim().equals(""))
 		{
 			System.out.println("Фильтрация в списке объектов начата");
-			for (MapItem item : data)
+			for (ListItem item : data)
 			{
-				String shortCharacteristic=item.getShortCharacteristic().toUpperCase();
-				String itemName=item.toString().toUpperCase();
-				
-				if (itemName.contains(filterString)||shortCharacteristic.contains(filterString))
+				String shortCharacteristic = item.getShortCharacteristic()
+						.toUpperCase();
+				String itemName = item.toString().toUpperCase();
+
+				if (itemName.contains(filterString)
+						|| shortCharacteristic.contains(filterString))
 					filteredData.add(item);
 			}
-			if (filteredData.size() == 0 && !usedSearches.contains(filterString))
+			if (filteredData.size() == 0
+					&& !usedSearches.contains(filterString))
 			{
 				myRunnable.setSearchString(filterString);
 				handler.postDelayed(myRunnable, 1000);
@@ -246,39 +300,41 @@ class ObjectAdapter
 		} else
 			filteredData.addAll(data);
 	}
-	
-	SearchRunnable myRunnable=new SearchRunnable();
-	
-	
+
+	SearchRunnable myRunnable = new SearchRunnable();
+
 	class SearchRunnable implements Runnable
 	{
-		private String searchString=null;
+		private String searchString = null;
+
 		public String getSearchString()
 		{
 			return searchString;
 		}
+
 		public void setSearchString(String searchString)
 		{
 			this.searchString = searchString;
 		}
+
 		@Override
 		public void run()
 		{
 			refresher.startRefreshing();
-			if (searchString!=null)
+			if (searchString != null)
 			{
-				MainApplication.mapItemContainer.loadItemsByNameAsync(MainApplication.mapItemContainer.getCategory(), searchString);
+				MainApplication.mapItemContainer.loadItemsByNameAsync(
+						MainApplication.mapItemContainer.getCategory(),
+						searchString);
 				usedSearches.add(searchString);
 			}
 		}
 	}
-	
-	
 }
-
 
 interface canBeRefreshing
 {
 	public void startRefreshing();
+
 	public void stopRefreshing();
 }

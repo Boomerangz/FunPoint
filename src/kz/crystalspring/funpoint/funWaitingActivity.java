@@ -19,30 +19,7 @@ public class funWaitingActivity extends Activity implements RefreshableMapList
 		{
 			refreshMapItems();
 		}
-		
-//		AsyncTask task=new AsyncTask<Object, Object,Boolean>()
-//				{
-//
-//					@Override
-//					protected Boolean doInBackground(Object... params)
-//					{
-//						return ; 
-//					}
-//					
-//					@Override 
-//					protected void onPostExecute(Boolean result)
-//					{
-//						if (result)
-//						{
-//							refreshMapItems();
-//						}
-//					}
-//					
-//				};
-//		task.execute();		
 	}
-	
-	
 
 	@Override
 	public void refreshMapItems()
