@@ -11,6 +11,7 @@ import kz.crystalspring.pointplus.HttpHelper;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
 
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +27,8 @@ public class FileConnector
 
 	private static final String JAM_CINEMA_URL = "http://www.homeplus.kz/jam/api_jam_cinema.php";
 	private static final String JAM_EVENT_URL = "http://www.homeplus.kz/jam/api_jam_event.php";
-
+	private static final String JAM_EVENTS_LIST_URL = "http://www.homeplus.kz/jam/api_jam_event_all.php";
+	
 	private static Context context;
 
 	public FileConnector(Context context)
@@ -156,8 +158,11 @@ public class FileConnector
 	
 	public static JSONArray loadJSONCinemaEventsList()
 	{
-		String sResponse="[{\"events_id\":\"11548\",\"title\":\"\u041a\u043e\u0440\u043e\u043b\u0435\u0432\u0441\u0442\u0432\u043e \u043f\u043e\u043b\u043d\u043e\u0439 \u043b\u0443\u043d\u044b\",\"img_url\":\"https://help.github.com/assets/logo-help-5c4aed4e1bef20c4f6b907d1d880f9b5.png\",\"description\":\"\"}]";
-		//HttpHelper.loadByUrl(sUrl);
+		//String sResponse="[{\"events_id\":\"11548\",\"title\":\"\u041a\u043e\u0440\u043e\u043b\u0435\u0432\u0441\u0442\u0432\u043e \u043f\u043e\u043b\u043d\u043e\u0439 \u043b\u0443\u043d\u044b\",\"img_url\":\"https://help.github.com/assets/logo-help-5c4aed4e1bef20c4f6b907d1d880f9b5.png\",\"description\":\"\"}]";
+		
+		List<BasicNameValuePair> params=new ArrayList();
+		params.add(new BasicNameValuePair("rubr_id", "4"));
+		String sResponse=HttpHelper.loadPostByUrl(JAM_EVENTS_LIST_URL, params);
 		try
 		{
 			return new JSONArray(sResponse);

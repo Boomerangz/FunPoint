@@ -150,6 +150,8 @@ public class funObjectList extends FragmentActivity implements
 		eventAdapter.setData(eventsList);
 		eventAdapter.refreshState();
 		eventAdapter.fillLayout(eventListView);
+		
+		System.gc();
 	}
 
 	private List<ViewFragment> fillObjectAndEventLists()

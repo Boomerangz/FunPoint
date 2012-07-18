@@ -199,11 +199,6 @@ public class JamMenuActivity extends Activity
 
 	}
 
-	private void beginUpdating()
-	{
-
-	}
-
 	private void updateNext()
 	{
 		if (continueUpdating)
