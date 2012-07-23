@@ -133,7 +133,7 @@ class CinemaTimeTableAdapter extends BaseAdapter
 		convertView.setTag(holder);
 		String st = Integer.toString(position) + ". " + toString();
 
-		holder.text.setText(table.getTimeLines().get(position).filmName+" "+table.getTimeLines().get(position).getStrDate());
+		holder.text.setText(table.getTimeLines().get(position).getTitle()+" "+table.getTimeLines().get(position).getStrDate());
 		holder.text.setOnClickListener(new OnClickListener()
 		{
 			@Override

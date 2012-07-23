@@ -28,6 +28,7 @@ public class FileConnector
 	private static final String JAM_CINEMA_URL = "http://www.homeplus.kz/jam/api_jam_cinema.php";
 	private static final String JAM_EVENT_URL = "http://www.homeplus.kz/jam/api_jam_event.php";
 	private static final String JAM_EVENTS_LIST_URL = "http://www.homeplus.kz/jam/api_jam_event_all.php";
+	private static final String JAM_PLACES_LIST_URL = "http://www.homeplus.kz/jam/api_jam_cinema_all.php";
 	
 	private static Context context;
 
@@ -133,10 +134,10 @@ public class FileConnector
 		}
 	}
 
-	public static JSONObject loadJSONEventById(int id)
+	public static JSONObject loadJSONEventById(String id)
 	{
 		List<BasicNameValuePair> params=new ArrayList();
-		params.add(new BasicNameValuePair("events_id", Integer.toString(id)));
+		params.add(new BasicNameValuePair("events_id", id));
 		String sResponse=HttpHelper.loadPostByUrl(JAM_EVENT_URL, params);
 		try
 		{
@@ -157,6 +158,26 @@ public class FileConnector
 		try
 		{
 			return new JSONArray(sResponse);
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static JSONArray loadJSONPlaceList(String event_id)
+	{
+		List<BasicNameValuePair> params=new ArrayList();
+		params.add(new BasicNameValuePair("events_id", event_id));
+		
+		String sResponse=HttpHelper.loadPostByUrl(JAM_PLACES_LIST_URL, params);
+		
+	    //sResponse="{\"events_id\":\"10937\",\"title\":\"\u041f\u0440\u043e\u043c\u0435\u0442\u0435\u0439\",\"places\":[{\"fsq_id\":\"4ee9f98229c220d20e69e8f4\",\"name\":\"\u0418\u0441\u043a\u0440\u0430\",\"ts\":\"2012-06-25 09-40-00\"},{\"fsq_id\":\"4bd2e47b41b9ef3b4bd4fee5\",\"name\":\"Silk Way City\",\"ts\":\"2012-06-24 22-25-00\"},{\"fsq_id\":\"4dea39f2e4cdc079f47d37ca\",\"name\":\"Kinopark 8\",\"ts\":\"2012-06-24 22-10-00\"},{\"fsq_id\":\"4dea39f2e4cdc079f47d37ca\",\"name\":\"Kinopark 8\",\"ts\":\"2012-06-24 22-10-00\"},{\"fsq_id\":\"4dea39f2e4cdc079f47d37ca\",\"name\":\"Kinopark 8\",\"ts\":\"2012-06-24 22-10-00\"},{\"fsq_id\":\"4dea39f2e4cdc079f47d37ca\",\"name\":\"Kinopark 8\",\"ts\":\"2012-06-24 22-10-00\"},{\"fsq_id\":\"4dea39f2e4cdc079f47d37ca\",\"name\":\"Kinopark 8\",\"ts\":\"2012-06-24 22-10-00\"},{\"fsq_id\":\"4dea39f2e4cdc079f47d37ca\",\"name\":\"Kinopark 8\",\"ts\":\"2012-06-24 22-10-00\"},{\"fsq_id\":\"4dea39f2e4cdc079f47d37ca\",\"name\":\"Kinopark 8\",\"ts\":\"2012-06-24 22-10-00\"},{\"fsq_id\":\"4dea39f2e4cdc079f47d37ca\",\"name\":\"Kinopark 8\",\"ts\":\"2012-06-24 22-10-00\"},{\"fsq_id\":\"4dea39f2e4cdc079f47d37ca\",\"name\":\"Kinopark 8\",\"ts\":\"2012-06-24 22-10-00\"},{\"fsq_id\":\"4dea39f2e4cdc079f47d37ca\",\"name\":\"Kinopark 8\",\"ts\":\"2012-06-24 22-10-00\"},{\"fsq_id\":\"4dea39f2e4cdc079f47d37ca\",\"name\":\"Kinopark 8\",\"ts\":\"2012-06-24 22-10-00\"},{\"fsq_id\":\"4dea39f2e4cdc079f47d37ca\",\"name\":\"Kinopark 8\",\"ts\":\"2012-06-24 22-10-00\"},{\"fsq_id\":\"50051c06e4b0fb593261df3b\",\"name\":\"\u041f\u0440\u043e\u043c\u0435\u043d\u0430\u0434 (\u0423)\",\"ts\":\"2012-06-25 11-00-00\"},{\"fsq_id\":\"50052341e4b03a9a758a7d92\",\"name\":\"Kinopark 5\",\"ts\":\"2012-06-25 11-20-00\"},{\"fsq_id\":\"4d55fa2a9e508cfa0e71079b\",\"name\":\"Kinopark 7\",\"ts\":\"2012-06-24 22-20-00\"},{\"fsq_id\":\"4d55fa2a9e508cfa0e71079b\",\"name\":\"Kinopark 7\",\"ts\":\"2012-06-24 22-20-00\"},{\"fsq_id\":\"4d55fa2a9e508cfa0e71079b\",\"name\":\"Kinopark 7\",\"ts\":\"2012-06-24 22-20-00\"},{\"fsq_id\":\"4d55fa2a9e508cfa0e71079b\",\"name\":\"Kinopark 7\",\"ts\":\"2012-06-24 22-20-00\"},{\"fsq_id\":\"4d55fa2a9e508cfa0e71079b\",\"name\":\"Kinopark 7\",\"ts\":\"2012-06-24 22-20-00\"},{\"fsq_id\":\"4d55fa2a9e508cfa0e71079b\",\"name\":\"Kinopark 7\",\"ts\":\"2012-06-24 22-20-00\"},{\"fsq_id\":\"4d55fa2a9e508cfa0e71079b\",\"name\":\"Kinopark 7\",\"ts\":\"2012-06-24 22-20-00\"},{\"fsq_id\":\"4d55fa2a9e508cfa0e71079b\",\"name\":\"Kinopark 7\",\"ts\":\"2012-06-24 22-20-00\"},{\"fsq_id\":\"4d55fa2a9e508cfa0e71079b\",\"name\":\"Kinopark 7\",\"ts\":\"2012-06-24 22-20-00\"},{\"fsq_id\":\"4d55fa2a9e508cfa0e71079b\",\"name\":\"Kinopark 7\",\"ts\":\"2012-06-24 22-20-00\"},{\"fsq_id\":\"4d55fa2a9e508cfa0e71079b\",\"name\":\"Kinopark 7\",\"ts\":\"2012-06-25 11-20-00\"},{\"fsq_id\":\"4d55fa2a9e508cfa0e71079b\",\"name\":\"Kinopark 7\",\"ts\":\"2012-06-24 22-20-00\"},{\"fsq_id\":\"4d55fa2a9e508cfa0e71079b\",\"name\":\"Kinopark 7\",\"ts\":\"2012-06-24 22-20-00\"},{\"fsq_id\":\"4ccd62d054f0b1f74a5b1cca\",\"name\":\"KinoPark 6 \u0421\u043f\u0443\u0442\u043d\u0438\u043a\",\"ts\":\"2012-06-25 10-30-00\"},{\"fsq_id\":null,\"name\":\"Kinopark 7 \u0410\u043a\u0442\u043e\u0431\u0435\",\"ts\":\"2012-06-24 22-10-00\"},{\"fsq_id\":null,\"name\":\"Kinopark 7 \u0410\u043a\u0442\u043e\u0431\u0435\",\"ts\":\"2012-06-25 10-20-00\"},{\"fsq_id\":\"4da1af6fd686b60c62b0a928\",\"name\":\"Star Cinema (\u0425\u0430\u043d \u0428\u0430\u0442\u044b\u0440)\",\"ts\":\"2012-06-25 08-50-00\"},{\"fsq_id\":\"4de398fbfa7651589f19c030\",\"name\":\"KinoPlexx\",\"ts\":\"2012-06-25 11-20-00\"},{\"fsq_id\":\"4f487f46e4b0db1b351c85e5\",\"name\":\"Chaplin ADK\",\"ts\":\"2012-06-25 11-05-00\"},{\"fsq_id\":\"4f487f46e4b0db1b351c85e5\",\"name\":\"Chaplin ADK\",\"ts\":\"2012-06-25 08-30-00\"}]}";
+		
+		try
+		{
+			JSONObject jResponse=new JSONObject(sResponse);
+			return jResponse.getJSONArray("places");
 		} catch (JSONException e)
 		{
 			e.printStackTrace();

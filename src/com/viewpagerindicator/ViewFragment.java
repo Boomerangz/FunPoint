@@ -43,20 +43,6 @@ public class ViewFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
-		// return view;
-//		TextView text = new TextView(getActivity());
-//		text.setGravity(Gravity.CENTER);
-//		text.setText("12312313");
-//		text.setTextSize(20 * getResources().getDisplayMetrics().density);
-//		text.setPadding(20, 20, 20, 20);
-//		text.setTextColor(getResources().getColor(R.color.blue));
-//
-//		LinearLayout layout = new LinearLayout(getActivity());
-//		layout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-//				LayoutParams.FILL_PARENT));
-//		layout.setGravity(Gravity.CENTER);
-//		layout.addView(text);
-
 		try
 		{
 			ViewGroup parent = (ViewGroup) view.getParent();

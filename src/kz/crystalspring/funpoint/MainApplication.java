@@ -47,7 +47,7 @@ public class MainApplication extends Application
 	public static FoursquareApp FsqApp;
 	public static PendingWorkAggregator pwAggregator=new PendingWorkAggregator();
 	public static UrlDrawable selectedItemPhoto;
-	public static int selectedEventId=-1;
+	public static String selectedEventId=null;
 	//public static SocialConnector socialConnector;
 	
 	

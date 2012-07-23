@@ -1,8 +1,10 @@
 package kz.crystalspring.funpoint.events;
+import kz.crystalspring.funpoint.CinemaTimeTable;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.funEventActivity;
 import kz.crystalspring.funpoint.funObjectDetail;
+import kz.crystalspring.funpoint.venues.FileConnector;
 import kz.crystalspring.funpoint.venues.ListItem;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItem.ViewHolder;
@@ -33,6 +35,8 @@ public class Event implements ListItem
 	private Drawable image;
 	private String place_type;
 	int id;
+	
+	CinemaTimeTable table=null;
 	
 	
 	Event(int id,String name, String description, String imageUrl)
@@ -173,7 +177,7 @@ public class Event implements ListItem
 			@Override
 			public void onClick(View v)
 			{
-				MainApplication.selectedEventId=id;
+				MainApplication.selectedEventId=Integer.toString(id);
 				Intent intent=new Intent(context,funEventActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivity(intent);
@@ -207,6 +211,20 @@ public class Event implements ListItem
 		if (Event.class.isInstance(o)&&this.getId()==((Event)o).getId())
 			return true;
 		else return false;
+	}
+	
+	public void loadPlaceTable()
+	{
+		if (table==null)
+		{
+			table=new CinemaTimeTable();
+			table.loadFromCinemaJSONArray(FileConnector.loadJSONPlaceList(Integer.toString(getId())));
+		}	
+	}
+
+	public CinemaTimeTable getTimeTable()
+	{
+		return table;
 	}
 
 }

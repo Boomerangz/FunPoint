@@ -26,7 +26,8 @@ public class JamTextImageSwitcher extends FrameLayout implements ViewFactory
 {
 	TextView text;
 	ImageSwitcher switcher;
-	List<SwitcherDesc> ImageSource;
+	private List<SwitcherDesc> ImageSource;
+	Drawable[] drawableArray;
 	static final int durationTime = 900;
 	int currImage = -1;
 	Handler mHandler=new Handler();
@@ -70,6 +71,14 @@ public class JamTextImageSwitcher extends FrameLayout implements ViewFactory
 		switcher.setOutAnimation(outAnimation);
 	}
 	
+	
+	
+	public void setImageSource(List<SwitcherDesc> imageSource)
+	{
+		ImageSource = imageSource;
+		drawableArray=new Drawable[ImageSource.size()];
+	}
+
 	public void setTextBackground(int color)
 	{
 		View textLayout=findViewById(R.id.text_background);
@@ -86,8 +95,12 @@ public class JamTextImageSwitcher extends FrameLayout implements ViewFactory
 		currImage++;
 		if (currImage == ImageSource.size())
 			currImage = 0;
-		return getContext().getResources().getDrawable(
+		if (drawableArray[currImage]==null)
+		{
+			drawableArray[currImage]=getContext().getResources().getDrawable(
 				ImageSource.get(currImage).source);
+		}
+		return drawableArray[currImage];
 	}
 	
 

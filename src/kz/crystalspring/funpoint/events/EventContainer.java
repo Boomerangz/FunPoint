@@ -24,11 +24,11 @@ public class EventContainer
 		context = applicationContext;
 	}
 	
-	public Event getEventById(int id)
+	public Event getEventById(String id)
 	{
 		for (Event event:eventsList)
 		{
-			if (event.getId()==id)
+			if (Integer.toString(event.getId()).equals(id))
 			{
 				return event;
 			}

@@ -17,11 +17,15 @@ import kz.crystalspring.pointplus.UserInfo;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.boomerang.jam_menu.JamTextImageSwitcher;
@@ -30,10 +34,12 @@ public class JamMenuActivity extends Activity
 {
 
 	List<JamTextImageSwitcher> switchers = new ArrayList<JamTextImageSwitcher>();
-	int currButton = -1;
+	//int currButton = -1;
 	Handler mHandler = new Handler();
 	boolean continueUpdating = true;
 	static final int UPDATE_DELAY = 1000 + JamTextImageSwitcher.durationTime;
+	
+	boolean isMoving=false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -70,16 +76,46 @@ public class JamMenuActivity extends Activity
 				new SwitcherDesc(R.drawable.hotel2),
 				new SwitcherDesc(R.drawable.hotel3) };
 		SwitcherDesc[] a = {
-				new SwitcherDesc(R.drawable.red),
-				new SwitcherDesc(R.drawable.blue)};
-		SwitcherDesc[] b = {
-				new SwitcherDesc(R.drawable.blue),
-				new SwitcherDesc(R.drawable.red)};
+				new SwitcherDesc(R.color.blue),
+				new SwitcherDesc(R.color.green),
+				new SwitcherDesc(android.R.color.white) };
+		SwitcherDesc[] b =  {
+				new SwitcherDesc(R.color.blue),
+				new SwitcherDesc(R.color.green),
+				new SwitcherDesc(android.R.color.white) };
+		
+//		SwitcherDesc[] swRest = {
+//				new SwitcherDesc(R.color.blue),
+//				new SwitcherDesc(R.color.green),
+//				new SwitcherDesc(R.color.blue) };
+//		
+//		SwitcherDesc[] swCinema = {
+//				new SwitcherDesc(R.color.blue),
+//				new SwitcherDesc(R.color.green),
+//				new SwitcherDesc(R.color.blue) };
+//		
+//		SwitcherDesc[] swShopping = {
+//				new SwitcherDesc(R.color.blue),
+//				new SwitcherDesc(R.color.green),
+//				new SwitcherDesc(R.color.blue) };
+//		
+//		SwitcherDesc[] swHotel = {
+//				new SwitcherDesc(R.color.blue),
+//				new SwitcherDesc(R.color.green),
+//				new SwitcherDesc(R.color.blue) };
+//		SwitcherDesc[] a = {
+//				new SwitcherDesc(R.color.blue),
+//				new SwitcherDesc(R.color.green),
+//				new SwitcherDesc(R.color.blue) };
+//		SwitcherDesc[] b = {
+//				new SwitcherDesc(R.color.blue),
+//				new SwitcherDesc(R.color.green),
+//				new SwitcherDesc(R.color.blue) };
 
-		switchers.get(0).ImageSource = Arrays.asList(swRest);
-		switchers.get(1).ImageSource = Arrays.asList(swCinema);
-		switchers.get(2).ImageSource = Arrays.asList(swShopping);
-		switchers.get(3).ImageSource = Arrays.asList(swHotel);
+		switchers.get(0).setImageSource(Arrays.asList(swRest));
+		switchers.get(1).setImageSource(Arrays.asList(swCinema));
+		switchers.get(2).setImageSource(Arrays.asList(swShopping));
+		switchers.get(3).setImageSource(Arrays.asList(swHotel));
 		for (int i = 0; i < switchers.size(); i++)
 		{
 			JamTextImageSwitcher switcher;
@@ -88,9 +124,9 @@ public class JamMenuActivity extends Activity
 			if (i > 3)
 			{
 				if (i % 2 == 0)
-					switcher.ImageSource = (Arrays.asList(a));
+					switcher.setImageSource(Arrays.asList(a));
 				else
-					switcher.ImageSource = (Arrays.asList(b));
+					switcher.setImageSource(Arrays.asList(b));
 			}
 			switcher.updateImage();
 			switcher.setOnClickListener(new OnClickListener()
@@ -187,7 +223,23 @@ public class JamMenuActivity extends Activity
 			}
 		});
 		MainApplication.loadAdditionalContent();
-	}
+		
+		
+		
+		
+		ScrollView scrollV=(ScrollView) findViewById(R.id.jam_menu_scrollview);
+		scrollV.setOnTouchListener(new OnTouchListener()
+		{
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event)
+			{
+					isMoving=(event.getAction()==event.ACTION_MOVE);// TODO Auto-generated method stub
+				return false;
+			}
+		});
+		scrollV.setVerticalScrollBarEnabled(false);
+	};
 
 	@Override
 	protected void onResume()
@@ -203,15 +255,34 @@ public class JamMenuActivity extends Activity
 	{
 		if (continueUpdating)
 		{
-			currButton = (int) Math
-					.round((Math.random() * switchers.size() - 1));
-			if (currButton >= switchers.size())
-				currButton = 0;
-			if (currButton < 0)
-				currButton = switchers.size() - 1;
-			switchers.get(currButton).updateImage();
-			mHandler.removeCallbacks(mUpdateTimeTask);
-			mHandler.postDelayed(mUpdateTimeTask, UPDATE_DELAY);
+			AsyncTask<Object, Object, JamTextImageSwitcher> task=new AsyncTask<Object, Object, JamTextImageSwitcher>()
+			{
+
+				@Override
+				protected JamTextImageSwitcher doInBackground(Object... params)
+				{
+	
+					int currButton = (int) Math
+							.round((Math.random() * switchers.size() - 1));
+					if (currButton >= switchers.size())
+						currButton = 0;
+					if (currButton < 0)
+						currButton = switchers.size() - 1;
+					mHandler.removeCallbacks(mUpdateTimeTask);
+					mHandler.postDelayed(mUpdateTimeTask, UPDATE_DELAY);
+					return switchers.get(currButton);
+				}
+				
+				@Override
+				public void onPostExecute(JamTextImageSwitcher result)
+				{
+					if (!isMoving)
+					{
+						result.updateImage();
+					}
+				}
+			};
+			task.execute();
 		}
 	}
 
