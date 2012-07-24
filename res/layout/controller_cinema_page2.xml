@@ -40,18 +40,11 @@
                 android:layout_marginLeft="5dp"
                 android:text="Индийская кухня, Китайская кухня"
                 android:textSize="7pt" />
-
-            <TextView
-                android:id="@+id/food_avg_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:text="Food lunch price" />
             
         </LinearLayout>
         <View android:layout_width="fill_parent"
                   android:layout_height="5dp"
-                  android:background="@color/restaurant"
+                  android:background="@color/cinema"
                   android:layout_below="@id/minor_header_layout"/>
     </RelativeLayout>
 
@@ -73,7 +66,7 @@
 
             <View android:layout_width="fill_parent"
                   android:layout_height="5dp"
-                  android:background="@color/restaurant"
+                  android:background="@color/cinema"
                   android:layout_below="@id/minor_header_layout"/>
             <TextView
                 android:id="@+id/textView1"
@@ -109,7 +102,7 @@
             android:background="#ffffff" >
             <View android:layout_width="fill_parent"
                   android:layout_height="5dp"
-                  android:background="@color/restaurant"
+                  android:background="@color/cinema"
                   android:layout_below="@id/minor_header_layout"/>
 
             <TextView
@@ -147,7 +140,7 @@
             
             <View android:layout_width="fill_parent"
                   android:layout_height="5dp"
-                  android:background="@color/restaurant"
+                  android:background="@color/cinema"
                   android:layout_below="@id/minor_header_layout"/>
 
             <TextView
@@ -193,7 +186,7 @@
             
             <View android:layout_width="fill_parent"
                   android:layout_height="5dp"
-                  android:background="@color/restaurant"
+                  android:background="@color/cinema"
                   android:layout_below="@id/minor_header_layout"/>
 
             <TextView
@@ -230,7 +223,7 @@
             
             <View android:layout_width="fill_parent"
                   android:layout_height="5dp"
-                  android:background="@color/restaurant"
+                  android:background="@color/cinema"
                   android:layout_below="@id/minor_header_layout"/>
 
             <TextView

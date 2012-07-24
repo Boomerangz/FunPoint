@@ -126,4 +126,18 @@ public class funHotelController extends ActivityController implements ViewFactor
 		iView.setBackgroundColor(0xFF000000);
 		return iView;
 	}
+
+	@Override
+	public void setStateTodo()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setStateChecked()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

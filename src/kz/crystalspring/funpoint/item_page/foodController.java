@@ -95,6 +95,7 @@ public class foodController extends ActivityController
 	@Override
 	protected void onResume()
 	{
+		super.onResume();
 		if (!MainApplication.mapItemContainer.getSelectedItem().equals(itemFood))
 		{
 			itemFood = (ItemFood) MainApplication.mapItemContainer
@@ -220,65 +221,7 @@ public class foodController extends ActivityController
 		return v;
 	}
 	
-	private void checkInHere()
-	{
-		FSQConnector.checkIn(itemFood.getId());
-		setStateChecked();
-		//MainApplication.socialConnector.shareCheckinOnTwitter(itemFood);
-	}
-
-	private void checkToDo()
-	{
-		FSQConnector.addToTodos(itemFood.getId());
-		setStateTodo();
-	}
-
-	private void goToMap()
-	{
-		MainApplication.mapItemContainer.setSelectedItem(itemFood);
-		MainMenu.goToObjectMap();
-		context.finish();
-	}
 	
-	private void openAddCommentActivity()
-	{
-		Intent intent = new Intent(context, WriteCommentActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		context.startActivity(intent);
-	}
-	
-	protected void showNeedLogin()
-	{
-		final Dialog dialog = new Dialog(context);
-		dialog.setContentView(R.layout.need_to_login);
-		dialog.setTitle("This is my custom dialog box");
-		dialog.setCancelable(true);
-		// set up button
-		Button loginButton = (Button) dialog.findViewById(R.id.ok_button);
-		loginButton.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				Intent intent = new Intent(context, ProfilePage.class);
-				context.startActivity(intent);
-				dialog.cancel();
-			}
-		});
-
-		Button cancelButton = (Button) dialog.findViewById(R.id.cancel_button);
-		cancelButton.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				dialog.cancel();
-			}
-		});
-		// now that the dialog is set up, it's time to show it
-		dialog.show();
-	}
-
 
 	@Override
 	protected void onPause()
@@ -397,14 +340,15 @@ public class foodController extends ActivityController
 			}
 		}
 	}
-
-	private void setStateChecked()
+	
+    @Override
+	public void setStateChecked()
 	{
 		checkInBtn.setEnabled(false);
 		checkInBtn.setBackgroundColor(Color.parseColor("#00A859"));
 	}
-
-	private void setStateTodo()
+    @Override
+    public void setStateTodo()
 	{
 		todoBtn.setEnabled(false);
 		todoBtn.setBackgroundColor(Color.parseColor("#00A859"));

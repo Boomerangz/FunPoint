@@ -110,6 +110,21 @@ public class FSQItem extends MapItem
 		}
 	}
 	
+	public void itemCinemaLoadOptionalInfo(JSONObject fsqJObject)
+	{
+		optInfo = new OptionalInfo();
+		try
+		{
+			optInfo.loadComments(fsqJObject.getJSONObject("tips"));
+			optInfo.loadPhones(fsqJObject.getJSONObject("contact"));
+			optInfo.loadPhotoUrls(fsqJObject.getJSONObject("photos"));
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	
 
 	public OptionalInfo getOptionalInfo()
 	{
@@ -129,7 +144,10 @@ public class FSQItem extends MapItem
 
 	public List<String> getPhones()
 	{
-		return optInfo.getFSQPhonesList();
+		if (optInfo!=null)
+			return optInfo.getFSQPhonesList();
+		else
+			return null;
 	}
 
 	public boolean isCheckedIn()

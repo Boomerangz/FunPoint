@@ -3,12 +3,11 @@ package kz.crystalspring.funpoint;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.boomerang.metromenu.MetromenuActivity;
 import com.viewpagerindicator.TabPageIndicator;
 import com.viewpagerindicator.ViewFragment;
 import com.viewpagerindicator.ViewFragmentAdapter;
 
-import kz.crystalspring.pointplus.Prefs;
+import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.funpoint.CinemaTimeTable.CinemaTime;
 import kz.crystalspring.funpoint.R;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
@@ -17,6 +16,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -29,33 +29,44 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout.LayoutParams;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 public class funCinemaController extends ActivityController
 {
-	
-	
-	private static final String[] CONTENT_TABS = new String[] { "Инфо",
-		"Отзывы", "Фото" };
+
+	private static final String[] CONTENT_TABS = new String[] { "Расписание",
+			"Инфо", "Фото" };
 	final String CINEMA_TIME_FILE = "json_cinema_info_zip";
 	TextView tv1;
 	// TextView timeTable;
 	LinearLayout timeList;
 	ItemCinema cinema;
+	TextView titleTV;
+	TextView addressTV;
+	TextView lunchPriceTV;
+	TextView avgPriceTV;
+	TextView kitchenTV;
+	TextView hereNowTV;
+	RelativeLayout checkInBtn;
+	RelativeLayout mapInBtn;
+	RelativeLayout todoBtn;
+	LinearLayout commentsListLayout;
+	LinearLayout mainInfoLayout;
+	TableLayout galleryLayout;
+	LinearLayout phoneLayout;
+
 	Activity activitycontext;
-	
+
 	LayoutInflater inflater = context.getLayoutInflater();
 
 	funCinemaController(FragmentActivity context)
 	{
 		super(context);
-		activitycontext=context;
+		activitycontext = context;
 	}
 
 	@Override
@@ -67,18 +78,22 @@ public class funCinemaController extends ActivityController
 	@Override
 	protected void onResume()
 	{
+		super.onResume();
 		context.setContentView(R.layout.controller_cinema);
 		cinema = (ItemCinema) MainApplication.mapItemContainer
 				.getSelectedItem();
-		
-		final int count=CONTENT_TABS.length;
-		List<ViewFragment> viewList=new ArrayList(count);
-		
-		View page1=loadTimePage();
-		viewList.add(new ViewFragment(page1,CONTENT_TABS[0]));
-		
+
+		final int count = CONTENT_TABS.length;
+		List<ViewFragment> viewList = new ArrayList<ViewFragment>(count);
+
+		View page1 = loadTimePage();
+		viewList.add(new ViewFragment(page1, CONTENT_TABS[0]));
+
+		View page2 = loadTitlePage();
+		viewList.add(new ViewFragment(page2, CONTENT_TABS[1]));
+
 		ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
-				context.getSupportFragmentManager(),viewList);
+				context.getSupportFragmentManager(), viewList);
 		ViewPager viewPager = (ViewPager) context.findViewById(R.id.pager);
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setCurrentItem(0);
@@ -86,7 +101,7 @@ public class funCinemaController extends ActivityController
 		TabPageIndicator indicator = (TabPageIndicator) context
 				.findViewById(R.id.indicator);
 		indicator.setViewPager(viewPager);
-		
+
 		cinema.loadAdditionalInfo();
 		showCinema(cinema);
 	}
@@ -96,10 +111,47 @@ public class funCinemaController extends ActivityController
 		tv1.setText(cinema.getName());
 		if (cinema.isHallInfoFilled())
 		{
-			new CinemaTimeTableAdapter(cinema.getTimeTable(), activitycontext).fillLayout(timeList);
+			new CinemaTimeTableAdapter(cinema.getTimeTable(), activitycontext)
+					.fillLayout(timeList);
 		} else
 		{
 		}
+		titleTV.setText(cinema.getName());
+		if (cinema.getAddress() != null && !cinema.getAddress().equals(""))
+		{
+			addressTV.setText(cinema.getAddress());
+			addressTV.setVisibility(View.VISIBLE);
+		} else
+			addressTV.setVisibility(View.GONE);
+		hereNowTV.setText(Integer.toString(cinema.getHereNow()));
+		kitchenTV.setText(cinema.getCategoriesString());
+
+		if (cinema.isCheckedIn())
+			setStateChecked();
+
+		if (cinema.isCheckedToDo())
+			setStateTodo();
+
+		phoneLayout.removeAllViews();
+		List<String> phones = cinema.getPhones();
+		if (phones != null)
+			for (String phone : phones)
+			{
+				final PhoneTextView phoneTV = new PhoneTextView(context);
+				phoneTV.setPhone(ProjectUtils.formatPhone(phone));
+				phoneTV.setOnClickListener(new OnClickListener()
+				{
+					@Override
+					public void onClick(View v)
+					{
+						Intent intent = new Intent(Intent.ACTION_DIAL, Uri
+								.parse("tel:" + phoneTV.getPhone()));
+						context.startActivity(intent);
+					}
+				});
+				phoneLayout.addView(phoneTV);
+			}
+
 	}
 
 	@Override
@@ -107,7 +159,7 @@ public class funCinemaController extends ActivityController
 	{
 
 	}
-	
+
 	private View loadTimePage()
 	{
 		View v = inflater.inflate(R.layout.controller_cinema_page1, null);
@@ -116,22 +168,85 @@ public class funCinemaController extends ActivityController
 		timeList = (LinearLayout) v.findViewById(R.id.time_list_view);
 		return v;
 	}
+
+	private View loadTitlePage()
+	{
+		View v = inflater.inflate(R.layout.controller_cinema_page2, null);
+		titleTV = (TextView) v.findViewById(R.id.food_title);
+		addressTV = (TextView) v.findViewById(R.id.food_address);
+		lunchPriceTV = (TextView) v.findViewById(R.id.food_lunch_price);
+		avgPriceTV = (TextView) v.findViewById(R.id.food_avg_price);
+		mainInfoLayout = (LinearLayout) v.findViewById(R.id.main_info_layout);
+		checkInBtn = (RelativeLayout) v.findViewById(R.id.checkin_block);
+		mapInBtn = (RelativeLayout) v.findViewById(R.id.map_block);
+		todoBtn = (RelativeLayout) v.findViewById(R.id.todo_block);
+		kitchenTV = (TextView) v.findViewById(R.id.food_kitchen);
+		hereNowTV = (TextView) v.findViewById(R.id.here_now_tv);
+		phoneLayout = (LinearLayout) v.findViewById(R.id.phone_block);
+
+		checkInBtn.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				if (MainApplication.FsqApp.hasAccessToken())
+					checkInHere();
+				else
+					showNeedLogin();
+
+			}
+		});
+		todoBtn.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				if (MainApplication.FsqApp.hasAccessToken())
+					checkToDo();
+				else
+					showNeedLogin();
+			}
+		});
+
+		mapInBtn.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				goToMap();
+			}
+		});
+
+		return v;
+	}
+
+	@Override
+	public void setStateChecked()
+	{
+		checkInBtn.setEnabled(false);
+		checkInBtn.setBackgroundColor(Color.parseColor("#00A859"));
+	}
+
+	@Override
+	public void setStateTodo()
+	{
+		todoBtn.setEnabled(false);
+		todoBtn.setBackgroundColor(Color.parseColor("#00A859"));
+	}
+
 }
-
-
 
 class CinemaTimeTableAdapter extends BaseAdapter
 {
 	CinemaTimeTable table;
 	Context context;
-	
-	public CinemaTimeTableAdapter(CinemaTimeTable table,Context context)
+
+	public CinemaTimeTableAdapter(CinemaTimeTable table, Context context)
 	{
-		this.table=table;
-		this.context=context;
+		this.table = table;
+		this.context = context;
 	}
-	
-	
+
 	@Override
 	public int getCount()
 	{
@@ -159,69 +274,74 @@ class CinemaTimeTableAdapter extends BaseAdapter
 		convertView = mInflater.inflate(R.layout.object_list_item_cinema, null);
 		holder = new ViewHolder();
 		holder.text = (TextView) convertView.findViewById(R.id.text);
-		holder.tableLayout=(TableLayout) convertView.findViewById(R.id.table);
-		
+		holder.tableLayout = (TableLayout) convertView.findViewById(R.id.table);
+
 		convertView.setMinimumHeight(60);
 		convertView.setTag(holder);
-		String st = Integer.toString(position) + ". " + toString();
-
-		holder.text.setText(table.getTimeLines().get(position).getTitle()+" "+table.getTimeLines().get(position).getStrDate());
+		holder.text.setText(table.getTimeLines().get(position).getTitle() + " "
+				+ table.getTimeLines().get(position).getStrDate());
 		holder.text.setOnClickListener(new OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				MainApplication.selectedEventId=table.getTimeLines().get(position).filmId;
+				MainApplication.selectedEventId = table.getTimeLines().get(
+						position).filmId;
 				Intent i = new Intent(context, funEventActivity.class);
 				i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivity(i);
 			}
 		});
-		
-		int i=0;
-		TableRow row=null;
-		
-		for (final CinemaTime time:table.getTimeLines().get(position).times)
+
+		int i = 0;
+		TableRow row = null;
+
+		for (final CinemaTime time : table.getTimeLines().get(position).times)
 		{
-		
+
 			TextView timeView;
 			if (!table.getTimeLines().get(position).ticketable)
-				timeView=new TextView(context);
+				timeView = new TextView(context);
 			else
 			{
-				Button btn=new Button(context);
+				Button btn = new Button(context);
 				btn.setOnClickListener(new OnClickListener()
 				{
-					
+
 					@Override
 					public void onClick(View v)
 					{
-						String url="http://m.ticketon.kz/hallplan/"+time.getHash();
-						String lUrl="http://www.google.kz";
+						String url = "http://m.ticketon.kz/hallplan/"
+								+ time.getHash();
 						Dialog dialog = new Dialog(context);
-			            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			            View vi = inflater.inflate(R.layout.webview, null);
-			            dialog.setContentView(vi);
-			            dialog.setCancelable(true);
-			            WebView wb = (WebView) vi.findViewById(R.id.webview);
-			            wb.getSettings().setJavaScriptEnabled(true);
-			            wb.setWebViewClient(new WebViewClient());
-			            wb.loadUrl(url);
-			            System.out.println("..loading url..");
-			            dialog.show();
+						dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+						LayoutInflater inflater = (LayoutInflater) context
+								.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+						View vi = inflater.inflate(R.layout.webview, null);
+						dialog.setContentView(vi);
+						dialog.setCancelable(true);
+						WebView wb = (WebView) vi.findViewById(R.id.webview);
+						wb.getSettings().setJavaScriptEnabled(true);
+						wb.setWebViewClient(new WebViewClient());
+						wb.loadUrl(url);
+						System.out.println("..loading url..");
+						dialog.show();
 					}
 				});
-				timeView=btn;
+				timeView = btn;
 			}
-			
-			timeView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,TableRow.LayoutParams.FILL_PARENT));
-			timeView.setText(time.getStringTime()+" ");
-			
-			if (i%4==0)
+
+			timeView.setLayoutParams(new TableRow.LayoutParams(
+					TableRow.LayoutParams.WRAP_CONTENT,
+					TableRow.LayoutParams.FILL_PARENT));
+			timeView.setText(time.getStringTime() + " ");
+
+			if (i % 4 == 0)
 			{
-				row=new TableRow(context);
-				row.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT,TableLayout.LayoutParams.WRAP_CONTENT));
+				row = new TableRow(context);
+				row.setLayoutParams(new TableLayout.LayoutParams(
+						TableLayout.LayoutParams.WRAP_CONTENT,
+						TableLayout.LayoutParams.WRAP_CONTENT));
 				holder.tableLayout.addView(row);
 			}
 			row.addView(timeView);
@@ -232,16 +352,14 @@ class CinemaTimeTableAdapter extends BaseAdapter
 
 	public void fillLayout(LinearLayout layout)
 	{
-		LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		layout.removeAllViews();
-		for (int i=0; i<getCount(); i++)
+		for (int i = 0; i < getCount(); i++)
 		{
-			View v=getView(i, null, null);
+			View v = getView(i, null, null);
 			layout.addView(v);
 		}
 	}
-	
-	
+
 	class ViewHolder
 	{
 		TextView text;
