@@ -28,7 +28,6 @@ public class funObjectDetail extends FragmentActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setcontroller();
 		controller.onCreate();
@@ -38,16 +37,13 @@ public class funObjectDetail extends FragmentActivity
 	{
 		MapItem selectedItem = MainApplication.mapItemContainer
 				.getSelectedMapItem();
-		String objType = ((FSQItem) MainApplication.mapItemContainer
-				.getSelectedItem()).getCategory();
+		String objType = ((FSQItem) selectedItem).getCategory();
 		if (objType.equals(MapItem.FSQ_TYPE_HOTEL))
 			controller = new funHotelController(this);
 		else if (objType.equals(MapItem.FSQ_TYPE_FOOD))
 			controller = new foodController(this);
 		else if (objType.equals(MapItem.FSQ_TYPE_CINEMA))
 			controller = new funCinemaController(this);
-		else
-			controller = new funFoodController(this);
 		controller.onCreate();
 	}
 
@@ -62,17 +58,12 @@ public class funObjectDetail extends FragmentActivity
 	protected void onResume()
 	{
 		super.onResume();
-	//	setcontroller();
 		controller.onResume();
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
-//		if (keyCode == KeyEvent.KEYCODE_BACK)
-//		{
-//			return controller.onKeyDown(keyCode, event);
-//		} else
 			return controller.onKeyDown(keyCode, event);
 	}
 

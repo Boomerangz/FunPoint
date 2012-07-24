@@ -1,6 +1,12 @@
 package kz.crystalspring.funpoint;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.boomerang.metromenu.MetromenuActivity;
+import com.viewpagerindicator.TabPageIndicator;
+import com.viewpagerindicator.ViewFragment;
+import com.viewpagerindicator.ViewFragmentAdapter;
 
 import kz.crystalspring.pointplus.Prefs;
 import kz.crystalspring.funpoint.CinemaTimeTable.CinemaTime;
@@ -13,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,13 +39,18 @@ import android.widget.TextView;
 
 public class funCinemaController extends ActivityController
 {
+	
+	
+	private static final String[] CONTENT_TABS = new String[] { "Инфо",
+		"Отзывы", "Фото" };
 	final String CINEMA_TIME_FILE = "json_cinema_info_zip";
 	TextView tv1;
 	// TextView timeTable;
-	LinearLayout hallLayout;
-	ListView timeList;
+	LinearLayout timeList;
 	ItemCinema cinema;
 	Activity activitycontext;
+	
+	LayoutInflater inflater = context.getLayoutInflater();
 
 	funCinemaController(FragmentActivity context)
 	{
@@ -55,15 +67,26 @@ public class funCinemaController extends ActivityController
 	@Override
 	protected void onResume()
 	{
-		context.setContentView(R.layout.fun_cinema_detail);
-		tv1 = (TextView) context.findViewById(R.id.object_name);
-		// timeTable = (TextView) context.findViewById(R.id.timetable);
-		hallLayout = (LinearLayout) context.findViewById(R.id.hall_layout);
-		timeList = (ListView) context.findViewById(R.id.time_list_view);
-		hallLayout.removeAllViews();
-		String sObjID = Prefs.getSelObjId(context.getApplicationContext());
+		context.setContentView(R.layout.controller_cinema);
 		cinema = (ItemCinema) MainApplication.mapItemContainer
 				.getSelectedItem();
+		
+		final int count=CONTENT_TABS.length;
+		List<ViewFragment> viewList=new ArrayList(count);
+		
+		View page1=loadTimePage();
+		viewList.add(new ViewFragment(page1,CONTENT_TABS[0]));
+		
+		ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
+				context.getSupportFragmentManager(),viewList);
+		ViewPager viewPager = (ViewPager) context.findViewById(R.id.pager);
+		viewPager.setAdapter(pagerAdapter);
+		viewPager.setCurrentItem(0);
+
+		TabPageIndicator indicator = (TabPageIndicator) context
+				.findViewById(R.id.indicator);
+		indicator.setViewPager(viewPager);
+		
 		cinema.loadAdditionalInfo();
 		showCinema(cinema);
 	}
@@ -73,7 +96,7 @@ public class funCinemaController extends ActivityController
 		tv1.setText(cinema.getName());
 		if (cinema.isHallInfoFilled())
 		{
-			timeList.setAdapter(new CinemaTimeTableAdapter(cinema.getTimeTable(), activitycontext));
+			new CinemaTimeTableAdapter(cinema.getTimeTable(), activitycontext).fillLayout(timeList);
 		} else
 		{
 		}
@@ -83,6 +106,15 @@ public class funCinemaController extends ActivityController
 	protected void onPause()
 	{
 
+	}
+	
+	private View loadTimePage()
+	{
+		View v = inflater.inflate(R.layout.controller_cinema_page1, null);
+		tv1 = (TextView) v.findViewById(R.id.object_name);
+		// timeTable = (TextView) context.findViewById(R.id.timetable);
+		timeList = (LinearLayout) v.findViewById(R.id.time_list_view);
+		return v;
 	}
 }
 
@@ -120,7 +152,7 @@ class CinemaTimeTableAdapter extends BaseAdapter
 	}
 
 	@Override
-	public View getView(final int position, View convertView, ViewGroup parent)
+	public View getView(final int position, View convertView, ViewGroup parent1)
 	{
 		ViewHolder holder;
 		LayoutInflater mInflater = LayoutInflater.from(context);
@@ -197,6 +229,18 @@ class CinemaTimeTableAdapter extends BaseAdapter
 		}
 		return convertView;
 	}
+
+	public void fillLayout(LinearLayout layout)
+	{
+		LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		layout.removeAllViews();
+		for (int i=0; i<getCount(); i++)
+		{
+			View v=getView(i, null, null);
+			layout.addView(v);
+		}
+	}
+	
 	
 	class ViewHolder
 	{
