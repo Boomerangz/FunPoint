@@ -1,5 +1,6 @@
 package kz.crystalspring.funpoint.venues;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,8 +124,6 @@ public class FSQItem extends MapItem
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 	public OptionalInfo getOptionalInfo()
 	{
@@ -176,7 +175,7 @@ public class FSQItem extends MapItem
 			}
 		}
 		if (ArrayList.class.isInstance(categoryList))
-			((ArrayList)categoryList).trimToSize();
+			((ArrayList<String>)categoryList).trimToSize();
 	}
 	
 	public String getCategoriesString()
@@ -195,12 +194,6 @@ public class FSQItem extends MapItem
 	{
 		return getCategoriesString();
 	}
-	
-
-//	public Drawable getPhotos(int i)
-//	{
-//		return optInfo.getPhoto(i);
-//	}
 	
 	public int getPhotosCount()
 	{

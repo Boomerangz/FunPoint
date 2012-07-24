@@ -9,6 +9,7 @@ import com.viewpagerindicator.ViewFragmentAdapter;
 
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.funpoint.CinemaTimeTable.CinemaTime;
+import kz.crystalspring.funpoint.item_page.VenueCommentsAdapter;
 import kz.crystalspring.funpoint.R;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
 
@@ -39,7 +40,7 @@ public class funCinemaController extends ActivityController
 {
 
 	private static final String[] CONTENT_TABS = new String[] { "Расписание",
-			"Инфо", "Фото" };
+			"Инфо", "Комментарии" };
 	final String CINEMA_TIME_FILE = "json_cinema_info_zip";
 	TextView tv1;
 	// TextView timeTable;
@@ -58,6 +59,7 @@ public class funCinemaController extends ActivityController
 	LinearLayout mainInfoLayout;
 	TableLayout galleryLayout;
 	LinearLayout phoneLayout;
+	View addCommentBtn;
 
 	Activity activitycontext;
 
@@ -79,30 +81,37 @@ public class funCinemaController extends ActivityController
 	protected void onResume()
 	{
 		super.onResume();
-		context.setContentView(R.layout.controller_cinema);
-		cinema = (ItemCinema) MainApplication.mapItemContainer
-				.getSelectedItem();
+		if (cinema==null||!cinema.equals(MainApplication.mapItemContainer.getSelectedItem()))
+		{
+			context.setContentView(R.layout.controller_cinema);
+			cinema = (ItemCinema) MainApplication.mapItemContainer
+					.getSelectedItem();
 
-		final int count = CONTENT_TABS.length;
-		List<ViewFragment> viewList = new ArrayList<ViewFragment>(count);
+			final int count = CONTENT_TABS.length;
+			List<ViewFragment> viewList = new ArrayList<ViewFragment>(count);
 
-		View page1 = loadTimePage();
-		viewList.add(new ViewFragment(page1, CONTENT_TABS[0]));
+			View page1 = loadTimePage();
+			viewList.add(new ViewFragment(page1, CONTENT_TABS[0]));
 
-		View page2 = loadTitlePage();
-		viewList.add(new ViewFragment(page2, CONTENT_TABS[1]));
+			View page2 = loadTitlePage();
+			viewList.add(new ViewFragment(page2, CONTENT_TABS[1]));
 
-		ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
-				context.getSupportFragmentManager(), viewList);
-		ViewPager viewPager = (ViewPager) context.findViewById(R.id.pager);
-		viewPager.setAdapter(pagerAdapter);
-		viewPager.setCurrentItem(0);
+			View page3 = loadCommentPage();
+			viewList.add(new ViewFragment(page3, CONTENT_TABS[2]));
 
-		TabPageIndicator indicator = (TabPageIndicator) context
-				.findViewById(R.id.indicator);
-		indicator.setViewPager(viewPager);
+			ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
+					context.getSupportFragmentManager(), viewList);
+			ViewPager viewPager = (ViewPager) context.findViewById(R.id.pager);
+			viewPager.setAdapter(pagerAdapter);
+			viewPager.setCurrentItem(0);
 
-		cinema.loadAdditionalInfo();
+			TabPageIndicator indicator = (TabPageIndicator) context
+					.findViewById(R.id.indicator);
+			indicator.setViewPager(viewPager);
+
+			cinema.loadAdditionalInfo();
+			cinema.itemCinemaLoadOptionalInfo();
+		}
 		showCinema(cinema);
 	}
 
@@ -151,6 +160,12 @@ public class funCinemaController extends ActivityController
 				});
 				phoneLayout.addView(phoneTV);
 			}
+		if (cinema.getOptionalInfo() != null)
+		{
+			VenueCommentsAdapter adapter = new VenueCommentsAdapter(context,
+					cinema.getOptionalInfo().getCommentsList());
+			adapter.fillLayout(commentsListLayout);
+		}
 
 	}
 
@@ -217,6 +232,23 @@ public class funCinemaController extends ActivityController
 			}
 		});
 
+		return v;
+	}
+
+	private View loadCommentPage()
+	{
+		View v = inflater.inflate(R.layout.controller_food_page2, null);
+		commentsListLayout = (LinearLayout) v
+				.findViewById(R.id.comment_list_layout);
+		addCommentBtn = (View) v.findViewById(R.id.add_comment);
+		addCommentBtn.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				openAddCommentActivity();
+			}
+		});
 		return v;
 	}
 

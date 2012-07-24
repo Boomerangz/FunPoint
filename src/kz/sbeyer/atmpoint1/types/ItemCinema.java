@@ -2,6 +2,7 @@ package kz.sbeyer.atmpoint1.types;
 
 import kz.crystalspring.funpoint.CinemaTimeTable;
 import kz.crystalspring.funpoint.R;
+import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.FileConnector;
 
@@ -100,6 +101,15 @@ public class ItemCinema extends FSQItem
 	public int getItemColor()
 	{
 		return context.getResources().getColor(R.color.cinema);
+	}
+
+	public void itemCinemaLoadOptionalInfo()
+	{
+		if (getOptionalInfo() == null)
+		{
+			JSONObject jObject = FSQConnector.getVenueInformation(getId());
+			itemFoodLoadOptionalInfo(jObject);
+		}
 	}
 
 }
