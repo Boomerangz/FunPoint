@@ -18,6 +18,9 @@ public class ItemCinema extends FSQItem
 {
 	boolean hallInfoFilled = false;
 	CinemaTimeTable timeTable;
+	
+	
+	public static final String TICKETON_URL="http://m.ticketon.kz/hallplan/";
 
 	public static final String CINEMA_IMG = "m_2";
 

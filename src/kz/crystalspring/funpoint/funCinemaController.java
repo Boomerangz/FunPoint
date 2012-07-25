@@ -39,11 +39,8 @@ import android.widget.TextView;
 public class funCinemaController extends ActivityController
 {
 
-	private static final String[] CONTENT_TABS = new String[] { "Расписание",
-			"Инфо", "Комментарии" };
-	final String CINEMA_TIME_FILE = "json_cinema_info_zip";
+	private static final String[] CONTENT_TABS = new String[] { "Расписание","Инфо", "Комментарии" };
 	TextView tv1;
-	// TextView timeTable;
 	LinearLayout timeList;
 	ItemCinema cinema;
 	TextView titleTV;
@@ -343,7 +340,7 @@ class CinemaTimeTableAdapter extends BaseAdapter
 					@Override
 					public void onClick(View v)
 					{
-						String url = "http://m.ticketon.kz/hallplan/"
+						String url = ItemCinema.TICKETON_URL
 								+ time.getHash();
 						Dialog dialog = new Dialog(context);
 						dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -25,6 +25,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -36,7 +37,7 @@ public class funEventActivity extends Activity
 	TextView eventNameText;
 	TextView eventDescriptionText;
 	LoadingImageView lImageView;
-	ListView listView;
+	LinearLayout listView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -50,7 +51,7 @@ public class funEventActivity extends Activity
 		eventNameText=(TextView) findViewById(R.id.event_name);
 		eventDescriptionText=(TextView) findViewById(R.id.event_desc);
 		lImageView=(LoadingImageView) findViewById(R.id.loading_imageview);
-		listView=(ListView) findViewById(R.id.listView1);
+		listView=(LinearLayout) findViewById(R.id.listView1);
 	}
 	
 	@Override
@@ -89,7 +90,7 @@ public class funEventActivity extends Activity
 		}
 		event.loadPlaceTable();
 		EventTimeTableAdapter adapter=new EventTimeTableAdapter(event.getTimeTable(), this);
-		listView.setAdapter(adapter);
+		adapter.fillLayout(listView);
 	}
 }
 
@@ -125,8 +126,7 @@ class EventTimeTableAdapter extends BaseAdapter
 		return position;
 	}
 
-	@Override
-	public View getView(final int position, View convertView, ViewGroup parent)
+	public View getView(final int position, View convertView)
 	{
 		ViewHolder holder;
 		LayoutInflater mInflater = LayoutInflater.from(context);
@@ -204,9 +204,27 @@ class EventTimeTableAdapter extends BaseAdapter
 		return convertView;
 	}
 	
+	public void fillLayout(LinearLayout layout)
+	{
+		layout.removeAllViews();
+		for (int i = 0; i < getCount(); i++)
+		{
+			View v = getView(i, null, null);
+			layout.addView(v);
+		}
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent)
+	{
+		return getView(position, convertView);
+	}
+	
 	class ViewHolder
 	{
 		TextView text;
 		TableLayout tableLayout;
 	}
+
+
 }

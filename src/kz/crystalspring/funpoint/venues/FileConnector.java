@@ -152,7 +152,7 @@ public class FileConnector
 	
 	public static JSONArray loadJSONCinemaEventsList()
 	{
-		List<BasicNameValuePair> params=new ArrayList();
+		List<BasicNameValuePair> params=new ArrayList<BasicNameValuePair>();
 		params.add(new BasicNameValuePair("rubr_id", "4"));
 		String sResponse=HttpHelper.loadPostByUrl(JAM_EVENTS_LIST_URL, params);
 		try
