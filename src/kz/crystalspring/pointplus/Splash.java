@@ -9,6 +9,7 @@ import kz.crystalspring.android_client.C_Log;
 import kz.crystalspring.android_client.C_NetHelper;
 import kz.crystalspring.android_client.C_Utils;
 import kz.crystalspring.android_client.C_Vars;
+import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
 import android.app.Activity;
 import android.content.Context;
@@ -29,7 +30,7 @@ public class Splash extends Activity
 		context = getApplicationContext();
 
 		CheckForFirstStart();
-
+		MainApplication.getInstance().onResume();
 		Thread t = new Thread()
 		{
 			@Override
@@ -49,7 +50,8 @@ public class Splash extends Activity
 				}
 			}
 		};
-		t.start();
+		if (MainApplication.internetConnection!=MainApplication.NO_CONNECTION)
+			t.start();
 	}
 
 	static final String C_TAG = "CS_MainActivity";

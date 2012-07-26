@@ -58,6 +58,8 @@ public class funEventActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
+		if (MainApplication.getInstance().checkInternetConnection())
+		{
 		eventNameText.setText(event.getName());
 		eventDescriptionText.setText(Html.fromHtml(event.getDescription()));
 		
@@ -91,6 +93,12 @@ public class funEventActivity extends Activity
 		event.loadPlaceTable();
 		EventTimeTableAdapter adapter=new EventTimeTableAdapter(event.getTimeTable(), this);
 		adapter.fillLayout(listView);
+		}
+		else
+		{
+			MainApplication.loadNoInternetPage();
+			finish();
+		}
 	}
 }
 

@@ -127,7 +127,7 @@ public class FileConnector
 		try
 		{
 			return new JSONObject(sCinemaInfo);
-		} catch (JSONException e)
+		} catch (Exception e)
 		{
 			e.printStackTrace();
 			return null;
@@ -178,7 +178,8 @@ public class FileConnector
 		{
 			JSONObject jResponse=new JSONObject(sResponse);
 			return jResponse.getJSONArray("places");
-		} catch (JSONException e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			return null;

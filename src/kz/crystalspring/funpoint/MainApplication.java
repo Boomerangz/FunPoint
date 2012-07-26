@@ -1,6 +1,7 @@
 package kz.crystalspring.funpoint;
 
 import java.nio.channels.FileChannel;
+import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ import kz.crystalspring.funpoint.venues.OptionalInfo.UrlDrawable;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
@@ -45,21 +47,20 @@ public class MainApplication extends Application
 	private static GeoPoint currLocation;
 	public static SharedPreferences mPrefs;
 	public static FoursquareApp FsqApp;
-	public static PendingWorkAggregator pwAggregator=new PendingWorkAggregator();
+	public static PendingWorkAggregator pwAggregator = new PendingWorkAggregator();
 	public static UrlDrawable selectedItemPhoto;
-	public static String selectedEventId=null;
-	//public static SocialConnector socialConnector;
-	
-	
-	public static final int WIFI=0;
-	public static final int UMTS=1;
-	public static final int EDGE=2;
-	public static final int NO_CONNECTION=4;
-	public static int internetConnection=-1;
-	
-	
+	public static String selectedEventId = null;
+	private static MainApplication singleTon;
+	// public static SocialConnector socialConnector;
+
+	public static final int WIFI = 0;
+	public static final int UMTS = 1;
+	public static final int EDGE = 2;
+	public static final int NO_CONNECTION = 4;
+	public static int internetConnection = -1;
+
 	LocationUpdater updater;
-	
+
 	public static final int ALPHA = 100;
 
 	public static void refreshMapItems()
@@ -72,10 +73,12 @@ public class MainApplication extends Application
 	public void onCreate()
 	{
 		super.onCreate();
+		singleTon = this;
+
 		mDensity = getApplicationContext().getResources().getDisplayMetrics().density;
 		mapItemContainer = new MapItemContainer(getApplicationContext());
 		eventContainer = new EventContainer(getApplicationContext());
-		
+
 		mPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
 		context = getApplicationContext();
@@ -83,13 +86,14 @@ public class MainApplication extends Application
 				FSQConnector.CLIENT_SECRET);
 
 		updater = new LocationUpdater(this);
-		
-	//	socialConnector=new SocialConnector();
-		
-		
+	}
+
+	public void onResume()
+	{
+		pwAggregator.setAbleToDo(true);
 		Runnable task = new Runnable()// ������ ��������, ������� ����
-										// ����������� ����� ���� ��� ����������
-										// ������� �������� �����.
+		// ����������� ����� ���� ��� ����������
+		// ������� �������� �����.
 		{
 			@Override
 			public void run()
@@ -98,47 +102,64 @@ public class MainApplication extends Application
 			}
 		};
 		
+		if (checkInternetConnection())
+		{
+			System.out.println("ЗАГРУЗКА НАЧАТА");
+			MainApplication.mapItemContainer.loadNearBy(getCurrentLocation(),
+					task);
+			MainApplication.loadAdditionalContent();
+			new FileConnector(getApplicationContext());
+		} else
+			loadNoInternetPage();
+	}
+	
+	public static void loadNoInternetPage()
+	{
+		Intent i = new Intent(context, NoInternetActivity.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+		context.startActivity(i);
+	}
+	
+	public boolean checkInternetConnection()
+	{
 		ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		android.net.NetworkInfo wifi = connec
+				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-		android.net.NetworkInfo mobile = connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+		android.net.NetworkInfo mobile = connec
+				.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
 		NetworkInfo info = connec.getActiveNetworkInfo();
-
-		if (info!=null)
-		{	
-		int netSubType = info.getSubtype();
-
-		            if (wifi.isConnected()) 
-		            {
-		            	internetConnection=WIFI;
-		            }
-		            else if (mobile.isConnected())
-		            { 
-		            	if(netSubType == TelephonyManager.NETWORK_TYPE_UMTS)
-	                {   
-		            		internetConnection=UMTS;
-	                }
-	                else
-	                {
-	                      internetConnection=EDGE;
-	                }
-	            }
-		}
-		else
+		if (info != null)
 		{
-			internetConnection=NO_CONNECTION;
-		}
-		
-		System.out.println("ЗАГРУЗКА НАЧАТА");
-		MainApplication.mapItemContainer.loadNearBy(getCurrentLocation(), task);
+			int netSubType = info.getSubtype();
 
-		new FileConnector(getApplicationContext());
+			if (wifi.isConnected())
+			{
+				internetConnection = WIFI;
+			} else if (mobile.isConnected())
+			{
+				if (netSubType == TelephonyManager.NETWORK_TYPE_UMTS)
+				{
+					internetConnection = UMTS;
+				} else
+				{
+					internetConnection = EDGE;
+				}
+			}
+		} else
+		{
+			internetConnection = NO_CONNECTION;
+		}
+		pwAggregator.setAbleToDo(internetConnection != NO_CONNECTION);
+		return internetConnection != NO_CONNECTION;
 	}
 
 	public static GeoPoint getCurrentLocation()
 	{
-		if (gMyLocationOverlay != null&&gMyLocationOverlay.getMyLocation()!=null)
+		if (gMyLocationOverlay != null
+				&& gMyLocationOverlay.getMyLocation() != null)
 			setCurrLocation(gMyLocationOverlay.getMyLocation());
 		else
 		{
@@ -150,9 +171,7 @@ public class MainApplication extends Application
 	public static void setCurrLocation(GeoPoint point)
 	{
 		currLocation = point;
-		int i = 0;
 	}
-
 
 	public static void loadAdditionalContent()
 	{
@@ -161,9 +180,9 @@ public class MainApplication extends Application
 			MainApplication.loadUserActivity();
 		}
 		eventContainer.loadEventList();
-		//loadJamContent();
+		// loadJamContent();
 	}
-	
+
 	public static void loadUserActivity()
 	{
 		if (!FSQConnector.getTodosLoaded())
@@ -173,9 +192,14 @@ public class MainApplication extends Application
 		if (!FSQConnector.getBadgessLoaded())
 			FSQConnector.loadBadgesAsync();
 	}
-	
+
 	public static void loadJamContent()
 	{
+	}
+
+	public static MainApplication getInstance()
+	{
+		return singleTon;
 	}
 
 }
@@ -210,7 +234,7 @@ class LocationUpdater implements LocationListener
 	{
 		if (location != null)
 			MainApplication.setCurrLocation(new GeoPoint((int) (location
-					.getLatitude() * 1e6*1),
+					.getLatitude() * 1e6 * 1),
 					(int) (location.getLongitude() * 1e6)));
 	}
 
@@ -234,6 +258,7 @@ class LocationUpdater implements LocationListener
 	public void onStatusChanged(String provider, int status, Bundle extras)
 	{
 	}
+
 }
 
 interface RefreshableMapList

@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -39,7 +40,8 @@ import android.widget.TextView;
 public class funCinemaController extends ActivityController
 {
 
-	private static final String[] CONTENT_TABS = new String[] { "Расписание","Инфо", "Комментарии" };
+	private static final String[] CONTENT_TABS = new String[] { "Расписание",
+			"Инфо", "Комментарии" };
 	TextView tv1;
 	LinearLayout timeList;
 	ItemCinema cinema;
@@ -57,6 +59,8 @@ public class funCinemaController extends ActivityController
 	TableLayout galleryLayout;
 	LinearLayout phoneLayout;
 	View addCommentBtn;
+
+	View contexView;
 
 	Activity activitycontext;
 
@@ -78,37 +82,71 @@ public class funCinemaController extends ActivityController
 	protected void onResume()
 	{
 		super.onResume();
-		if (cinema==null||!cinema.equals(MainApplication.mapItemContainer.getSelectedItem()))
+		if (MainApplication.getInstance().checkInternetConnection())
 		{
-			context.setContentView(R.layout.controller_cinema);
-			cinema = (ItemCinema) MainApplication.mapItemContainer
-					.getSelectedItem();
+			AsyncTask loadingTask = new AsyncTask()
+			{
+				@Override
+				protected Object doInBackground(Object... params)
+				{
+					contexView = inflater.inflate(R.layout.controller_cinema,
+							null);
+					cinema = (ItemCinema) MainApplication.mapItemContainer
+							.getSelectedItem();
 
-			final int count = CONTENT_TABS.length;
-			List<ViewFragment> viewList = new ArrayList<ViewFragment>(count);
+					final int count = CONTENT_TABS.length;
+					List<ViewFragment> viewList = new ArrayList<ViewFragment>(
+							count);
 
-			View page1 = loadTimePage();
-			viewList.add(new ViewFragment(page1, CONTENT_TABS[0]));
+					View page1 = loadTimePage();
+					viewList.add(new ViewFragment(page1, CONTENT_TABS[0]));
 
-			View page2 = loadTitlePage();
-			viewList.add(new ViewFragment(page2, CONTENT_TABS[1]));
+					View page2 = loadTitlePage();
+					viewList.add(new ViewFragment(page2, CONTENT_TABS[1]));
 
-			View page3 = loadCommentPage();
-			viewList.add(new ViewFragment(page3, CONTENT_TABS[2]));
+					View page3 = loadCommentPage();
+					viewList.add(new ViewFragment(page3, CONTENT_TABS[2]));
 
-			ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
-					context.getSupportFragmentManager(), viewList);
-			ViewPager viewPager = (ViewPager) context.findViewById(R.id.pager);
-			viewPager.setAdapter(pagerAdapter);
-			viewPager.setCurrentItem(0);
+					ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
+							context.getSupportFragmentManager(), viewList);
+					ViewPager viewPager = (ViewPager) contexView
+							.findViewById(R.id.pager);
+					viewPager.setAdapter(pagerAdapter);
+					viewPager.setCurrentItem(0);
 
-			TabPageIndicator indicator = (TabPageIndicator) context
-					.findViewById(R.id.indicator);
-			indicator.setViewPager(viewPager);
+					TabPageIndicator indicator = (TabPageIndicator) contexView
+							.findViewById(R.id.indicator);
+					indicator.setViewPager(viewPager);
 
-			cinema.loadAdditionalInfo();
-			cinema.itemCinemaLoadOptionalInfo();
+					cinema.loadAdditionalInfo();
+					cinema.itemCinemaLoadOptionalInfo();
+					return null;
+				}
+
+				@Override
+				public void onPostExecute(Object result)
+				{
+					onContentLoaded();
+				}
+			};
+			if (cinema == null
+					|| !cinema.equals(MainApplication.mapItemContainer
+							.getSelectedItem()))
+			{
+				context.setContentView(R.layout.waiting_layout);
+				loadingTask.execute();
+			} else
+				onContentLoaded();
+		} else
+		{
+			MainApplication.loadNoInternetPage();
+			context.finish();
 		}
+	}
+
+	private void onContentLoaded()
+	{
+		context.setContentView(contexView);
 		showCinema(cinema);
 	}
 
@@ -340,8 +378,7 @@ class CinemaTimeTableAdapter extends BaseAdapter
 					@Override
 					public void onClick(View v)
 					{
-						String url = ItemCinema.TICKETON_URL
-								+ time.getHash();
+						String url = ItemCinema.TICKETON_URL + time.getHash();
 						Dialog dialog = new Dialog(context);
 						dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 						LayoutInflater inflater = (LayoutInflater) context

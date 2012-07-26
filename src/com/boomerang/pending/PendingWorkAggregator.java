@@ -9,7 +9,8 @@ public class PendingWorkAggregator
 {
 	List workList = new ArrayList(0);
 	boolean runningNow = false;
-
+	boolean ableToDo = true;
+	
 	public PendingWorkAggregator()
 	{
 		// AsyncTask iterator=new AsyncTask()
@@ -73,7 +74,10 @@ public class PendingWorkAggregator
 	}
 
 	private void runNextTask()
-	{   Object oTask=null;
+	{   
+		if (ableToDo)
+		{
+		Object oTask=null;
 		synchronized (workList)
 		{
 			if (workList.size() > 0)
@@ -89,6 +93,7 @@ public class PendingWorkAggregator
 			QueueAsyncTask queueTask = new QueueAsyncTask(
 					(PendingWork) oTask);
 			queueTask.execute();
+		}
 		}
 	}
 
@@ -123,6 +128,21 @@ public class PendingWorkAggregator
 		{
 			if (work != null)
 				work.runPostTask();
+			runNextTask();
+		}
+	}
+
+	public void stopQueue()
+	{
+		ableToDo=false;
+		setRunningNow(false);
+	}
+
+	public void setAbleToDo(boolean b)
+	{
+		ableToDo=true;
+		if (!getRunningNow())
+		{
 			runNextTask();
 		}
 	}

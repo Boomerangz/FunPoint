@@ -49,7 +49,8 @@ public abstract class ActivityController
 
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
-		context.finish();
+		if (keyCode==KeyEvent.KEYCODE_BACK)
+			context.finish();
 		return true;
 	}
 
@@ -111,7 +112,6 @@ public abstract class ActivityController
 				dialog.cancel();
 			}
 		});
-		// now that the dialog is set up, it's time to show it
 		dialog.show();
 	}
 

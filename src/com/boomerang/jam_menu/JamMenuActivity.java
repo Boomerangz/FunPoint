@@ -222,7 +222,7 @@ public class JamMenuActivity extends Activity
 				openHelpdesk();
 			}
 		});
-		MainApplication.loadAdditionalContent();
+		//MainApplication.loadAdditionalContent();
 		
 		
 		

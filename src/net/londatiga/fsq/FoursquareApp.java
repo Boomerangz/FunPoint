@@ -199,74 +199,7 @@ public class FoursquareApp {
 		mDialog.show();
 	}
 	
-	public ArrayList<FsqVenue> getNearby(double latitude, double longitude) throws Exception {
-		ArrayList<FsqVenue> venueList = new ArrayList<FsqVenue>();
 		
-		try {
-			String ll 	= String.valueOf(latitude) + "," + String.valueOf(longitude);
-			String sUrl=API_URL + "/venues/search?ll=" + ll;
-			if (mAccessToken!=null)
-				sUrl+="&oauth_token=" + mAccessToken;
-				else 	
-					sUrl+="&client_id="+FSQConnector.CLIENT_ID+"&client_secret="+FSQConnector.CLIENT_SECRET;
-			URL url 	= new URL(sUrl);
-			
-			Log.d(TAG, "Opening URL " + url.toString());
-			
-			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-			
-			urlConnection.setRequestMethod("GET");
-			urlConnection.setDoInput(true);
-			urlConnection.setDoOutput(true);
-			
-			urlConnection.connect();
-			
-			String response		= streamToString(urlConnection.getInputStream());
-			JSONObject jsonObj 	= (JSONObject) new JSONTokener(response).nextValue();
-			
-			JSONArray groups	= (JSONArray) jsonObj.getJSONObject("response").getJSONArray("groups");
-			
-			int length			= groups.length();
-			
-			if (length > 0) {
-				for (int i = 0; i < length; i++) {
-					JSONObject group 	= (JSONObject) groups.get(i);
-					JSONArray items 	= (JSONArray) group.getJSONArray("items");
-					
-					int ilength 		= items.length();
-					
-					for (int j = 0; j < ilength; j++) {
-						JSONObject item = (JSONObject) items.get(j);
-						
-						FsqVenue venue 	= new FsqVenue();
-						
-						venue.id 		= item.getString("id");
-						venue.name		= item.getString("name");
-						
-						JSONObject location = (JSONObject) item.getJSONObject("location");
-						
-						Location loc 	= new Location(LocationManager.NETWORK_PROVIDER);
-						
-						loc.setLatitude(Double.valueOf(location.getString("lat")));
-						loc.setLongitude(Double.valueOf(location.getString("lng")));
-						
-						venue.location	= loc;
-						venue.address	= "";//location.getString("address");
-						venue.distance	= location.getInt("distance");
-						venue.herenow	= 0;//item.getJSONObject("hereNow").getInt("count");
-						venue.type		= group.getString("type");
-						
-						venueList.add(venue);
-					}
-				}
-			}
-		} catch (Exception ex) {
-			throw ex;
-		}
-		
-		return venueList;
-	}
-	
 	private String streamToString(InputStream is) throws IOException {
 		String str  = "";
 		

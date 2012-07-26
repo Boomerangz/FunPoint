@@ -9,6 +9,7 @@ import kz.crystalspring.funpoint.venues.ListItem;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItem.ViewHolder;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -218,7 +219,9 @@ public class Event implements ListItem
 		if (table==null)
 		{
 			table=new CinemaTimeTable();
-			table.loadFromCinemaJSONArray(FileConnector.loadJSONPlaceList(Integer.toString(getId())));
+			JSONArray jArray=FileConnector.loadJSONPlaceList(Integer.toString(getId()));
+			if (jArray!=null)
+				table.loadFromCinemaJSONArray(jArray);
 		}	
 	}
 

@@ -14,6 +14,8 @@ import java.util.zip.GZIPInputStream;
 
 import kz.crystalspring.android_client.C_FileHelper;
 import kz.crystalspring.funpoint.MainApplication;
+import kz.crystalspring.funpoint.funEventActivity;
+import kz.crystalspring.funpoint.funWaitingActivity;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 
 import org.apache.http.HttpResponse;
@@ -26,6 +28,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;

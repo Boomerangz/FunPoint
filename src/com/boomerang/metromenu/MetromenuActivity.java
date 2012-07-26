@@ -217,7 +217,6 @@ public class MetromenuActivity extends Activity
 		continueUpdating = true;
 		mHandler.removeCallbacks(mUpdateTimeTask);
 		mHandler.postDelayed(mUpdateTimeTask, UPDATE_DELAY);
-		MainApplication.loadAdditionalContent();
 	}
 
 	private void beginUpdating()

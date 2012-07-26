@@ -96,51 +96,60 @@ public class foodController extends ActivityController
 	protected void onResume()
 	{
 		super.onResume();
-		if (!MainApplication.mapItemContainer.getSelectedItem().equals(itemFood))
+
+		if (!MainApplication.mapItemContainer.getSelectedItem()
+				.equals(itemFood))
 		{
 			itemFood = (ItemFood) MainApplication.mapItemContainer
 					.getSelectedItem();
-		
-		context.setContentView(R.layout.controller_food);
 
-		
-		if (itemFood.getOptionalInfo() == null)
-		{
-			JSONObject jObject = FSQConnector.getVenueInformation(itemFood
-					.getId());
-			itemFood.itemFoodLoadOptionalInfo(jObject);
-		}
+			context.setContentView(R.layout.controller_food);
 
-		if (itemFood.getFoodOptions() == null)
-		{
-			JSONObject jObject = FileConnector.getFoodInfoFromFile(itemFood
-					.getId());
-			itemFood.loadFoodOptions(jObject);
-		}
-		
-		final int count=CONTENT_TABS.length;
-		List<ViewFragment> viewList=new ArrayList(count);
-		
-		View page1=loadTitlePage();
-		viewList.add(new ViewFragment(page1, CONTENT_TABS[0]));
-		
-		View page2=loadCommentPage();
-		viewList.add(new ViewFragment(page2, CONTENT_TABS[1]));
-		
-		View page3=loadGalleryPage();
-		viewList.add(new ViewFragment(page3, CONTENT_TABS[2]));
-		
-		ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
-				context.getSupportFragmentManager(),viewList);
-		ViewPager viewPager = (ViewPager) context.findViewById(R.id.pager);
-		viewPager.setAdapter(pagerAdapter);
-		viewPager.setCurrentItem(0);
+			if (MainApplication.getInstance().checkInternetConnection())
+			{
+				if (itemFood.getOptionalInfo() == null)
+				{
+					JSONObject jObject = FSQConnector
+							.getVenueInformation(itemFood.getId());
+					itemFood.itemFoodLoadOptionalInfo(jObject);
+				}
 
-		TabPageIndicator indicator = (TabPageIndicator) context
-				.findViewById(R.id.indicator);
-		indicator.setViewPager(viewPager);
-		
-		showFood(itemFood);
+				if (itemFood.getFoodOptions() == null)
+				{
+					JSONObject jObject = FileConnector
+							.getFoodInfoFromFile(itemFood.getId());
+					itemFood.loadFoodOptions(jObject);
+				}
+
+				final int count = CONTENT_TABS.length;
+				List<ViewFragment> viewList = new ArrayList(count);
+
+				View page1 = loadTitlePage();
+				viewList.add(new ViewFragment(page1, CONTENT_TABS[0]));
+
+				View page2 = loadCommentPage();
+				viewList.add(new ViewFragment(page2, CONTENT_TABS[1]));
+
+				View page3 = loadGalleryPage();
+				viewList.add(new ViewFragment(page3, CONTENT_TABS[2]));
+
+				ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
+						context.getSupportFragmentManager(), viewList);
+				ViewPager viewPager = (ViewPager) context
+						.findViewById(R.id.pager);
+				viewPager.setAdapter(pagerAdapter);
+				viewPager.setCurrentItem(0);
+
+				TabPageIndicator indicator = (TabPageIndicator) context
+						.findViewById(R.id.indicator);
+				indicator.setViewPager(viewPager);
+
+				showFood(itemFood);
+			} else
+			{
+				MainApplication.loadNoInternetPage();
+				context.finish();
+			}
 		}
 	}
 
@@ -158,7 +167,7 @@ public class foodController extends ActivityController
 		kitchenTV = (TextView) v.findViewById(R.id.food_kitchen);
 		hereNowTV = (TextView) v.findViewById(R.id.here_now_tv);
 		phoneLayout = (LinearLayout) v.findViewById(R.id.phone_block);
-		
+
 		checkInBtn.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -191,7 +200,7 @@ public class foodController extends ActivityController
 				goToMap();
 			}
 		});
-		
+
 		return v;
 	}
 
@@ -200,7 +209,7 @@ public class foodController extends ActivityController
 		View v = inflater.inflate(R.layout.controller_food_page2, null);
 		commentsListLayout = (LinearLayout) v
 				.findViewById(R.id.comment_list_layout);
-		addCommentBtn = (View)  v.findViewById(R.id.add_comment);
+		addCommentBtn = (View) v.findViewById(R.id.add_comment);
 		addCommentBtn.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -212,7 +221,6 @@ public class foodController extends ActivityController
 
 		return v;
 	}
-	
 
 	private View loadGalleryPage()
 	{
@@ -220,8 +228,6 @@ public class foodController extends ActivityController
 		galleryLayout = (TableLayout) v.findViewById(R.id.gallery_table);
 		return v;
 	}
-	
-	
 
 	@Override
 	protected void onPause()
@@ -340,18 +346,18 @@ public class foodController extends ActivityController
 			}
 		}
 	}
-	
-    @Override
+
+	@Override
 	public void setStateChecked()
 	{
 		checkInBtn.setEnabled(false);
 		checkInBtn.setBackgroundColor(Color.parseColor("#00A859"));
 	}
-    @Override
-    public void setStateTodo()
+
+	@Override
+	public void setStateTodo()
 	{
 		todoBtn.setEnabled(false);
 		todoBtn.setBackgroundColor(Color.parseColor("#00A859"));
 	}
 }
-
