@@ -40,19 +40,19 @@ public class MapItemContainer
 	{
 		return selectedItem;
 	}
-	
+
 	public MapItem getSelectedMapItem()
 	{
 		if (MapItem.class.isInstance(selectedItem))
-			return (MapItem)selectedItem;
+			return (MapItem) selectedItem;
 		else
 			return null;
 	}
-	
+
 	public Event getSelectedEventItem()
 	{
 		if (Event.class.isInstance(selectedItem))
-			return (Event)selectedItem;
+			return (Event) selectedItem;
 		else
 			return null;
 	}
@@ -85,10 +85,9 @@ public class MapItemContainer
 		if (filteredList.size() == 0)
 		{
 			filteredList = filterList(getMapItemListFromFile());
-		}
-		else
+		} else
 		{
-			itemListFromFile=null;
+			itemListFromFile = null;
 			System.gc();
 		}
 		if (MainApplication.getCurrentLocation() != null)
@@ -170,7 +169,7 @@ public class MapItemContainer
 		else
 		{
 			List<MapItem> itemArray = null;
-			try 
+			try
 			{
 				FileInputStream fos = context.openFileInput(FILENAME);
 				ObjectInputStream ois = new ObjectInputStream(fos);
@@ -255,6 +254,22 @@ public class MapItemContainer
 		addVisibleFilter(visibleFilter);
 	}
 
+	public String getCategoryName(String categoryID)
+	{
+		String categoryName = "";
+		if (categoryID.equals(MapItem.FSQ_TYPE_CINEMA))
+			categoryName = "Кино";
+		else if (categoryID.equals(MapItem.FSQ_TYPE_CLUB))
+			categoryName = "Клубы";
+		else if (categoryID.equals(MapItem.FSQ_TYPE_FOOD))
+			categoryName = "Кафе";
+		else if (categoryID.equals(MapItem.FSQ_TYPE_HOTEL))
+			categoryName = "Отели";
+		else if (categoryID.equals(MapItem.FSQ_TYPE_MARKET))
+			categoryName = "Магазины";
+		return categoryName;
+	}
+
 	public MapItem getItemById(String VenueID)
 	{
 		MapItem item = null;
@@ -268,10 +283,20 @@ public class MapItemContainer
 		}
 		return item;
 	}
+
 	public String getCategory()
 	{
 		if (visibleFilterMap.size() > 0)
 			return visibleFilterMap.get(0);
 		return null;
+	}
+
+	public String getCategoryName()
+	{
+		String categIdString = getCategory();
+		if (categIdString != null)
+			return getCategoryName(categIdString);
+		else
+			return "";
 	}
 }

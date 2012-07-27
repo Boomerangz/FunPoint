@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 public class funObjectList extends FragmentActivity implements
 		RefreshableMapList, canBeRefreshing
@@ -40,6 +41,8 @@ public class funObjectList extends FragmentActivity implements
 	List<Event> eventsList;
 	ObjectAdapter objectAdapter;
 	ObjectAdapter eventAdapter;
+	
+	TextView categorySubHeader;
 	
 	ViewPager viewPager;
 	TabPageIndicator tabIndicator;
@@ -61,7 +64,7 @@ public class funObjectList extends FragmentActivity implements
 		mapBtn = (Button) findViewById(R.id.mapBtn);
 		pgBar = (ProgressBar) findViewById(R.id.progressBar1);
 
-		
+		categorySubHeader=(TextView) findViewById(R.id.category_subheader);
 		List<ViewFragment> viewList = fillObjectAndEventLists(); 
 		ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
 				getSupportFragmentManager(), viewList);
@@ -147,6 +150,8 @@ public class funObjectList extends FragmentActivity implements
 		stopRefreshing();
 		itemsList = MainApplication.mapItemContainer.getFilteredItemList();
 		eventsList = MainApplication.eventContainer.getFilteredEventsList();
+		
+		categorySubHeader.setText(MainApplication.mapItemContainer.getCategoryName().toLowerCase());
 		
 		objectAdapter.setData(itemsList);
 		objectAdapter.refreshState();

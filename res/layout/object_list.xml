@@ -4,12 +4,9 @@
     android:background="#96989A"
     android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
 
-        <Button           android:id="@+id/mapBtn"
+        <Button
+            android:id="@+id/mapBtn"
             android:layout_width="fill_parent"
             android:layout_height="44dp"
             android:text="Button"
@@ -18,7 +15,6 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin"
             android:background="@drawable/white_gray_gradient" >
 
             <TextView
@@ -33,7 +29,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/TextView01"
+                android:id="@+id/category_subheader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/category_header"
@@ -48,8 +44,7 @@
                 android:id="@+id/black_line"
                 android:layout_width="fill_parent"
                 android:layout_height="1dip"
-                android:layout_below="@id/TextView01"
-                android:layout_marginBottom="@dimen/margin"
+                android:layout_below="@id/category_subheader"
                 android:layout_marginLeft="@dimen/margin"
                 android:layout_marginRight="@dimen/margin"
                 android:background="#000000" />
@@ -59,9 +54,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/black_line"
-                android:layout_marginBottom="@dimen/margin"
-                android:layout_marginLeft="@dimen/margin"
-                android:layout_marginRight="@dimen/margin"
+                android:layout_margin="@dimen/margin"
                 android:visibility="gone" />
 
             <ImageView
@@ -84,16 +77,14 @@
         </RelativeLayout>
 
         <com.viewpagerindicator.TabPageIndicator
-        android:id="@+id/indicator"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        />
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        />
-    </LinearLayout>
+            android:id="@+id/indicator"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1" />
 
 </LinearLayout>

@@ -568,7 +568,6 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int LinLWizardDest=0x7f0a006c;
         public static final int ListBtn=0x7f0a0095;
         public static final int Switcher=0x7f0a0056;
-        public static final int TextView01=0x7f0a00a5;
         public static final int aboutDeposDescription=0x7f0a008c;
         public static final int aboutDeposImage=0x7f0a008a;
         public static final int add_comment=0x7f0a0029;
@@ -616,6 +615,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int button1=0x7f0a0040;
         public static final int cancel_button=0x7f0a0035;
         public static final int category_header=0x7f0a00a4;
+        public static final int category_subheader=0x7f0a00a5;
         public static final int checkin_block=0x7f0a001c;
         public static final int cinema_btn=0x7f0a009b;
         public static final int cmntDatetime=0x7f0a00a2;

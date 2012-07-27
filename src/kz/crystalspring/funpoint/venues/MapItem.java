@@ -43,7 +43,7 @@ public abstract class MapItem implements Serializable, ListItem
 
 	public static final String FSQ_TYPE_CINEMA = "4bf58dd8d48988d17f941735";
 	public static final String FSQ_TYPE_CLUB = "4bf58dd8d48988d11f941735";
-	public static final String FSQ_TYPE_HOTEL = FSQ_TYPE_CLUB;// "4bf58dd8d48988d1fa931735";
+	public static final String FSQ_TYPE_HOTEL ="4bf58dd8d48988d1fa931735";
 	public static final String FSQ_TYPE_FOOD = "4d4b7105d754a06374d81259";// "4bf58dd8d48988d145941735";"4d4b7105d754a06374d81259;
 	public static final String FSQ_TYPE_MARKET = "4d4b7105d754a06378d81259";
 
@@ -51,7 +51,7 @@ public abstract class MapItem implements Serializable, ListItem
 			FSQ_TYPE_HOTEL, FSQ_TYPE_FOOD, FSQ_TYPE_MARKET };
 
 	public static Context context;
-	private static Drawable icon;
+	//private static Drawable icon;
 
 	public String getId()
 	{
@@ -105,7 +105,6 @@ public abstract class MapItem implements Serializable, ListItem
 
 	public int getRating()
 	{
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

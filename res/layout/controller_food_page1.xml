@@ -18,8 +18,8 @@
             android:id="@+id/minor_header_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="33dp"
-            android:layout_marginRight="33dp"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
             android:layout_weight="1"
             android:gravity="left"
             android:orientation="vertical" >
@@ -28,7 +28,6 @@
                 android:id="@+id/food_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:maxLines="2"
                 android:text="Food title"
                 android:textSize="14pt" />
@@ -37,7 +36,6 @@
                 android:id="@+id/food_kitchen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:text="Индийская кухня, Китайская кухня"
                 android:textSize="7pt" />
 
@@ -45,7 +43,6 @@
                 android:id="@+id/food_avg_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:text="Food lunch price" />
             
         </LinearLayout>
