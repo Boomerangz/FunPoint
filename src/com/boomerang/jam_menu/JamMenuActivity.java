@@ -9,12 +9,9 @@ import kz.crystalspring.funpoint.MainMenu;
 import kz.crystalspring.funpoint.ProfilePage;
 import kz.crystalspring.funpoint.funCheckinNow;
 import kz.crystalspring.funpoint.funWaitingActivity;
-import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.pointplus.Helpdesk;
-import kz.crystalspring.pointplus.UserInfo;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -24,7 +21,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -234,7 +230,7 @@ public class JamMenuActivity extends Activity
 			@Override
 			public boolean onTouch(View v, MotionEvent event)
 			{
-					isMoving=(event.getAction()==event.ACTION_MOVE);// TODO Auto-generated method stub
+					isMoving=(event.getAction()==MotionEvent.ACTION_MOVE);// TODO Auto-generated method stub
 				return false;
 			}
 		});
