@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import kz.crystalspring.funpoint.venues.FSQConnector;
+import kz.crystalspring.pointplus.HttpHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -77,19 +78,11 @@ public class FoursquareApp {
 				int what = 0;
 				
 				try {
-					URL url = new URL(mTokenUrl + "&code=" + code);
+					String url = mTokenUrl + "&code=" + code;
 					
 					Log.i(TAG, "Opening URL " + url.toString());
 					
-					HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-					
-					urlConnection.setRequestMethod("GET");
-					urlConnection.setDoInput(true);
-					urlConnection.setDoOutput(true);
-					
-					urlConnection.connect();
-					
-					JSONObject jsonObj  = (JSONObject) new JSONTokener(streamToString(urlConnection.getInputStream())).nextValue();
+					JSONObject jsonObj  = (JSONObject) new JSONTokener(HttpHelper.loadByUrl(url)).nextValue();
 		        	mAccessToken 		= jsonObj.getString("access_token");
 		        	
 		        	Log.i(TAG, "Got access token: " + mAccessToken);
@@ -113,19 +106,11 @@ public class FoursquareApp {
 				int what = 0;
 		
 				try {
-					URL url = new URL(API_URL + "/users/self?oauth_token=" + mAccessToken);
+					String url = API_URL + "/users/self?oauth_token=" + mAccessToken;
 					
 					Log.d(TAG, "Opening URL " + url.toString());
 					
-					HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-					
-					urlConnection.setRequestMethod("GET");
-					urlConnection.setDoInput(true);
-					urlConnection.setDoOutput(true);
-					
-					urlConnection.connect();
-					
-					String response		= streamToString(urlConnection.getInputStream());
+					String response		= HttpHelper.loadByUrl(url);
 					JSONObject jsonObj 	= (JSONObject) new JSONTokener(response).nextValue();
 		       
 					JSONObject resp		= (JSONObject) jsonObj.get("response");

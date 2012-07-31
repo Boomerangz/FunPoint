@@ -218,11 +218,6 @@ public class JamMenuActivity extends Activity
 				openHelpdesk();
 			}
 		});
-		//MainApplication.loadAdditionalContent();
-		
-		
-		
-		
 		ScrollView scrollV=(ScrollView) findViewById(R.id.jam_menu_scrollview);
 		scrollV.setOnTouchListener(new OnTouchListener()
 		{
