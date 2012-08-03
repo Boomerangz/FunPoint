@@ -56,8 +56,10 @@ public abstract class ActivityController
 
 	public void checkInHere()
 	{
-		FSQConnector.checkIn(mapItem.getId());
-		setStateChecked();
+		Intent intent = new Intent(context, WriteCommentActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.putExtra("requestCode", WriteCommentActivity.CHECKIN_MODE);
+		context.startActivity(intent);
 		//MainApplication.socialConnector.shareCheckinOnTwitter(itemFood);
 	}
 
@@ -78,6 +80,7 @@ public abstract class ActivityController
 	{
 		Intent intent = new Intent(context, WriteCommentActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.putExtra("requestCode", WriteCommentActivity.COMMENT_MODE);
 		context.startActivity(intent);
 	}
 	

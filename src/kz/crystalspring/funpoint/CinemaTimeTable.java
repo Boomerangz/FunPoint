@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import kz.crystalspring.funpoint.CinemaTimeTable.CinemaTime;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,7 +32,7 @@ public class CinemaTimeTable
 		String title;
 		Date date;
 		boolean ticketable = false;;
-		List<CinemaTime> times = new ArrayList(0);
+		List<CinemaTime> times = new ArrayList<CinemaTime>(0);
 
 		public String getStrDate()
 		{

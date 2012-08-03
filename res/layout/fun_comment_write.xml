@@ -3,6 +3,12 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
     <EditText
         android:id="@+id/comment_text"
         android:layout_width="fill_parent"

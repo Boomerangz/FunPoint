@@ -2,6 +2,7 @@ package kz.crystalspring.funpoint;
 import kz.crystalspring.funpoint.item_page.foodController;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.MapItem;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
@@ -53,5 +54,5 @@ public class funObjectDetail extends FragmentActivity
 	{
 			return controller.onKeyDown(keyCode, event);
 	}
-
+	
 }

@@ -25,8 +25,10 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -140,6 +142,9 @@ public class HttpHelper
 			HttpPost post = new HttpPost(usedUrl);
 			post.setHeader("Accept-Language", "ru");
 			post.setEntity(new UrlEncodedFormEntity(parameters));
+//			AbstractHttpEntity ent = new UrlEncodedFormEntity(parameters, HTTP.UTF_8);
+//			ent.setContentEncoding("UTF-8");
+//			post.setEntity(ent);
 			InputStream is = loadStream(post);
 			try
 			{

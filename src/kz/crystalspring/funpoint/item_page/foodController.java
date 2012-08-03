@@ -143,14 +143,14 @@ public class foodController extends ActivityController
 				TabPageIndicator indicator = (TabPageIndicator) context
 						.findViewById(R.id.indicator);
 				indicator.setViewPager(viewPager);
-
-				showFood(itemFood);
 			} else
 			{
 				MainApplication.loadNoInternetPage();
 				context.finish();
 			}
+			
 		}
+		showFood(itemFood);
 	}
 
 	private View loadTitlePage()

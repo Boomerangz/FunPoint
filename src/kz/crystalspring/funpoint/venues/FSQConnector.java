@@ -1,6 +1,7 @@
 package kz.crystalspring.funpoint.venues;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -54,10 +55,16 @@ import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 
+import fi.foyt.foursquare.api.FoursquareApi;
+import fi.foyt.foursquare.api.FoursquareApiException;
+import fi.foyt.foursquare.api.Result;
+import fi.foyt.foursquare.api.entities.Photo;
+
 public class FSQConnector
 {
 	public static final String CLIENT_ID = "ATCDKP1BI3F1YDPOHVOWI2UCEXIUFWGPR0GF3DOVSLJFRFBM";
 	public static final String CLIENT_SECRET = "YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO";
+	public static final String CALLBACK_URL = "myapp://connect";
 	private static final String API_URL = "https://api.foursquare.com/v2";
 	private static final String CHECK_IN_URL = "https://api.foursquare.com/v2/checkins/add";
 	private static final String TIP_ADD_URL = "https://api.foursquare.com/v2/tips/add";
@@ -67,17 +74,18 @@ public class FSQConnector
 	private static final String CHECKINS_GET_URL = "https://api.foursquare.com/v2/users/self/checkins";
 	private static final String TAG = "FoursquareApi";
 	private static final String API_VERSION = "&v=20120522";
-	public static final int AREA_RADIUS=1500;
-	
-	private static List<FSQTodo> todosList = new ArrayList(0);
-	private static List<String> checkinsList = new ArrayList(0);
-	private static List<FSQBadge> badgesList = new ArrayList(0);
-	
+	public static final int AREA_RADIUS = 1500;
+
+	private static List<FSQTodo> todosList = new ArrayList<FSQTodo>(0);
+	private static List<String> checkinsList = new ArrayList<String>(0);
+	private static List<FSQBadge> badgesList = new ArrayList<FSQBadge>(0);
+
 	private static boolean isTodosLoaded = false;
 	private static boolean isCheckinsLoaded = false;
 	private static boolean isBadgesLoaded = false;
 
-	public static List<MapItem> loadItems(GeoPoint point, String category, int radius)
+	public static List<MapItem> loadItems(GeoPoint point, String category,
+			int radius)
 	{
 		if (point != null)
 		{
@@ -85,8 +93,8 @@ public class FSQConnector
 			{
 				List<MapItem> list = getNearby(point.getLatitudeE6() / 1e6,
 						point.getLongitudeE6() / 1e6, category, radius);
-//				list.addAll(getNearby(point.getLatitudeE6() / 1e6,
-//						point.getLongitudeE6() / 1e6, category, 0));
+				// list.addAll(getNearby(point.getLatitudeE6() / 1e6,
+				// point.getLongitudeE6() / 1e6, category, 0));
 				return list;
 			} catch (Exception e)
 			{
@@ -96,8 +104,6 @@ public class FSQConnector
 		} else
 			return new ArrayList<MapItem>();
 	}
-	
-	
 
 	public static ArrayList<MapItem> getNearby(double latitude,
 			double longitude, String category, int radius) throws Exception
@@ -154,24 +160,25 @@ public class FSQConnector
 		{
 			throw ex;
 		}
-		System.out.println("Составлен список объектов на основе ответа от сервера");
+		System.out
+				.println("Составлен список объектов на основе ответа от сервера");
 		return venueList;
 	}
-	
+
 	public static ArrayList<MapItem> getByName(double latitude,
-			double longitude,String category, String name) throws Exception
+			double longitude, String category, String name) throws Exception
 	{
 		ArrayList<MapItem> venueList = new ArrayList<MapItem>();
 		try
 		{
 			String ll = String.valueOf(latitude) + ","
 					+ String.valueOf(longitude);
-			
+
 			String sUrl = API_URL + "/venues/search?ll=" + ll;
 
 			if (category != null)
 				sUrl += "&categoryId=" + category;
-			
+
 			if (name != null)
 				sUrl += "&query=" + URLEncoder.encode(name);
 
@@ -213,18 +220,10 @@ public class FSQConnector
 		{
 			throw ex;
 		}
-		System.out.println("Составлен список объектов на основе ответа от сервера");
+		System.out
+				.println("Составлен список объектов на основе ответа от сервера");
 		return venueList;
 	}
-	
-	
-	
-	
-
-
-	
-
-
 
 	public static JSONObject getVenueInformation(String id)
 	{
@@ -249,9 +248,32 @@ public class FSQConnector
 
 	}
 
-	
-	
-	public static void checkIn(final String venueID)
+	public static void uploadPhoto(String venueId, String checkinId,
+			String tipId, byte[] image)
+	{
+		if (MainApplication.FsqApp.hasAccessToken())
+		{
+			String oAuthToken = MainApplication.FsqApp.getAccesToken();
+			String ll = Float.toString(MainApplication.mapItemContainer
+					.getSelectedMapItem().getLatitude())
+					+ ","
+					+ Float.toString(MainApplication.mapItemContainer
+							.getSelectedMapItem().getLongitude());
+			FoursquareApi foursquareApi = new FoursquareApi(CLIENT_ID,
+					CLIENT_SECRET, CALLBACK_URL);
+			foursquareApi.setoAuthToken(oAuthToken);
+			try
+			{
+				Result<Photo> photo = foursquareApi.photosAdd(checkinId, tipId,
+						venueId, "", ll, 0.0, 0.0, 0.0, image);
+			} catch (FoursquareApiException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void checkIn(final String venueID, final String comment, final byte[] image)
 	{
 		Runnable task = new Runnable()
 		{
@@ -269,24 +291,26 @@ public class FSQConnector
 
 					HttpClient client = new DefaultHttpClient();
 					HttpPost post = new HttpPost(sUrl);
-					List pairs = new ArrayList();
+					List<BasicNameValuePair> pairs = new ArrayList<BasicNameValuePair>();
 					pairs.add(new BasicNameValuePair("venueId", venueID));
 					post.setEntity(new UrlEncodedFormEntity(pairs));
 					HttpResponse response = client.execute(post);
-					st = HttpHelper.streamToString(response.getEntity().getContent());
-					String ID = new JSONObject(st).getJSONObject("response")
-							.getJSONObject("checkin").getJSONObject("venue")
-							.getString("id");
-					checkinsList.add(ID);
+					st = HttpHelper.streamToString(response.getEntity()
+							.getContent());
+					String ID = new JSONObject(st).getJSONObject("response").getJSONObject("checkin").getString("id");
+					if (ID!=null&&image!=null)
+						uploadPhoto(null, ID, null, image);
 				} catch (Exception e)
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
 				System.out.println(st);
 			}
 		};
 		MainApplication.pwAggregator.addTaskToQueue(task, null);
+		checkinsList.add(venueID);
 	}
 
 	public static boolean isFSQConnected()
@@ -294,35 +318,53 @@ public class FSQConnector
 		return MainApplication.FsqApp.hasAccessToken();
 	}
 
-	public static void addToTips(String venueID, String comment)
+	public static void addToTips(final String venueID, final String comment, final byte[] image)
 	{
-		String st = "";
-		
-		try
+		Runnable task = new Runnable()
 		{
-			String sUrl = TIP_ADD_URL + "?oauth_token="
-					+ MainApplication.FsqApp.getAccesToken() + API_VERSION;
-			URL url = new URL(sUrl);
-			Log.d(TAG, "Opening URL " + url.toString());
+			@Override
+			public void run()
+			{
+				String st = "";
+				String tipId = null;
+				try
+				{
+					String sUrl = TIP_ADD_URL + "?oauth_token="
+							+ MainApplication.FsqApp.getAccesToken()
+							+ API_VERSION;
+					URL url = new URL(sUrl);
+					Log.d(TAG, "Opening URL " + url.toString());
 
-			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost(sUrl);
-			List pairs = new ArrayList();
-			pairs.add(new BasicNameValuePair("venueId", venueID));
-			pairs.add(new BasicNameValuePair("text", comment));
-			AbstractHttpEntity ent=new UrlEncodedFormEntity(pairs, HTTP.UTF_8);
-			ent.setContentEncoding("UTF-8");
-			post.setEntity(ent);
-			
-			HttpResponse response = client.execute(post);
-			st = HttpHelper.streamToString(response.getEntity().getContent());
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		System.out.println(st);
-		FSQItem item=(FSQItem) MainApplication.mapItemContainer.getItemById(venueID);
-		item.getOptionalInfo().addCommentFromResponse(st);
+					HttpClient client = new DefaultHttpClient();
+					HttpPost post = new HttpPost(sUrl);
+					List<BasicNameValuePair> pairs = new ArrayList<BasicNameValuePair>();
+					pairs.add(new BasicNameValuePair("venueId", venueID));
+					pairs.add(new BasicNameValuePair("text", comment));
+					AbstractHttpEntity ent = new UrlEncodedFormEntity(pairs,
+							HTTP.UTF_8);
+					ent.setContentEncoding("UTF-8");
+					post.setEntity(ent);
+
+					HttpResponse response = client.execute(post);
+					st = HttpHelper.streamToString(response.getEntity()
+							.getContent());
+					JSONObject jRequest = new JSONObject(st);
+					tipId = jRequest.getJSONObject("response")
+							.getJSONObject("tip").getString("id");
+					if (tipId!=null&&image!=null)
+						uploadPhoto(null, null, tipId, image);
+
+				} catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+				System.out.println(st);
+				FSQItem item = (FSQItem) MainApplication.mapItemContainer
+						.getItemById(venueID);
+				item.getOptionalInfo().addCommentFromResponse(st);
+			}
+		};
+		MainApplication.pwAggregator.addTaskToQueue(task, null);
 	}
 
 	public static void addToTodos(final String venueID)
@@ -346,14 +388,14 @@ public class FSQConnector
 
 						HttpClient client = new DefaultHttpClient();
 						HttpPost post = new HttpPost(sUrl);
-						List pairs = new ArrayList();
+						List<BasicNameValuePair> pairs = new ArrayList<BasicNameValuePair>();
 						// pairs.add(new BasicNameValuePair("LIST_ID",
 						// "self/todos"));
 						pairs.add(new BasicNameValuePair("venueId", venueID));
 						post.setEntity(new UrlEncodedFormEntity(pairs));
 						HttpResponse response = client.execute(post);
-						String st = HttpHelper.streamToString(response.getEntity()
-								.getContent());
+						String st = HttpHelper.streamToString(response
+								.getEntity().getContent());
 
 						newTodo = newTodo.loadFromJSON_NewToDo(new JSONObject(
 								(String) st).getJSONObject("response")
@@ -531,7 +573,7 @@ public class FSQConnector
 		} else
 			return false;
 	}
-	
+
 	public static void loadBadgesAsync()
 	{
 		Runnable task = new Runnable()
@@ -551,17 +593,20 @@ public class FSQConnector
 								+ "&sort=recent" + API_VERSION;
 						st = HttpHelper.loadByUrl(sUrl);
 
-						JSONObject response = new JSONObject(st)
-								.getJSONObject("response")
-								.getJSONObject("badges");
-						
-						JSONArray names=response.names();
-						
+						JSONObject response = new JSONObject(st).getJSONObject(
+								"response").getJSONObject("badges");
+
+						JSONArray names = response.names();
+
 						for (int i = 0; i < response.length(); i++)
 						{
-							if (response.getJSONObject(names.getString(i)).getJSONArray("unlocks").length()>0)//если значок получен
-							{	
-								FSQBadge item = FSQBadge.loadFromJSON(response.getJSONObject(names.getString(i)));
+							if (response.getJSONObject(names.getString(i))
+									.getJSONArray("unlocks").length() > 0)// если
+																			// значок
+																			// получен
+							{
+								FSQBadge item = FSQBadge.loadFromJSON(response
+										.getJSONObject(names.getString(i)));
 								if (item != null)
 									todos.add(item);
 							}
@@ -582,12 +627,12 @@ public class FSQConnector
 		};
 		MainApplication.pwAggregator.addTaskToQueue(task, null);
 	}
-	
+
 	public static List<FSQBadge> getBadgesList()
 	{
 		return badgesList;
 	}
-	
+
 	public static boolean getBadgessLoaded()
 	{
 		return isBadgesLoaded;
@@ -597,66 +642,66 @@ public class FSQConnector
 	{
 		isBadgesLoaded = loaded;
 	}
-	
-	public static void loadImageAsync(final LoadingImageView iv, final UrlDrawable urlDr, final int big_or_small, boolean prioity)
+
+	public static void loadImageAsync(final LoadingImageView iv,
+			final UrlDrawable urlDr, final int big_or_small, boolean prioity)
 	{
-		Runnable preTask=new Runnable()
+		Runnable preTask = new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				if (big_or_small==UrlDrawable.BIG_URL&&urlDr.getBigDrawable()==null)
+				if (big_or_small == UrlDrawable.BIG_URL
+						&& urlDr.getBigDrawable() == null)
 				{
-					Drawable dr=HttpHelper.loadPictureByUrl(urlDr.bigUrl);
+					Drawable dr = HttpHelper.loadPictureByUrl(urlDr.bigUrl);
 					urlDr.setBigDrawable(dr);
+				} else if (big_or_small == UrlDrawable.SMALL_URL
+						&& urlDr.getSmallDrawable() == null)
+				{
+					urlDr.setSmallDrawable(HttpHelper
+							.loadPictureByUrl(urlDr.smallUrl));
 				}
-				else 
-					if (big_or_small==UrlDrawable.SMALL_URL&&urlDr.getSmallDrawable()==null)
-					{
-						urlDr.setSmallDrawable(HttpHelper.loadPictureByUrl(urlDr.smallUrl));
-					}
 			}
 		};
-		
-		Runnable postTask=new Runnable()
+
+		Runnable postTask = new Runnable()
 		{
 			@Override
 			public void run()
 			{
 				Drawable pict;
-				if (big_or_small==UrlDrawable.BIG_URL)
-					pict=urlDr.getBigDrawable();
+				if (big_or_small == UrlDrawable.BIG_URL)
+					pict = urlDr.getBigDrawable();
 				else
-					pict=urlDr.getSmallDrawable();
+					pict = urlDr.getSmallDrawable();
 				iv.setDrawable(pict);
 				iv.setOnClickListener(new OnClickListener()
 				{
 					@Override
 					public void onClick(View v)
 					{
-						Toast.makeText(iv.getContext(), "On Click", Toast.LENGTH_SHORT).show();
-						Intent intent=new Intent(iv.getContext(),FullScrLoadingImageActivity.class);
-						MainApplication.selectedItemPhoto=urlDr;
+						Toast.makeText(iv.getContext(), "On Click",
+								Toast.LENGTH_SHORT).show();
+						Intent intent = new Intent(iv.getContext(),
+								FullScrLoadingImageActivity.class);
+						MainApplication.selectedItemPhoto = urlDr;
 						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						iv.getContext().startActivity(intent);
 					}
 				});
 			}
 		};
-		
+
 		if (!prioity)
-			MainApplication.pwAggregator.addTaskToQueue(preTask,postTask);
+			MainApplication.pwAggregator.addTaskToQueue(preTask, postTask);
 		else
 			MainApplication.pwAggregator.addPriorityTask(preTask, postTask);
 	}
-	
-	
-	
-	
 
 	public static void loadBadgesPictureAsync(FSQBadge fsqBadge)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 }
