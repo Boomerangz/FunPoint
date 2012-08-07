@@ -57,7 +57,7 @@ public class EventContainer
 	
 	public void loadEventList()
 	{
-		JSONArray cinemaJSONArray=FileConnector.loadJSONCinemaEventsList();
+ 		JSONArray cinemaJSONArray=FileConnector.loadJSONCinemaEventsList();
 		for (int i=0;i<cinemaJSONArray.length();i++)
 		{
 			try

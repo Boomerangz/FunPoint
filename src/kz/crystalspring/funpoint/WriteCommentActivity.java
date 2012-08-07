@@ -126,7 +126,7 @@ public class WriteCommentActivity extends Activity
 			sendTip(comment,venueId);
 		else
 			sendCheckin(comment, venueId);
-		finisм нh();
+		finish();
 	}
 	
 	private void sendTip(String comment, String venueId)
@@ -227,14 +227,6 @@ public class WriteCommentActivity extends Activity
 		Bitmap mImageBitmap = Bitmap
 				.createScaledBitmap(mLargeBitmap, mLargeBitmap.getWidth() / 2,
 						mLargeBitmap.getHeight() / 2, true);
-		// FileOutputStream out;
-		// try {
-		// out = new FileOutputStream(_path);
-		// mImageBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
-		// } catch (FileNotFoundException e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// }
 		mImageView.setImageBitmap(mImageBitmap);
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		mImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);

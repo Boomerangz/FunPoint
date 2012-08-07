@@ -48,7 +48,6 @@ public class HttpHelper
 
 	private static HttpResponse loadResponse(HttpUriRequest request)
 	{
-
 		try
 		{
 			return client.execute(request);
@@ -141,18 +140,21 @@ public class HttpHelper
 			}
 			HttpPost post = new HttpPost(usedUrl);
 			post.setHeader("Accept-Language", "ru");
-			post.setEntity(new UrlEncodedFormEntity(parameters));
-//			AbstractHttpEntity ent = new UrlEncodedFormEntity(parameters, HTTP.UTF_8);
-//			ent.setContentEncoding("UTF-8");
-//			post.setEntity(ent);
+			AbstractHttpEntity ent = new UrlEncodedFormEntity(parameters,
+					HTTP.UTF_8);
+			ent.setContentEncoding("UTF-8");
+			post.setEntity(ent);
 			InputStream is = loadStream(post);
-			try
+			if (USE_PROXY)
 			{
-				GZIPInputStream gzip = new GZIPInputStream(is);
-				is = gzip;
-			} catch (Exception e)
-			{
-				e.printStackTrace();
+				try
+				{
+					GZIPInputStream gzip = new GZIPInputStream(is);
+					is = gzip;
+				} catch (Exception e)
+				{
+					e.printStackTrace();
+				}
 			}
 			return streamToString(is);
 		} catch (Exception e)

@@ -160,8 +160,7 @@ public class FSQConnector
 		{
 			throw ex;
 		}
-		System.out
-				.println("Составлен список объектов на основе ответа от сервера");
+		System.out.println("Составлен список объектов на основе ответа от сервера");
 		return venueList;
 	}
 
@@ -293,16 +292,21 @@ public class FSQConnector
 					HttpPost post = new HttpPost(sUrl);
 					List<BasicNameValuePair> pairs = new ArrayList<BasicNameValuePair>();
 					pairs.add(new BasicNameValuePair("venueId", venueID));
-					post.setEntity(new UrlEncodedFormEntity(pairs));
-					HttpResponse response = client.execute(post);
-					st = HttpHelper.streamToString(response.getEntity()
-							.getContent());
+					if (comment!=null&&!comment.trim().equalsIgnoreCase(""))
+						pairs.add(new BasicNameValuePair("shout", comment));
+					AbstractHttpEntity ent = new UrlEncodedFormEntity(pairs,
+							HTTP.UTF_8);
+					ent.setContentEncoding("UTF-8");
+					post.setEntity(ent);
+//					HttpResponse response = client.execute(post);
+//					st = HttpHelper.streamToString(response.getEntity()
+//							.getContent());
+					st = HttpHelper.loadPostByUrl(sUrl, pairs);
 					String ID = new JSONObject(st).getJSONObject("response").getJSONObject("checkin").getString("id");
 					if (ID!=null&&image!=null)
 						uploadPhoto(null, ID, null, image);
 				} catch (Exception e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
