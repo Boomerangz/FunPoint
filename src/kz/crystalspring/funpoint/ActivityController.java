@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
@@ -30,7 +31,7 @@ import android.widget.Toast;
 public abstract class ActivityController
 {
 	protected MapItem mapItem;
-	
+	protected AsyncTask  currentTask;
 	protected FragmentActivity context;
 	protected ActivityController(FragmentActivity _context)
 	{
@@ -50,8 +51,16 @@ public abstract class ActivityController
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
 		if (keyCode==KeyEvent.KEYCODE_BACK)
-			context.finish();
+		{
+			exit();
+		}
 		return true;
+	}
+
+	private void exit()
+	{
+	    context.finish();
+	    onExit();
 	}
 
 	public void checkInHere()
@@ -73,7 +82,7 @@ public abstract class ActivityController
 	{
 		MainApplication.mapItemContainer.setSelectedItem(mapItem);
 		MainMenu.goToObjectMap();
-		context.finish();
+		exit();
 	}
 	
 	public void openAddCommentActivity()
@@ -83,6 +92,13 @@ public abstract class ActivityController
 		intent.putExtra("requestCode", WriteCommentActivity.COMMENT_MODE);
 		context.startActivity(intent);
 	}
+	
+	public void onExit()
+	{
+	    if (currentTask!=null&&!currentTask.isCancelled())
+		currentTask.cancel(false);
+	}
+	  
 	
 	public abstract void setStateTodo();
 	public abstract void setStateChecked();

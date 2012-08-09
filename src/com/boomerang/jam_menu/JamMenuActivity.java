@@ -79,34 +79,6 @@ public class JamMenuActivity extends Activity
 				new SwitcherDesc(R.color.blue),
 				new SwitcherDesc(R.color.green),
 				new SwitcherDesc(android.R.color.white) };
-		
-//		SwitcherDesc[] swRest = {
-//				new SwitcherDesc(R.color.blue),
-//				new SwitcherDesc(R.color.green),
-//				new SwitcherDesc(R.color.blue) };
-//		
-//		SwitcherDesc[] swCinema = {
-//				new SwitcherDesc(R.color.blue),
-//				new SwitcherDesc(R.color.green),
-//				new SwitcherDesc(R.color.blue) };
-//		
-//		SwitcherDesc[] swShopping = {
-//				new SwitcherDesc(R.color.blue),
-//				new SwitcherDesc(R.color.green),
-//				new SwitcherDesc(R.color.blue) };
-//		
-//		SwitcherDesc[] swHotel = {
-//				new SwitcherDesc(R.color.blue),
-//				new SwitcherDesc(R.color.green),
-//				new SwitcherDesc(R.color.blue) };
-//		SwitcherDesc[] a = {
-//				new SwitcherDesc(R.color.blue),
-//				new SwitcherDesc(R.color.green),
-//				new SwitcherDesc(R.color.blue) };
-//		SwitcherDesc[] b = {
-//				new SwitcherDesc(R.color.blue),
-//				new SwitcherDesc(R.color.green),
-//				new SwitcherDesc(R.color.blue) };
 
 		switchers.get(0).setImageSource(Arrays.asList(swRest));
 		switchers.get(1).setImageSource(Arrays.asList(swCinema));

@@ -43,7 +43,7 @@ public class HttpHelper
 	private static final String GLOBAL_PROXY = "http://www.homeplus.kz/jam/4sq_gzip_curl.php";
 	private static final String LOCAL_PROXY = "http://192.168.1.50/jam/4sq_gzip_curl.php";
 	private static final String CURRENT_PROXY = GLOBAL_PROXY;
-	private static final boolean USE_PROXY = true;
+	private static final boolean USE_PROXY = false;
 	static HttpClient client = new DefaultHttpClient();
 
 	private static HttpResponse loadResponse(HttpUriRequest request)
