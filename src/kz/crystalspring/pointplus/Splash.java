@@ -29,8 +29,7 @@ public class Splash extends Activity
 		setContentView(R.layout.splash);
 		context = getApplicationContext();
 
-		CheckForFirstStart();
-		MainApplication.getInstance().onResume();
+
 		Thread t = new Thread()
 		{
 			@Override
@@ -38,6 +37,7 @@ public class Splash extends Activity
 			{
 				try
 				{
+					CheckForFirstStart();
 					sleep(1500);
 				} catch (InterruptedException e)
 				{

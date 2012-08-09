@@ -33,26 +33,10 @@ public class EventContainer
 				return event;
 			}
 		}
-		
-		
 		JSONObject jEvent=FileConnector.loadJSONEventById(id);
 		Event event=new Event(jEvent);
 		eventsList.add(event);
 		return event;
-//		JamDbAdapter jamDb=new JamDbAdapter(context);
-//		jamDb.open();
-//		Cursor cursor=jamDb.getEventById(id);
-//		cursor.moveToFirst();
-//		Event event;
-//		try
-//		{
-//			event = new Event(cursor);
-//		} catch (Exception e)
-//		{
-//			event=null;
-//			e.printStackTrace();
-//		}
-//		jamDb.close();
 	}
 	
 	public void loadEventList()
@@ -90,7 +74,5 @@ public class EventContainer
 	{
 		return eventsList;
 	}
-	
-	
 	
 }

@@ -20,7 +20,6 @@ import kz.crystalspring.funpoint.venues.FileConnector;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItemContainer;
 import kz.crystalspring.funpoint.venues.UserActivity;
-import kz.crystalspring.funpoint.venues.OptionalInfo.UrlDrawable;
 
 import android.app.Application;
 import android.content.Context;
@@ -49,7 +48,7 @@ public class MainApplication extends Application
 	public static SharedPreferences mPrefs;
 	public static FoursquareApp FsqApp;
 	public static PendingWorkAggregator pwAggregator = new PendingWorkAggregator();
-	public static UrlDrawable selectedItemPhoto;
+	public static kz.crystalspring.funpoint.venues.UrlDrawable selectedItemPhoto;
 	public static String selectedEventId = null;
 	private static MainApplication singleTon;
 	// public static SocialConnector socialConnector;
@@ -87,14 +86,14 @@ public class MainApplication extends Application
 				FSQConnector.CLIENT_SECRET);
 
 		updater = new LocationUpdater(this);
+		onResume();
 	}
-
+	
+	
 	public void onResume()
 	{
 		pwAggregator.setAbleToDo(true);
-		Runnable task = new Runnable()// ������ ��������, ������� ����
-		// ����������� ����� ���� ��� ����������
-		// ������� �������� �����.
+		Runnable task = new Runnable()
 		{
 			@Override
 			public void run()

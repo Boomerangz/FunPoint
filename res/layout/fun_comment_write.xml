@@ -23,26 +23,32 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" >
 
         <Button
             android:id="@+id/ok_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ok" />
-         <Button
+
+        <Button
             android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel" />
-         <Button
-            android:id="@+id/photo_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Photo" />
     </LinearLayout>
-	<ImageView 
-	    android:id="@+id/imageView1"
-	    android:layout_width="500dp"
-            android:layout_height="500dp"/>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/camera" />
+
+    <Button
+        android:id="@+id/clear_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        android:visibility="gone" />
+
 </LinearLayout>

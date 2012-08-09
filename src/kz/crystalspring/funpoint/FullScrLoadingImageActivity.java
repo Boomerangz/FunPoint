@@ -1,7 +1,7 @@
 package kz.crystalspring.funpoint;
 
 import kz.crystalspring.funpoint.venues.FSQConnector;
-import kz.crystalspring.funpoint.venues.OptionalInfo.UrlDrawable;
+import kz.crystalspring.funpoint.venues.UrlDrawable;
 import kz.crystalspring.pointplus.HttpHelper;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.visualities.LoadingImageView;

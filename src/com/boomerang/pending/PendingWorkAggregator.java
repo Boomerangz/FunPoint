@@ -93,6 +93,7 @@ public class PendingWorkAggregator
 			QueueAsyncTask queueTask = new QueueAsyncTask(
 					(PendingWork) oTask);
 			queueTask.execute();
+			runNextTask();
 		}
 		}
 	}
@@ -128,7 +129,7 @@ public class PendingWorkAggregator
 		{
 			if (work != null)
 				work.runPostTask();
-			runNextTask();
+
 		}
 	}
 
@@ -146,5 +147,4 @@ public class PendingWorkAggregator
 			runNextTask();
 		}
 	}
-
 }

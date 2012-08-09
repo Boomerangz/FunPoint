@@ -255,7 +255,9 @@ class ObjectAdapter extends BaseAdapter
 
 	public View getView(int position)
 	{
-		return filteredData.get(position).getView(null, position);
+		View v=filteredData.get(position).getView(null, position);
+		v.setMinimumHeight(Math.round(70*MainApplication.mDensity));
+		return v;
 	}
 	
 	@Override
@@ -270,8 +272,6 @@ class ObjectAdapter extends BaseAdapter
 		for (int i = 0; i < getCount(); i++)
 		{
 			View v = getView(i);
-
-			v.setMinimumHeight(Math.round(70 * MainApplication.mDensity));
 			viewList.add(v);
 		}
 		l.removeAllViews();

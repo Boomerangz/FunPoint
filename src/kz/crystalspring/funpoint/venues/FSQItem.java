@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kz.crystalspring.funpoint.R;
-import kz.crystalspring.funpoint.venues.OptionalInfo.UrlDrawable;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
 import kz.sbeyer.atmpoint1.types.ItemFood;
 

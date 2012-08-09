@@ -16,7 +16,6 @@ import java.util.List;
 
 import kz.crystalspring.funpoint.FullScrLoadingImageActivity;
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.venues.OptionalInfo.UrlDrawable;
 import kz.crystalspring.pointplus.HttpHelper;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.visualities.LoadingImageView;
@@ -287,17 +286,11 @@ public class FSQConnector
 							+ API_VERSION;
 					URL url = new URL(sUrl);
 					Log.d(TAG, "Opening URL " + url.toString());
-
-					HttpClient client = new DefaultHttpClient();
-					HttpPost post = new HttpPost(sUrl);
+					
 					List<BasicNameValuePair> pairs = new ArrayList<BasicNameValuePair>();
 					pairs.add(new BasicNameValuePair("venueId", venueID));
 					if (comment!=null&&!comment.trim().equalsIgnoreCase(""))
 						pairs.add(new BasicNameValuePair("shout", comment));
-					AbstractHttpEntity ent = new UrlEncodedFormEntity(pairs,
-							HTTP.UTF_8);
-					ent.setContentEncoding("UTF-8");
-					post.setEntity(ent);
 //					HttpResponse response = client.execute(post);
 //					st = HttpHelper.streamToString(response.getEntity()
 //							.getContent());
@@ -336,22 +329,11 @@ public class FSQConnector
 					String sUrl = TIP_ADD_URL + "?oauth_token="
 							+ MainApplication.FsqApp.getAccesToken()
 							+ API_VERSION;
-					URL url = new URL(sUrl);
-					Log.d(TAG, "Opening URL " + url.toString());
-
-					HttpClient client = new DefaultHttpClient();
-					HttpPost post = new HttpPost(sUrl);
 					List<BasicNameValuePair> pairs = new ArrayList<BasicNameValuePair>();
 					pairs.add(new BasicNameValuePair("venueId", venueID));
 					pairs.add(new BasicNameValuePair("text", comment));
-					AbstractHttpEntity ent = new UrlEncodedFormEntity(pairs,
-							HTTP.UTF_8);
-					ent.setContentEncoding("UTF-8");
-					post.setEntity(ent);
-
-					HttpResponse response = client.execute(post);
-					st = HttpHelper.streamToString(response.getEntity()
-							.getContent());
+					//HttpResponse response = client.execute(post);
+					st = HttpHelper.loadPostByUrl(sUrl, pairs);
 					JSONObject jRequest = new JSONObject(st);
 					tipId = jRequest.getJSONObject("response")
 							.getJSONObject("tip").getString("id");
@@ -387,19 +369,10 @@ public class FSQConnector
 					FSQTodo newTodo = new FSQTodo();
 					try
 					{
-						url = new URL(sUrl);
-						Log.d(TAG, "Opening URL " + url.toString());
 
-						HttpClient client = new DefaultHttpClient();
-						HttpPost post = new HttpPost(sUrl);
 						List<BasicNameValuePair> pairs = new ArrayList<BasicNameValuePair>();
-						// pairs.add(new BasicNameValuePair("LIST_ID",
-						// "self/todos"));
 						pairs.add(new BasicNameValuePair("venueId", venueID));
-						post.setEntity(new UrlEncodedFormEntity(pairs));
-						HttpResponse response = client.execute(post);
-						String st = HttpHelper.streamToString(response
-								.getEntity().getContent());
+						String st = HttpHelper.loadPostByUrl(sUrl, pairs);
 
 						newTodo = newTodo.loadFromJSON_NewToDo(new JSONObject(
 								(String) st).getJSONObject("response")
