@@ -71,8 +71,6 @@ public class JamTextImageSwitcher extends FrameLayout implements ViewFactory
 		switcher.setOutAnimation(outAnimation);
 	}
 	
-	
-	
 	public void setImageSource(List<SwitcherDesc> imageSource)
 	{
 		ImageSource = imageSource;
