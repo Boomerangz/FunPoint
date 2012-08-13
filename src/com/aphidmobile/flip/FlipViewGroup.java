@@ -28,16 +28,20 @@ import com.aphidmobile.utils.AphidLog;
 
  */
 
-public class FlipViewGroup extends ViewGroup {
+public class FlipViewGroup extends ViewGroup
+{
 
 	private static final int MSG_SURFACE_CREATED = 1;
 
 	private LinkedList<View> flipViews = new LinkedList<View>();
 
-	private Handler handler = new Handler(new Handler.Callback() {
+	private Handler handler = new Handler(new Handler.Callback()
+	{
 		@Override
-		public boolean handleMessage(Message msg) {
-			if (msg.what == MSG_SURFACE_CREATED) {
+		public boolean handleMessage(Message msg)
+		{
+			if (msg.what == MSG_SURFACE_CREATED)
+			{
 				width = 0;
 				height = 0;
 				requestLayout();
@@ -55,12 +59,14 @@ public class FlipViewGroup extends ViewGroup {
 
 	private boolean flipping = false;
 
-	public FlipViewGroup(Context context) {
+	public FlipViewGroup(Context context)
+	{
 		super(context);
 		setupSurfaceView();
 	}
 
-	private void setupSurfaceView() {
+	private void setupSurfaceView()
+	{
 		surfaceView = new GLSurfaceView(getContext());
 
 		renderer = new FlipRenderer(this);
@@ -74,37 +80,44 @@ public class FlipViewGroup extends ViewGroup {
 		addView(surfaceView);
 	}
 
-	public GLSurfaceView getSurfaceView() {
+	public GLSurfaceView getSurfaceView()
+	{
 		return surfaceView;
 	}
 
-	public FlipRenderer getRenderer() {
+	public FlipRenderer getRenderer()
+	{
 		return renderer;
 	}
 
-	public void addFlipView(View v) {
+	public void addFlipView(View v)
+	{
 		flipViews.add(v);
 		addView(v);
 	}
 
 	@Override
-	protected void onLayout(boolean changed, int l, int t, int r, int b) {
+	protected void onLayout(boolean changed, int l, int t, int r, int b)
+	{
 		AphidLog.i("onLayout: %d, %d, %d, %d; child %d", l, t, r, b,
 				flipViews.size());
 
 		for (View child : flipViews)
 			child.layout(0, 0, r - l, b - t);
 
-		if (changed || width == 0) {
+		if (changed || width == 0)
+		{
 			int w = r - l;
 			int h = b - t;
 			surfaceView.layout(0, 0, w, h);
 
-			if (width != w || height != h) {
+			if (width != w || height != h)
+			{
 				width = w;
 				height = h;
 
-				if (flipping && flipViews.size() >= 2) {
+				if (flipping && flipViews.size() >= 2)
+				{
 					View frontView = flipViews.get(flipViews.size() - 1);
 					View backView = flipViews.get(flipViews.size() - 2);
 					renderer.updateTexture(frontView, backView);
@@ -117,19 +130,22 @@ public class FlipViewGroup extends ViewGroup {
 
 	int currentView = 0;
 
-	public void goNext() {
+	public void goNext()
+	{
 		if (currentView < 1)
 			currentView++;
 		// updateViews();
 	}
 
-	public void goPrevious() {
+	public void goPrevious()
+	{
 		if (currentView > 0)
 			currentView--;
 		// updateViews();
 	}
 
-	public void updateViews() {
+	public void updateViews()
+	{
 		for (View v : flipViews)
 			v.setVisibility(View.INVISIBLE);
 		if (currentView >= 0 && currentView < flipViews.size())
@@ -137,7 +153,8 @@ public class FlipViewGroup extends ViewGroup {
 	}
 
 	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+	{
 		// Logger.i( String.format("onMeasure: %d, %d, ; child %d",
 		// widthMeasureSpec, heightMeasureSpec, flipViews.size()));
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -146,30 +163,36 @@ public class FlipViewGroup extends ViewGroup {
 			child.measure(widthMeasureSpec, heightMeasureSpec);
 	}
 
-	public void startFlipping() {
+	public void startFlipping()
+	{
 		flipping = true;
 	}
 
-	public void onResume() {
+	public void onResume()
+	{
 		surfaceView.onResume();
 	}
 
-	public void onPause() {
+	public void onPause()
+	{
 		surfaceView.onPause();
 	}
 
-	public void reloadTexture() {
+	public void reloadTexture()
+	{
 		handler.sendMessage(Message.obtain(handler, MSG_SURFACE_CREATED));
 	}
 
 	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+	public boolean onTouchEvent(MotionEvent event)
+	{
+		if (event.getAction() == MotionEvent.ACTION_DOWN)
+		{
 			View frontView = flipViews.get(flipViews.size() - 1);
 			View backView = flipViews.get(flipViews.size() - 2);
 			renderer.updateTexture(frontView, backView);
 			return true;
 		}
-		return  renderer.getCards().handleTouchEvent(event);
+		return renderer.getCards().handleTouchEvent(event);
 	}
 }

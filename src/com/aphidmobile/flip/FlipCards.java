@@ -27,7 +27,8 @@ import com.aphidmobile.utils.AphidLog;
 
  */
 
-public class FlipCards {
+public class FlipCards
+{
 	private static final float ACCELERATION = 0.618f;
 	private static final float TIP_SPEED = 1f;
 	private static final float MOVEMENT_RATE = 1.5f;
@@ -48,7 +49,7 @@ public class FlipCards {
 
 	private Card backTopCard;
 	private Card backBottomCard;
-	
+
 	public static FlipViewGroup fvg;
 
 	private float angle = 0f;
@@ -57,7 +58,8 @@ public class FlipCards {
 	private int animatedFrame = 0;
 	private int state = STATE_TIP;
 
-	public FlipCards() {
+	public FlipCards()
+	{
 		frontTopCard = new Card();
 		frontBottomCard = new Card();
 
@@ -68,12 +70,14 @@ public class FlipCards {
 		backTopCard.setAxis(Card.AXIS_BOTTOM);
 	}
 
-	public void reloadTexture(View frontView, View backView) {
+	public void reloadTexture(View frontView, View backView)
+	{
 		frontBitmap = GrabIt.takeScreenshot(frontView);
 		backBitmap = GrabIt.takeScreenshot(backView);
 	}
 
-	public void rotateBy(float delta) {
+	public void rotateBy(float delta)
+	{
 		angle += delta;
 		if (angle > 180)
 			angle = 180;
@@ -81,25 +85,33 @@ public class FlipCards {
 			angle = 0;
 	}
 
-	public void setState(int state) {
-		if (this.state != state) {
+	public void setState(int state)
+	{
+		if (this.state != state)
+		{
 			this.state = state;
 			animatedFrame = 0;
 		}
 	}
 
-	public int getState() {
+	public int getState()
+	{
 		return state;
 	}
-	int currentCard=0;
-	public void draw(GL10 gl) {
+
+	int currentCard = 0;
+
+	public void draw(GL10 gl)
+	{
 		applyTexture(gl);
 
 		if (frontTexture == null)
 			return;
 
-		switch (state) {
-		case STATE_TIP: {
+		switch (state)
+		{
+		case STATE_TIP:
+		{
 			if (angle >= 180)
 				forward = false;
 			else if (angle <= 0)
@@ -115,17 +127,17 @@ public class FlipCards {
 			break;
 		case STATE_TOUCH:
 			break;
-		case STATE_AUTO_ROTATE: {
+		case STATE_AUTO_ROTATE:
+		{
 			animatedFrame++;
 			rotateBy((forward ? ACCELERATION : -ACCELERATION) * animatedFrame);
 			if (angle >= 180)
 			{
 				setState(STATE_TIP);
-			} else
-				if (angle <= 0)
-				{
-					setState(STATE_TIP);
-				}
+			} else if (angle <= 0)
+			{
+				setState(STATE_TIP);
+			}
 		}
 			break;
 		default:
@@ -133,13 +145,16 @@ public class FlipCards {
 			break;
 		}
 
-		if (getState() != STATE_TIP) {
-			if (angle < 90) {
+		if (getState() != STATE_TIP)
+		{
+			if (angle < 90)
+			{
 				frontTopCard.draw(gl);
 				backBottomCard.draw(gl);
 				frontBottomCard.setAngle(angle);
 				frontBottomCard.draw(gl);
-			} else {
+			} else
+			{
 				frontTopCard.draw(gl);
 				backTopCard.setAngle(180 - angle);
 				backTopCard.draw(gl);
@@ -148,12 +163,15 @@ public class FlipCards {
 		}
 	}
 
-	public int getCurrentCard() {
+	public int getCurrentCard()
+	{
 		return currentCard;
 	}
 
-	private void applyTexture(GL10 gl) {
-		if (frontBitmap != null) {
+	private void applyTexture(GL10 gl)
+	{
+		if (frontBitmap != null)
+		{
 			if (frontTexture != null)
 				frontTexture.destroy(gl);
 
@@ -209,7 +227,8 @@ public class FlipCards {
 			frontBitmap = null;
 		}
 
-		if (backBitmap != null) {
+		if (backBitmap != null)
+		{
 			if (backTexture != null)
 				backTexture.destroy(gl);
 
@@ -268,7 +287,8 @@ public class FlipCards {
 		}
 	}
 
-	public void invalidateTexture() {
+	public void invalidateTexture()
+	{
 		// Texture is vanished when the gl context is gone, no need to delete it
 		// explicitly
 		frontTexture = null;
@@ -277,33 +297,33 @@ public class FlipCards {
 
 	private float lastY = -1;
 
-	
-	public boolean handleTouchEvent(MotionEvent event) {
+	public boolean handleTouchEvent(MotionEvent event)
+	{
 		if (frontTexture == null)
 			return false;
 
 		float delta;
 		System.out.println("TEXTURE_ACTION");
-		switch (event.getAction()) {
-//		case MotionEvent.ACTION_DOWN:
-//			System.out.println("TEXTURE_ACTION_DOWN");
-//			lastY = event.getY();
-//			return true;
+		switch (event.getAction())
+		{
+		// case MotionEvent.ACTION_DOWN:
+		// System.out.println("TEXTURE_ACTION_DOWN");
+		// lastY = event.getY();
+		// return true;
 		case MotionEvent.ACTION_MOVE:
 			System.out.println("TEXTURE_ACTION_MOVE");
-			if (lastY==-1)
+			if (lastY == -1)
 			{
 				lastY = event.getY();
 				return true;
-			}
-			else
+			} else
 			{
-			setState(STATE_TOUCH);
-			delta = lastY - event.getY();
-			rotateBy(180 * delta / frontTexture.getContentHeight()
-					* MOVEMENT_RATE);
-			lastY = event.getY();
-			return true;
+				setState(STATE_TOUCH);
+				delta = lastY - event.getY();
+				rotateBy(180 * delta / frontTexture.getContentHeight()
+						* MOVEMENT_RATE);
+				lastY = event.getY();
+				return true;
 			}
 		case MotionEvent.ACTION_UP:
 		case MotionEvent.ACTION_CANCEL:
@@ -315,15 +335,14 @@ public class FlipCards {
 			{
 				forward = false;
 				fvg.goPrevious();
-			}
-			else
+			} else
 			{
 				forward = true;
 				fvg.goNext();
 			}
 			setState(STATE_AUTO_ROTATE);
 			fvg.updateViews();
-			lastY=-1;
+			lastY = -1;
 			return true;
 		}
 

@@ -28,7 +28,8 @@ import android.widget.Toast;
 import com.aphidmobile.flip.FlipViewGroup;
 import com.boomerang.jam_menu.JamTextImageSwitcher;
 
-public class JamMenuActivity extends Activity {
+public class JamMenuActivity extends Activity
+{
 
 	List<JamTextImageSwitcher> switchers = new ArrayList<JamTextImageSwitcher>();
 	// int currButton = -1;
@@ -40,7 +41,8 @@ public class JamMenuActivity extends Activity {
 	boolean isMoving = false;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 
 		LayoutInflater inflater = getLayoutInflater();
@@ -93,11 +95,13 @@ public class JamMenuActivity extends Activity {
 		switchers.get(1).setImageSource(Arrays.asList(swCinema));
 		switchers.get(2).setImageSource(Arrays.asList(swShopping));
 		switchers.get(3).setImageSource(Arrays.asList(swHotel));
-		for (int i = 0; i < switchers.size(); i++) {
+		for (int i = 0; i < switchers.size(); i++)
+		{
 			JamTextImageSwitcher switcher;
 			switcher = switchers.get(i);
 
-			if (i > 3) {
+			if (i > 3)
+			{
 				if (i % 2 == 0)
 					switcher.setImageSource(Arrays.asList(a));
 				else
@@ -146,45 +150,59 @@ public class JamMenuActivity extends Activity {
 		// }
 		// });
 
-		switchers.get(0).setOnTouchListener(new OnSwitcherTouchListener() {
+		switchers.get(0).setOnTouchListener(new OnSwitcherTouchListener()
+		{
 			@Override
-			public void onClick() {
+			public void onClick()
+			{
 				runItemActivityWithFilter(MapItem.FSQ_TYPE_FOOD);
 			}
 		});
-		switchers.get(1).setOnTouchListener(new OnSwitcherTouchListener() {
+		switchers.get(1).setOnTouchListener(new OnSwitcherTouchListener()
+		{
 			@Override
-			public void onClick() {
+			public void onClick()
+			{
 				runItemActivityWithFilter(MapItem.FSQ_TYPE_CINEMA);
 			}
 		});
-		switchers.get(2).setOnTouchListener(new OnSwitcherTouchListener() {
+		switchers.get(2).setOnTouchListener(new OnSwitcherTouchListener()
+		{
 			@Override
-			public void onClick() {
+			public void onClick()
+			{
 				runItemActivityWithFilter(MapItem.FSQ_TYPE_MARKET);
 			}
 		});
-		switchers.get(3).setOnTouchListener(new OnSwitcherTouchListener() {
+		switchers.get(3).setOnTouchListener(new OnSwitcherTouchListener()
+		{
 			@Override
-			public void onClick() {
+			public void onClick()
+			{
 				runItemActivityWithFilter(MapItem.FSQ_TYPE_HOTEL);
 			}
 		});
-		switchers.get(4).setOnTouchListener(new OnSwitcherTouchListener() {
+		switchers.get(4).setOnTouchListener(new OnSwitcherTouchListener()
+		{
 			@Override
-			public void onClick() {
+			public void onClick()
+			{
 				openCheckIn();
 			}
 		});
-		switchers.get(6).setOnTouchListener(new OnSwitcherTouchListener() {
+		switchers.get(6).setOnTouchListener(new OnSwitcherTouchListener()
+		{
 			@Override
-			public void onClick() {
+			public void onClick()
+			{
 				openUserInfo();
 			}
 		});
-		switchers.get(7).setOnTouchListener(new OnSwitcherTouchListener() {
+		switchers.get(7).setOnTouchListener(new OnSwitcherTouchListener()
+		{
 			@Override
-			public void onClick() {
+			public void onClick()
+			{
 				openHelpdesk();
 			}
 		});
@@ -196,7 +214,8 @@ public class JamMenuActivity extends Activity {
 	};
 
 	@Override
-	protected void onResume() {
+	protected void onResume()
+	{
 		super.onResume();
 		continueUpdating = true;
 		mHandler.removeCallbacks(mUpdateTimeTask);
@@ -205,17 +224,22 @@ public class JamMenuActivity extends Activity {
 	}
 
 	@Override
-	protected void onPause() {
+	protected void onPause()
+	{
 		super.onPause();
 		contentView.onPause();
 	}
 
-	private void updateNext() {
-		if (continueUpdating) {
-			AsyncTask<Object, Object, JamTextImageSwitcher> task = new AsyncTask<Object, Object, JamTextImageSwitcher>() {
+	private void updateNext()
+	{
+		if (continueUpdating)
+		{
+			AsyncTask<Object, Object, JamTextImageSwitcher> task = new AsyncTask<Object, Object, JamTextImageSwitcher>()
+			{
 
 				@Override
-				protected JamTextImageSwitcher doInBackground(Object... params) {
+				protected JamTextImageSwitcher doInBackground(Object... params)
+				{
 
 					int currButton = (int) Math.round((Math.random()
 							* switchers.size() - 1));
@@ -229,8 +253,10 @@ public class JamMenuActivity extends Activity {
 				}
 
 				@Override
-				public void onPostExecute(JamTextImageSwitcher result) {
-					if (!isMoving) {
+				public void onPostExecute(JamTextImageSwitcher result)
+				{
+					if (!isMoving)
+					{
 						result.updateImage();
 					}
 				}
@@ -239,13 +265,16 @@ public class JamMenuActivity extends Activity {
 		}
 	}
 
-	private Runnable mUpdateTimeTask = new Runnable() {
-		public void run() {
+	private Runnable mUpdateTimeTask = new Runnable()
+	{
+		public void run()
+		{
 			updateNext();
 		}
 	};
 
-	private void runItemActivityWithFilter(String visibleFilter) {
+	private void runItemActivityWithFilter(String visibleFilter)
+	{
 		MainApplication.mapItemContainer.setVisibleFilter(visibleFilter);
 		Intent intent = new Intent(JamMenuActivity.this,
 				funWaitingActivity.class);
@@ -254,41 +283,50 @@ public class JamMenuActivity extends Activity {
 		continueUpdating = false;
 	}
 
-	private void openHelpdesk() {
+	private void openHelpdesk()
+	{
 		openActivity(Helpdesk.class);
 	}
 
-	private void openCheckIn() {
+	private void openCheckIn()
+	{
 		openActivity(funCheckinNow.class);
 	}
 
-	private <E> void openActivity(Class<E> class1) {
+	private <E> void openActivity(Class<E> class1)
+	{
 		Intent intent = new Intent(this, class1);
 		startActivity(intent);
 	}
 
-	private void openUserInfo() {
+	private void openUserInfo()
+	{
 		openActivity(ProfilePage.class);
 	}
 
-	abstract class OnSwitcherTouchListener implements OnTouchListener {
+	abstract class OnSwitcherTouchListener implements OnTouchListener
+	{
 		boolean canceled = false;
 		float x;
 		float y;
 
 		@Override
-		public boolean onTouch(View arg0, MotionEvent arg1) {
+		public boolean onTouch(View arg0, MotionEvent arg1)
+		{
 			System.out.println("ACTION____");
-			if (arg1.getAction() == MotionEvent.ACTION_DOWN) {
+			if (arg1.getAction() == MotionEvent.ACTION_DOWN)
+			{
 				canceled = false;
 				x = arg1.getRawX();
 				y = arg1.getRawY();
 				isMoving = true;
 				System.out.println("ACTION_DOWN");
 			}
-			switch (arg1.getAction()) {
+			switch (arg1.getAction())
+			{
 			case MotionEvent.ACTION_MOVE:
-				if (!canceled) {
+				if (!canceled)
+				{
 					System.out.println("ACTION_MOVE");
 					if (Math.abs(arg1.getRawX() - x) > 10
 							|| Math.abs(arg1.getRawY() - y) > 10)
@@ -300,8 +338,9 @@ public class JamMenuActivity extends Activity {
 				break;
 			case MotionEvent.ACTION_UP:
 				System.out.println("ACTION_UP");
-				isMoving=false;
-				if (!canceled) {
+				isMoving = false;
+				if (!canceled)
+				{
 					onClick();
 					return true;
 				}
