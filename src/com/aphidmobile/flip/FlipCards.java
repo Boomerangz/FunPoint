@@ -31,7 +31,7 @@ public class FlipCards
 {
 	private static final float ACCELERATION = 0.618f;
 	private static final float TIP_SPEED = 1f;
-	private static final float MOVEMENT_RATE = 1.5f;
+	private static final float MOVEMENT_RATE = 1f;
 	private static final int MAX_TIP_ANGLE = 60;
 
 	public static final int STATE_TIP = 0;

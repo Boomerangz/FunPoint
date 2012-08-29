@@ -18,7 +18,7 @@ import kz.crystalspring.funpoint.FullScrLoadingImageActivity;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.pointplus.HttpHelper;
 import kz.crystalspring.pointplus.ProjectUtils;
-import kz.crystalspring.visualities.LoadingImageView;
+import kz.crystalspring.views.LoadingImageView;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
 import kz.sbeyer.atmpoint1.types.ItemFood;
 import kz.sbeyer.atmpoint1.types.ItemHotel;

@@ -261,7 +261,4 @@ class LocationUpdater implements LocationListener
 
 }
 
-interface RefreshableMapList
-{
-	public void refreshMapItems();
-}
+

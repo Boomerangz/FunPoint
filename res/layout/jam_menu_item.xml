@@ -14,7 +14,23 @@
             android:layout_height="fill_parent"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true" />
-
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="7dp"
+            android:shadowColor="#000000"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="3"
+            android:text="Large Text"
+            android:textColor="@color/white"
+            android:textSize="7pt"
+            android:textStyle="bold" />
+
         <LinearLayout
             android:id="@+id/text_background"
             android:layout_width="fill_parent"
@@ -23,15 +39,6 @@
             android:layout_alignParentRight="true"
             android:background="@color/selected_blue"
             android:gravity="center" >
-
-            <TextView
-                android:id="@+id/text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Large Text"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="7pt"/>
         </LinearLayout>
     </RelativeLayout>
 

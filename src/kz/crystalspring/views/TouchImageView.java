@@ -1,4 +1,4 @@
-package kz.crystalspring.visualities;
+package kz.crystalspring.views;
 
 import kz.crystalspring.funpoint.MainApplication;
 import android.content.Context;

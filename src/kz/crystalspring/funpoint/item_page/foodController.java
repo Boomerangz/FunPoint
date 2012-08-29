@@ -18,7 +18,7 @@ import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FileConnector;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
 import kz.crystalspring.pointplus.ProjectUtils;
-import kz.crystalspring.visualities.LoadingImageView;
+import kz.crystalspring.views.LoadingImageView;
 import kz.sbeyer.atmpoint1.types.ItemFood;
 import android.content.Intent;
 import android.graphics.Color;

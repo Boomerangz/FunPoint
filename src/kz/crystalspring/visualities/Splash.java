@@ -1,4 +1,4 @@
-package kz.crystalspring.pointplus;
+package kz.crystalspring.visualities;
 
 import com.boomerang.jam_menu.JamMenuActivity;
 import com.boomerang.metromenu.MetromenuActivity;
@@ -45,7 +45,7 @@ public class Splash extends Activity
 				} finally
 				{
 					Intent openMainPage = new Intent(Splash.this,
-							JamMenuActivity.class);
+							HomeScreen.class);
 					startActivity(openMainPage);
 				}
 			}

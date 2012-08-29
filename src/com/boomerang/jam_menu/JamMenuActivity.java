@@ -69,27 +69,27 @@ public class JamMenuActivity extends Activity
 		switchers.add((JamTextImageSwitcher) secondPage
 				.findViewById(R.id.switcher8));
 
-		SwitcherDesc[] swRest = { new SwitcherDesc(R.drawable.rest0),
-				new SwitcherDesc(R.drawable.rest1),
-				new SwitcherDesc(R.drawable.rest2) };
+		SwitcherDescription[] swRest = { new SwitcherDescription(R.drawable.rest0),
+				new SwitcherDescription(R.drawable.rest1),
+				new SwitcherDescription(R.drawable.rest2) };
 
-		SwitcherDesc[] swCinema = { new SwitcherDesc(R.drawable.cinema1),
-				new SwitcherDesc(R.drawable.cinema2),
-				new SwitcherDesc(R.drawable.cinema3) };
+		SwitcherDescription[] swCinema = { new SwitcherDescription(R.drawable.cinema1),
+				new SwitcherDescription(R.drawable.cinema2),
+				new SwitcherDescription(R.drawable.cinema3) };
 
-		SwitcherDesc[] swShopping = { new SwitcherDesc(R.drawable.shopping1),
-				new SwitcherDesc(R.drawable.shopping2),
-				new SwitcherDesc(R.drawable.shopping3) };
+		SwitcherDescription[] swShopping = { new SwitcherDescription(R.drawable.shopping1),
+				new SwitcherDescription(R.drawable.shopping2),
+				new SwitcherDescription(R.drawable.shopping3) };
 
-		SwitcherDesc[] swHotel = { new SwitcherDesc(R.drawable.hotel1),
-				new SwitcherDesc(R.drawable.hotel2),
-				new SwitcherDesc(R.drawable.hotel3) };
-		SwitcherDesc[] a = { new SwitcherDesc(R.color.blue),
-				new SwitcherDesc(R.color.green),
-				new SwitcherDesc(android.R.color.white) };
-		SwitcherDesc[] b = { new SwitcherDesc(R.color.blue),
-				new SwitcherDesc(R.color.green),
-				new SwitcherDesc(android.R.color.white) };
+		SwitcherDescription[] swHotel = { new SwitcherDescription(R.drawable.hotel1),
+				new SwitcherDescription(R.drawable.hotel2),
+				new SwitcherDescription(R.drawable.hotel3) };
+		SwitcherDescription[] a = { new SwitcherDescription(R.color.blue),
+				new SwitcherDescription(R.color.green),
+				new SwitcherDescription(android.R.color.white) };
+		SwitcherDescription[] b = { new SwitcherDescription(R.color.blue),
+				new SwitcherDescription(R.color.green),
+				new SwitcherDescription(android.R.color.white) };
 
 		switchers.get(0).setImageSource(Arrays.asList(swRest));
 		switchers.get(1).setImageSource(Arrays.asList(swCinema));
@@ -108,47 +108,27 @@ public class JamMenuActivity extends Activity
 					switcher.setImageSource(Arrays.asList(b));
 			}
 			switcher.updateImage();
-			// switcher.setOnClickListener(new OnClickListener()
-			// {
-			//
-			// @Override
-			// public void onClick(View v)
-			// {
-			// Toast toast = Toast.makeText(getBaseContext(),
-			// "Coming soon", 100);
-			// toast.show();
-			// }
-			// });
 		}
 		switchers.get(0).setText("РЕСТОРАНЫ");
-		switchers.get(0).setTextBackground(
-				getResources().getColor(R.color.restaurant));
+//		switchers.get(0).setTextBackground(
+//				getResources().getColor(R.color.restaurant));
 
 		switchers.get(1).setText("КИНО");
-		switchers.get(1).setTextBackground(
-				getResources().getColor(R.color.cinema));
+//		switchers.get(1).setTextBackground(
+//				getResources().getColor(R.color.cinema));
 
 		switchers.get(3).setText("ОТЕЛИ");
-		switchers.get(3).setTextBackground(
-				getResources().getColor(R.color.hotel));
+//		switchers.get(3).setTextBackground(
+//				getResources().getColor(R.color.hotel));
 
 		switchers.get(2).setText("МАГАЗИНЫ");
-		switchers.get(2).setTextBackground(
-				getResources().getColor(R.color.shop));
+//		switchers.get(2).setTextBackground(
+//				getResources().getColor(R.color.shop));
 
 		switchers.get(4).setText("CheckIn Now");
 		switchers.get(5).setText("Jam.KZ");
 		switchers.get(6).setText("ПРОФИЛЬ");
 		switchers.get(7).setText("СООБЩЕНИЯ");
-		// switchers.get(0).setOnClickListener(new OnClickListener()
-		// {
-		//
-		// @Override
-		// public void onClick(View v)
-		// {
-		// runItemActivityWithFilter(MapItem.FSQ_TYPE_FOOD);
-		// }
-		// });
 
 		switchers.get(0).setOnTouchListener(new OnSwitcherTouchListener()
 		{
@@ -236,7 +216,6 @@ public class JamMenuActivity extends Activity
 		{
 			AsyncTask<Object, Object, JamTextImageSwitcher> task = new AsyncTask<Object, Object, JamTextImageSwitcher>()
 			{
-
 				@Override
 				protected JamTextImageSwitcher doInBackground(Object... params)
 				{
@@ -251,7 +230,6 @@ public class JamMenuActivity extends Activity
 					mHandler.postDelayed(mUpdateTimeTask, UPDATE_DELAY);
 					return switchers.get(currButton);
 				}
-
 				@Override
 				public void onPostExecute(JamTextImageSwitcher result)
 				{

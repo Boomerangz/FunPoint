@@ -1,4 +1,4 @@
-package kz.crystalspring.visualities;
+package kz.crystalspring.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
