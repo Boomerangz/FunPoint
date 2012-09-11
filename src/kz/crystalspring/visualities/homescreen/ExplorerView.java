@@ -53,7 +53,7 @@ public class ExplorerView
 		if (listView.getAdapter()==null||listView.getAdapter().getCount()==0)
 		{
 			listView.setAdapter(new ExplorerAdapter(FSQConnector.getExplorer()));
-			listView.setMinimumHeight(Math.round(1*MainApplication.mDensity));
+			listView.setMinimumHeight(Math.round(100*MainApplication.mDensity));
 		}
 		else
 		{

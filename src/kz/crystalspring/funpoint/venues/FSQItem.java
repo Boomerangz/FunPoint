@@ -4,7 +4,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
+import kz.crystalspring.views.LoadingImageView;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
 import kz.sbeyer.atmpoint1.types.ItemFood;
 
@@ -13,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 
 public class FSQItem extends MapItem
 {
@@ -211,6 +214,34 @@ public class FSQItem extends MapItem
 		if (getObjTypeId().equals(FSQ_TYPE_MARKET))
 			return context.getResources().getColor(R.color.shop);
 		return context.getResources().getColor(R.color.selected_blue);
+	}
+	Drawable photo=null;
+	@Override
+	protected void loadImageToView(final LoadingImageView loadingImageView) 
+	{
+		
+		Runnable task=new Runnable()
+		{
+
+			@Override
+			public void run() 
+			{
+				if (photo==null)
+					photo=FSQConnector.loadTitlePhotoForVenue(getId());
+			}
+		};
+		Runnable postTask=new Runnable() {
+			
+			@Override
+			public void run() 
+			{
+				if (photo!=null)
+					loadingImageView.setDrawable(photo);
+				else
+					loadingImageView.setDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
+			}
+		};
+		MainApplication.pwAggregator.addPriorityTask(task, postTask);
 	}
 
 }

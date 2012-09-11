@@ -9,6 +9,7 @@ import java.util.List;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.funObjectDetail;
 import kz.crystalspring.pointplus.ProjectUtils;
+import kz.crystalspring.views.LoadingImageView;
 import kz.crystalspring.funpoint.R;
 
 import org.json.JSONObject;
@@ -21,16 +22,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.sax.StartElementListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public abstract class MapItem implements Serializable, ListItem
-{
+public abstract class MapItem implements Serializable, ListItem {
 	String id;
 	float longitude;
 	float latitude;
@@ -43,7 +45,7 @@ public abstract class MapItem implements Serializable, ListItem
 
 	public static final String FSQ_TYPE_CINEMA = "4bf58dd8d48988d17f941735";
 	public static final String FSQ_TYPE_CLUB = "4bf58dd8d48988d11f941735";
-	public static final String FSQ_TYPE_HOTEL ="4bf58dd8d48988d1fa931735";
+	public static final String FSQ_TYPE_HOTEL = "4bf58dd8d48988d1fa931735";
 	public static final String FSQ_TYPE_FOOD = "4d4b7105d754a06374d81259";// "4bf58dd8d48988d145941735";"4d4b7105d754a06374d81259;
 	public static final String FSQ_TYPE_MARKET = "4d4b7105d754a06378d81259";
 
@@ -51,60 +53,50 @@ public abstract class MapItem implements Serializable, ListItem
 			FSQ_TYPE_HOTEL, FSQ_TYPE_FOOD, FSQ_TYPE_MARKET };
 
 	public static Context context;
-	//private static Drawable icon;
 
-	public String getId()
-	{
+	// private static Drawable icon;
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(String id)
-	{
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public float getLongitude()
-	{
+	public float getLongitude() {
 		return longitude;
 	}
 
-	public int getLongitudeE6()
-	{
+	public int getLongitudeE6() {
 		return (int) Math.round(getLongitude() * 1e6);
 	}
 
-	public void setLongitude(float longitude)
-	{
+	public void setLongitude(float longitude) {
 		this.longitude = longitude;
 	}
 
-	public float getLatitude()
-	{
+	public float getLatitude() {
 		return latitude;
 	}
 
-	public int getLatitudeE6()
-	{
+	public int getLatitudeE6() {
 		return (int) Math.round(getLatitude() * 1e6);
 	}
 
-	public void setLatitude(float latitude)
-	{
+	public void setLatitude(float latitude) {
 		this.latitude = latitude;
 	}
 
-	public void setIsValid(int i)
-	{
+	public void setIsValid(int i) {
 		valid = i;
 	}
 
-	public int getIsValid()
-	{
+	public int getIsValid() {
 		return valid;
 	}
 
-	public int getRating()
-	{
+	public int getRating() {
 		return 0;
 	}
 
@@ -113,15 +105,13 @@ public abstract class MapItem implements Serializable, ListItem
 	public abstract MapItem loadFromJSON(JSONObject jObject);
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "ID " + getId();
 	}
 
 	public abstract String getIconName();
 
-	public Drawable getIcon()
-	{
+	public Drawable getIcon() {
 
 		int id = getImgId(getIconName());
 		Drawable icon = context.getResources().getDrawable(id);
@@ -131,113 +121,82 @@ public abstract class MapItem implements Serializable, ListItem
 		return icon;
 	}
 
-	public Bitmap getIconBM()
-	{
+	public Bitmap getIconBM() {
 		int id = getImgId(getIconName());
 		return BitmapFactory.decodeResource(context.getResources(), id);
 	}
 
-	public String toStringLong()
-	{
+	public String toStringLong() {
 		// TODO Auto-generated method stub
 		return "";
 	}
 
-	public GeoPoint getGeoPoint()
-	{
+	public GeoPoint getGeoPoint() {
 		GeoPoint point = new GeoPoint(getLatitudeE6(), getLongitudeE6());
 		return point;
 	}
 
-	public static int getImgId(String pImgSrcStr)
-	{
-		if (pImgSrcStr.equalsIgnoreCase("m_1"))
-		{
+	public static int getImgId(String pImgSrcStr) {
+		if (pImgSrcStr.equalsIgnoreCase("m_1")) {
 			return R.drawable.m_1;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_13"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_13")) {
 			return R.drawable.m_13;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_16"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_16")) {
 			return R.drawable.m_16;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_2"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_2")) {
 			return R.drawable.m_2;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_21"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_21")) {
 			return R.drawable.m_21;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_22"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_22")) {
 			return R.drawable.m_22;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_26"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_26")) {
 			return R.drawable.m_26;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_27"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_27")) {
 			return R.drawable.m_27;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_29"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_29")) {
 			return R.drawable.m_29;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_3"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_3")) {
 			return R.drawable.m_3;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_35"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_35")) {
 			return R.drawable.m_35;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_37"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_37")) {
 			return R.drawable.m_37;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_4"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_4")) {
 			return R.drawable.m_4;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_43"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_43")) {
 			return R.drawable.m_43;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_44"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_44")) {
 			return R.drawable.m_44;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_48"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_48")) {
 			return R.drawable.m_48;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_5"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_5")) {
 			return R.drawable.m_5;
-		} else if (pImgSrcStr.equalsIgnoreCase("m_8"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("m_8")) {
 			return R.drawable.m_8;
-		} else if (pImgSrcStr.equalsIgnoreCase("cinema"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("cinema")) {
 			return R.drawable.m_notarius;
-		} else if (pImgSrcStr.equalsIgnoreCase("exchange"))
-		{
+		} else if (pImgSrcStr.equalsIgnoreCase("exchange")) {
 			return R.drawable.m_exchange;
-		} else
-		{
+		} else {
 			return 0;
 		}
 
 	}
 
-	public float distanceTo(GeoPoint gp)
-	{
+	public float distanceTo(GeoPoint gp) {
 		return ProjectUtils.distance(getLatitude(), getLongitude(),
 				(float) (gp.getLatitudeE6() / 1e6),
 				(float) (gp.getLongitudeE6() / 1e6));
 	}
 
 	public static void sortMapItemList(List<MapItem> mapItemList,
-			final GeoPoint point)
-	{
-		Collections.sort(mapItemList, new Comparator<MapItem>()
-		{
+			final GeoPoint point) {
+		Collections.sort(mapItemList, new Comparator<MapItem>() {
 			@Override
-			public int compare(MapItem lhs, MapItem rhs)
-			{
-				if (lhs.distanceTo(point) > rhs.distanceTo(point))
-				{
+			public int compare(MapItem lhs, MapItem rhs) {
+				if (lhs.distanceTo(point) > rhs.distanceTo(point)) {
 					return 1;
-				} else if (lhs.distanceTo(point) < rhs.distanceTo(point))
-				{
+				} else if (lhs.distanceTo(point) < rhs.distanceTo(point)) {
 					return -1;
 				} else
 					return 0;
@@ -246,26 +205,22 @@ public abstract class MapItem implements Serializable, ListItem
 	}
 
 	@Override
-	public boolean equals(Object o)
-	{
+	public boolean equals(Object o) {
 		if (o != null && MapItem.class.isInstance(o))
 			return ((MapItem) o).id.equals(this.id);
 		else
 			return false;
 	}
 
-	public void loadInfoFromFile()
-	{
+	public void loadInfoFromFile() {
 
 	}
 
 	View v = null;
 
 	@Override
-	public View getView(View convertView, int position)
-	{
-		if (v == null)
-		{
+	public View getView(View convertView, int position) {
+		if (v == null) {
 			convertView = null;
 			ViewHolder holder;
 			LayoutInflater mInflater = LayoutInflater.from(context);
@@ -279,10 +234,12 @@ public abstract class MapItem implements Serializable, ListItem
 					.findViewById(R.id.go_into_btn);
 			holder.background = (View) convertView
 					.findViewById(R.id.list_block);
-//			holder.itemColorView = (View) convertView
-//					.findViewById(R.id.item_color_view);
+			holder.loadingImageView = (LoadingImageView) convertView
+					.findViewById(R.id.loading_imageview);
+			// holder.itemColorView = (View) convertView
+			// .findViewById(R.id.item_color_view);
 
-			//convertView.setMinimumHeight(Math.round(40*MainApplication.mDensity));
+			 convertView.setMinimumHeight(Math.round(90*MainApplication.mDensity));
 			convertView.setTag(holder);
 			String st = toString();
 
@@ -296,11 +253,9 @@ public abstract class MapItem implements Serializable, ListItem
 			// holder.background.getBackground().setAlpha(MainApplication.ALPHA);
 			holder.range.setText(st);
 
-			holder.background.setOnClickListener(new OnClickListener()
-			{
+			holder.background.setOnClickListener(new OnClickListener() {
 				@Override
-				public void onClick(View v)
-				{
+				public void onClick(View v) {
 					MainApplication.mapItemContainer
 							.setSelectedItem(MapItem.this);
 					Intent intent = new Intent(context, funObjectDetail.class);
@@ -308,22 +263,44 @@ public abstract class MapItem implements Serializable, ListItem
 					context.startActivity(intent);
 				}
 			});
+			
+			loadImageToView(holder.loadingImageView);
 
-//			holder.itemColorView.setBackgroundColor(getItemColor());
+			// holder.itemColorView.setBackgroundColor(getItemColor());
 			v = convertView;
 			return convertView;
 		} else
 			return v;
 	}
 
-	public static class ViewHolder
+	protected void loadImageToView(final LoadingImageView loadingImageView) 
 	{
+		AsyncTask task=new AsyncTask() {
+			@Override
+			protected Object doInBackground(Object... params) {
+				for (int i=0; i<64000;i++)
+				{
+					
+				}
+				return null;
+			}
+			@Override
+			protected void onPostExecute(Object result)
+			{
+				loadingImageView.setDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
+			}
+		};
+		task.execute();
+	}
+
+	public static class ViewHolder {
 		public TextView name;
 		public TextView shortDescription;
 		public TextView range;
 		public ImageView goIntoButton;
 		public View background;
-//		public View itemColorView;
+		public LoadingImageView loadingImageView;
+		// public View itemColorView;
 	}
 
 	public abstract String getShortCharacteristic();

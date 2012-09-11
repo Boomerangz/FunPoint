@@ -66,15 +66,19 @@ public class FSQConnector {
 	public static final String CLIENT_SECRET = "YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO";
 	public static final String CALLBACK_URL = "myapp://connect";
 	private static final String API_URL = "https://api.foursquare.com/v2";
-	private static final String CHECK_IN_URL = "https://api.foursquare.com/v2/checkins/add";
-	private static final String TIP_ADD_URL = "https://api.foursquare.com/v2/tips/add";
-	private static final String TODO_ADD_URL = "https://api.foursquare.com/v2/lists/self/todos/additem";
-	private static final String TODOS_GET_URL = "https://api.foursquare.com/v2/users/self/todos";
-	private static final String BADGES_GET_URL = "https://api.foursquare.com/v2/users/self/badges";
-	private static final String CHECKINS_GET_URL = "https://api.foursquare.com/v2/users/self/checkins";
-	private static final String FRIEND_CHECKINS_GET_URL = "https://api.foursquare.com/v2/checkins/recent";
-	private static final String EXPLORE_URL = "https://api.foursquare.com/v2/venues/explore";
-	private static final String CATEGORIES_URL = "https://api.foursquare.com/v2/venues/categories";
+	private static final String CHECK_IN_URL = API_URL + "/checkins/add";
+	private static final String TIP_ADD_URL = API_URL + "/tips/add";
+	private static final String TODO_ADD_URL = API_URL
+			+ "/lists/self/todos/additem";
+	private static final String TODOS_GET_URL = API_URL + "/users/self/todos";
+	private static final String BADGES_GET_URL = API_URL + "/users/self/badges";
+	private static final String CHECKINS_GET_URL = API_URL
+			+ "/users/self/checkins";
+	private static final String FRIEND_CHECKINS_GET_URL = API_URL
+			+ "/checkins/recent";
+	private static final String EXPLORE_URL = API_URL + "/venues/explore";
+	private static final String CATEGORIES_URL = API_URL + "/venues/categories";
+	private static final String PHOTO_URL = API_URL + "/venues/";
 
 	private static final String TAG = "FoursquareApi";
 	private static final String API_VERSION = "&v=20120522";
@@ -752,16 +756,20 @@ public class FSQConnector {
 
 						String sUrl = EXPLORE_URL + "?oauth_token="
 								+ MainApplication.FsqApp.getAccesToken()
-								+ "&ll=" + ll +API_VERSION;
+								+ "&ll=" + ll + API_VERSION;
 						st = HttpHelper.loadByUrl(sUrl);
 
 						JSONObject response = new JSONObject(st);
 						if (response.getJSONObject("meta").getInt("code") == 200) {
-							JSONArray array = response.getJSONObject("response").getJSONArray("groups").getJSONObject(0).getJSONArray("items");
-							for (int i = 0; i < array.length(); i++) 
-							{
-								JSONObject place=array.getJSONObject(i).getJSONObject("venue");
-								FSQItem item=(FSQItem) MainApplication.mapItemContainer.addItem(place);
+							JSONArray array = response
+									.getJSONObject("response")
+									.getJSONArray("groups").getJSONObject(0)
+									.getJSONArray("items");
+							for (int i = 0; i < array.length(); i++) {
+								JSONObject place = array.getJSONObject(i)
+										.getJSONObject("venue");
+								FSQItem item = (FSQItem) MainApplication.mapItemContainer
+										.addItem(place);
 								exploreItems.add(item);
 							}
 						}
@@ -770,9 +778,8 @@ public class FSQConnector {
 						e.printStackTrace();
 					}
 					System.out.println(st);
-					synchronized (exploreList) 
-					{
-						exploreList=exploreItems;
+					synchronized (exploreList) {
+						exploreList = exploreItems;
 					}
 				}
 			}
@@ -794,5 +801,39 @@ public class FSQConnector {
 
 	public static List<FSQItem> getExplorer() {
 		return exploreList;
+	}
+
+	public static Drawable loadTitlePhotoForVenue(String id) {
+		String sUrl = PHOTO_URL + id + "/photos?limit=1" + "&oauth_token="
+				+ MainApplication.FsqApp.getAccesToken() + API_VERSION;
+		String response = HttpHelper.loadByUrl(sUrl);
+		try {
+			JSONObject jObject = new JSONObject(response);
+			if (jObject.getJSONObject("meta").getInt("code")==200)
+			{	
+				JSONObject jResponse = jObject.getJSONObject("response");
+				JSONArray jArray=jResponse.getJSONObject("photos").getJSONArray("groups");
+				JSONObject jGroup=null;
+				for (int i=0;i<jArray.length();i++)
+				{
+					jGroup = jArray.getJSONObject(i);
+					if (jGroup.getString("type").equals("venue"))
+						break;
+				}
+				if (jGroup!=null&&jGroup.getString("type").equals("venue"))
+				{
+					jGroup=jGroup.getJSONArray("items").getJSONObject(0).getJSONObject("sizes");
+					int count=jGroup.getInt("count");
+					JSONObject jSize = jGroup.getJSONArray("items").getJSONObject(count-2);
+					String imageUrl=jSize.getString("url");
+					Drawable image=HttpHelper.loadPictureByUrl(imageUrl);
+					return image;
+				}
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
