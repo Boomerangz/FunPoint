@@ -1,25 +1,21 @@
 package kz.crystalspring.visualities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import com.boomerang.jam_menu.JamTextImageSwitcher;
-import com.boomerang.jam_menu.SwitcherDescription;
 import com.viewpagerindicator.TabPageIndicator;
 import com.viewpagerindicator.ViewFragment;
 import com.viewpagerindicator.ViewFragmentAdapter;
 
+import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.RefreshableMapList;
+import kz.crystalspring.visualities.homescreen.ExplorerView;
+import kz.crystalspring.visualities.homescreen.FriendFeed;
 import kz.crystalspring.visualities.homescreen.PlacesSquareMenu;
-import android.R.layout;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -32,7 +28,8 @@ RefreshableMapList
 	TabPageIndicator tabIndicator;
 	
 	View placesMenu;
-	
+	FriendFeed friendFeed;
+	ExplorerView explorer;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -62,7 +59,18 @@ RefreshableMapList
 	@Override
 	public void refreshMapItems()
 	{
-		// TODO Auto-generated method stub
+		if (friendFeed!=null)
+			friendFeed.refresh();
+		if (explorer!=null)
+			explorer.refresh();
+	}
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		MainApplication.refreshable=this;
+		refreshMapItems();
 	}
 	
 	
@@ -70,15 +78,10 @@ RefreshableMapList
 	{
 		List<ViewFragment> viewList = new ArrayList();
 
-		ListView eventListView2 = new ListView(getBaseContext());
-		eventListView2.setLayoutParams(new ScrollView.LayoutParams(
-				ScrollView.LayoutParams.FILL_PARENT,
-				ScrollView.LayoutParams.WRAP_CONTENT));
-		eventListView2.setDivider(getResources().getDrawable(R.drawable.transperent_color));
-		eventListView2.setDividerHeight(0);
-		eventListView2.setCacheColorHint(0);
+		friendFeed=new FriendFeed(this);
+		View friendFeedView=friendFeed.getFriendFeed();
 
-		viewList.add(new ViewFragment(eventListView2, "Лента"));
+		viewList.add(new ViewFragment(friendFeedView, "Лента"));
 		
 		PlacesSquareMenu psm=new PlacesSquareMenu(this);
 		View squareMenu=psm.getSquareMenu();
@@ -102,7 +105,9 @@ RefreshableMapList
 		eventListView1.setDividerHeight(0);
 		eventListView1.setCacheColorHint(0);
 
-		viewList.add(new ViewFragment(eventListView1, "Рекомендации"));
+		explorer=new ExplorerView(this);
+		View explorerView=explorer.getExplorer();
+		viewList.add(new ViewFragment(explorerView, "Рекомендации"));
 		return viewList;
 	}
 	

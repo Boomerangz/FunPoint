@@ -3,6 +3,7 @@ package kz.crystalspring.funpoint.events;
 import java.util.ArrayList;
 import java.util.List;
 
+import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.venues.FileConnector;
 
 import org.json.JSONArray;
@@ -41,20 +42,28 @@ public class EventContainer
 	
 	public void loadEventList()
 	{
- 		JSONArray cinemaJSONArray=FileConnector.loadJSONCinemaEventsList();
-		for (int i=0;i<cinemaJSONArray.length();i++)
-		{
-			try
+ 		Runnable preTask=new Runnable(){
+
+			@Override
+			public void run() 
 			{
-				JSONObject jEvent=cinemaJSONArray.getJSONObject(i);
-				FilmEvent event=new FilmEvent(jEvent);
-				addEventToList(event);
-			} 
-			catch (JSONException e)
-			{
-				e.printStackTrace();
+				JSONArray cinemaJSONArray=FileConnector.loadJSONCinemaEventsList();
+				for (int i=0;i<cinemaJSONArray.length();i++)
+				{
+					try
+					{
+						JSONObject jEvent=cinemaJSONArray.getJSONObject(i);
+						FilmEvent event=new FilmEvent(jEvent);
+						addEventToList(event);
+					} 
+					catch (JSONException e)
+					{
+						e.printStackTrace();
+					}
+				}
 			}
-		}
+ 		};
+ 		MainApplication.pwAggregator.addTaskToQueue(preTask, null);
 	}
 	
 	public void addEventToList(Event event)

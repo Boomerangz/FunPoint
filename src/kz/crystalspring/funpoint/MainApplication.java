@@ -175,6 +175,7 @@ public class MainApplication extends Application
 
 	public static void loadAdditionalContent()
 	{
+		FSQConnector.loadCategories();
 		if (FSQConnector.isFSQConnected())
 		{
 			MainApplication.loadUserActivity();
@@ -191,6 +192,11 @@ public class MainApplication extends Application
 			FSQConnector.loadCheckinsAsync();
 		if (!FSQConnector.getBadgessLoaded())
 			FSQConnector.loadBadgesAsync();
+		if (!FSQConnector.getFriendFeedLoaded())
+			FSQConnector.loadFriendFeed();
+		if (!FSQConnector.getExploringLoaded())
+			FSQConnector.loadExploring(getCurrentLocation());
+		
 	}
 
 	public static void loadJamContent()

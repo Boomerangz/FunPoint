@@ -11,8 +11,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.events.Event;
+import kz.sbeyer.atmpoint1.types.ItemCinema;
+import kz.sbeyer.atmpoint1.types.ItemFood;
+import kz.sbeyer.atmpoint1.types.ItemHotel;
 
 import com.google.android.maps.GeoPoint;
 
@@ -298,5 +304,43 @@ public class MapItemContainer
 			return getCategoryName(categIdString);
 		else
 			return "";
+	}
+
+	public MapItem addItem(JSONObject place)
+	{
+		MapItem item=null;
+		String localCat=null;
+		try {
+			localCat=place.getJSONArray("categories").getJSONObject(0).getString("id");
+			String globalCat=FSQConnector.getGlobalCategory(localCat);
+			localCat=globalCat;
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if (localCat!=null)
+		{
+			if (localCat.equals(MapItem.FSQ_TYPE_CINEMA))
+				item=new ItemCinema();
+			else
+			if (localCat.equals(MapItem.FSQ_TYPE_FOOD))
+				item=new ItemFood();
+			else
+			if (localCat.equals(MapItem.FSQ_TYPE_HOTEL))
+				item=new ItemHotel();
+			else
+				item=new FSQItem();
+		}
+		else
+		{
+			item=new FSQItem();
+		}
+		if (item!=null)
+		{
+			item.loadFromJSON(place);
+			addItem(item);
+		}
+		return item;
 	}
 }

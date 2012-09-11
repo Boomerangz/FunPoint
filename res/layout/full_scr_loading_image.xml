@@ -8,7 +8,7 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-     <kz.crystalspring.visualities.TouchImageView
+     <kz.crystalspring.views.TouchImageView
         android:id="@+id/photo"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

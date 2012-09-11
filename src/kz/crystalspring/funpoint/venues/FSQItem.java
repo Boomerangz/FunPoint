@@ -49,8 +49,8 @@ public class FSQItem extends MapItem
 				setAddress(location.getString("address"));
 			setLatitude(lat);
 			setLongitude(lng);
-			setHereNow(jObject.getJSONObject("hereNow").getInt("count"));
 			loadCategories(jObject.getJSONArray("categories"));
+			setHereNow(jObject.getJSONObject("hereNow").getInt("count"));
 			return this;
 		} catch (JSONException e)
 		{
@@ -184,7 +184,8 @@ public class FSQItem extends MapItem
 		{
 			st+=", "+s;
 		}
-		st=st.substring(2).trim();
+		if (st.length()>2)
+			st=st.substring(2).trim();
 		return st;
 	}
 	

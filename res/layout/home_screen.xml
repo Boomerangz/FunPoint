@@ -6,15 +6,15 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp">
+        android:layout_height="wrap_content"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp" >
 
         <ImageView
             android:layout_width="111dip"
             android:layout_height="60dip"
-            android:layout_marginLeft="5dp"
             android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
             android:src="@drawable/jam_logo" />
 
         <Button
@@ -22,19 +22,18 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_alignParentRight="true"
-            android:text=""
-            android:layout_marginRight="2dp"
             android:layout_marginLeft="2dp"
-            android:background="@drawable/man_button" />
+            android:layout_marginRight="2dp"
+            android:background="@drawable/man_button"
+            android:text="" />
 
         <Button
             android:id="@+id/btn2"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_toLeftOf="@id/btn1"
-
-            android:text=""
-            android:background="@drawable/flag_button" />
+            android:background="@drawable/flag_button"
+            android:text="" />
     </RelativeLayout>
 
     <LinearLayout
@@ -52,7 +51,8 @@
             android:id="@+id/pager"
             android:layout_width="fill_parent"
             android:layout_height="0dip"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:paddingTop="8dp" />
     </LinearLayout>
 
 </LinearLayout>

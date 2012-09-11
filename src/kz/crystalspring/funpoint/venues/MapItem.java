@@ -279,12 +279,12 @@ public abstract class MapItem implements Serializable, ListItem
 					.findViewById(R.id.go_into_btn);
 			holder.background = (View) convertView
 					.findViewById(R.id.list_block);
-			holder.itemColorView = (View) convertView
-					.findViewById(R.id.item_color_view);
+//			holder.itemColorView = (View) convertView
+//					.findViewById(R.id.item_color_view);
 
-			convertView.setMinimumHeight(80);
+			//convertView.setMinimumHeight(Math.round(40*MainApplication.mDensity));
 			convertView.setTag(holder);
-			String st = Integer.toString(position) + ". " + toString();
+			String st = toString();
 
 			holder.name.setText(st);
 			if (MainApplication.getCurrentLocation() != null)
@@ -309,7 +309,7 @@ public abstract class MapItem implements Serializable, ListItem
 				}
 			});
 
-			holder.itemColorView.setBackgroundColor(getItemColor());
+//			holder.itemColorView.setBackgroundColor(getItemColor());
 			v = convertView;
 			return convertView;
 		} else
@@ -323,7 +323,7 @@ public abstract class MapItem implements Serializable, ListItem
 		public TextView range;
 		public ImageView goIntoButton;
 		public View background;
-		public View itemColorView;
+//		public View itemColorView;
 	}
 
 	public abstract String getShortCharacteristic();

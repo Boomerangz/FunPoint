@@ -129,7 +129,6 @@ public class PendingWorkAggregator
 		{
 			if (work != null)
 				work.runPostTask();
-
 		}
 	}
 

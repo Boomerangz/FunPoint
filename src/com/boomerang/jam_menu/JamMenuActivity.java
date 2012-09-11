@@ -20,10 +20,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.aphidmobile.flip.FlipViewGroup;
 import com.boomerang.jam_menu.JamTextImageSwitcher;
