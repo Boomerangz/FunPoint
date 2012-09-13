@@ -107,6 +107,7 @@ public class MapItemContainer
 		for (MapItem item : itemArray)
 			if (visibleFilterMap.contains(item.getObjTypeId()))
 				filteredList.add(item);
+		
 		return filteredList;
 	}
 

@@ -1,21 +1,69 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#96989A"
-    >
+    android:background="@color/background"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp" >
+
+        <TextView
+            android:id="@+id/category_subheader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin"
+            android:text="кафе"
+            android:textColor="@color/jam_pink"
+            android:textSize="18pt"
+            android:typeface="sans" />
+
+        <Button
+            android:id="@+id/profile_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/man_button"
+            android:text="" />
+
+        <Button
+            android:id="@+id/btn2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_toLeftOf="@id/profile_button"
+            android:background="@drawable/flag_button"
+            android:text="" />
+        
+            <TextView
+        android:id="@+id/food_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="3dp"
+        android:background="#e9e9e9"
+        android:maxLines="2"
+        android:text="Food title"
+        android:textSize="12pt"
+        android:paddingLeft="3dp"
+        android:layout_below="@id/profile_button" />
+    </RelativeLayout>
+
+
 
     <com.viewpagerindicator.TabPageIndicator
         android:id="@+id/indicator"
-        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        />
+        android:layout_height="wrap_content" />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
-        android:layout_weight="1"
-        />
+        android:layout_weight="1" />
 
 </LinearLayout>

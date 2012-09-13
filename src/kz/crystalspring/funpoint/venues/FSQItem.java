@@ -1,27 +1,23 @@
 package kz.crystalspring.funpoint.venues;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.views.LoadingImageView;
-import kz.sbeyer.atmpoint1.types.ItemCinema;
-import kz.sbeyer.atmpoint1.types.ItemFood;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 
 public class FSQItem extends MapItem
 {
 	String name;
 	String address;
-	String category = FSQ_TYPE_FOOD;
+	String category = FSQ_UNDEFINED;
 	int hereNow;
 	List<String> categoryList = new ArrayList<String>(); 
 
@@ -30,6 +26,7 @@ public class FSQItem extends MapItem
 	@Override
 	public String getObjTypeId()
 	{
+		int i;
 		return category;
 	}
 
@@ -54,6 +51,8 @@ public class FSQItem extends MapItem
 			setLongitude(lng);
 			loadCategories(jObject.getJSONArray("categories"));
 			setHereNow(jObject.getJSONObject("hereNow").getInt("count"));
+			getCategory();
+			
 			return this;
 		} catch (JSONException e)
 		{

@@ -18,7 +18,6 @@
             android:background="@color/list_bg"
             android:clickable="true"
             android:gravity="center_vertical" >
-
             <kz.crystalspring.views.LoadingImageView
                 android:id="@+id/loading_imageview"
                 android:layout_width="90dp"

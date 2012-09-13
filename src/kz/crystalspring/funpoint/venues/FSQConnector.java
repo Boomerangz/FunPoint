@@ -804,31 +804,23 @@ public class FSQConnector {
 	}
 
 	public static Drawable loadTitlePhotoForVenue(String id) {
-		String sUrl = PHOTO_URL + id + "/photos?limit=1" + "&oauth_token="
-				+ MainApplication.FsqApp.getAccesToken() + API_VERSION;
+		String sUrl = PHOTO_URL + id + "/photos?limit=1&group=venue"
+				+ "&oauth_token=" + MainApplication.FsqApp.getAccesToken()
+				+ API_VERSION;
 		String response = HttpHelper.loadByUrl(sUrl);
 		try {
 			JSONObject jObject = new JSONObject(response);
-			if (jObject.getJSONObject("meta").getInt("code")==200)
-			{	
+			if (jObject.getJSONObject("meta").getInt("code") == 200) {
 				JSONObject jResponse = jObject.getJSONObject("response");
-				JSONArray jArray=jResponse.getJSONObject("photos").getJSONArray("groups");
-				JSONObject jGroup=null;
-				for (int i=0;i<jArray.length();i++)
-				{
-					jGroup = jArray.getJSONObject(i);
-					if (jGroup.getString("type").equals("venue"))
-						break;
-				}
-				if (jGroup!=null&&jGroup.getString("type").equals("venue"))
-				{
-					jGroup=jGroup.getJSONArray("items").getJSONObject(0).getJSONObject("sizes");
-					int count=jGroup.getInt("count");
-					JSONObject jSize = jGroup.getJSONArray("items").getJSONObject(count-2);
-					String imageUrl=jSize.getString("url");
-					Drawable image=HttpHelper.loadPictureByUrl(imageUrl);
-					return image;
-				}
+				JSONObject jGroup = jResponse.getJSONObject("photos");
+				jGroup = jGroup.getJSONArray("items").getJSONObject(0)
+						.getJSONObject("sizes");
+				int count = jGroup.getInt("count") - 2;
+				JSONObject jSize = jGroup.getJSONArray("items").getJSONObject(
+						count);
+				String imageUrl = jSize.getString("url");
+				Drawable image = HttpHelper.loadPictureByUrl(imageUrl);
+				return image;
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

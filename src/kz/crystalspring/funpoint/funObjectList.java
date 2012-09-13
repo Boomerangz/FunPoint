@@ -11,7 +11,9 @@ import kz.crystalspring.funpoint.events.Event;
 import kz.crystalspring.funpoint.venues.ListItem;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.R;
+import kz.crystalspring.visualities.HomeScreen;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -47,7 +49,7 @@ public class funObjectList extends FragmentActivity implements
 	ViewPager viewPager;
 	TabPageIndicator tabIndicator;
 
-	Button mapBtn;
+	//Button mapBtn;
 	ImageView openSearchButton;
 	EditText searchEdit;
 
@@ -61,10 +63,21 @@ public class funObjectList extends FragmentActivity implements
 
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		tabIndicator = (TabPageIndicator) findViewById(R.id.indicator);
-		mapBtn = (Button) findViewById(R.id.mapBtn);
+		//mapBtn = (Button) findViewById(R.id.mapBtn);
 		pgBar = (ProgressBar) findViewById(R.id.progressBar1);
 
 		categorySubHeader=(TextView) findViewById(R.id.category_subheader);
+		View profileButton=findViewById(R.id.profile_button);
+		profileButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) 
+			{
+				Intent j = new Intent(funObjectList.this, ProfilePage.class);
+				startActivity(j);
+			}
+		});
+
+		
 		List<ViewFragment> viewList = fillObjectAndEventLists(); 
 		ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
 				getSupportFragmentManager(), viewList);
@@ -76,14 +89,14 @@ public class funObjectList extends FragmentActivity implements
 		objectAdapter = new ObjectAdapter(this, this);
 		eventAdapter = new ObjectAdapter(this, this);
 		
-		mapBtn.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				MainMenu.goToObjectMap();
-			}
-		});
+//		mapBtn.setOnClickListener(new OnClickListener()
+//		{
+//			@Override
+//			public void onClick(View v)
+//			{
+//				MainMenu.goToObjectMap();
+//			}
+//		});
 
 		searchEdit = (EditText) findViewById(R.id.search_edit);
 		searchEdit.addTextChangedListener(new TextWatcher()

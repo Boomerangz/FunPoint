@@ -26,6 +26,12 @@ public class ItemFood extends FSQItem
 	{
 		return REST_IMG;
 	}
+	
+	@Override
+	public String getObjTypeId()
+	{
+		return FSQ_TYPE_FOOD;
+	}
 
 	public String getLunchPrice()
 	{

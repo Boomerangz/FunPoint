@@ -10,7 +10,10 @@ import kz.crystalspring.funpoint.venues.FSQItem;
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
@@ -52,8 +55,18 @@ public class ExplorerView
 		ListView listView=(ListView) exploreList.findViewById(R.id.listView1);
 		if (listView.getAdapter()==null||listView.getAdapter().getCount()==0)
 		{
-			listView.setAdapter(new ExplorerAdapter(FSQConnector.getExplorer()));
+			ExplorerAdapter adapter=new ExplorerAdapter(FSQConnector.getExplorer());
+			listView.setAdapter(adapter);
 			listView.setMinimumHeight(Math.round(100*MainApplication.mDensity));
+			listView.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) 
+				{
+					System.out.println("LISTCLICK!!!!");
+				}
+			});
 		}
 		else
 		{

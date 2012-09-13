@@ -128,7 +128,6 @@ public class FoursquareDialog extends Dialog {
 	        		mListener.onComplete(urls[1]);
 	        		
 	        		FoursquareDialog.this.dismiss();
-	        		
 	        		return true;	        		
 	        	} 
 	    

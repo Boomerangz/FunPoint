@@ -4,10 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import kz.crystalspring.funpoint.MainApplication;
+import kz.crystalspring.funpoint.MainMenu;
+import kz.crystalspring.funpoint.ProfilePage;
 import kz.crystalspring.funpoint.R;
+import kz.crystalspring.funpoint.funCheckinNow;
+import kz.crystalspring.funpoint.funWaitingActivity;
 import kz.crystalspring.funpoint.venues.MapItem;
+import kz.crystalspring.pointplus.Helpdesk;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -16,6 +23,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 
+import com.boomerang.jam_menu.JamMenuActivity;
 import com.boomerang.jam_menu.JamTextImageSwitcher;
 import com.boomerang.jam_menu.SwitcherDescription;
 
@@ -85,6 +93,11 @@ public class PlacesSquareMenu
 				new SwitcherDescription(R.drawable.hotel2),
 				new SwitcherDescription(R.drawable.hotel3) };
 		
+		SwitcherDescription[] swСlub = {
+				new SwitcherDescription(R.drawable.club1),
+				new SwitcherDescription(R.drawable.club2),
+				new SwitcherDescription(R.drawable.club3) };
+		
 		SwitcherDescription[] a = { new SwitcherDescription(R.color.blue),
 				new SwitcherDescription(R.color.green),
 				new SwitcherDescription(android.R.color.white) };
@@ -96,6 +109,7 @@ public class PlacesSquareMenu
 		switchers.get(1).setImageSource(Arrays.asList(swCinema));
 		switchers.get(2).setImageSource(Arrays.asList(swShopping));
 		switchers.get(3).setImageSource(Arrays.asList(swHotel));
+		switchers.get(4).setImageSource(Arrays.asList(swСlub));
 
 		switchers.get(0).setText("Рестораны");
 
@@ -104,13 +118,15 @@ public class PlacesSquareMenu
 		switchers.get(3).setText("Отели");
 
 		switchers.get(2).setText("Магазины");
+		
+		switchers.get(4).setText("Ночные клубы");
 
 		for (int i = 0; i < switchers.size(); i++)
 		{
 			JamTextImageSwitcher switcher;
 			switcher = switchers.get(i);
 
-			if (i > 3)
+			if (i > 4)
 			{
 				if (i % 2 == 0)
 					switcher.setImageSource(Arrays.asList(a));
@@ -128,7 +144,7 @@ public class PlacesSquareMenu
 			@Override
 			public void onClick(View arg0)
 			{
-				//runItemActivityWithFilter(MapItem.FSQ_TYPE_FOOD);
+				runItemActivityWithFilter(MapItem.FSQ_TYPE_FOOD);
 			}
 		});
 		switchers.get(1).setOnClickListener(new OnClickListener()
@@ -136,7 +152,7 @@ public class PlacesSquareMenu
 			@Override
 			public void onClick(View arg0)
 			{
-				//runItemActivityWithFilter(MapItem.FSQ_TYPE_CINEMA);
+				runItemActivityWithFilter(MapItem.FSQ_TYPE_CINEMA);
 			}
 		});
 		switchers.get(2).setOnClickListener(new OnClickListener()
@@ -144,7 +160,7 @@ public class PlacesSquareMenu
 			@Override
 			public void onClick(View arg0)
 			{
-			//	runItemActivityWithFilter(MapItem.FSQ_TYPE_MARKET);
+				runItemActivityWithFilter(MapItem.FSQ_TYPE_MARKET);
 			}
 		});
 		switchers.get(3).setOnClickListener(new OnClickListener()
@@ -152,7 +168,7 @@ public class PlacesSquareMenu
 			@Override
 			public void onClick(View arg0)
 			{
-			//	runItemActivityWithFilter(MapItem.FSQ_TYPE_HOTEL);
+				runItemActivityWithFilter(MapItem.FSQ_TYPE_HOTEL);
 			}
 		});
 		switchers.get(4).setOnClickListener(new OnClickListener()
@@ -160,7 +176,7 @@ public class PlacesSquareMenu
 			@Override
 			public void onClick(View arg0)
 			{
-			//	openCheckIn();
+				runItemActivityWithFilter(MapItem.FSQ_TYPE_CLUB);//openCheckIn();
 			}
 		});
 		switchers.get(6).setOnClickListener(new OnClickListener()
@@ -168,7 +184,7 @@ public class PlacesSquareMenu
 			@Override
 			public void onClick(View arg0)
 			{
-			//	openUserInfo();
+				openUserInfo();
 			}
 		});
 		switchers.get(7).setOnClickListener(new OnClickListener()
@@ -176,14 +192,14 @@ public class PlacesSquareMenu
 			@Override
 			public void onClick(View arg0)
 			{
-			//	openHelpdesk();
+				openHelpdesk();
 			}
 		});
 		
 		
 		return squareMenu;
 	}
-
+	
 	static final int UPDATE_DELAY = 1000 + JamTextImageSwitcher.durationTime;
 	Handler mHandler = new Handler();
 
@@ -220,6 +236,38 @@ public class PlacesSquareMenu
 		// }
 	}
 
+	private void runItemActivityWithFilter(String visibleFilter)
+	{
+		MainApplication.mapItemContainer.setVisibleFilter(visibleFilter);
+		Intent intent = new Intent(context,
+				funWaitingActivity.class);
+		context.startActivity(intent);
+		MainMenu.currentListTab = MainMenu.OBJECT_LIST_TAB;
+		//continueUpdating = false;
+	}
+
+	private void openHelpdesk()
+	{
+		openActivity(Helpdesk.class);
+	}
+
+	private void openCheckIn()
+	{
+		openActivity(funCheckinNow.class);
+	}
+
+	private <E> void openActivity(Class<E> class1)
+	{
+		Intent intent = new Intent(context, class1);
+		context.startActivity(intent);
+	}
+
+	private void openUserInfo()
+	{
+		openActivity(ProfilePage.class);
+	}
+	
+	
 	private Runnable mUpdateTimeTask = new Runnable()
 	{
 		public void run()

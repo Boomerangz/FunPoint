@@ -8,15 +8,19 @@ import com.viewpagerindicator.ViewFragment;
 import com.viewpagerindicator.ViewFragmentAdapter;
 
 import kz.crystalspring.funpoint.MainApplication;
+import kz.crystalspring.funpoint.ProfilePage;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.RefreshableMapList;
+import kz.crystalspring.pointplus.Prefs;
 import kz.crystalspring.visualities.homescreen.ExplorerView;
 import kz.crystalspring.visualities.homescreen.FriendFeed;
 import kz.crystalspring.visualities.homescreen.PlacesSquareMenu;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.ScrollView;
 
@@ -44,6 +48,16 @@ RefreshableMapList
 				getSupportFragmentManager(), viewList);
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setCurrentItem(0);
+		
+		View profileButton=findViewById(R.id.profile_button);
+		profileButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) 
+			{
+				Intent j = new Intent(HomeScreen.this, ProfilePage.class);
+				startActivity(j);
+			}
+		});
 
 		tabIndicator.setViewPager(viewPager);
 
