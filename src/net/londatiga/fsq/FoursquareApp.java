@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.pointplus.HttpHelper;
 
@@ -84,7 +85,8 @@ public class FoursquareApp {
 					
 					JSONObject jsonObj  = (JSONObject) new JSONTokener(HttpHelper.loadByUrl(url)).nextValue();
 		        	mAccessToken 		= jsonObj.getString("access_token");
-		        	
+		        	FSQConnector.dropUserActivity();
+		        	MainApplication.loadAdditionalContent();
 		        	Log.i(TAG, "Got access token: " + mAccessToken);
 				} catch (Exception ex) {
 					what = 1;

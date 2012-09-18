@@ -27,6 +27,8 @@ public class UrlDrawable implements Serializable
 	}
 	public synchronized Drawable getSmallDrawable()
 	{
+		if (smallDrawable==null&&bigDrawable!=null)
+				return bigDrawable;
 		return smallDrawable;
 	}
 	public synchronized void setSmallDrawable(Drawable smallDrawable)

@@ -33,28 +33,41 @@
             android:id="@+id/phone_block"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin"
             android:layout_marginLeft="@dimen/margin"
             android:layout_marginRight="@dimen/margin"
-            android:layout_marginBottom="@dimen/margin"
             android:background="#ffffff"
             android:gravity="left"
             android:orientation="vertical" >
         </LinearLayout>
- <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="3dp"
-        android:layout_marginTop="3dp"
-        android:maxLines="2"
-        android:text="Советы"
-        android:textSize="10pt"
-        android:paddingLeft="3dp"
-         />
+
+                <LinearLayout
+                    android:id="@+id/gallery_list_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin"
+                    android:layout_marginRight="@dimen/margin"
+                    android:background="#ffffff"
+                    android:orientation="vertical"
+                    android:padding="@dimen/margin" />
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="3dp"
+            android:maxLines="2"
+            android:paddingLeft="3dp"
+            android:text="Советы"
+            android:textSize="10pt" />
+
         <LinearLayout
             android:id="@+id/comment_list_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
+
+
 
         <RelativeLayout
             android:id="@+id/major_header_layout"

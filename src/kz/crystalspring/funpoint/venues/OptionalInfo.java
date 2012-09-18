@@ -2,6 +2,8 @@ package kz.crystalspring.funpoint.venues;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import kz.crystalspring.pointplus.ProjectUtils;
@@ -17,12 +19,6 @@ public class OptionalInfo
 	List<VenueComment> commentList = new ArrayList<VenueComment>();
 	List<String> FSQPhonesList = new ArrayList();
 	List<UrlDrawable> FSQPhotosList = new ArrayList();
-
-
-	
-	
-	
-	
 	
 	private void addCommentToList(VenueComment comment)
 	{
@@ -143,6 +139,12 @@ public class OptionalInfo
 				VenueComment comment=new VenueComment();
 				comment=comment.loadFromJSON(jObject.getJSONObject("response").getJSONObject("tip"));
 				ProjectUtils.addToBeginOfArrayList((ArrayList) commentList, comment).add(comment);
+				
+				
+				GregorianCalendar date=null;
+				date.add(Calendar.SECOND, (int) -date.getTimeInMillis());
+				
+				
 			}
 		} catch (JSONException e)
 		{
@@ -152,5 +154,10 @@ public class OptionalInfo
 	}
 
 }
+
+
+
+
+
 
 

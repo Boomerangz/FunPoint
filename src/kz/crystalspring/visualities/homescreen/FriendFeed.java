@@ -49,16 +49,8 @@ public class FriendFeed
 	public void refresh()
 	{
 		ListView listView=(ListView) friendFeedList.findViewById(R.id.listView1);
-		if (listView.getAdapter()==null)
-		{
 			listView.setAdapter(new FriendFeedAdapter(FSQConnector.getFriendFeed()));
 			listView.setMinimumHeight(Math.round(80*MainApplication.mDensity));
-		}
-		else
-		{
-			listView.invalidate();
-		}
-		
 		View progressBar=friendFeedList.findViewById(R.id.progressBar1);
 		if (listView.getAdapter().getCount()>0)
 			progressBar.setVisibility(View.GONE);

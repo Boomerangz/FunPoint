@@ -18,6 +18,7 @@ import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FileConnector;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
 import kz.crystalspring.pointplus.ProjectUtils;
+import kz.crystalspring.views.GalleryWrapper;
 import kz.crystalspring.views.LoadingImageView;
 import kz.sbeyer.atmpoint1.types.ItemFood;
 import android.content.Intent;
@@ -53,9 +54,11 @@ public class foodController extends ActivityController {
 	RelativeLayout todoBtn;
 	LinearLayout commentsListLayout;
 	LinearLayout mainInfoLayout;
-	TableLayout galleryLayout;
+	LinearLayout galleryLayout;
 	LinearLayout phoneLayout;
 
+	GalleryWrapper wrapper;
+	
 	ImageView switchThirdBtn;
 	ImageView switchPreviousBtn;
 	ImageView switchNextBtn;
@@ -89,8 +92,8 @@ public class foodController extends ActivityController {
 			View page2 = loadCommentPage();
 			viewList.add(new ViewFragment(page2, CONTENT_TABS[1]));
 
-			View page3 = loadGalleryPage();
-			viewList.add(new ViewFragment(page3, CONTENT_TABS[2]));
+//			View page3 = loadGalleryPage(page1);
+//			viewList.add(new ViewFragment(page3, CONTENT_TABS[2]));
 
 			ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
 					context.getSupportFragmentManager(), viewList);
@@ -160,7 +163,9 @@ public class foodController extends ActivityController {
 		phoneLayout = (LinearLayout) v.findViewById(R.id.phone_block);
 		commentsListLayout = (LinearLayout) v
 				.findViewById(R.id.comment_list_layout);
-
+		galleryLayout = (LinearLayout)v.findViewById(R.id.gallery_list_layout);
+		createGallery();
+		
 		checkInBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -190,6 +195,17 @@ public class foodController extends ActivityController {
 		return v;
 	}
 
+	private void createGallery() 
+	{
+		wrapper = new GalleryWrapper(context);
+		View view = wrapper.getView();
+		view.setLayoutParams(new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.FILL_PARENT,
+				LinearLayout.LayoutParams.FILL_PARENT));
+		galleryLayout.removeAllViews();
+		galleryLayout.addView(view);
+	}
+
 	private View loadCommentPage() {
 		View v = inflater.inflate(R.layout.controller_food_page2, null);
 
@@ -204,8 +220,8 @@ public class foodController extends ActivityController {
 		return v;
 	}
 
-	private View loadGalleryPage() {
-		View v = inflater.inflate(R.layout.controller_food_page3, null);
+	private View loadGalleryPage(View v) {
+		//View v = inflater.inflate(R.layout.controller_food_page3, null);
 		galleryLayout = (TableLayout) v.findViewById(R.id.gallery_table);
 		return v;
 	}
@@ -265,50 +281,12 @@ public class foodController extends ActivityController {
 		loadPhotosToGallery();
 	}
 
-	private void loadPhotosToGallery() {
-		galleryLayout.removeAllViews();
-		TableRow.LayoutParams lp = new TableRow.LayoutParams(
-				TableRow.LayoutParams.FILL_PARENT,
-				Math.round(80 * MainApplication.mDensity));
-		lp.weight = 1;
-
-		TableRow currentRow = null;
-		for (int i = 0; i < itemFood.getPhotosCount(); i++) {
-			final LoadingImageView iv = new LoadingImageView(context);
-			iv.setLayoutParams(lp);
-			// iv.setImageDrawable(itemFood.getPhotos(i));
-			if (i % 3 == 0) {
-				TableRow tr = new TableRow(context);
-				tr.setLayoutParams(new TableLayout.LayoutParams(Math
-						.round(80 * MainApplication.mDensity), Math
-						.round(80 * MainApplication.mDensity)));
-				galleryLayout.addView(tr);
-
-			}
-			currentRow = (TableRow) galleryLayout.getChildAt(galleryLayout
-					.getChildCount() - 1);
-			if (currentRow != null)
-				currentRow.addView(iv);
-			if (itemFood.getUrlAndPhoto(i).getSmallDrawable() == null) {
-				FSQConnector.loadImageAsync(iv, itemFood.getUrlAndPhoto(i),
-						UrlDrawable.SMALL_URL, false);
-			} else {
-				iv.setDrawable(itemFood.getUrlAndPhoto(i).getSmallDrawable());
-				final int ii = i;
-				iv.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Toast.makeText(iv.getContext(), "On Click",
-								Toast.LENGTH_SHORT).show();
-						Intent intent = new Intent(iv.getContext(),
-								FullScrLoadingImageActivity.class);
-						MainApplication.selectedItemPhoto = itemFood
-								.getUrlAndPhoto(ii);
-						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						iv.getContext().startActivity(intent);
-					}
-				});
-			}
+	private void loadPhotosToGallery() 
+	{
+		wrapper.clear();
+		for (int i=0; i<itemFood.getPhotosCount();i++)
+		{
+			wrapper.addDrawable(itemFood.getUrlAndPhoto(i));
 		}
 	}
 

@@ -25,8 +25,7 @@ import com.google.android.maps.GeoPoint;
 import android.content.Context;
 import android.os.AsyncTask;
 
-public class MapItemContainer
-{
+public class MapItemContainer {
 	private List<String> visibleFilterMap = new ArrayList<String>();
 	private List<MapItem> mapItemArray = new ArrayList<MapItem>();
 
@@ -36,44 +35,37 @@ public class MapItemContainer
 
 	private final String FILENAME = "map_items";
 
-	public MapItemContainer(Context applicationContext)
-	{
+	public MapItemContainer(Context applicationContext) {
 		context = applicationContext;
 		MapItem.context = context;
 	}
 
-	public Object getSelectedItem()
-	{
+	public Object getSelectedItem() {
 		return selectedItem;
 	}
 
-	public MapItem getSelectedMapItem()
-	{
+	public MapItem getSelectedMapItem() {
 		if (MapItem.class.isInstance(selectedItem))
 			return (MapItem) selectedItem;
 		else
 			return null;
 	}
 
-	public Event getSelectedEventItem()
-	{
+	public Event getSelectedEventItem() {
 		if (Event.class.isInstance(selectedItem))
 			return (Event) selectedItem;
 		else
 			return null;
 	}
 
-	public void setSelectedItem(Object selectedItem)
-	{
+	public void setSelectedItem(Object selectedItem) {
 		this.selectedItem = selectedItem;
 	}
 
-	Comparator<MapItem> comp = new Comparator<MapItem>()
-	{
+	Comparator<MapItem> comp = new Comparator<MapItem>() {
 
 		@Override
-		public int compare(MapItem lhs, MapItem rhs)
-		{
+		public int compare(MapItem lhs, MapItem rhs) {
 			if (lhs.distanceTo(MainApplication.getCurrentLocation()) > rhs
 					.distanceTo(MainApplication.getCurrentLocation()))
 				return 1;
@@ -85,14 +77,11 @@ public class MapItemContainer
 		}
 	};
 
-	public synchronized List<MapItem> getFilteredItemList()
-	{
+	public synchronized List<MapItem> getFilteredItemList() {
 		List<MapItem> filteredList = filterList(mapItemArray);
-		if (filteredList.size() == 0)
-		{
+		if (filteredList.size() == 0) {
 			filteredList = filterList(getMapItemListFromFile());
-		} else
-		{
+		} else {
 			itemListFromFile = null;
 			System.gc();
 		}
@@ -101,18 +90,18 @@ public class MapItemContainer
 		return filteredList;
 	}
 
-	private List<MapItem> filterList(List<MapItem> itemArray)
-	{
-		List<MapItem> filteredList = new ArrayList<MapItem>();
-		for (MapItem item : itemArray)
-			if (visibleFilterMap.contains(item.getObjTypeId()))
-				filteredList.add(item);
-		
-		return filteredList;
+	private List<MapItem> filterList(List<MapItem> itemArray) {
+		synchronized (itemArray) {
+			List<MapItem> filteredList = new ArrayList<MapItem>();
+			for (MapItem item : itemArray)
+				if (visibleFilterMap.contains(item.getObjTypeId()))
+					filteredList.add(item);
+
+			return filteredList;
+		}
 	}
 
-	public List<MapItem> getUnFilteredItemList()
-	{
+	public List<MapItem> getUnFilteredItemList() {
 		List<MapItem> unFilteredList = new ArrayList<MapItem>();
 		unFilteredList.addAll(mapItemArray);
 		if (MainApplication.getCurrentLocation() != null)
@@ -120,70 +109,58 @@ public class MapItemContainer
 		return unFilteredList;
 	}
 
-	public void addVisibleFilter(String visibleFilter)
-	{
+	public void addVisibleFilter(String visibleFilter) {
 		if (!visibleFilterMap.contains(visibleFilter))
 			visibleFilterMap.add(visibleFilter);
 		else
 			deleteVisibleFilter(visibleFilter);
 	}
 
-	public void addVisibleFilterList(List<String> list)
-	{
+	public void addVisibleFilterList(List<String> list) {
 		for (String filter : list)
 			addVisibleFilter(filter);
 	}
 
-	public void deleteVisibleFilter(String visibleFilter)
-	{
+	public void deleteVisibleFilter(String visibleFilter) {
 		if (visibleFilterMap.contains(visibleFilter))
 			visibleFilterMap.remove(visibleFilter);
 	}
 
-	public void addItem(MapItem item)
-	{
+	public void addItem(MapItem item) {
 		if (!mapItemArray.contains(item))
 			mapItemArray.add(item);
 	}
 
-	public void addItemsList(List<MapItem> items)
-	{
+	public void addItemsList(List<MapItem> items) {
 		for (MapItem item : items)
 			addItem(item);
 	}
 
-	private void saveItemListToFile()
-	{
-		try
-		{
+	private void saveItemListToFile() {
+		try {
 			FileOutputStream fos = context.openFileOutput(FILENAME,
 					Context.MODE_PRIVATE);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(mapItemArray);
 			oos.close();
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	private List<MapItem> itemListFromFile = null;
 
-	private List<MapItem> getMapItemListFromFile()
-	{
+	private List<MapItem> getMapItemListFromFile() {
 		if (itemListFromFile != null)
 			return itemListFromFile;
-		else
-		{
+		else {
 			List<MapItem> itemArray = null;
-			try
-			{
+			try {
 				FileInputStream fos = context.openFileInput(FILENAME);
 				ObjectInputStream ois = new ObjectInputStream(fos);
 				itemArray = (List<MapItem>) ois.readObject();
 				ois.close();
-			} catch (Exception e)
-			{
+			} catch (Exception e) {
 				itemArray = new ArrayList(0);
 				e.printStackTrace();
 			}
@@ -192,60 +169,48 @@ public class MapItemContainer
 		}
 	}
 
-	public void loadCategory(String sCategoryId, int radius)
-	{
+	public void loadCategory(String sCategoryId, int radius) {
 		addItemsList(FSQConnector.loadItems(point, sCategoryId, radius));
 	}
 
-	public void loadItemsByNameAsync(final String category, final String name)
-	{
-		Runnable task = new Runnable()
-		{
+	public void loadItemsByNameAsync(final String category, final String name) {
+		Runnable task = new Runnable() {
 
 			@Override
-			public void run()
-			{
-				try
-				{
+			public void run() {
+				try {
 					addItemsList(FSQConnector.getByName(MainApplication
 							.getCurrentLocation().getLatitudeE6() / 1e6,
 							MainApplication.getCurrentLocation()
 									.getLongitudeE6() / 1e6, category, name));
 					saveItemListToFile();
-				} catch (Exception e)
-				{
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		};
-		Runnable postTask = new Runnable()
-		{
+		Runnable postTask = new Runnable() {
 
 			@Override
-			public void run()
-			{
+			public void run() {
 				MainApplication.refreshMapItems();
 			}
 		};
 		MainApplication.pwAggregator.addPriorityTask(task, postTask);
 	}
 
-	public void loadNearBy(GeoPoint point, Runnable action)
-	{
+	public void loadNearBy(GeoPoint point, Runnable action) {
 		this.point = point;
 		RefreshItemsTask task = new RefreshItemsTask();
 		MainApplication.pwAggregator.addTaskToQueue(task, action);
 	}
 
-	private class RefreshItemsTask implements Runnable
-	{
+	private class RefreshItemsTask implements Runnable {
 		@Override
-		public void run()
-		{
+		public void run() {
 			ArrayList<String> filterArray = new ArrayList();
 			filterArray.addAll(Arrays.asList(MapItem.TYPES_ARRAY));
-			for (String st : filterArray)
-			{
+			for (String st : filterArray) {
 				if (!st.equals(MapItem.FSQ_TYPE_FOOD))
 					loadCategory(st, 0);
 				else
@@ -255,14 +220,12 @@ public class MapItemContainer
 		}
 	}
 
-	public void setVisibleFilter(String visibleFilter)
-	{
+	public void setVisibleFilter(String visibleFilter) {
 		visibleFilterMap.clear();
 		addVisibleFilter(visibleFilter);
 	}
 
-	public String getCategoryName(String categoryID)
-	{
+	public String getCategoryName(String categoryID) {
 		String categoryName = "";
 		if (categoryID.equals(MapItem.FSQ_TYPE_CINEMA))
 			categoryName = "Кино";
@@ -277,13 +240,10 @@ public class MapItemContainer
 		return categoryName;
 	}
 
-	public MapItem getItemById(String VenueID)
-	{
+	public MapItem getItemById(String VenueID) {
 		MapItem item = null;
-		for (MapItem mItem : getUnFilteredItemList())
-		{
-			if (mItem.getId().equals(VenueID))
-			{
+		for (MapItem mItem : getUnFilteredItemList()) {
+			if (mItem.getId().equals(VenueID)) {
 				item = mItem;
 				break;
 			}
@@ -291,15 +251,13 @@ public class MapItemContainer
 		return item;
 	}
 
-	public String getCategory()
-	{
+	public String getCategory() {
 		if (visibleFilterMap.size() > 0)
 			return visibleFilterMap.get(0);
 		return null;
 	}
 
-	public String getCategoryName()
-	{
+	public String getCategoryName() {
 		String categIdString = getCategory();
 		if (categIdString != null)
 			return getCategoryName(categIdString);
@@ -307,38 +265,32 @@ public class MapItemContainer
 			return "";
 	}
 
-	public MapItem addItem(JSONObject place)
-	{
-		MapItem item=null;
-		String localCat=null;
+	public MapItem addItem(JSONObject place) {
+		MapItem item = null;
+		String localCat = null;
 		try {
-			localCat=place.getJSONArray("categories").getJSONObject(0).getString("id");
-			String globalCat=FSQConnector.getGlobalCategory(localCat);
-			localCat=globalCat;
+			localCat = place.getJSONArray("categories").getJSONObject(0)
+					.getString("id");
+			String globalCat = FSQConnector.getGlobalCategory(localCat);
+			localCat = globalCat;
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		if (localCat!=null)
-		{
+
+		if (localCat != null) {
 			if (localCat.equals(MapItem.FSQ_TYPE_CINEMA))
-				item=new ItemCinema();
+				item = new ItemCinema();
+			else if (localCat.equals(MapItem.FSQ_TYPE_FOOD))
+				item = new ItemFood();
+			else if (localCat.equals(MapItem.FSQ_TYPE_HOTEL))
+				item = new ItemHotel();
 			else
-			if (localCat.equals(MapItem.FSQ_TYPE_FOOD))
-				item=new ItemFood();
-			else
-			if (localCat.equals(MapItem.FSQ_TYPE_HOTEL))
-				item=new ItemHotel();
-			else
-				item=new FSQItem();
+				item = new FSQItem();
+		} else {
+			item = new FSQItem();
 		}
-		else
-		{
-			item=new FSQItem();
-		}
-		if (item!=null)
-		{
+		if (item != null) {
 			item.loadFromJSON(place);
 			addItem(item);
 		}

@@ -3,10 +3,16 @@ package com.boomerang.jam_menu;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nikkoaiello.mobile.android.PinchImageView;
+
+import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.text.Layout;
@@ -31,7 +37,7 @@ public class JamTextImageSwitcher extends FrameLayout implements ViewFactory
 	public static final int durationTime = 900;
 	int currImage = -1;
 	Handler mHandler=new Handler();
-
+	
 	public JamTextImageSwitcher(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
@@ -94,6 +100,7 @@ public class JamTextImageSwitcher extends FrameLayout implements ViewFactory
 	public void updateImage()
 	{
 		switcher.setImageDrawable(getNextImage());
+		//switcher.setImageResource(getNextImageId());
 	}
 
 	private Drawable getNextImage()
@@ -103,10 +110,31 @@ public class JamTextImageSwitcher extends FrameLayout implements ViewFactory
 			currImage = 0;
 		if (drawableArray[currImage]==null)
 		{
-			drawableArray[currImage]=getContext().getResources().getDrawable(
-				ImageSource.get(currImage).source);
+			Drawable drw;
+//			Bitmap btm=BitmapFactory.decodeResource(getContext().getResources(), ImageSource.get(currImage).source);
+//			if (btm!=null)
+//			{
+//			//	btm.setDensity(Math.round(MainApplication.mDensity/2));
+//				drw=new BitmapDrawable(btm);
+//			}
+//			else
+//			{
+				drw=getContext().getResources().getDrawable(
+						ImageSource.get(currImage).source);
+//			}
+			drawableArray[currImage]=drw;
 		}
-		return drawableArray[currImage];
+		Drawable drw=drawableArray[currImage];
+		return drw;
+	}
+	
+	private int getNextImageId()
+	{
+		currImage++;
+		if (currImage == ImageSource.size())
+			currImage = 0;
+		int imageSourceInt=ImageSource.get(currImage).source;
+		return imageSourceInt;
 	}
 	
 

@@ -17,7 +17,13 @@ import android.test.IsolatedContext;
 
 public class ItemFood extends FSQItem
 {
-
+	@Override
+	public String getCategory()
+	{
+		return FSQ_TYPE_FOOD;
+	}
+	
+	
 	public static final String REST_IMG = "exchange";
 	private FoodOptionalInformation foodOptions;
 

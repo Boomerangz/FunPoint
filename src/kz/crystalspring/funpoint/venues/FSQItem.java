@@ -206,7 +206,6 @@ public class FSQItem extends MapItem
 	{
 		return optInfo.getUrlAndPhoto(i);
 	}
-	
 	@Override
 	public int getItemColor()
 	{

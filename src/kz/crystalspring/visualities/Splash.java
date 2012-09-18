@@ -29,7 +29,6 @@ public class Splash extends Activity
 		setContentView(R.layout.splash);
 		context = getApplicationContext();
 
-
 		Thread t = new Thread()
 		{
 			@Override
@@ -50,17 +49,11 @@ public class Splash extends Activity
 				}
 			}
 		};
-		if (MainApplication.internetConnection!=MainApplication.NO_CONNECTION)
 			t.start();
 	}
 
 	static final String C_TAG = "CS_MainActivity";
 
-	/**
-	 * �������� �� ������ ������ ���� ��� ������ ������, �� ������������
-	 * ����������� ������ �� Assets � Documents � �������� ���������� ��
-	 * ���������� �� ������
-	 */
 	private void CheckForFirstStart()
 	{
 		C_Log.v(3, C_TAG, "CheckForFirstStart - start");

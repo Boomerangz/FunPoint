@@ -622,6 +622,7 @@ public class FSQConnector {
 				List<FSQFriendCheckin> checkins = new ArrayList<FSQFriendCheckin>();
 				if (isFSQConnected()) {
 					String st = "";
+					friendFeedList=new ArrayList(0);
 					try {
 						String sUrl = FRIEND_CHECKINS_GET_URL + "?oauth_token="
 								+ MainApplication.FsqApp.getAccesToken()
@@ -741,16 +742,19 @@ public class FSQConnector {
 	protected static boolean isExploringLoaded = false;
 
 	public static void loadExploring(final GeoPoint point) {
+		isExploringLoaded=false;
+		exploreList=new ArrayList(0);
 		Runnable preTask = new Runnable() {
 			@Override
 			public void run() {
 				List<FSQItem> exploreItems = new ArrayList<FSQItem>();
+
 				if (isFSQConnected()) {
 					String st = "";
 					try {
-						Float lat = new Float(
-								(float) (point.getLatitudeE6() / 1e6));
-						Float lon = new Float(
+						Float lat = Float.valueOf(
+								 (float) (point.getLatitudeE6() / 1e6));
+						Float lon = Float.valueOf(
 								(float) (point.getLongitudeE6() / 1e6));
 						String ll = lat.toString() + "," + lon.toString();
 
@@ -827,5 +831,17 @@ public class FSQConnector {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static boolean isExploringLoaded() {
+		return isExploringLoaded;
+	}
+
+	public static void dropUserActivity() {
+		isBadgesLoaded=false;
+		isCheckinsLoaded=false;
+		isExploringLoaded=false;
+		isFriendFeedLoaded=false;
+		isTodosLoaded=false;
 	}
 }
