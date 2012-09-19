@@ -20,6 +20,7 @@ public class GalleryActivity extends Activity {
 	LinearLayout mainLayout;
 	private static final int PHOTOS_IN_ROW = 3;
 	private String filledItem;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
