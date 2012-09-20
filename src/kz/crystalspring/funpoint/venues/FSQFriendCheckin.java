@@ -70,7 +70,7 @@ public class FSQFriendCheckin
 				.findViewById(R.id.loading_imageview);
 		if (friendPhoto.getBigDrawable() == null)
 			FSQConnector.loadImageAsync(LVI, friendPhoto, UrlDrawable.BIG_URL,
-					false);
+					false,null);
 		else
 			LVI.setDrawable(friendPhoto.getBigDrawable());
 		return view;

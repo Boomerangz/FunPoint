@@ -81,8 +81,10 @@ public abstract class ActivityController
 	public void goToMap()
 	{
 		MainApplication.mapItemContainer.setSelectedItem(mapItem);
-		MainMenu.goToObjectMap();
-		exit();
+//		MainMenu.goToObjectMap();
+		Intent intent = new Intent(context,funMap.class);
+		context.startActivity(intent);
+		//exit();
 	}
 	
 	public void openAddCommentActivity()

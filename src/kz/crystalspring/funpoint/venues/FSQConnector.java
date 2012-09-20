@@ -569,7 +569,7 @@ public class FSQConnector {
 	}
 
 	public static void loadImageAsync(final LoadingImageView iv,
-			final UrlDrawable urlDr, final int big_or_small, boolean prioity) {
+			final UrlDrawable urlDr, final int big_or_small, boolean prioity, final OnClickListener listner) {
 		Runnable preTask = new Runnable() {
 			@Override
 			public void run() {
@@ -594,18 +594,22 @@ public class FSQConnector {
 				else
 					pict = urlDr.getSmallDrawable();
 				iv.setDrawable(pict);
-				iv.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Toast.makeText(iv.getContext(), "On Click",
-								Toast.LENGTH_SHORT).show();
-						Intent intent = new Intent(iv.getContext(),
-								FullScrLoadingImageActivity.class);
-						MainApplication.selectedItemPhoto = urlDr;
-						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						iv.getContext().startActivity(intent);
-					}
-				});
+				OnClickListener localListner;
+				if (listner==null)
+					localListner=new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Toast.makeText(iv.getContext(), "On Click",
+									Toast.LENGTH_SHORT).show();
+							Intent intent = new Intent(iv.getContext(),
+									FullScrLoadingImageActivity.class);
+							MainApplication.selectedItemPhoto = urlDr;
+							intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+							iv.getContext().startActivity(intent);
+						}
+					};
+					else localListner=listner;
+				iv.setOnClickListener(localListner);
 			}
 		};
 

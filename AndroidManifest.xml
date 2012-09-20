@@ -63,6 +63,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name="kz.crystalspring.visualities.ImageTableActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="kz.crystalspring.funpoint.funWaitingActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >

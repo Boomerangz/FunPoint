@@ -77,7 +77,7 @@ public class OptionalInfo
 	{
 		try
 		{
-			JSONArray jPhotos = jObject.getJSONArray("groups");
+		JSONArray jPhotos = jObject.getJSONArray("groups");
 			for (int i = 0; i < jPhotos.length(); i++)
 			{
 				JSONObject jPhoto = jPhotos.getJSONObject(i);

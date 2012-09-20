@@ -9,6 +9,7 @@ import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
 import kz.crystalspring.visualities.GalleryActivity;
+import kz.crystalspring.visualities.ImageTableActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -40,7 +41,7 @@ public class GalleryWrapper {
 			@Override
 			public void onClick(View arg0) {
 				Intent intent = new Intent(GalleryWrapper.this.context,
-						GalleryActivity.class);
+						ImageTableActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				GalleryWrapper.this.context.startActivity(intent);
 			}
@@ -58,7 +59,7 @@ public class GalleryWrapper {
 		layout.removeAllViews();
 		for (int i = 0; i < drawList.size() && i < PHOTOS_COUNT; i++) {
 			UrlDrawable drw = drawList.get(i);
-			View imageView = createImageView(drw);
+			View imageView = createImageView(drw,i);
 			layout.addView(imageView);
 		}
 		if (drawList.size()>0)
@@ -67,28 +68,31 @@ public class GalleryWrapper {
 			moreButton.setText("Фотграфий этого места нет");
 	}
 
-	private View createImageView(final UrlDrawable drw) {
+	private View createImageView(final UrlDrawable drw, final int position) {
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.FILL_PARENT,
 				Math.round(80 * MainApplication.mDensity));
 		lp.weight = 1;
 		final LoadingImageView iv = new LoadingImageView(context);
 		iv.setLayoutParams(lp);
-		if (drw.getSmallDrawable() != null) {
-			iv.setDrawable(drw.getSmallDrawable());
-		} else {
-			FSQConnector.loadImageAsync(iv, drw, UrlDrawable.SMALL_URL, false);
-		}
-		iv.setOnClickListener(new OnClickListener() {
+		OnClickListener listner=new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				MainApplication.selectedItemPhoto = drw;
 				Intent intent = new Intent(context,
-						FullScrLoadingImageActivity.class);
+						GalleryActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				GalleryActivity.selectedImage=position;
 				context.startActivity(intent);
 			}
-		});
+		};
+		
+		if (drw.getSmallDrawable() != null) {
+			iv.setDrawable(drw.getSmallDrawable());
+		} else {
+			FSQConnector.loadImageAsync(iv, drw, UrlDrawable.SMALL_URL, false,listner);
+		}
+		iv.setOnClickListener(listner);
 		return iv;
 	}
 
