@@ -11,6 +11,7 @@ import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.ProfilePage;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.RefreshableMapList;
+import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.Prefs;
 import kz.crystalspring.visualities.homescreen.ExplorerView;
 import kz.crystalspring.visualities.homescreen.FriendFeed;
@@ -34,6 +35,7 @@ RefreshableMapList
 	View placesMenu;
 	FriendFeed friendFeed;
 	ExplorerView explorer;
+	PlacesSquareMenu psm;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -56,6 +58,15 @@ RefreshableMapList
 			{
 				Intent j = new Intent(HomeScreen.this, ProfilePage.class);
 				startActivity(j);
+			}
+		});
+		
+		View fastCheckinButton=findViewById(R.id.fast_check_btn);
+		fastCheckinButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) 
+			{
+				psm.runItemActivityWithFilter(MapItem.FSQ_UNDEFINED);
 			}
 		});
 
@@ -97,7 +108,7 @@ RefreshableMapList
 
 		viewList.add(new ViewFragment(friendFeedView, "Лента"));
 		
-		PlacesSquareMenu psm=new PlacesSquareMenu(this);
+		psm=new PlacesSquareMenu(this);
 		View squareMenu=psm.getSquareMenu();
 		viewList.add(new ViewFragment(squareMenu, "Места"));
 		

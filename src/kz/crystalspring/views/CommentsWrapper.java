@@ -1,11 +1,8 @@
-package kz.crystalspring.funpoint.item_page;
+package kz.crystalspring.views;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import kz.crystalspring.funpoint.R;
-import kz.crystalspring.funpoint.venues.VenueComment;
-import kz.crystalspring.pointplus.ProjectUtils;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +10,35 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import kz.crystalspring.funpoint.R;
+import kz.crystalspring.funpoint.venues.FSQItem;
+import kz.crystalspring.funpoint.venues.VenueComment;
+import kz.crystalspring.pointplus.ProjectUtils;
 
-public class VenueCommentsAdapter
+public class CommentsWrapper
+{
+	List<VenueComment> commentsList;
+	Context context;
+
+	public CommentsWrapper(FSQItem item, Context context)
+	{
+		commentsList = item.getOptionalInfo().getCommentsList();
+		this.context = context;
+	}
+
+	public View getView()
+	{
+		LinearLayout lv = new LinearLayout(context);
+		lv.setOrientation(LinearLayout.VERTICAL);
+		LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		lv.setLayoutParams(lp);
+		VenueCommentsAdapter adapter=new VenueCommentsAdapter(context, commentsList);
+		adapter.fillLayout(lv);
+		return lv;
+	}
+}
+
+class VenueCommentsAdapter
 {
 	List<VenueComment> data;
 	private LayoutInflater mInflater;

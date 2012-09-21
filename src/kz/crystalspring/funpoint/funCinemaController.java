@@ -8,8 +8,8 @@ import com.viewpagerindicator.ViewFragment;
 import com.viewpagerindicator.ViewFragmentAdapter;
 
 import kz.crystalspring.pointplus.ProjectUtils;
+import kz.crystalspring.views.CommentsWrapper;
 import kz.crystalspring.funpoint.CinemaTimeTable.CinemaTime;
-import kz.crystalspring.funpoint.item_page.VenueCommentsAdapter;
 import kz.crystalspring.funpoint.R;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
 
@@ -29,13 +29,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.widget.*;
 
 public class funCinemaController extends ActivityController
 {
@@ -195,13 +189,16 @@ public class funCinemaController extends ActivityController
 				});
 				phoneLayout.addView(phoneTV);
 			}
-		if (cinema.getOptionalInfo() != null)
+		loadComments();
+	}
+	
+	private void loadComments()
+	{
+		if (cinema.getOptionalInfo()!=null)
 		{
-			VenueCommentsAdapter adapter = new VenueCommentsAdapter(context,
-					cinema.getOptionalInfo().getCommentsList());
-			adapter.fillLayout(commentsListLayout);
+			CommentsWrapper commentsWrapper=new CommentsWrapper(cinema,context);
+			commentsListLayout.addView(commentsWrapper.getView());
 		}
-
 	}
 
 	@Override

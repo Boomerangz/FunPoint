@@ -97,8 +97,8 @@ public class FSQItem extends MapItem
 	{
 		return category;
 	}
-
-	public void itemFoodLoadOptionalInfo(JSONObject fsqJObject)
+	
+	public void loadSimpleOptionalInfo(JSONObject fsqJObject)
 	{
 		optInfo = new OptionalInfo();
 		try
@@ -111,19 +111,15 @@ public class FSQItem extends MapItem
 			e.printStackTrace();
 		}
 	}
+
+	public void itemFoodLoadOptionalInfo(JSONObject fsqJObject)
+	{
+		loadSimpleOptionalInfo(fsqJObject);
+	}
 	
 	public void itemCinemaLoadOptionalInfo(JSONObject fsqJObject)
 	{
-		optInfo = new OptionalInfo();
-		try
-		{
-			optInfo.loadComments(fsqJObject.getJSONObject("tips"));
-			optInfo.loadPhones(fsqJObject.getJSONObject("contact"));
-			optInfo.loadPhotoUrls(fsqJObject.getJSONObject("photos"));
-		} catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
+		loadSimpleOptionalInfo(fsqJObject);
 	}
 
 	public OptionalInfo getOptionalInfo()
@@ -241,5 +237,7 @@ public class FSQItem extends MapItem
 		};
 		MainApplication.pwAggregator.addPriorityTask(task, postTask);
 	}
+
+
 
 }

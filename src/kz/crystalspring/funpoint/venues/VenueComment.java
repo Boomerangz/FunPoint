@@ -3,7 +3,7 @@ package kz.crystalspring.funpoint.venues;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class VenueComment
+public class VenueComment implements Comparable<VenueComment>
 {
 	String text;
 	String author;
@@ -55,6 +55,12 @@ public class VenueComment
 		return createdAt;
 	}
 
+	@Override
+	public int compareTo(VenueComment another)
+	{
+		return createdAt.compareTo(another.createdAt);
+	}
+	
 //	public void setCreatedAt(java.util.Date createdAt)
 //	{
 //		this.createdAt = createdAt;

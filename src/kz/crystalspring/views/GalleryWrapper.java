@@ -21,86 +21,105 @@ import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-public class GalleryWrapper {
+public class GalleryWrapper
+{
 	LinearLayout mainLayout;
 	Context context;
 	List<UrlDrawable> drawList;
 	TextView moreButton;
-	
+
 	private final static int PHOTOS_COUNT = 3;
 
-	public GalleryWrapper(final Activity context) {
+	public GalleryWrapper(final Activity context)
+	{
 		this.context = context;
 		LayoutInflater inflater = context.getLayoutInflater();
 		mainLayout = (LinearLayout) inflater.inflate(R.layout.gallery_widget,
 				null);
 		drawList = new ArrayList<UrlDrawable>();
 		moreButton = (TextView) mainLayout.findViewById(R.id.more_button);
-		moreButton.setText("Посмотреть все "+drawList.size()+" фотографий");
-		moreButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				Intent intent = new Intent(GalleryWrapper.this.context,
-						ImageTableActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				GalleryWrapper.this.context.startActivity(intent);
-			}
-		});
 	}
 
-	public void addDrawable(UrlDrawable drawabl) {
+	public void addDrawable(UrlDrawable drawabl)
+	{
 		drawList.add(drawabl);
 		refreshLayout();
 	}
 
-	private void refreshLayout() {
+	private void refreshLayout()
+	{
 		LinearLayout layout = (LinearLayout) mainLayout
 				.findViewById(R.id.gallery_layout);
 		layout.removeAllViews();
-		for (int i = 0; i < drawList.size() && i < PHOTOS_COUNT; i++) {
+		for (int i = 0; i < drawList.size() && i < PHOTOS_COUNT; i++)
+		{
 			UrlDrawable drw = drawList.get(i);
-			View imageView = createImageView(drw,i);
+			View imageView = createImageView(drw, i);
 			layout.addView(imageView);
 		}
-		if (drawList.size()>0)
-			moreButton.setText("Посмотреть все "+drawList.size()+" фотографий");
-		else
+		if (drawList.size() > 0)
+		{
+			moreButton.setText("Посмотреть все " + drawList.size()
+					+ " фотографий");
+			moreButton.setOnClickListener(new OnClickListener()
+			{
+				@Override
+				public void onClick(View arg0)
+				{
+					Intent intent = new Intent(GalleryWrapper.this.context,
+							ImageTableActivity.class);
+					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					GalleryWrapper.this.context.startActivity(intent);
+				}
+			});
+		} else
+		{
 			moreButton.setText("Фотграфий этого места нет");
+			moreButton.setOnClickListener(null);
+		}
+
 	}
 
-	private View createImageView(final UrlDrawable drw, final int position) {
+	private View createImageView(final UrlDrawable drw, final int position)
+	{
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.FILL_PARENT,
 				Math.round(80 * MainApplication.mDensity));
 		lp.weight = 1;
 		final LoadingImageView iv = new LoadingImageView(context);
 		iv.setLayoutParams(lp);
-		OnClickListener listner=new OnClickListener() {
+		OnClickListener listner = new OnClickListener()
+		{
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View arg0)
+			{
 				MainApplication.selectedItemPhoto = drw;
-				Intent intent = new Intent(context,
-						GalleryActivity.class);
+				Intent intent = new Intent(context, GalleryActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				GalleryActivity.selectedImage=position;
+				GalleryActivity.selectedImage = position;
 				context.startActivity(intent);
 			}
 		};
-		
-		if (drw.getSmallDrawable() != null) {
+		if (drw.getSmallDrawable() != null)
+		{
 			iv.setDrawable(drw.getSmallDrawable());
-		} else {
-			FSQConnector.loadImageAsync(iv, drw, UrlDrawable.SMALL_URL, false,listner);
+		} else
+		{
+			FSQConnector.loadImageAsync(iv, drw, UrlDrawable.SMALL_URL, false,
+					listner);
 		}
 		iv.setOnClickListener(listner);
 		return iv;
 	}
 
-	public View getView() {
+	public View getView()
+	{
+		refreshLayout();
 		return mainLayout;
 	}
 
-	public void clear() {
+	public void clear()
+	{
 		drawList.clear();
 	}
 }

@@ -1,0 +1,333 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background" >
+
+    <LinearLayout
+        android:id="@+id/main_info_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/address_block"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
+            android:layout_marginTop="@dimen/margin"
+            android:background="#ffffff"
+            android:gravity="left"
+            android:padding="@dimen/margin" >
+
+            <TextView
+                android:id="@+id/food_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="ул. Гоголя, д. 84, г. Алматы"
+                android:typeface="sans" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/phone_block"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
+            android:background="#ffffff"
+            android:gravity="left"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/gallery_list_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin"
+                    android:layout_marginRight="@dimen/margin"
+                    android:background="#ffffff"
+                    android:orientation="vertical"
+                    android:padding="@dimen/margin" />
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="3dp"
+            android:maxLines="2"
+            android:paddingLeft="3dp"
+            android:text="Советы"
+            android:textSize="10pt" />
+
+        <LinearLayout
+            android:id="@+id/comment_list_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+
+
+        <RelativeLayout
+            android:id="@+id/major_header_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin"
+            android:background="@color/white" >
+
+            <LinearLayout
+                android:id="@+id/minor_header_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/food_kitchen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Индийская кухня, Китайская кухня"
+                    android:textSize="7pt" />
+
+                <TextView
+                    android:id="@+id/food_avg_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Food lunch price" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="5dp"
+                android:layout_below="@id/minor_header_layout"
+                android:background="@color/restaurant" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="80dp" >
+
+            <RelativeLayout
+                android:id="@+id/checkin_block"
+                android:layout_width="fill_parent"
+                android:layout_height="80dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="74dp"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_weight="1"
+                android:background="#ffffff" >
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="5dp"
+                    android:layout_below="@id/minor_header_layout"
+                    android:background="@color/restaurant" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="5dp"
+                    android:text="Я здесь"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/checkin_icon" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/map_block"
+                android:layout_width="fill_parent"
+                android:layout_height="80dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_weight="1"
+                android:background="#ffffff" >
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="5dp"
+                    android:layout_below="@id/minor_header_layout"
+                    android:background="@color/restaurant" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="5dp"
+                    android:text="на карте"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/map_icon" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/todo_block"
+                android:layout_width="fill_parent"
+                android:layout_height="80dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_weight="1"
+                android:background="#ffffff" >
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="5dp"
+                    android:layout_below="@id/minor_header_layout"
+                    android:background="@color/restaurant" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="5dp"
+                    android:text="хочу"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/map_icon" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="@dimen/margin" >
+
+            <RelativeLayout
+                android:id="@+id/herenow_block"
+                android:layout_width="fill_parent"
+                android:layout_height="85dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="74dp"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_weight="1"
+                android:background="#ffffff" >
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="5dp"
+                    android:layout_below="@id/minor_header_layout"
+                    android:background="@color/restaurant" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="5dp"
+                    android:text="здесь сейчас"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+
+                <TextView
+                    android:id="@+id/here_now_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:text="5"
+                    android:textSize="55dp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/avg_price_block"
+                android:layout_width="fill_parent"
+                android:layout_height="85dp"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_weight="1"
+                android:background="#ffffff" >
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="5dp"
+                    android:layout_below="@id/minor_header_layout"
+                    android:background="@color/restaurant" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="5dp"
+                    android:text="ланч"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+
+                <TextView
+                    android:id="@+id/food_lunch_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:text="80000"
+                    android:textSize="50dp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin" >
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

@@ -101,6 +101,8 @@ public class FSQConnector {
 			int radius) {
 		if (point != null) {
 			try {
+				if (category.equals(MapItem.FSQ_UNDEFINED))
+					category=null;
 				List<MapItem> list = getNearby(point.getLatitudeE6() / 1e6,
 						point.getLongitudeE6() / 1e6, category, radius);
 				// list.addAll(getNearby(point.getLatitudeE6() / 1e6,
@@ -123,7 +125,7 @@ public class FSQConnector {
 					+ String.valueOf(longitude);
 			String sUrl = API_URL + "/venues/search?ll=" + ll;
 
-			if (category != null)
+			if (category != null )
 				sUrl += "&categoryId=" + category;
 
 			if (radius > 0)

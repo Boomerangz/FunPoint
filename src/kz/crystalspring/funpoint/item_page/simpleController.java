@@ -15,6 +15,7 @@ import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.PhoneTextView;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
+import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.FileConnector;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
 import kz.crystalspring.pointplus.ProjectUtils;
@@ -39,11 +40,11 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class foodController extends ActivityController {
+public class simpleController extends ActivityController {
 	private static final String[] CONTENT_TABS = new String[] { "Инфо",
 			"Отзывы", "Фото" };
 
-	ItemFood itemFood;
+	FSQItem item;
 	TextView titleTV;
 	TextView addressTV;
 	TextView lunchPriceTV;
@@ -59,7 +60,7 @@ public class foodController extends ActivityController {
 	LinearLayout phoneLayout;
 
 	GalleryWrapper wrapper;
-	
+
 	ImageView switchThirdBtn;
 	ImageView switchPreviousBtn;
 	ImageView switchNextBtn;
@@ -69,7 +70,7 @@ public class foodController extends ActivityController {
 
 	LayoutInflater inflater = context.getLayoutInflater();
 
-	public foodController(FragmentActivity _context) {
+	public simpleController(FragmentActivity _context) {
 		super(_context);
 
 		// TODO Auto-generated constructor stub
@@ -77,13 +78,11 @@ public class foodController extends ActivityController {
 
 	@Override
 	protected void onCreate() {
-		if (!MainApplication.mapItemContainer.getSelectedItem()
-				.equals(itemFood)) {
-			itemFood = (ItemFood) MainApplication.mapItemContainer
-					.getSelectedItem();
+		if (!MainApplication.mapItemContainer.getSelectedItem().equals(item)) {
+			item = (FSQItem) MainApplication.mapItemContainer.getSelectedItem();
 
 			context.setContentView(R.layout.waiting_layout);
-			mainView = inflater.inflate(R.layout.controller_food, null);
+			mainView = inflater.inflate(R.layout.controller_simple, null);
 			final int count = CONTENT_TABS.length;
 			List<ViewFragment> viewList = new ArrayList<ViewFragment>(count);
 
@@ -92,9 +91,6 @@ public class foodController extends ActivityController {
 
 			View page2 = loadCommentPage();
 			viewList.add(new ViewFragment(page2, CONTENT_TABS[1]));
-
-//			View page3 = loadGalleryPage(page1);
-//			viewList.add(new ViewFragment(page3, CONTENT_TABS[2]));
 
 			ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
 					context.getSupportFragmentManager(), viewList);
@@ -122,24 +118,17 @@ public class foodController extends ActivityController {
 
 			@Override
 			protected Object doInBackground(Object... params) {
-				if (itemFood.getOptionalInfo() == null) {
+				if (item.getOptionalInfo() == null) {
 					JSONObject jObject = FSQConnector
-							.getVenueInformation(itemFood.getId());
-					itemFood.itemFoodLoadOptionalInfo(jObject);
+							.getVenueInformation(item.getId());
+					item.loadSimpleOptionalInfo(jObject);
 				}
-
-				if (itemFood.getFoodOptions() == null) {
-					JSONObject jObject = FileConnector
-							.getFoodInfoFromFile(itemFood.getId());
-					itemFood.loadFoodOptions(jObject);
-				}
-				System.out.println("Загрузка в фоне");
 				return null;
 			}
 
 			@Override
 			public void onPostExecute(Object result) {
-				showFood(itemFood);
+				showItem(item);
 				context.setContentView(mainView);
 				currentTask = null;
 			}
@@ -163,9 +152,9 @@ public class foodController extends ActivityController {
 		phoneLayout = (LinearLayout) v.findViewById(R.id.phone_block);
 		commentsListLayout = (LinearLayout) v
 				.findViewById(R.id.comment_list_layout);
-		galleryLayout = (LinearLayout)v.findViewById(R.id.gallery_list_layout);
+		galleryLayout = (LinearLayout) v.findViewById(R.id.gallery_list_layout);
 		createGallery();
-		
+
 		checkInBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -195,8 +184,7 @@ public class foodController extends ActivityController {
 		return v;
 	}
 
-	private void createGallery() 
-	{
+	private void createGallery() {
 		wrapper = new GalleryWrapper(context);
 		View view = wrapper.getView();
 		view.setLayoutParams(new LinearLayout.LayoutParams(
@@ -221,7 +209,7 @@ public class foodController extends ActivityController {
 	}
 
 	private View loadGalleryPage(View v) {
-		//View v = inflater.inflate(R.layout.controller_food_page3, null);
+		// View v = inflater.inflate(R.layout.controller_food_page3, null);
 		galleryLayout = (TableLayout) v.findViewById(R.id.gallery_table);
 		return v;
 	}
@@ -231,33 +219,28 @@ public class foodController extends ActivityController {
 		// TODO Auto-generated method stub
 	}
 
-	private void showFood(ItemFood food) {
-		titleTV.setText(food.getName());
-		if (food.getAddress() != null && !food.getAddress().equals("")) {
-			addressTV.setText(food.getAddress());
+	private void showItem(FSQItem item) {
+		titleTV.setText(item.getName());
+		if (item.getAddress() != null && !item.getAddress().equals("")) {
+			addressTV.setText(item.getAddress());
 			addressTV.setVisibility(View.VISIBLE);
 		} else
 			addressTV.setVisibility(View.GONE);
-		hereNowTV.setText(Integer.toString(food.getHereNow()));
-		lunchPriceTV.setText(food.getLunchPrice());
-		kitchenTV.setText(food.getCategoriesString());
+		hereNowTV.setText(Integer.toString(item.getHereNow()));
+		kitchenTV.setText(item.getCategoriesString());
 		// kitchenTV.setVisibility(View.VISIBLE);
-		if (itemFood.getFoodOptions() != null) {
-			avgPriceTV.setText(food.getAvgPrice() + "тг");
-			avgPriceTV.setVisibility(View.VISIBLE);
-		} else {
-			// kitchenTV.setVisibility(View.INVISIBLE);
-			avgPriceTV.setVisibility(View.INVISIBLE);
-		}
-
-		if (food.isCheckedIn())
+		if (item.isCheckedIn())
 			setStateChecked();
 
-		if (food.isCheckedToDo())
+		if (item.isCheckedToDo())
 			setStateTodo();
 
 		phoneLayout.removeAllViews();
-		List<String> phones = food.getPhones();
+		if (item.getOptionalInfo()==null)
+		{
+			
+		}
+		List<String> phones = item.getPhones();
 		for (String phone : phones) {
 			final PhoneTextView phoneTV = new PhoneTextView(context);
 			phoneTV.setPhone(ProjectUtils.formatPhone(phone));
@@ -271,27 +254,25 @@ public class foodController extends ActivityController {
 			});
 			phoneLayout.addView(phoneTV);
 		}
-
+		
 		loadComments();
 		loadPhotosToGallery();
 	}
 	
 	private void loadComments()
 	{
-		if (itemFood.getOptionalInfo()!=null)
+		if (item.getOptionalInfo()!=null)
 		{
 			commentsListLayout.removeAllViews();
-			CommentsWrapper commentsWrapper=new CommentsWrapper(itemFood,context);
+			CommentsWrapper commentsWrapper=new CommentsWrapper(item,context);
 			commentsListLayout.addView(commentsWrapper.getView());
 		}
 	}
 
-	private void loadPhotosToGallery() 
-	{
+	private void loadPhotosToGallery() {
 		wrapper.clear();
-		for (int i=0; i<itemFood.getPhotosCount();i++)
-		{
-			wrapper.addDrawable(itemFood.getUrlAndPhoto(i));
+		for (int i = 0; i < item.getPhotosCount(); i++) {
+			wrapper.addDrawable(item.getUrlAndPhoto(i));
 		}
 	}
 

@@ -94,9 +94,8 @@ public class MapItemContainer {
 		synchronized (itemArray) {
 			List<MapItem> filteredList = new ArrayList<MapItem>();
 			for (MapItem item : itemArray)
-				if (visibleFilterMap.contains(item.getObjTypeId()))
+				if (visibleFilterMap.contains(item.getObjTypeId())||visibleFilterMap.contains(MapItem.FSQ_UNDEFINED))
 					filteredList.add(item);
-
 			return filteredList;
 		}
 	}

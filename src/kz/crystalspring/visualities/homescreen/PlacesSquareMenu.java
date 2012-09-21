@@ -236,7 +236,7 @@ public class PlacesSquareMenu
 		// }
 	}
 
-	private void runItemActivityWithFilter(String visibleFilter)
+	public void runItemActivityWithFilter(String visibleFilter)
 	{
 		MainApplication.mapItemContainer.setVisibleFilter(visibleFilter);
 		Intent intent = new Intent(context,

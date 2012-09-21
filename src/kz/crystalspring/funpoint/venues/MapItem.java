@@ -51,7 +51,7 @@ public abstract class MapItem implements Serializable, ListItem {
 	public static final String FSQ_UNDEFINED = "??????????"; 
 
 	public static final String[] TYPES_ARRAY = { FSQ_TYPE_CINEMA,
-			FSQ_TYPE_HOTEL, FSQ_TYPE_FOOD, FSQ_TYPE_MARKET, FSQ_TYPE_CLUB };
+			FSQ_TYPE_HOTEL, FSQ_TYPE_FOOD, FSQ_TYPE_MARKET, FSQ_TYPE_CLUB, FSQ_UNDEFINED };
 
 	public static Context context;
 

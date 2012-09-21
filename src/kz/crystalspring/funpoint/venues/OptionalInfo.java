@@ -3,6 +3,8 @@ package kz.crystalspring.funpoint.venues;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -58,6 +60,8 @@ public class OptionalInfo
 				if (comment != null)
 					addCommentToList(comment);
 			}
+			Collections.sort(commentList);
+			Collections.reverse(commentList);
 		}
 	}
 
