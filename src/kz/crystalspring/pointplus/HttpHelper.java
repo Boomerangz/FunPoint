@@ -4,18 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-import kz.crystalspring.android_client.C_FileHelper;
-import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.funEventActivity;
-import kz.crystalspring.funpoint.funWaitingActivity;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 
 import org.apache.http.HttpResponse;
@@ -30,12 +23,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 
 public class HttpHelper
 {

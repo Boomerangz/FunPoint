@@ -14,6 +14,7 @@ import kz.crystalspring.funpoint.venues.UrlDrawable;
 import kz.crystalspring.visualities.RatingActivity;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,7 +39,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class WriteCommentActivity extends Activity
+public class WriteCommentActivity extends Activity implements RefreshableMapList
 {
 	ImageView mImageView;
 	protected String _path;
@@ -48,6 +49,7 @@ public class WriteCommentActivity extends Activity
 	public static final int COMMENT_MODE = 1;
 	public static final int CHECKIN_MODE = 2;
 	Button clearButton;
+	private static String response=null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -115,6 +117,13 @@ public class WriteCommentActivity extends Activity
 		});
 
 	}
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		MainApplication.refreshable=this;
+	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)
@@ -138,23 +147,40 @@ public class WriteCommentActivity extends Activity
 			sendTip(comment, venueId);
 		else
 			sendCheckin(comment, venueId);
-		finish();
+	//	finish();
 	}
 
 	private void sendTip(String comment, String venueId)
 	{
 		FSQConnector.addToTips(venueId, comment, bitmapToBytes(imageBitmap));
+		finish();
 	}
 
+	
+	Dialog pd=null;
 	private void sendCheckin(String comment, String venueId)
 	{
-		//FSQConnector.checkIn(venueId, comment, bitmapToBytes(imageBitmap));
-		loadRatingPage();
+		pd=ProgressDialog.show(this, "Checkin", "Checkining now");
+		FSQConnector.checkIn(venueId, comment, bitmapToBytes(imageBitmap));
+		//loadRatingPage();
 	}
 	
-	private void loadRatingPage()
+	@Override
+	public void refreshMapItems()
+	{
+		if (pd!=null&&response!=null)
+		{
+			pd.dismiss();
+			pd=null;
+			loadRatingPage(response);
+			response=null;
+		}
+	}
+	
+	private void loadRatingPage(String checkinResponse)
 	{
 		Intent intent=new Intent(this,RatingActivity.class);
+		intent.putExtra("checkinResponse", checkinResponse);
 		startActivity(intent);
 	}
 
@@ -351,4 +377,10 @@ public class WriteCommentActivity extends Activity
 		}
 		return null;
 	}
+
+	public static synchronized void setResponse(String st)
+	{
+		response=st;
+	}
+
 }
