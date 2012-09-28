@@ -197,7 +197,7 @@ public class funCinemaController extends ActivityController
 		if (cinema.getOptionalInfo()!=null)
 		{
 			CommentsWrapper commentsWrapper=new CommentsWrapper(cinema,context);
-			commentsListLayout.addView(commentsWrapper.getView());
+		//	commentsListLayout.addView(commentsWrapper.getView());
 		}
 	}
 
@@ -375,7 +375,7 @@ class CinemaTimeTableAdapter extends BaseAdapter
 					@Override
 					public void onClick(View v)
 					{
-						String url = ItemCinema.TICKETON_URL + time.getHash();
+						String url = time.getHash();
 						Dialog dialog = new Dialog(context);
 						dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 						LayoutInflater inflater = (LayoutInflater) context

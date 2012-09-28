@@ -24,7 +24,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
         </RelativeLayout>
 
-            <kz.crystalspring.visualities.LoadingImageView
+            <kz.crystalspring.views.LoadingImageView
                 android:id="@+id/loading_imageview"
                 android:layout_width="fill_parent"
                 android:layout_height="200dp" />

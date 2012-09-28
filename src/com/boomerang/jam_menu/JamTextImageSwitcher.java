@@ -100,6 +100,7 @@ public class JamTextImageSwitcher extends FrameLayout implements ViewFactory
 	public void updateImage()
 	{
 		switcher.setImageDrawable(getNextImage());
+		System.gc();
 		//switcher.setImageResource(getNextImageId());
 	}
 
@@ -108,24 +109,25 @@ public class JamTextImageSwitcher extends FrameLayout implements ViewFactory
 		currImage++;
 		if (currImage == ImageSource.size())
 			currImage = 0;
-		if (drawableArray[currImage]==null)
-		{
-			Drawable drw;
-//			Bitmap btm=BitmapFactory.decodeResource(getContext().getResources(), ImageSource.get(currImage).source);
-//			if (btm!=null)
-//			{
-//			//	btm.setDensity(Math.round(MainApplication.mDensity/2));
-//				drw=new BitmapDrawable(btm);
-//			}
-//			else
-//			{
-				drw=getContext().getResources().getDrawable(
-						ImageSource.get(currImage).source);
-//			}
-			drawableArray[currImage]=drw;
-		}
-		Drawable drw=drawableArray[currImage];
-		return drw;
+//		if (drawableArray[currImage]==null)
+//		{
+//			Drawable drw;
+////			Bitmap btm=BitmapFactory.decodeResource(getContext().getResources(), ImageSource.get(currImage).source);
+////			if (btm!=null)
+////			{
+////			//	btm.setDensity(Math.round(MainApplication.mDensity/2));
+////				drw=new BitmapDrawable(btm);
+////			}
+////			else
+////			{
+//				drw=getContext().getResources().getDrawable(
+//						ImageSource.get(currImage).source);
+////			}
+//			drawableArray[currImage]=drw;
+//		}
+//		Drawable drw=drawableArray[currImage];
+		return getContext().getResources().getDrawable(
+				ImageSource.get(currImage).source);
 	}
 	
 	private int getNextImageId()

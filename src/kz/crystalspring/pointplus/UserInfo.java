@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 
 import kz.crystalspring.android_client.C_JavascriptInterface;
 import kz.crystalspring.android_client.C_NetHelper;
-import kz.crystalspring.funpoint.MainMenu;
 import kz.crystalspring.funpoint.R;
 import android.app.Activity;
 import android.content.Context;

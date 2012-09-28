@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.MainMenu;
 import kz.crystalspring.funpoint.ProfilePage;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.funCheckinNow;
@@ -23,7 +22,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 
-import com.boomerang.jam_menu.JamMenuActivity;
 import com.boomerang.jam_menu.JamTextImageSwitcher;
 import com.boomerang.jam_menu.SwitcherDescription;
 
@@ -242,7 +240,7 @@ public class PlacesSquareMenu
 		Intent intent = new Intent(context,
 				funWaitingActivity.class);
 		context.startActivity(intent);
-		MainMenu.currentListTab = MainMenu.OBJECT_LIST_TAB;
+		//MainMenu.currentListTab = MainMenu.OBJECT_LIST_TAB;
 		//continueUpdating = false;
 	}
 

@@ -20,8 +20,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 
@@ -37,19 +40,18 @@ RefreshableMapList
 	ExplorerView explorer;
 	PlacesSquareMenu psm;
 	
+	
+	static int cuurPage=0;
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.home_screen);
+		Log.w("HomeScreen", "Created");
+		setContentView(R.layout.home_screen1);
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		tabIndicator = (TabPageIndicator) findViewById(R.id.indicator);
 		
-		List<ViewFragment> viewList = fillObjectAndEventLists(); 
-		ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
-				getSupportFragmentManager(), viewList);
-		viewPager.setAdapter(pagerAdapter);
-		viewPager.setCurrentItem(0);
+		Log.w("HomeScreen", Integer.valueOf(cuurPage).toString());
 		
 		View profileButton=findViewById(R.id.profile_button);
 		profileButton.setOnClickListener(new OnClickListener() {
@@ -70,8 +72,14 @@ RefreshableMapList
 			}
 		});
 
-		tabIndicator.setViewPager(viewPager);
 
+	}
+	
+	@Override
+	public void onStop()
+	{
+		super.onStop();
+		Log.w("HomeScreen", "Stopped");
 	}
 	
 	@Override
@@ -79,6 +87,13 @@ RefreshableMapList
 	{
 	//	super.onPause();
 		finish();
+	}
+	
+	@Override
+	public void onRestart()
+	{
+		super.onRestart();
+		Log.w("HomeScreen","Restarted");
 	}
 
 	@Override
@@ -94,24 +109,55 @@ RefreshableMapList
 	public void onResume()
 	{
 		super.onResume();
+		Log.w("HomeScreen", "Resumed");
 		MainApplication.refreshable=this;
+		List<ViewFragment> viewList = fillObjectAndEventLists(); 
+		ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter( 
+				getSupportFragmentManager(), viewList);
+		viewPager.setAdapter(pagerAdapter);
+		tabIndicator.setViewPager(viewPager);
+		viewPager.setCurrentItem(0);
 		refreshMapItems();
+	}
+	
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		Log.w("HomeScreen", "Paused");
+	//	finish();
+	}
+	
+	@Override
+	public void onDestroy()
+	{
+		super.onDestroy();
+		Log.w("HomeScreen", "Destroyed");
 	}
 	
 	
 	private List<ViewFragment> fillObjectAndEventLists()
 	{
 		List<ViewFragment> viewList = new ArrayList();
-
+		Log.w("HomeScreen","Filling ViewPager");
 		friendFeed=new FriendFeed(this);
 		View friendFeedView=friendFeed.getFriendFeed();
+	//	viewList.add(new ViewFragment(friendFeedView, "Лента"));
+		Log.w("HomeScreen_Filling","Filling FriendFeed");
 
-		viewList.add(new ViewFragment(friendFeedView, "Лента"));
+		Button button=new Button(this);
+		friendFeedView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+		button.setText("Button");
+		
+		LinearLayout justLayout=(LinearLayout) findViewById(R.id.just_layout);
+		justLayout.removeAllViews();
+		justLayout.addView(friendFeedView);
+		
 		
 		psm=new PlacesSquareMenu(this);
 		View squareMenu=psm.getSquareMenu();
 		viewList.add(new ViewFragment(squareMenu, "Места"));
-		
+		Log.w("HomeScreen_Filling","Filling SquareMenu");
 		ListView eventListView = new ListView(getBaseContext());
 		eventListView.setLayoutParams(new ScrollView.LayoutParams(
 				ScrollView.LayoutParams.FILL_PARENT,

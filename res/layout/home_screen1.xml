@@ -35,6 +35,9 @@
             android:background="@drawable/flag_button"
             android:text="" />
     </RelativeLayout>
+    <LinearLayout android:id="@+id/just_layout" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:layout_width="fill_parent"

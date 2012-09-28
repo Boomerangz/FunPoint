@@ -254,7 +254,6 @@ public class simpleController extends ActivityController {
 			});
 			phoneLayout.addView(phoneTV);
 		}
-		
 		loadComments();
 		loadPhotosToGallery();
 	}

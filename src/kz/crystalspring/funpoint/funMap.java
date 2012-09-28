@@ -55,7 +55,7 @@ public class funMap extends MapActivity implements LocationListener,
 			@Override
 			public void onClick(View v)
 			{
-				MainMenu.goToObjectList();
+				//MainMenu.goToObjectList();
 			}
 		});
 		mMyLocationOverlay = new CustomMyLocationOverlay(this, mapView);

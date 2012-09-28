@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -37,7 +39,7 @@ public class HttpHelper
 	private static final boolean USE_PROXY = false;
 	static HttpClient client = new DefaultHttpClient();
 
-	private static HttpResponse loadResponse(HttpUriRequest request)
+	private static synchronized HttpResponse loadResponse(HttpUriRequest request)
 	{
 		try
 		{
@@ -54,7 +56,7 @@ public class HttpHelper
 
 	private static InputStream loadStream(HttpPost post)
 	{
-		try
+		try 
 		{
 			InputStream is = loadResponse(post).getEntity().getContent();
 			return is;
@@ -157,14 +159,14 @@ public class HttpHelper
 
 	public static synchronized Drawable loadPictureByUrl(String sUrl)
 	{
-
 		try
 		{
-			HttpGet request = new HttpGet();
-			request.setURI(new URI(sUrl));
-			request.setHeader("Accept-Language", "ru");
-			HttpResponse response = loadResponse(request);
-			return streamToDrawable(response.getEntity().getContent());
+			URL url = new URL(sUrl);
+			URLConnection connection = url.openConnection();
+			connection.setUseCaches(true);
+			InputStream response = (InputStream) connection.getContent();
+			Bitmap bitmap = BitmapFactory.decodeStream(response);
+			return new BitmapDrawable(bitmap);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -204,5 +206,27 @@ public class HttpHelper
 		b.setDensity(Bitmap.DENSITY_NONE);
 		Drawable d = new BitmapDrawable(b);
 		return d;
+	}
+
+	public static Drawable loadPictureByUrl(String sUrl, int i)
+	{
+		try
+		{
+			URL url = new URL(sUrl);
+			URLConnection connection = url.openConnection();
+			connection.setUseCaches(true);
+			InputStream response = (InputStream) connection.getContent();
+			Bitmap true_bitmap = BitmapFactory.decodeStream(response);
+			int h_coof=i;
+			int w_coof=Math.round(true_bitmap.getWidth()/((float)true_bitmap.getHeight()/i)); 
+			Bitmap small_bitmap = Bitmap.createScaledBitmap(true_bitmap,h_coof, w_coof, false);
+			true_bitmap.recycle();
+			System.gc();
+			return new BitmapDrawable(small_bitmap);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

@@ -2,7 +2,6 @@ package kz.crystalspring.funpoint;
 
 import java.util.List;
 
-import com.boomerang.metromenu.MetromenuActivity;
 
 import android.app.Activity;
 import android.app.ActivityManager;

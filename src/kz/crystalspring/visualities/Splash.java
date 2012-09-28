@@ -1,7 +1,5 @@
 package kz.crystalspring.visualities;
 
-import com.boomerang.jam_menu.JamMenuActivity;
-import com.boomerang.metromenu.MetromenuActivity;
 
 import kz.crystalspring.android_client.C_DBHelper;
 import kz.crystalspring.android_client.C_FileHelper;

@@ -228,7 +228,7 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 
 	private void takePhotoFromCamera()
 	{
-		_path = Environment.getExternalStorageDirectory().getName()
+		_path = Environment.getExternalStorageDirectory().getAbsolutePath()
 				+ File.separatorChar + "Android/data/"
 				+ WriteCommentActivity.this.getPackageName()
 				+ "/files/1111.jpg";
@@ -315,29 +315,31 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 		_taken = true;
 
 		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inSampleSize = 4;
+		options.inSampleSize = 2;
 
 		FileInputStream fis = null;
 		byte[] image = new byte[0];
-		try
-		{
-			fis = new FileInputStream(new File(_path));
-			image = new byte[fis.available()];
-			fis.read(image);
-		} catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		Bitmap mLargeBitmap=null;
+//		try
+//		{
+		//	fis = new FileInputStream(new File(_path));
+//			image = new byte[fis.available()];
+//			fis.read(image);
+			mLargeBitmap = BitmapFactory.decodeFile(_path, options);
+//		} catch (FileNotFoundException e)
+//		{
+//			e.printStackTrace();
+//		} catch (IOException e)
+//		{
+//			e.printStackTrace();
+//		}
+		
+//		Bitmap mLargeBitmap = BitmapFactory.decodeByteArray(image, 0,
+//				image.length);
 
-		Bitmap mLargeBitmap = BitmapFactory.decodeByteArray(image, 0,
-				image.length);
-
-		Bitmap mImageBitmap = Bitmap
-				.createScaledBitmap(mLargeBitmap, mLargeBitmap.getWidth() / 2,
-						mLargeBitmap.getHeight() / 2, true);
+		Bitmap mImageBitmap =mLargeBitmap;// Bitmap
+//				.createScaledBitmap(mLargeBitmap, mLargeBitmap.getWidth() / 2,
+//						mLargeBitmap.getHeight() / 2, true);
 		mImageView.setImageBitmap(mImageBitmap);
 		imageBitmap = mImageBitmap;
 		mImageView.setOnClickListener(openPhotoListner);

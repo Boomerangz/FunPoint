@@ -1,6 +1,5 @@
 package kz.crystalspring.funpoint;
 
-import com.boomerang.metromenu.MetromenuActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -24,7 +23,7 @@ public class funWaitingActivity extends Activity implements RefreshableMapList
 	@Override
 	public void refreshMapItems()
 	{
-		Intent intent = new Intent(funWaitingActivity.this, MainMenu.class);
+		Intent intent = new Intent(funWaitingActivity.this, funObjectList.class);
 		startActivity(intent);
 		finish();
 	}

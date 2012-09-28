@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import kz.crystalspring.funpoint.FullScrLoadingImageActivity;
 import kz.crystalspring.funpoint.MainApplication;
@@ -324,9 +325,10 @@ public class FSQConnector
 					pairs.add(new BasicNameValuePair("venueId", venueID));
 					if (comment != null && !comment.trim().equalsIgnoreCase(""))
 						pairs.add(new BasicNameValuePair("shout", comment));
-					// HttpResponse response = client.execute(post);
-					// st = HttpHelper.streamToString(response.getEntity()
-					// .getContent());
+//					 HttpResponse response = client.execute(post);
+//					 st = HttpHelper.streamToString(response.getEntity()
+//					 .getContent());
+					st = "{\"meta\":{\"code\":200},\"notifications\":[{\"type\":\"notificationTray\",\"item\":{\"unreadCount\":0}},{\"type\":\"message\",\"item\":{\"message\":\"ОК! Мы нашли вас в Street Bar & Grill. Вы были здесь 11 раз(а).\"}},{\"type\":\"tip\",\"item\":{\"tip\":{\"id\":\"5031a2cae4b0bde72784cbe8\",\"createdAt\":1345430218,\"text\":\"#7. Для мальчишника\",\"likes\":{\"count\":0,\"groups\":[]},\"like\":false,\"todo\":{\"count\":0},\"done\":{\"count\":1},\"user\":{\"id\":\"5305686\",\"firstName\":\"Anry\",\"lastName\":\"A.\",\"photo\":\"https://is0.4sqi.net/userpix_thumbs/KVXX4NB21ROKP1QP.jpg\",\"tips\":{\"count\":18},\"lists\":{\"groups\":[{\"type\":\"created\",\"count\":2,\"items\":[]}]},\"gender\":\"male\",\"homeCity\":\"Almaty, Kazakhstan\",\"bio\":\"\",\"contact\":{\"facebook\":\"100000690443377\"}}},\"name\":\"Популярная подсказка\"}},{\"type\":\"leaderboard\",\"item\":{\"leaderboard\":[{\"user\":{\"id\":\"27342785\",\"firstName\":\"igor\",\"lastName\":\"zygin\",\"relationship\":\"self\",\"photo\":\"https://foursquare.com/img/blank_boy.png\",\"tips\":{\"count\":17},\"lists\":{\"groups\":[{\"type\":\"created\",\"count\":1,\"items\":[]}]},\"gender\":\"male\",\"homeCity\":\"\",\"bio\":\"\",\"contact\":{\"email\":\"izygin@gmail.com\"}},\"scores\":{\"recent\":76,\"max\":79,\"checkinsCount\":23},\"rank\":1},{\"user\":{\"id\":\"9831657\",\"firstName\":\"Alexey\",\"lastName\":\"Tuchin\",\"relationship\":\"friend\",\"photo\":\"https://is1.4sqi.net/userpix_thumbs/OH501PJM34D1DMOK.png\",\"tips\":{\"count\":1},\"lists\":{\"groups\":[{\"type\":\"created\",\"count\":3,\"items\":[]}]},\"gender\":\"male\",\"homeCity\":\"Almaty, Kazakhstan\",\"bio\":\"Прилетел спасать Землю\",\"contact\":{\"email\":\"atuchin@gmail.com\",\"facebook\":\"100000753092441\"}},\"scores\":{\"recent\":70,\"max\":114,\"checkinsCount\":17},\"rank\":2},{\"user\":{\"id\":\"32728674\",\"firstName\":\"Sergey\",\"lastName\":\"Chekmarev\",\"relationship\":\"friend\",\"photo\":\"https://is1.4sqi.net/userpix_thumbs/KFI131TPBJHAPBQ4.jpg\",\"tips\":{\"count\":0},\"lists\":{\"groups\":[{\"type\":\"created\",\"count\":3,\"items\":[]}]},\"gender\":\"male\",\"homeCity\":\"Almaty\",\"bio\":\"\",\"contact\":{\"phone\":\"87053388442\",\"email\":\"nine.priest@gmail.com\",\"facebook\":\"100001895567569\"}},\"scores\":{\"recent\":14,\"max\":75,\"checkinsCount\":4},\"rank\":3}],\"message\":\"Вы №1! Вы возглавляете список лидеров.\",\"scores\":[{\"points\":1,\"icon\":\"https://foursquare.com/img/points/defaultpointsicon2.png\",\"message\":\"Nice! You've checked in 2 times today!\"}],\"total\":1}},{\"type\":\"score\",\"item\":{\"scores\":[{\"points\":1,\"icon\":\"https://foursquare.com/img/points/defaultpointsicon2.png\",\"message\":\"Nice! You've checked in 2 times today!\"}],\"total\":1}}],\"response\":{\"checkin\":{\"id\":\"50612fb7e4b06bd054586b53\",\"createdAt\":1348546487,\"type\":\"checkin\",\"timeZone\":\"Asia/Almaty\",\"timeZoneOffset\":360,\"venue\":{\"id\":\"4f278959e4b0ca643f33e9ac\",\"name\":\"Street Bar & Grill\",\"contact\":{},\"location\":{\"lat\":43.23659306978218,\"lng\":76.90875141782021,\"country\":\"Kazakhstan\",\"cc\":\"KZ\"},\"categories\":[{\"id\":\"4bf58dd8d48988d14e941735\",\"name\":\"Ресторан американской кухни\",\"pluralName\":\"Рестораны американской кухни\",\"shortName\":\"Американский\",\"icon\":{\"prefix\":\"https://foursquare.com/img/categories/food/default_\",\"sizes\":[32,44,64,88,256],\"name\":\".png\"},\"primary\":true}],\"verified\":false,\"stats\":{\"checkinsCount\":126,\"usersCount\":43,\"tipCount\":3},\"likes\":{\"count\":0,\"groups\":[]},\"beenHere\":{\"count\":0}},\"likes\":{\"count\":0,\"groups\":[]},\"photos\":{\"count\":0,\"items\":[]},\"comments\":{\"count\":0,\"items\":[]},\"source\":{\"name\":\"walker\",\"url\":\"http://homeplus.kz\"}}}}";
 					st = HttpHelper.loadPostByUrl(sUrl, pairs);
 					String ID = new JSONObject(st).getJSONObject("response")
 							.getJSONObject("checkin").getString("id");
@@ -692,7 +694,7 @@ public class FSQConnector
 						&& urlDr.getSmallDrawable() == null)
 				{
 					urlDr.setSmallDrawable(HttpHelper
-							.loadPictureByUrl(urlDr.smallUrl));
+							.loadPictureByUrl(urlDr.smallUrl,80));
 				}
 			}
 		};
@@ -971,8 +973,15 @@ public class FSQConnector
 		return exploreList;
 	}
 
+	
+	private static Map<String,String> photosForVenues;
 	public static Drawable loadTitlePhotoForVenue(String id)
 	{
+		if (photosForVenues==null)
+			photosForVenues=new HashMap<String, String>();
+		String imageUrl;
+		if (!photosForVenues.containsKey(id))
+		{
 		String sUrl = PHOTO_URL + id + "/photos?limit=1&group=venue"
 				+ "&oauth_token=" + MainApplication.FsqApp.getAccesToken()
 				+ API_VERSION;
@@ -989,16 +998,23 @@ public class FSQConnector
 				int count = jGroup.getInt("count") - 2;
 				JSONObject jSize = jGroup.getJSONArray("items").getJSONObject(
 						count);
-				String imageUrl = jSize.getString("url");
-				Drawable image = HttpHelper.loadPictureByUrl(imageUrl);
-				return image;
+				imageUrl = jSize.getString("url");
+				photosForVenues.put(id, imageUrl);
 			}
+			else
+				imageUrl = "";
 		} catch (JSONException e)
 		{
-			// TODO Auto-generated catch block
+			imageUrl = "";
 			e.printStackTrace();
 		}
-		return null;
+		}
+		else
+		{
+			imageUrl=photosForVenues.get(id);
+		}
+		Drawable image = HttpHelper.loadPictureByUrl(imageUrl);
+		return image;
 	}
 
 	public static boolean isExploringLoaded()

@@ -111,7 +111,7 @@ public class ItemCinema extends FSQItem
 		if (getOptionalInfo() == null)
 		{
 			JSONObject jObject = FSQConnector.getVenueInformation(getId());
-			itemFoodLoadOptionalInfo(jObject);
+			itemCinemaLoadOptionalInfo(jObject);
 		}
 	}
 

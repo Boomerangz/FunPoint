@@ -2,7 +2,6 @@ package kz.crystalspring.pointplus;
 
 import java.util.ArrayList;
 
-import kz.crystalspring.funpoint.MainMenu;
 import kz.crystalspring.funpoint.funMap;
 
 import android.content.Context;

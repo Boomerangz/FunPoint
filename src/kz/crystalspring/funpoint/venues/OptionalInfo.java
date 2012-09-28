@@ -21,7 +21,7 @@ public class OptionalInfo
 	List<VenueComment> commentList = new ArrayList<VenueComment>();
 	List<String> FSQPhonesList = new ArrayList();
 	List<UrlDrawable> FSQPhotosList = new ArrayList();
-	
+
 	private void addCommentToList(VenueComment comment)
 	{
 		commentList.add(comment);
@@ -51,7 +51,7 @@ public class OptionalInfo
 				VenueComment comment = new VenueComment();
 				try
 				{
-					comment=comment.loadFromJSON(tipItems.getJSONObject(i));
+					comment = comment.loadFromJSON(tipItems.getJSONObject(i));
 				} catch (JSONException e)
 				{
 					comment = null;
@@ -81,7 +81,8 @@ public class OptionalInfo
 	{
 		try
 		{
-		JSONArray jPhotos = jObject.getJSONArray("groups");
+			System.gc();
+			JSONArray jPhotos = jObject.getJSONArray("groups");
 			for (int i = 0; i < jPhotos.length(); i++)
 			{
 				JSONObject jPhoto = jPhotos.getJSONObject(i);
@@ -89,17 +90,24 @@ public class OptionalInfo
 				{
 					for (int j = 0; j < jPhoto.getJSONArray("items").length(); j++)
 					{
-						int count=jPhoto.getJSONArray("items")
-								.getJSONObject(j).getJSONObject("sizes").getJSONArray("items").length();
+						int count = jPhoto.getJSONArray("items")
+								.getJSONObject(j).getJSONObject("sizes")
+								.getJSONArray("items").length();
+						int smallIndex=(count-2)>0?(count-2):0;
+						
 						String bigUrl = jPhoto.getJSONArray("items")
-								.getJSONObject(j).getJSONObject("sizes").getJSONArray("items").getJSONObject(0).getString("url");
+								.getJSONObject(j).getJSONObject("sizes")
+								.getJSONArray("items").getJSONObject(0)
+								.getString("url");
 						String smallUrl = jPhoto.getJSONArray("items")
-								.getJSONObject(j).getJSONObject("sizes").getJSONArray("items").getJSONObject(Math.round(count/2)).getString("url");
-						
-						UrlDrawable urlDr=new UrlDrawable();
-						urlDr.bigUrl=bigUrl;
-						urlDr.smallUrl=smallUrl;
-						
+								.getJSONObject(j).getJSONObject("sizes")
+								.getJSONArray("items").getJSONObject(smallIndex)
+								.getString("url");
+
+						UrlDrawable urlDr = new UrlDrawable();
+						urlDr.bigUrl = bigUrl;
+						urlDr.smallUrl = smallUrl;
+
 						FSQPhotosList.add(urlDr);
 					}
 				}
@@ -121,7 +129,6 @@ public class OptionalInfo
 		FSQPhonesList = fSQPhonesList;
 	}
 
-
 	public int getPhotosCount()
 	{
 		return FSQPhotosList.size();
@@ -136,19 +143,20 @@ public class OptionalInfo
 	{
 		try
 		{
-			JSONObject jObject=new JSONObject(st);
-			String status= jObject.getJSONObject("response").getJSONObject("tip").getString("status");
+			JSONObject jObject = new JSONObject(st);
+			String status = jObject.getJSONObject("response")
+					.getJSONObject("tip").getString("status");
 			if (status.equals("done"))
 			{
-				VenueComment comment=new VenueComment();
-				comment=comment.loadFromJSON(jObject.getJSONObject("response").getJSONObject("tip"));
-				ProjectUtils.addToBeginOfArrayList((ArrayList) commentList, comment).add(comment);
-				
-				
-				GregorianCalendar date=null;
+				VenueComment comment = new VenueComment();
+				comment = comment.loadFromJSON(jObject
+						.getJSONObject("response").getJSONObject("tip"));
+				ProjectUtils.addToBeginOfArrayList((ArrayList) commentList,
+						comment).add(comment);
+
+				GregorianCalendar date = null;
 				date.add(Calendar.SECOND, (int) -date.getTimeInMillis());
-				
-				
+
 			}
 		} catch (JSONException e)
 		{
@@ -158,10 +166,3 @@ public class OptionalInfo
 	}
 
 }
-
-
-
-
-
-
-

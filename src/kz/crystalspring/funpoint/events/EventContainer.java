@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 
 public class EventContainer
@@ -47,7 +48,9 @@ public class EventContainer
 			@Override
 			public void run() 
 			{
+				Log.w("cinema", "НАЧАЛ ЗАГРУЗКУ ФИЛЬМОВ");
 				JSONArray cinemaJSONArray=FileConnector.loadJSONCinemaEventsList();
+				Log.w("cinema", "НАЧАЛ СОЗДАНИЕ СПИСКА ФИЛЬМОВ");
 				for (int i=0;i<cinemaJSONArray.length();i++)
 				{
 					try
@@ -61,6 +64,7 @@ public class EventContainer
 						e.printStackTrace();
 					}
 				}
+				Log.w("cinema", "ЗАКОНЧИЛ СОЗДАНИЕ СПИСКА ФИЛЬМОВ");
 			}
  		};
  		MainApplication.pwAggregator.addTaskToQueue(preTask, null);

@@ -209,6 +209,7 @@ public class FSQItem extends MapItem
 			return context.getResources().getColor(R.color.shop);
 		return context.getResources().getColor(R.color.selected_blue);
 	}
+	
 	Drawable photo=null;
 	@Override
 	protected void loadImageToView(final LoadingImageView loadingImageView) 
@@ -233,11 +234,9 @@ public class FSQItem extends MapItem
 					loadingImageView.setDrawable(photo);
 				else
 					loadingImageView.setDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
+				photo=null;
 			}
 		};
 		MainApplication.pwAggregator.addPriorityTask(task, postTask);
 	}
-
-
-
 }

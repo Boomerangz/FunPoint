@@ -24,7 +24,7 @@ public class CinemaTimeTable
 	public static final DateFormat date_formatter = new SimpleDateFormat(
 			"yyyy-MM-dd");
 	public static final DateFormat time_formatter = new SimpleDateFormat(
-			"hh-mm");
+			"HH-mm");
 
 	class TimeLine
 	{
@@ -165,7 +165,7 @@ public class CinemaTimeTable
 				clearDate.setHours(0);
 				clearDate.setMinutes(0);
 				clearDate.setSeconds(0);
-				String sHash = "1:71:1340860800";// jEvent.getString("hash");
+				String sHash = jEvent.getString("url_mobile");//"3:128:1348659300";//"1:71:1340860800";// jEvent.getString("hash");
 				boolean ticketAble = true;
 
 				TimeLine timeline = null;

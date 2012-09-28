@@ -56,21 +56,6 @@
                     android:layout_weight="1"
                     android:layout_marginRight="3dp"
                     android:layout_marginTop="3dp" />
-
-                <com.boomerang.jam_menu.JamTextImageSwitcher
-                    android:id="@+id/switcher4"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginTop="3dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"         android:layout_marginTop="3dp" >
-
                 <com.boomerang.jam_menu.JamTextImageSwitcher
                     android:id="@+id/switcher5"
                     android:layout_width="fill_parent"
@@ -80,6 +65,22 @@
                     android:layout_marginRight="3dp"
                     android:layout_marginTop="3dp" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"         android:layout_marginTop="3dp" >
+
+                <com.boomerang.jam_menu.JamTextImageSwitcher
+                    android:id="@+id/switcher4"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                     android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="3dp" />
+                
                 <com.boomerang.jam_menu.JamTextImageSwitcher
                     android:id="@+id/switcher6"
                     android:layout_width="fill_parent"
