@@ -27,10 +27,12 @@ public class GalleryWrapper
 	Context context;
 	List<UrlDrawable> drawList;
 	TextView moreButton;
+	public static final int MODE_PLACE=999;
+	public static final int MODE_BADGES=9999;
 
 	private final static int PHOTOS_COUNT = 3;
 
-	public GalleryWrapper(final Activity context)
+	public GalleryWrapper(final Activity context, int mode)
 	{
 		this.context = context;
 		LayoutInflater inflater = context.getLayoutInflater();
@@ -38,6 +40,8 @@ public class GalleryWrapper
 				null);
 		drawList = new ArrayList<UrlDrawable>();
 		moreButton = (TextView) mainLayout.findViewById(R.id.more_button);
+		if (mode==MODE_BADGES)
+			moreButton.setEnabled(false);
 	}
 
 	public void addDrawable(UrlDrawable drawabl)
@@ -74,7 +78,7 @@ public class GalleryWrapper
 			});
 		} else
 		{
-			moreButton.setText("Фотграфий этого места нет");
+			moreButton.setText("Фотографий этого места нет");
 			moreButton.setOnClickListener(null);
 		}
 
@@ -121,5 +125,11 @@ public class GalleryWrapper
 	public void clear()
 	{
 		drawList.clear();
+	}
+
+	public void addDrawableList(List<UrlDrawable> badgesList)
+	{
+		drawList.addAll(badgesList);
+		refreshLayout();
 	}
 }

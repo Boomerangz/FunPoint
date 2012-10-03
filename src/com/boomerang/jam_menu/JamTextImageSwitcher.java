@@ -11,6 +11,7 @@ import kz.crystalspring.funpoint.R;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -77,12 +78,28 @@ public class JamTextImageSwitcher extends FrameLayout implements ViewFactory
 		switcher.setOutAnimation(outAnimation);
 	}
 	
+	private void equalizeHeight()
+	{
+		int width=(getWidth());
+		getLayoutParams().height=width;
+	}
+	
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh)
 	{
 		super.onSizeChanged(w, h, oldw, oldh);
-		int width=(getWidth());
-		getLayoutParams().height=width;
+	}
+	@Override
+	public void onDraw(Canvas canvas)
+	{
+		super.onDraw(canvas);
+	}
+	
+	@Override
+	protected void onLayout(boolean changed, int left, int top, int right,
+			int bottom)
+	{
+		super.onLayout(changed, left, top, right, bottom);
 	}
 	
 	public void setImageSource(List<SwitcherDescription> imageSource)
@@ -155,7 +172,6 @@ public class JamTextImageSwitcher extends FrameLayout implements ViewFactory
 	{
 		this.text.setText(text);
 	}
-	
 }
 
 

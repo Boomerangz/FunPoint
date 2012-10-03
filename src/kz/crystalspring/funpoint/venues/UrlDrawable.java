@@ -17,6 +17,16 @@ public class UrlDrawable implements Serializable
 	public String smallUrl="";
 	private Drawable bigDrawable=null;
 	private Drawable smallDrawable=null;
+	public UrlDrawable(String smallUrl2, String bigUrl2)
+	{
+		this.smallUrl=smallUrl2;
+		this.bigUrl=bigUrl2;
+	}
+	
+	public UrlDrawable()
+	{
+	}
+	
 	public synchronized Drawable getBigDrawable()
 	{
 		return bigDrawable;

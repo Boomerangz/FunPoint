@@ -172,6 +172,23 @@ public class FileConnector
 		}
 	}
 	
+	public static JSONArray loadJSONEventsList()
+	{
+		List<BasicNameValuePair> params=new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("rubr_id", "1"));
+		params.add(key_pair);
+		String sResponse=HttpHelper.loadPostByUrl(JAM_EVENTS_LIST_URL, params);
+		Log.w("cinema", "Длинна ответа -"+Long.valueOf(sResponse.length()).toString());
+		try
+		{
+			return new JSONArray(sResponse);
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public static JSONArray loadJSONPlaceList(String event_id)
 	{
 		List<BasicNameValuePair> params=new ArrayList();

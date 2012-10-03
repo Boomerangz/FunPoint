@@ -9,6 +9,7 @@ import com.viewpagerindicator.ViewFragmentAdapter;
 
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.CommentsWrapper;
+import kz.crystalspring.visualities.TitleFragment;
 import kz.crystalspring.funpoint.CinemaTimeTable.CinemaTime;
 import kz.crystalspring.funpoint.R;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
@@ -20,6 +21,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -89,7 +91,7 @@ public class funCinemaController extends ActivityController
 							.getSelectedItem();
 
 					final int count = CONTENT_TABS.length;
-					List<ViewFragment> viewList = new ArrayList<ViewFragment>(
+					List<TitleFragment> viewList = new ArrayList<TitleFragment>(
 							count);
 
 					View page1 = loadTimePage();

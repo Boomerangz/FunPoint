@@ -42,7 +42,7 @@ public class Splash extends Activity
 				} finally
 				{
 					Intent openMainPage = new Intent(Splash.this,
-							HomeScreen.class);
+							HomeScreen1.class);
 					startActivity(openMainPage);
 				}
 			}

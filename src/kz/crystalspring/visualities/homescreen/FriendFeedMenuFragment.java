@@ -1,23 +1,60 @@
 package kz.crystalspring.visualities.homescreen;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQFriendCheckin;
+import kz.crystalspring.visualities.TitleFragment;
 import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-public class FriendFeed
+public class FriendFeedMenuFragment extends TitleFragment
+{
+	public static FriendFeedMenuFragment newInstance()
+	{
+		FriendFeedMenuFragment fragment=new FriendFeedMenuFragment();
+		return fragment;
+	}
+	
+	 @Override  
+	 public void onCreate(Bundle savedInstanceState) {  
+	     super.onCreate(savedInstanceState);  
+	 }  
+	 FriendFeed menu;
+	 @Override  
+	 public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {  
+		 menu=new FriendFeed(getActivity());
+ 	     View v=menu.getFriendFeed();
+	     return v;  
+	 }
+
+	@Override
+	public String getTitle()
+	{
+		return "Лента";
+	}
+
+	public void refresh()
+	{
+		if(menu!=null)
+			menu.refresh();
+	}  
+}
+
+
+class FriendFeed
 {
 	Activity context;
 	View friendFeedList;
-	
 	
 	public FriendFeed(Activity context)
 	{
@@ -27,13 +64,9 @@ public class FriendFeed
 	
 	public View getFriendFeed()
 	{
-		if (friendFeedList!=null)
-			return friendFeedList;
-		else
-		{
 			friendFeedList=createFriendFeedList();
-			return getFriendFeed();
-		}
+			refresh();
+			return friendFeedList;
 	}
 
 	private View createFriendFeedList()
@@ -42,7 +75,8 @@ public class FriendFeed
 		LayoutInflater layoutInf = context.getLayoutInflater();
 
 		friendFeed = layoutInf.inflate(R.layout.friend_feed, null);
-				
+		if (friendFeed==null)		
+			Log.w("HomeScree", "FriednFeed is null");
 		return friendFeed;
 	}
 
@@ -52,7 +86,7 @@ public class FriendFeed
 			listView.setAdapter(new FriendFeedAdapter(FSQConnector.getFriendFeed()));
 			listView.setMinimumHeight(Math.round(80*MainApplication.mDensity));
 		View progressBar=friendFeedList.findViewById(R.id.progressBar1);
-		if (listView.getAdapter().getCount()>0)
+		if (FSQConnector.isFriendFeedLoaded())
 			progressBar.setVisibility(View.GONE);
 		else
 			progressBar.setVisibility(View.VISIBLE);

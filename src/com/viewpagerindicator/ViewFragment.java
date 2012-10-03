@@ -1,17 +1,16 @@
 package com.viewpagerindicator;
 
-import kz.crystalspring.funpoint.R;
+import kz.crystalspring.visualities.TitleFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.Gravity;
+import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.LinearLayout.LayoutParams;
+import android.widget.FrameLayout;
 
-public class ViewFragment extends Fragment
+public class ViewFragment extends TitleFragment
 {
 	View view;
 	String title;
@@ -32,12 +31,13 @@ public class ViewFragment extends Fragment
 	{
 		super.onCreate(savedInstanceState);
 	}
-	
+
 	@Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        setUserVisibleHint(true);
-    }
+	public void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+		setUserVisibleHint(true);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +55,16 @@ public class ViewFragment extends Fragment
 		return view;
 	}
 
+	@Override
+	public View getView()
+	{
+		FrameLayout ll = (FrameLayout) super.getView();
+		if (ll==null)
+			Log.w("ViewFragment", "LL=null");
+		return ll;
+	}
+
+	@Override
 	public String getTitle()
 	{
 		return title;

@@ -1,6 +1,9 @@
 package com.viewpagerindicator;
 
 import java.util.List;
+import java.util.Map;
+
+import kz.crystalspring.visualities.TitleFragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,17 +12,23 @@ import android.view.ViewGroup;
 
 public class ViewFragmentAdapter extends FragmentPagerAdapter
 {
-List<ViewFragment> viewList;
+List<TitleFragment> viewList;
 	
 	
-	public ViewFragmentAdapter(FragmentManager fm, List<ViewFragment> viewList)
+	public ViewFragmentAdapter(FragmentManager fm, List<TitleFragment> viewList)
 	{
 		super(fm);
 		this.viewList=viewList;
 	}
+	
+	@Override 
+	public int getItemPosition(Object object)
+	{
+		return POSITION_NONE;
+	}
 
 	@Override
-	public ViewFragment getItem(int position)
+	public Fragment getItem(int position)
 	{
 		return viewList.get(position);
 	}
@@ -33,7 +42,7 @@ List<ViewFragment> viewList;
 	@Override
 	public String getPageTitle(int position)
 	{
-		return getItem(position).getTitle();
+		return viewList.get(position).getTitle();
 	}
 	
 }

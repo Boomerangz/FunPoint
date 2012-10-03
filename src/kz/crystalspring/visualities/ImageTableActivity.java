@@ -79,7 +79,8 @@ public class ImageTableActivity extends Activity {
 
 	LinearLayout.LayoutParams lp = null;
 
-	private LinearLayout.LayoutParams getStandartLayoutParams() {
+	private LinearLayout.LayoutParams getStandartLayoutParams() 
+	{
 		if (lp == null) {
 			lp = new LinearLayout.LayoutParams(
 					LinearLayout.LayoutParams.FILL_PARENT,

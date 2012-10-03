@@ -49,6 +49,24 @@ public class EventContainer
 			public void run() 
 			{
 				Log.w("cinema", "НАЧАЛ ЗАГРУЗКУ ФИЛЬМОВ");
+				JSONArray eventsJSONArray=FileConnector.loadJSONCinemaEventsList();
+				Log.w("cinema", "НАЧАЛ СОЗДАНИЕ СПИСКА ФИЛЬМОВ");
+				for (int i=0;i<eventsJSONArray.length();i++)
+				{
+					try
+					{
+						JSONObject jEvent=eventsJSONArray.getJSONObject(i);
+						Event event=new Event(jEvent);
+						addEventToList(event);
+					} 
+					catch (JSONException e)
+					{
+						e.printStackTrace();
+					}
+				}
+				Log.w("cinema", "ЗАКОНЧИЛ СОЗДАНИЕ СПИСКА ФИЛЬМОВ");
+				
+				Log.w("cinema", "НАЧАЛ ЗАГРУЗКУ ФИЛЬМОВ");
 				JSONArray cinemaJSONArray=FileConnector.loadJSONCinemaEventsList();
 				Log.w("cinema", "НАЧАЛ СОЗДАНИЕ СПИСКА ФИЛЬМОВ");
 				for (int i=0;i<cinemaJSONArray.length();i++)

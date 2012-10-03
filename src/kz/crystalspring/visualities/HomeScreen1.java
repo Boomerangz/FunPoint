@@ -13,11 +13,13 @@ import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.RefreshableMapList;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.Prefs;
-import kz.crystalspring.visualities.homescreen.ExplorerView;
-import kz.crystalspring.visualities.homescreen.FriendFeed;
-import kz.crystalspring.visualities.homescreen.PlacesSquareMenu;
+import kz.crystalspring.visualities.homescreen.ExplorerFragment;
+import kz.crystalspring.visualities.homescreen.FriendFeedMenuFragment;
+import kz.crystalspring.visualities.homescreen.SquareMenuFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -28,7 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 
-public class HomeScreen extends FragmentActivity implements
+public class HomeScreen1 extends FragmentActivity implements
 RefreshableMapList
 {
 	
@@ -36,12 +38,13 @@ RefreshableMapList
 	TabPageIndicator tabIndicator;
 	
 	View placesMenu;
-	FriendFeed friendFeed;
-	ExplorerView explorer;
-	PlacesSquareMenu psm;
+	FriendFeedMenuFragment friendFeed;
+	SquareMenuFragment spm;
+	ExplorerFragment explorer;
 	
 	
 	static int cuurPage=0;
+	ViewFragmentAdapter pagerAdapter;
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -58,7 +61,7 @@ RefreshableMapList
 			@Override
 			public void onClick(View arg0) 
 			{
-				Intent j = new Intent(HomeScreen.this, ProfilePage.class);
+				Intent j = new Intent(HomeScreen1.this, ProfilePage.class);
 				startActivity(j);
 			}
 		});
@@ -68,11 +71,34 @@ RefreshableMapList
 			@Override
 			public void onClick(View arg0) 
 			{
-				psm.runItemActivityWithFilter(MapItem.FSQ_UNDEFINED);
+				spm.runItemActivityWithFilter(MapItem.FSQ_UNDEFINED);
 			}
 		});
-
-
+		final List<TitleFragment> viewList = fillObjectAndEventLists(); 
+		pagerAdapter = new ViewFragmentAdapter( 
+				getSupportFragmentManager(), viewList);
+		viewPager.setAdapter(pagerAdapter);
+		viewPager.setOffscreenPageLimit(4);
+		tabIndicator.setViewPager(viewPager);
+		viewPager.setCurrentItem(0);
+		Handler handler=new Handler();
+		handler.postDelayed(new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				if (pagerAdapter.getItem(0).getView()==null)
+				{
+					Log.w("HomeScreen", "NULLL");
+					pagerAdapter.notifyDataSetChanged();
+				}
+				if (viewList.get(0).getView()==null)
+				{
+					Log.w("HomeScreen", "NULLL22");
+				}
+			}
+		}, 10);
 	}
 	
 	@Override
@@ -99,10 +125,9 @@ RefreshableMapList
 	@Override
 	public void refreshMapItems()
 	{
-		if (friendFeed!=null)
-			friendFeed.refresh();
-		if (explorer!=null)
-			explorer.refresh();
+		pagerAdapter.notifyDataSetChanged();
+//		if (friendFeed!=null)
+//			friendFeed.refresh();
 	}
 	
 	@Override
@@ -111,12 +136,6 @@ RefreshableMapList
 		super.onResume();
 		Log.w("HomeScreen", "Resumed");
 		MainApplication.refreshable=this;
-		List<ViewFragment> viewList = fillObjectAndEventLists(); 
-		ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter( 
-				getSupportFragmentManager(), viewList);
-		viewPager.setAdapter(pagerAdapter);
-		tabIndicator.setViewPager(viewPager);
-		viewPager.setCurrentItem(0);
 		refreshMapItems();
 	}
 	
@@ -136,27 +155,17 @@ RefreshableMapList
 	}
 	
 	
-	private List<ViewFragment> fillObjectAndEventLists()
+	private List<TitleFragment> fillObjectAndEventLists()
 	{
-		List<ViewFragment> viewList = new ArrayList();
+		List<TitleFragment> viewList = new ArrayList();
 		Log.w("HomeScreen","Filling ViewPager");
-		friendFeed=new FriendFeed(this);
-		View friendFeedView=friendFeed.getFriendFeed();
-	//	viewList.add(new ViewFragment(friendFeedView, "Лента"));
+		friendFeed=FriendFeedMenuFragment.newInstance();
+		viewList.add(friendFeed);
 		Log.w("HomeScreen_Filling","Filling FriendFeed");
 
-		Button button=new Button(this);
-		friendFeedView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-		button.setText("Button");
-		
-		LinearLayout justLayout=(LinearLayout) findViewById(R.id.just_layout);
-		justLayout.removeAllViews();
-		justLayout.addView(friendFeedView);
-		
-		
-		psm=new PlacesSquareMenu(this);
-		View squareMenu=psm.getSquareMenu();
-		viewList.add(new ViewFragment(squareMenu, "Места"));
+		//View squareMenu=psm.getSquareMenu();
+		spm=SquareMenuFragment.newInstance();
+		viewList.add(spm);
 		Log.w("HomeScreen_Filling","Filling SquareMenu");
 		ListView eventListView = new ListView(getBaseContext());
 		eventListView.setLayoutParams(new ScrollView.LayoutParams(
@@ -176,9 +185,8 @@ RefreshableMapList
 		eventListView1.setDividerHeight(0);
 		eventListView1.setCacheColorHint(0);
 
-		explorer=new ExplorerView(this);
-		View explorerView=explorer.getExplorer();
-		viewList.add(new ViewFragment(explorerView, "Рекомендации"));
+		explorer=new ExplorerFragment();
+		viewList.add(explorer);
 		return viewList;
 	}
 	

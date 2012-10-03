@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.boomerang.jam_menu.JamTextImageSwitcher;
+import com.boomerang.jam_menu.SwitcherDescription;
+
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.ProfilePage;
 import kz.crystalspring.funpoint.R;
@@ -11,21 +14,59 @@ import kz.crystalspring.funpoint.funCheckinNow;
 import kz.crystalspring.funpoint.funWaitingActivity;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.Helpdesk;
+import kz.crystalspring.visualities.TitleFragment;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 
-import com.boomerang.jam_menu.JamTextImageSwitcher;
-import com.boomerang.jam_menu.SwitcherDescription;
+public class SquareMenuFragment extends TitleFragment
+{
+	public static SquareMenuFragment newInstance()
+	{
+		SquareMenuFragment fragment=new SquareMenuFragment();
+		return fragment;
+	}
+	
+	 @Override  
+	 public void onCreate(Bundle savedInstanceState) {  
+	     super.onCreate(savedInstanceState);  
+	 }  
+	 PlacesSquareMenu menu;
+	 @Override  
+	 public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {  
 
-public class PlacesSquareMenu
+	     menu=new PlacesSquareMenu(getActivity());
+	     View v=menu.getSquareMenu();
+	     return v;  
+	 }
+
+	@Override
+	public String getTitle()
+	{
+		return "Места";
+	}
+
+	public void runItemActivityWithFilter(String visibleFilter)
+	{
+		menu.runItemActivityWithFilter(visibleFilter);
+	}  
+}
+
+
+
+class PlacesSquareMenu
 {
 	View squareMenu;
 	Activity context;
@@ -52,7 +93,17 @@ public class PlacesSquareMenu
 		View squareMenu;
 		LayoutInflater layoutInf = context.getLayoutInflater();
 
+
+		
 		squareMenu = layoutInf.inflate(R.layout.jam_menu, null);
+		
+		TableLayout layout=(TableLayout) squareMenu.findViewById(R.id.main_layout);
+		for (int i=0; i<layout.getChildCount();i++)
+		{
+			TableRow row=(TableRow) layout.getChildAt(i);
+			row.getLayoutParams().height=2;
+		}
+		
 		switchers.add((JamTextImageSwitcher) squareMenu
 				.findViewById(R.id.switcher1));
 		switchers.add((JamTextImageSwitcher) squareMenu
@@ -71,6 +122,15 @@ public class PlacesSquareMenu
 				.findViewById(R.id.switcher7));
 		switchers.add((JamTextImageSwitcher) squareMenu
 				.findViewById(R.id.switcher8));
+		
+		for (JamTextImageSwitcher switcher:switchers)
+		{
+			Display display = context.getWindowManager().getDefaultDisplay(); 
+			int width = display.getWidth();
+			int size=width/2-3;
+			switcher.getLayoutParams().height=size;
+			switcher.getLayoutParams().width=size;
+		}
 		SwitcherDescription[] swRest = {
 				new SwitcherDescription(R.drawable.rest0),
 				new SwitcherDescription(R.drawable.rest1),
@@ -134,8 +194,6 @@ public class PlacesSquareMenu
 			switcher.updateImage();
 		}
 		updateNext();
-		
-		
 		
 		switchers.get(0).setOnClickListener(new OnClickListener()
 		{
@@ -324,5 +382,4 @@ public class PlacesSquareMenu
 	}
 
 }
-
 

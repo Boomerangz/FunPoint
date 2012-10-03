@@ -5,19 +5,54 @@ import java.util.List;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
-import kz.crystalspring.funpoint.venues.FSQFriendCheckin;
 import kz.crystalspring.funpoint.venues.FSQItem;
+import kz.crystalspring.visualities.TitleFragment;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
-public class ExplorerView
+public class ExplorerFragment  extends TitleFragment
+{
+	public static ExplorerFragment newInstance()
+	{
+		 ExplorerFragment fragment=new ExplorerFragment();
+		return fragment;
+	}
+	
+	 @Override  
+	 public void onCreate(Bundle savedInstanceState) {  
+	     super.onCreate(savedInstanceState);  
+	 }  
+	 ExplorerView menu;
+	 @Override  
+	 public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {  
+		 menu=new ExplorerView(getActivity());
+		 refresh();
+	     View v=menu.getExplorer();
+	     return v;  
+	 }
+	public void refresh()
+	{
+		if(menu!=null)
+			menu.refresh();
+	} 
+	
+	@Override
+	public String getTitle()
+	{
+		return "Рекомендации";
+	}
+
+}
+
+
+class ExplorerView
 {
 	Activity context;
 	View exploreList;

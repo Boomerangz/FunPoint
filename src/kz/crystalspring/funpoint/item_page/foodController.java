@@ -21,11 +21,13 @@ import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.CommentsWrapper;
 import kz.crystalspring.views.GalleryWrapper;
 import kz.crystalspring.views.LoadingImageView;
+import kz.crystalspring.visualities.TitleFragment;
 import kz.sbeyer.atmpoint1.types.ItemFood;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -85,7 +87,7 @@ public class foodController extends ActivityController {
 			context.setContentView(R.layout.waiting_layout);
 			mainView = inflater.inflate(R.layout.controller_food, null);
 			final int count = CONTENT_TABS.length;
-			List<ViewFragment> viewList = new ArrayList<ViewFragment>(count);
+			List<TitleFragment> viewList = new ArrayList<TitleFragment>(count);
 
 			View page1 = loadTitlePage();
 			viewList.add(new ViewFragment(page1, CONTENT_TABS[0]));
@@ -197,7 +199,7 @@ public class foodController extends ActivityController {
 
 	private void createGallery() 
 	{
-		wrapper = new GalleryWrapper(context);
+		wrapper = new GalleryWrapper(context,GalleryWrapper.MODE_PLACE);
 		View view = wrapper.getView();
 		view.setLayoutParams(new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.FILL_PARENT,

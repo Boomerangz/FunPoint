@@ -8,6 +8,7 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -29,21 +30,25 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 public class HttpHelper
 {
-
 	private static final String GLOBAL_PROXY = "http://www.homeplus.kz/jam/4sq_gzip_curl.php";
 	private static final String LOCAL_PROXY = "http://192.168.1.50/jam/4sq_gzip_curl.php";
 	private static final String CURRENT_PROXY = GLOBAL_PROXY;
 	private static final boolean USE_PROXY = false;
 	static HttpClient client = new DefaultHttpClient();
 
-	private static synchronized HttpResponse loadResponse(HttpUriRequest request)
+	private static HttpResponse loadResponse(HttpUriRequest request)
 	{
 		try
 		{
-			return client.execute(request);
+			Date begin_d=new Date();
+			HttpResponse response=client.execute(request);
+			Date end_d=new Date();
+			Log.w("HTTPRequest", Long.toString(end_d.getTime()-begin_d.getTime()));
+			return response; 
 		} catch (ClientProtocolException e)
 		{
 			e.printStackTrace();
@@ -79,7 +84,7 @@ public class HttpHelper
 				ArrayList<BasicNameValuePair> params = new ArrayList();
 				String url = get.getURI().toString();
 				params.add(new BasicNameValuePair("url", url));
-				params.add(new BasicNameValuePair("key",
+				params.add(new BasicNameValuePair("key_zip",
 						FSQConnector.CLIENT_SECRET));
 				post.setEntity(new UrlEncodedFormEntity(params));
 				is = loadResponse(post).getEntity().getContent();
@@ -104,6 +109,7 @@ public class HttpHelper
 	public static synchronized String loadByUrl(String sUrl)
 	{
 		HttpGet request = new HttpGet();
+		Log.w("HTTPRequest", sUrl);
 		request.setHeader("Accept-Language", "ru");
 		try
 		{
@@ -122,6 +128,7 @@ public class HttpHelper
 	{
 
 		String usedUrl = sUrl;
+		Log.w("HTTPRequest", sUrl);
 		try
 		{
 			if (USE_PROXY)

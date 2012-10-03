@@ -35,6 +35,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 public class MainApplication extends Application
 {
@@ -69,10 +70,13 @@ public class MainApplication extends Application
 			refreshable.refreshMapItems();
 	}
 
+	static int starts=0;
+	
 	@Override
 	public void onCreate()
 	{
 		super.onCreate();
+		Log.w("MainApplication", "Created "+Integer.valueOf(++starts));
 		singleTon = this;
 
 		mDensity = getApplicationContext().getResources().getDisplayMetrics().density;
@@ -87,6 +91,20 @@ public class MainApplication extends Application
 
 		updater = new LocationUpdater(this);
 		onResume();
+	}
+	
+	@Override
+	public void onLowMemory()
+	{
+		super.onLowMemory();
+		Log.w("MainApplication", "Low Memory");
+	}
+	
+	@Override
+	public void onTerminate()
+	{
+		super.onTerminate();
+		Log.w("MainApplication", "Terminated");
 	}
 	
 	

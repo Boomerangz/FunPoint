@@ -11,11 +11,12 @@ import kz.crystalspring.funpoint.events.Event;
 import kz.crystalspring.funpoint.venues.ListItem;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.R;
-import kz.crystalspring.visualities.HomeScreen;
+import kz.crystalspring.visualities.TitleFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
@@ -78,7 +79,7 @@ public class funObjectList extends FragmentActivity implements
 		});
 
 		
-		List<ViewFragment> viewList = fillObjectAndEventLists(); 
+		List<TitleFragment> viewList = fillObjectAndEventLists(); 
 		ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
 				getSupportFragmentManager(), viewList);
 		viewPager.setAdapter(pagerAdapter);
@@ -177,9 +178,9 @@ public class funObjectList extends FragmentActivity implements
 		System.gc();
 	}
 
-	private List<ViewFragment> fillObjectAndEventLists()
+	private List<TitleFragment> fillObjectAndEventLists()
 	{
-		List<ViewFragment> viewList = new ArrayList();
+		List<TitleFragment> viewList = new ArrayList();
 		
 		objectListView = new ListView(getBaseContext());
 		objectListView.setDivider(getResources().getDrawable(R.drawable.transperent_color));

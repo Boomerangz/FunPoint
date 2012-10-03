@@ -542,5 +542,14 @@ public class ProjectUtils
 		   phone="+7"+phone.substring(1);
 		return phone;
 	}
+	
+//	public static <E> Class<E> ifnull(<E> a,<E> b)
+//	{
+//		if (a!=null)
+//		{
+//			return a;
+//		}
+//		return b;
+//	}
 
 }

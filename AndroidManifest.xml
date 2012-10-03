@@ -52,7 +52,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="kz.crystalspring.visualities.HomeScreen"
+            android:name="kz.crystalspring.visualities.HomeScreen1"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
