@@ -147,7 +147,7 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 			sendTip(comment, venueId);
 		else
 			sendCheckin(comment, venueId);
-	//	finish();
+		finish();
 	}
 
 	private void sendTip(String comment, String venueId)
@@ -174,6 +174,7 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 			pd=null;
 			loadRatingPage(response);
 			response=null;
+			finish();
 		}
 	}
 	

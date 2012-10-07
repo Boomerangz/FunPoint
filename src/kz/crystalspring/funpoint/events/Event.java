@@ -1,4 +1,10 @@
 package kz.crystalspring.funpoint.events;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
+
 import kz.crystalspring.funpoint.CinemaTimeTable;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
@@ -22,36 +28,67 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-public class Event implements ListItem
+
+public abstract class Event implements ListItem
 {
-	private static final String COLUMN_NAME="title";
-	private static final String COLUMN_DESC="description";
-	private static final String COLUMN_IMGURL="image";
-	private static final Context context=MainApplication.context;
-	
+	private static final String COLUMN_NAME = "title";
+	private static final String COLUMN_DESC = "description";
+	private static final String COLUMN_IMGURL = "image";
+	static final Context context = MainApplication.context;
+	protected static Map<Integer, String> JamCategoryMap;
+	protected static Map<Integer, String> JamGenresMap;
+
+	protected static final DateFormat date_formatter = new SimpleDateFormat(
+			"yyyy-MM-dd");
+	protected static final DateFormat datetime_formatter = new SimpleDateFormat(
+			"yyyy-MM-dd HH-mm");
+	public static final DateFormat time_formatter = new SimpleDateFormat(
+			"HH-mm");
 	
 	private String name;
 	private String description;
 	private String imageUrl;
 	private Drawable image;
 	private String place_type;
+	private Integer eventType;
 	int id;
-	
-	CinemaTimeTable table=null;
-	
-	
-	Event(int id,String name, String description, String imageUrl)
+
+
+	Event(int id, String name, String description, String imageUrl, Integer rubrId)
 	{
-		this.id=id;
+		initCategoryMapIfNot();
+		
+		this.id = id;
 		setName(name);
 		setDescription(description);
 		setImageUrl(imageUrl);
+		setPlace_type(getCatEquiv((rubrId)));
 	}
-	
-	Event ()
+
+	private void initCategoryMapIfNot()
+	{
+		if (JamCategoryMap == null)
+		{
+			JamCategoryMap = new HashMap<Integer, String>();
+			JamCategoryMap.put(2, MapItem.FSQ_TYPE_CINEMA);
+			JamCategoryMap.put(3, MapItem.FSQ_TYPE_FOOD);
+			JamCategoryMap.put(4, MapItem.FSQ_TYPE_CLUB);
+		}
+		if (JamGenresMap == null)
+		{
+			JamGenresMap = new HashMap<Integer, String>();
+			JamGenresMap.put(2,"Кино");
+			JamGenresMap.put(3,"Концерт");
+			JamGenresMap.put(4,"Вечеринка");
+			JamGenresMap.put(5,"Спектакль");
+			JamGenresMap.put(7,"Выставка");
+		}
+	}
+
+	Event()
 	{
 	}
-	
+
 	public String getImageUrl()
 	{
 		return imageUrl;
@@ -62,53 +99,64 @@ public class Event implements ListItem
 		this.imageUrl = imageUrl;
 	}
 
-	Event (Cursor cursor) throws Exception
+	Event(Cursor cursor) throws Exception
 	{
-		String[] columnNames=cursor.getColumnNames();
-		String nm=null;
-		String dsc=null;
-		String imgurl=null;
-		int i=0;
-		for (String columName:columnNames)
+		String[] columnNames = cursor.getColumnNames();
+		String nm = null;
+		String dsc = null;
+		String imgurl = null;
+		int i = 0;
+		for (String columName : columnNames)
 		{
-			if (columName.trim().toUpperCase().equals(COLUMN_NAME.toUpperCase().trim()))
+			if (columName.trim().toUpperCase()
+					.equals(COLUMN_NAME.toUpperCase().trim()))
 			{
-				nm=cursor.getString(i);
+				nm = cursor.getString(i);
 			}
-			if (columName.trim().toUpperCase().equals(COLUMN_DESC.toUpperCase().trim()))
+			if (columName.trim().toUpperCase()
+					.equals(COLUMN_DESC.toUpperCase().trim()))
 			{
-				dsc=cursor.getString(i);
+				dsc = cursor.getString(i);
 			}
-			if (columName.trim().toUpperCase().equals(COLUMN_IMGURL.toUpperCase().trim()))
+			if (columName.trim().toUpperCase()
+					.equals(COLUMN_IMGURL.toUpperCase().trim()))
 			{
-				imgurl=cursor.getString(i);
+				imgurl = cursor.getString(i);
 			}
 			i++;
 		}
-		if (nm!=null&&dsc!=null&&imgurl!=null)
+		if (nm != null && dsc != null && imgurl != null)
 		{
 			setName(nm);
 			setDescription(dsc);
 			setImageUrl(imgurl);
-		}
-		else 
+		} else
 		{
-			throw new Exception("Name or Description or Image URI not found in cursor");
+			throw new Exception(
+					"Name or Description or Image URI not found in cursor");
 		}
 	}
 
 	public Event(JSONObject jEvent)
 	{
+		initCategoryMapIfNot();
 		try
 		{
-			id=jEvent.getInt("events_id");
+			id = jEvent.getInt("events_id");
 			setName(jEvent.getString("title"));
 			setDescription(jEvent.getString("description"));
 			setImageUrl(jEvent.getString("img_url"));
+			setEventType(jEvent.getInt("id_route"));
+			setPlace_type(getCatEquiv(getEventType()));
 		} catch (JSONException e)
 		{
 			e.printStackTrace();
 		}
+	}
+
+	private String getCatEquiv(int int1)
+	{
+		return JamCategoryMap.get(Integer.valueOf(int1));
 	}
 
 	public String getName()
@@ -145,10 +193,30 @@ public class Event implements ListItem
 	{
 		return id;
 	}
-	
+
 	public int getItemColor()
 	{
 		return context.getResources().getColor(R.color.cinema);
+	}
+
+	public String getPlace_type()
+	{
+		return place_type;
+	}
+
+	public void setPlace_type(String place_type)
+	{
+		this.place_type = place_type;
+	}
+
+	public Integer getEventType()
+	{
+		return eventType;
+	}
+
+	public void setEventType(Integer eventType)
+	{
+		this.eventType = eventType;
 	}
 
 	@Override
@@ -165,11 +233,12 @@ public class Event implements ListItem
 		holder.goIntoButton = (ImageView) convertView
 				.findViewById(R.id.go_into_btn);
 		holder.background = (View) convertView.findViewById(R.id.list_block);
-		holder.itemColorView = (View) convertView.findViewById(R.id.item_color_view);
+		holder.itemColorView = (View) convertView
+				.findViewById(R.id.item_color_view);
 
 		convertView.setMinimumHeight(80);
 		convertView.setTag(holder);
-		String st = Integer.toString(position) + ". " + getName();
+		String st = getName();
 
 		holder.name.setText(st);
 		holder.shortDescription.setText(getShortCharacteristic());
@@ -178,15 +247,15 @@ public class Event implements ListItem
 			@Override
 			public void onClick(View v)
 			{
-				MainApplication.selectedEventId=Integer.toString(id);
-				Intent intent=new Intent(context,funEventActivity.class);
+				MainApplication.selectedEventId = Integer.toString(id);
+				Intent intent = new Intent(context, funEventActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivity(intent);
 			}
 		});
-		
+
 		holder.itemColorView.setBackgroundColor(getItemColor());
-		
+
 		return convertView;
 	}
 
@@ -195,8 +264,7 @@ public class Event implements ListItem
 	{
 		return getName();
 	}
-	
-	
+
 	public static class ViewHolder
 	{
 		public TextView name;
@@ -205,29 +273,14 @@ public class Event implements ListItem
 		public View background;
 		public View itemColorView;
 	}
-	
+
 	@Override
 	public boolean equals(Object o)
 	{
-		if (Event.class.isInstance(o)&&this.getId()==((Event)o).getId())
+		if (Event.class.isInstance(o) && this.getId() == ((Event) o).getId())
 			return true;
-		else return false;
-	}
-	
-	public void loadPlaceTable()
-	{
-		if (table==null)
-		{
-			table=new CinemaTimeTable();
-			JSONArray jArray=FileConnector.loadJSONPlaceList(Integer.toString(getId()));
-			if (jArray!=null)
-				table.loadFromCinemaJSONArray(jArray);
-		}	
-	}
-
-	public CinemaTimeTable getTimeTable()
-	{
-		return table;
+		else
+			return false;
 	}
 
 }

@@ -272,56 +272,8 @@ public abstract class MapItem implements Serializable, ListItem
 		convertView=null;
 		if (v == null)
 		{
-			convertView = null;
-			ViewHolder holder;
-			LayoutInflater mInflater = LayoutInflater.from(context);
-			convertView = mInflater.inflate(R.layout.object_list_item, null);
-			holder = new ViewHolder();
-			holder.name = (TextView) convertView.findViewById(R.id.name);
-			holder.range = (TextView) convertView.findViewById(R.id.range);
-			holder.shortDescription = (TextView) convertView
-					.findViewById(R.id.short_description);
-			holder.goIntoButton = (ImageView) convertView
-					.findViewById(R.id.go_into_btn);
-			holder.background = (View) convertView
-					.findViewById(R.id.list_block);
-			holder.loadingImageView = (LoadingImageView) convertView
-					.findViewById(R.id.loading_imageview);
-			// holder.itemColorView = (View) convertView
-			// .findViewById(R.id.item_color_view);
-
-			convertView.setMinimumHeight(Math
-					.round(90 * MainApplication.mDensity));
-			convertView.setTag(holder);
-			String st = toString();
-
-			holder.name.setText(st);
-			if (MainApplication.getCurrentLocation() != null)
-				st = Integer.toString(Math.round(distanceTo(MainApplication
-						.getCurrentLocation()))) + " м";
-			else
-				st = "";
-			holder.shortDescription.setText(getShortCharacteristic());
-			// holder.background.getBackground().setAlpha(MainApplication.ALPHA);
-			holder.range.setText(st);
-
-			holder.background.setOnClickListener(new OnClickListener()
-			{
-				@Override
-				public void onClick(View v)
-				{
-					MainApplication.mapItemContainer
-							.setSelectedItem(MapItem.this);
-					Intent intent = new Intent(context, funObjectDetail.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					context.startActivity(intent);
-				}
-			});
-			loadImageToView(holder.loadingImageView);
-			v = convertView;
-			return convertView;
+			v = getNewView();
 		}
-		else
 			return v;
 	}
 
@@ -347,6 +299,57 @@ public abstract class MapItem implements Serializable, ListItem
 			}
 		};
 		task.execute();
+	}
+	
+	public View getNewView()
+	{
+		View v;
+		ViewHolder holder;
+		LayoutInflater mInflater = LayoutInflater.from(context);
+		v = mInflater.inflate(R.layout.object_list_item, null);
+		holder = new ViewHolder();
+		holder.name = (TextView) v.findViewById(R.id.name);
+		holder.range = (TextView) v.findViewById(R.id.range);
+		holder.shortDescription = (TextView) v
+				.findViewById(R.id.short_description);
+		holder.goIntoButton = (ImageView) v
+				.findViewById(R.id.go_into_btn);
+		holder.background = (View) v
+				.findViewById(R.id.list_block);
+		holder.loadingImageView = (LoadingImageView) v
+				.findViewById(R.id.loading_imageview);
+		// holder.itemColorView = (View) convertView
+		// .findViewById(R.id.item_color_view);
+
+		v.setMinimumHeight(Math
+				.round(90 * MainApplication.mDensity));
+		v.setTag(holder);
+		String st = toString();
+
+		holder.name.setText(st);
+		if (MainApplication.getCurrentLocation() != null)
+			st = Integer.toString(Math.round(distanceTo(MainApplication
+					.getCurrentLocation()))) + " м";
+		else
+			st = "";
+		holder.shortDescription.setText(getShortCharacteristic());
+		// holder.background.getBackground().setAlpha(MainApplication.ALPHA);
+		holder.range.setText(st);
+
+		holder.background.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				MainApplication.mapItemContainer
+						.setSelectedItem(MapItem.this);
+				Intent intent = new Intent(context, funObjectDetail.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(intent);
+			}
+		});
+		loadImageToView(holder.loadingImageView);
+		return v;
 	}
 
 	public static class ViewHolder

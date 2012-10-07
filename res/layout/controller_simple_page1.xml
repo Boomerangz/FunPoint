@@ -92,19 +92,7 @@
                     android:layout_height="wrap_content"
                     android:text="Индийская кухня, Китайская кухня"
                     android:textSize="7pt" />
-
-                <TextView
-                    android:id="@+id/food_avg_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Food lunch price" />
             </LinearLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="5dp"
-                android:layout_below="@id/minor_header_layout"
-                android:background="@color/restaurant" />
         </RelativeLayout>
 
         <LinearLayout
@@ -235,8 +223,7 @@
             android:layout_width="fill_parent"
             android:layout_height="80dp"
             android:layout_marginTop="@dimen/margin" >
-
-            <RelativeLayout
+             <RelativeLayout
                 android:id="@+id/herenow_block"
                 android:layout_width="fill_parent"
                 android:layout_height="85dp"
@@ -277,44 +264,6 @@
                     android:textStyle="bold"
                     android:typeface="sans" />
             </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/avg_price_block"
-                android:layout_width="fill_parent"
-                android:layout_height="85dp"
-                android:layout_marginRight="@dimen/margin"
-                android:layout_weight="1"
-                android:background="#ffffff" >
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="5dp"
-                    android:layout_below="@id/minor_header_layout"
-                    android:background="@color/restaurant" />
-
-                <TextView
-                    android:id="@+id/textView1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="5dp"
-                    android:text="ланч"
-                    android:textSize="15dp"
-                    android:textStyle="bold"
-                    android:typeface="sans" />
-
-                <TextView
-                    android:id="@+id/food_lunch_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:text="80000"
-                    android:textSize="50dp"
-                    android:textStyle="bold"
-                    android:typeface="sans" />
-            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -327,6 +276,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin" >
+            
         </LinearLayout>
     </LinearLayout>
 

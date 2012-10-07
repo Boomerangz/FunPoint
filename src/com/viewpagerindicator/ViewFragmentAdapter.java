@@ -3,7 +3,7 @@ package com.viewpagerindicator;
 import java.util.List;
 import java.util.Map;
 
-import kz.crystalspring.visualities.TitleFragment;
+import kz.crystalspring.visualities.homescreen.TitleFragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

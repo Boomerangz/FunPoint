@@ -4,6 +4,9 @@ import java.util.List;
 
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
+import kz.crystalspring.funpoint.events.Event;
+import kz.crystalspring.funpoint.events.EventContainer;
+import kz.crystalspring.funpoint.events.SimpleEvent;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import android.app.Activity;
@@ -16,11 +19,11 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class ExplorerFragment  extends TitleFragment
+public class EventsFragment  extends TitleFragment
 {
-	public static ExplorerFragment newInstance()
+	public static EventsFragment newInstance()
 	{
-		 ExplorerFragment fragment=new ExplorerFragment();
+		 EventsFragment fragment=new EventsFragment();
 		return fragment;
 	}
 	
@@ -28,10 +31,10 @@ public class ExplorerFragment  extends TitleFragment
 	 public void onCreate(Bundle savedInstanceState) {  
 	     super.onCreate(savedInstanceState);  
 	 }  
-	 ExplorerView menu;
+	 EventsWrapper menu;
 	 @Override  
 	 public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {  
-		 menu=new ExplorerView(getActivity());
+		 menu=new EventsWrapper(getActivity());
 		 refresh();
 	     View v=menu.getExplorer();
 	     return v;  
@@ -45,19 +48,19 @@ public class ExplorerFragment  extends TitleFragment
 	@Override
 	public String getTitle()
 	{
-		return "Рекомендации";
+		return "События";
 	}
 
 }
 
 
-class ExplorerView
+class EventsWrapper
 {
 	Activity context;
 	View exploreList;
 	
 	
-	public ExplorerView(Activity context)
+	public EventsWrapper(Activity context)
 	{
 		this.context=context;
 		exploreList=createExplorerList();
@@ -89,7 +92,7 @@ class ExplorerView
 		ListView listView=(ListView) exploreList.findViewById(R.id.listView1);
 		if (listView.getAdapter()==null||listView.getAdapter().getCount()==0)
 		{
-			ExplorerAdapter adapter=new ExplorerAdapter(FSQConnector.getExplorer());
+			EventsAdapter adapter=new EventsAdapter(MainApplication.eventContainer.getUnFilteredEventsList());
 			listView.setAdapter(adapter);
 			listView.setMinimumHeight(Math.round(100*MainApplication.mDensity));
 			listView.setOnItemClickListener(new OnItemClickListener() {
@@ -116,12 +119,12 @@ class ExplorerView
 }
 
 
-class ExplorerAdapter extends BaseAdapter
+class EventsAdapter extends BaseAdapter
 {
-	List<FSQItem> list;
-	ExplorerAdapter(List<FSQItem> list)
+	List<SimpleEvent> list;
+	EventsAdapter(List<SimpleEvent> list2)
 	{
-		this.list=list;
+		this.list=list2;
 	}
 
 	@Override

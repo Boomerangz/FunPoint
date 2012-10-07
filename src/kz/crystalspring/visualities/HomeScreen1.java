@@ -13,9 +13,11 @@ import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.RefreshableMapList;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.Prefs;
+import kz.crystalspring.visualities.homescreen.EventsFragment;
 import kz.crystalspring.visualities.homescreen.ExplorerFragment;
 import kz.crystalspring.visualities.homescreen.FriendFeedMenuFragment;
 import kz.crystalspring.visualities.homescreen.SquareMenuFragment;
+import kz.crystalspring.visualities.homescreen.TitleFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -160,22 +162,15 @@ RefreshableMapList
 		List<TitleFragment> viewList = new ArrayList();
 		Log.w("HomeScreen","Filling ViewPager");
 		friendFeed=FriendFeedMenuFragment.newInstance();
-		viewList.add(friendFeed);
+
 		Log.w("HomeScreen_Filling","Filling FriendFeed");
 
 		//View squareMenu=psm.getSquareMenu();
 		spm=SquareMenuFragment.newInstance();
-		viewList.add(spm);
 		Log.w("HomeScreen_Filling","Filling SquareMenu");
-		ListView eventListView = new ListView(getBaseContext());
-		eventListView.setLayoutParams(new ScrollView.LayoutParams(
-				ScrollView.LayoutParams.FILL_PARENT,
-				ScrollView.LayoutParams.WRAP_CONTENT));
-		eventListView.setDivider(getResources().getDrawable(R.drawable.transperent_color));
-		eventListView.setDividerHeight(0);
-		eventListView.setCacheColorHint(0);
 
-		viewList.add(new ViewFragment(eventListView, "События"));
+
+
 		
 		ListView eventListView1 = new ListView(getBaseContext());
 		eventListView1.setLayoutParams(new ScrollView.LayoutParams(
@@ -186,6 +181,9 @@ RefreshableMapList
 		eventListView1.setCacheColorHint(0);
 
 		explorer=new ExplorerFragment();
+		viewList.add(spm);
+		viewList.add(new EventsFragment());
+		viewList.add(friendFeed);
 		viewList.add(explorer);
 		return viewList;
 	}

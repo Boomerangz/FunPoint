@@ -1,4 +1,4 @@
-package kz.crystalspring.visualities;
+package kz.crystalspring.visualities.homescreen;
 
 import android.support.v4.app.Fragment;
 

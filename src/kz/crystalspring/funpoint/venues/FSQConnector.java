@@ -690,11 +690,7 @@ public class FSQConnector
 				if (big_or_small == UrlDrawable.BIG_URL
 						&& urlDr.getBigDrawable() == null)
 				{
-					String sUrl = null;
-					if (urlDr.bigUrl != null)
-						sUrl = urlDr.smallUrl;
-					else if (urlDr.smallUrl != null)
-						sUrl = urlDr.bigUrl;
+					String sUrl = (String) ProjectUtils.ifnull(urlDr.bigUrl, urlDr.smallUrl);
 					if (sUrl != null)
 					{
 						Drawable dr = HttpHelper.loadPictureByUrl(sUrl);
@@ -703,11 +699,7 @@ public class FSQConnector
 				} else if (big_or_small == UrlDrawable.SMALL_URL
 						&& urlDr.getSmallDrawable() == null)
 				{
-					String sUrl = null;
-					if (urlDr.smallUrl != null)
-						sUrl = urlDr.smallUrl;
-					else if (urlDr.bigUrl != null)
-						sUrl = urlDr.bigUrl;
+					String sUrl = (String) ProjectUtils.ifnull(urlDr.smallUrl, urlDr.bigUrl);
 					if (sUrl != null)
 						urlDr.setSmallDrawable(HttpHelper.loadPictureByUrl(
 								urlDr.smallUrl, 80));

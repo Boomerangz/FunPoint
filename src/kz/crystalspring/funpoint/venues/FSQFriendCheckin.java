@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
+import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.LoadingImageView;
 import android.content.Context;
 import android.text.Html;
@@ -23,32 +24,55 @@ public class FSQFriendCheckin
 
 	public FSQFriendCheckin(JSONObject checkin)
 	{
-		String lastName;
-		try
+		int i = 1;
+		while (i < 6)
 		{
-			lastName = checkin.getJSONObject("user").getString("lastName");
-			String firstName = checkin.getJSONObject("user").getString(
-					"firstName");
-			String name = firstName + " " + lastName;
-			String photoUrl = checkin.getJSONObject("user").getString("photo");
-			Date time = new Date(checkin.getInt("createdAt"));
-			JSONObject place = checkin.getJSONObject("venue");
-
-			this.place = MainApplication.mapItemContainer.addItem(place);
-			friendName = name;
-			friendPhoto = new UrlDrawable();
-			friendPhoto.bigUrl = photoUrl;
-			this.time = time;
-		} catch (JSONException e)
-		{
-			e.printStackTrace();
+			try
+			{
+				String lastName=null;
+				String firstName=null;
+				switch (i)
+				{
+				case 1:
+					lastName = checkin.getJSONObject("user").getString(
+							"lastName");
+					i++;
+				case 2:
+					firstName = checkin.getJSONObject("user").getString(
+							"firstName");
+					i++;
+				case 3:
+					String name = ProjectUtils.ifnull(firstName,"") + " " + ProjectUtils.ifnull(lastName,"");
+					friendName = name;
+					i++;
+				case 4:
+					String photoUrl = checkin.getJSONObject("user").getString(
+							"photo");
+					friendPhoto = new UrlDrawable();
+					friendPhoto.bigUrl = photoUrl;
+					i++;
+				case 5:
+					Date time = new Date(checkin.getInt("createdAt"));
+					this.time = time;
+					i++;
+				case 6:
+					JSONObject place = checkin.getJSONObject("venue");
+					this.place = MainApplication.mapItemContainer
+							.addItem(place);
+					i++;
+				}
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+				i++;
+			}
 		}
 	}
 
 	@Override
 	public String toString()
 	{
-		return friendName + " зачекинился в " + place.toString();
+		return friendName + " зачекинился в " + ProjectUtils.ifnull(place,"").toString();
 	}
 
 	View view = null;
@@ -64,13 +88,13 @@ public class FSQFriendCheckin
 		userAction.setText(Html.fromHtml("<b>" + friendName + "</b>"
 				+ " зачекинился в"));
 		TextView userPlace = (TextView) view.findViewById(R.id.user_place);
-		userPlace.setText(place.toString());
+		userPlace.setText(ProjectUtils.ifnull(place, "").toString());
 
 		LoadingImageView LVI = (LoadingImageView) view
 				.findViewById(R.id.loading_imageview);
 		if (friendPhoto.getBigDrawable() == null)
 			FSQConnector.loadImageAsync(LVI, friendPhoto, UrlDrawable.BIG_URL,
-					false,null);
+					false, null);
 		else
 			LVI.setDrawable(friendPhoto.getBigDrawable());
 		return view;

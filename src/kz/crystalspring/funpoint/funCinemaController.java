@@ -9,7 +9,7 @@ import com.viewpagerindicator.ViewFragmentAdapter;
 
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.CommentsWrapper;
-import kz.crystalspring.visualities.TitleFragment;
+import kz.crystalspring.visualities.homescreen.TitleFragment;
 import kz.crystalspring.funpoint.CinemaTimeTable.CinemaTime;
 import kz.crystalspring.funpoint.R;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
@@ -362,12 +362,19 @@ class CinemaTimeTableAdapter extends BaseAdapter
 		int i = 0;
 		TableRow row = null;
 
+		TableRow.LayoutParams ll=new TableRow.LayoutParams(
+				TableRow.LayoutParams.WRAP_CONTENT,
+				TableRow.LayoutParams.FILL_PARENT);
+		ll.setMargins(3, 0, 0, 3);
 		for (final CinemaTime time : table.getTimeLines().get(position).times)
 		{
 
 			TextView timeView;
-			if (!table.getTimeLines().get(position).ticketable)
-				timeView = new TextView(context);
+			if (ProjectUtils.ifnull(time.getHash(), "").equals(""))
+			{
+				timeView = new Button(context);
+				timeView.setBackgroundColor(context.getResources().getColor(R.color.vpi__dark_theme));
+			}
 			else
 			{
 				Button btn = new Button(context);
@@ -396,9 +403,7 @@ class CinemaTimeTableAdapter extends BaseAdapter
 				timeView = btn;
 			}
 
-			timeView.setLayoutParams(new TableRow.LayoutParams(
-					TableRow.LayoutParams.WRAP_CONTENT,
-					TableRow.LayoutParams.FILL_PARENT));
+			timeView.setLayoutParams(ll);
 			timeView.setText(time.getStringTime() + " ");
 
 			if (i % 4 == 0)

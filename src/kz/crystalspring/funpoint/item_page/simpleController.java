@@ -22,7 +22,7 @@ import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.CommentsWrapper;
 import kz.crystalspring.views.GalleryWrapper;
 import kz.crystalspring.views.LoadingImageView;
-import kz.crystalspring.visualities.TitleFragment;
+import kz.crystalspring.visualities.homescreen.TitleFragment;
 import kz.sbeyer.atmpoint1.types.ItemFood;
 import android.content.Intent;
 import android.graphics.Color;
@@ -42,15 +42,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class simpleController extends ActivityController {
+public class simpleController extends ActivityController
+{
 	private static final String[] CONTENT_TABS = new String[] { "Инфо",
 			"Отзывы", "Фото" };
 
 	FSQItem item;
 	TextView titleTV;
 	TextView addressTV;
-	TextView lunchPriceTV;
-	TextView avgPriceTV;
 	TextView kitchenTV;
 	TextView hereNowTV;
 	RelativeLayout checkInBtn;
@@ -72,15 +71,18 @@ public class simpleController extends ActivityController {
 
 	LayoutInflater inflater = context.getLayoutInflater();
 
-	public simpleController(FragmentActivity _context) {
+	public simpleController(FragmentActivity _context)
+	{
 		super(_context);
 
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	protected void onCreate() {
-		if (!MainApplication.mapItemContainer.getSelectedItem().equals(item)) {
+	protected void onCreate()
+	{
+		if (!MainApplication.mapItemContainer.getSelectedItem().equals(item))
+		{
 			item = (FSQItem) MainApplication.mapItemContainer.getSelectedItem();
 
 			context.setContentView(R.layout.waiting_layout);
@@ -105,8 +107,10 @@ public class simpleController extends ActivityController {
 					.findViewById(R.id.indicator);
 			indicator.setViewPager(viewPager);
 
-			if (MainApplication.getInstance().checkInternetConnection()) {
-			} else {
+			if (MainApplication.getInstance().checkInternetConnection())
+			{
+			} else
+			{
 				MainApplication.loadNoInternetPage();
 				context.finish();
 			}
@@ -114,22 +118,28 @@ public class simpleController extends ActivityController {
 	}
 
 	@Override
-	protected void onResume() {
+	protected void onResume()
+	{
 		super.onResume();
-		AsyncTask task = new AsyncTask() {
+		AsyncTask task = new AsyncTask()
+		{
 
 			@Override
-			protected Object doInBackground(Object... params) {
-				if (item.getOptionalInfo() == null) {
-					JSONObject jObject = FSQConnector
-							.getVenueInformation(item.getId());
+			protected Object doInBackground(Object... params)
+			{
+				if (item.getOptionalInfo() == null)
+				{
+					JSONObject jObject = FSQConnector.getVenueInformation(item
+							.getId());
 					item.loadSimpleOptionalInfo(jObject);
 				}
+				FileConnector.loadCinemaInfo(item.getId());
 				return null;
 			}
 
 			@Override
-			public void onPostExecute(Object result) {
+			public void onPostExecute(Object result)
+			{
 				showItem(item);
 				context.setContentView(mainView);
 				currentTask = null;
@@ -140,11 +150,10 @@ public class simpleController extends ActivityController {
 
 	}
 
-	private View loadTitlePage() {
-		View v = inflater.inflate(R.layout.controller_food_page1, null);
+	private View loadTitlePage()
+	{
+		View v = inflater.inflate(R.layout.controller_simple_page1, null);
 		addressTV = (TextView) v.findViewById(R.id.food_address);
-		lunchPriceTV = (TextView) v.findViewById(R.id.food_lunch_price);
-		avgPriceTV = (TextView) v.findViewById(R.id.food_avg_price);
 		mainInfoLayout = (LinearLayout) v.findViewById(R.id.main_info_layout);
 		checkInBtn = (RelativeLayout) v.findViewById(R.id.checkin_block);
 		mapInBtn = (RelativeLayout) v.findViewById(R.id.map_block);
@@ -157,18 +166,22 @@ public class simpleController extends ActivityController {
 		galleryLayout = (LinearLayout) v.findViewById(R.id.gallery_list_layout);
 		createGallery();
 
-		checkInBtn.setOnClickListener(new OnClickListener() {
+		checkInBtn.setOnClickListener(new OnClickListener()
+		{
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				if (MainApplication.FsqApp.hasAccessToken())
 					checkInHere();
 				else
 					showNeedLogin();
 			}
 		});
-		todoBtn.setOnClickListener(new OnClickListener() {
+		todoBtn.setOnClickListener(new OnClickListener()
+		{
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				if (MainApplication.FsqApp.hasAccessToken())
 					checkToDo();
 				else
@@ -176,9 +189,11 @@ public class simpleController extends ActivityController {
 			}
 		});
 
-		mapInBtn.setOnClickListener(new OnClickListener() {
+		mapInBtn.setOnClickListener(new OnClickListener()
+		{
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				goToMap();
 			}
 		});
@@ -186,8 +201,9 @@ public class simpleController extends ActivityController {
 		return v;
 	}
 
-	private void createGallery() {
-		wrapper = new GalleryWrapper(context,GalleryWrapper.MODE_PLACE);
+	private void createGallery()
+	{
+		wrapper = new GalleryWrapper(context, GalleryWrapper.MODE_PLACE);
 		View view = wrapper.getView();
 		view.setLayoutParams(new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.FILL_PARENT,
@@ -196,13 +212,16 @@ public class simpleController extends ActivityController {
 		galleryLayout.addView(view);
 	}
 
-	private View loadCommentPage() {
+	private View loadCommentPage()
+	{
 		View v = inflater.inflate(R.layout.controller_food_page2, null);
 
 		addCommentBtn = (View) v.findViewById(R.id.add_comment);
-		addCommentBtn.setOnClickListener(new OnClickListener() {
+		addCommentBtn.setOnClickListener(new OnClickListener()
+		{
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				openAddCommentActivity();
 			}
 		});
@@ -210,20 +229,24 @@ public class simpleController extends ActivityController {
 		return v;
 	}
 
-	private View loadGalleryPage(View v) {
+	private View loadGalleryPage(View v)
+	{
 		// View v = inflater.inflate(R.layout.controller_food_page3, null);
 		galleryLayout = (TableLayout) v.findViewById(R.id.gallery_table);
 		return v;
 	}
 
 	@Override
-	protected void onPause() {
+	protected void onPause()
+	{
 		// TODO Auto-generated method stub
 	}
 
-	private void showItem(FSQItem item) {
+	private void showItem(FSQItem item)
+	{
 		titleTV.setText(item.getName());
-		if (item.getAddress() != null && !item.getAddress().equals("")) {
+		if (item.getAddress() != null && !item.getAddress().equals(""))
+		{
 			addressTV.setText(item.getAddress());
 			addressTV.setVisibility(View.VISIBLE);
 		} else
@@ -238,17 +261,20 @@ public class simpleController extends ActivityController {
 			setStateTodo();
 
 		phoneLayout.removeAllViews();
-		if (item.getOptionalInfo()==null)
+		if (item.getOptionalInfo() == null)
 		{
-			
+
 		}
 		List<String> phones = item.getPhones();
-		for (String phone : phones) {
+		for (String phone : phones)
+		{
 			final PhoneTextView phoneTV = new PhoneTextView(context);
 			phoneTV.setPhone(ProjectUtils.formatPhone(phone));
-			phoneTV.setOnClickListener(new OnClickListener() {
+			phoneTV.setOnClickListener(new OnClickListener()
+			{
 				@Override
-				public void onClick(View v) {
+				public void onClick(View v)
+				{
 					Intent intent = new Intent(Intent.ACTION_DIAL, Uri
 							.parse("tel:" + phoneTV.getPhone()));
 					context.startActivity(intent);
@@ -259,32 +285,36 @@ public class simpleController extends ActivityController {
 		loadComments();
 		loadPhotosToGallery();
 	}
-	
+
 	private void loadComments()
 	{
-		if (item.getOptionalInfo()!=null)
+		if (item.getOptionalInfo() != null)
 		{
 			commentsListLayout.removeAllViews();
-			CommentsWrapper commentsWrapper=new CommentsWrapper(item,context);
+			CommentsWrapper commentsWrapper = new CommentsWrapper(item, context);
 			commentsListLayout.addView(commentsWrapper.getView());
 		}
 	}
 
-	private void loadPhotosToGallery() {
+	private void loadPhotosToGallery()
+	{
 		wrapper.clear();
-		for (int i = 0; i < item.getPhotosCount(); i++) {
+		for (int i = 0; i < item.getPhotosCount(); i++)
+		{
 			wrapper.addDrawable(item.getUrlAndPhoto(i));
 		}
 	}
 
 	@Override
-	public void setStateChecked() {
+	public void setStateChecked()
+	{
 		checkInBtn.setEnabled(false);
 		checkInBtn.setBackgroundColor(Color.parseColor("#00A859"));
 	}
 
 	@Override
-	public void setStateTodo() {
+	public void setStateTodo()
+	{
 		todoBtn.setEnabled(false);
 		todoBtn.setBackgroundColor(Color.parseColor("#00A859"));
 	}

@@ -14,7 +14,6 @@ import kz.crystalspring.funpoint.funCheckinNow;
 import kz.crystalspring.funpoint.funWaitingActivity;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.Helpdesk;
-import kz.crystalspring.visualities.TitleFragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;

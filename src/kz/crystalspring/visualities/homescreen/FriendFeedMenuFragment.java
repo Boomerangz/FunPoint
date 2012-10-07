@@ -7,7 +7,6 @@ import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQFriendCheckin;
-import kz.crystalspring.visualities.TitleFragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;

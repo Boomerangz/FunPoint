@@ -2,7 +2,12 @@ package kz.crystalspring.funpoint.venues;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import kz.crystalspring.android_client.C_FileHelper;
@@ -172,11 +177,21 @@ public class FileConnector
 		}
 	}
 	
+	
+	public static final DateFormat date_formatter = new SimpleDateFormat(
+			"yyyy-MM-dd");
 	public static JSONArray loadJSONEventsList()
 	{
 		List<BasicNameValuePair> params=new ArrayList<BasicNameValuePair>();
-		params.add(new BasicNameValuePair("rubr_id", "1"));
+		params.add(new BasicNameValuePair("rubr_id", "0"));
 		params.add(key_pair);
+		
+		GregorianCalendar start=new GregorianCalendar();
+		GregorianCalendar end=new GregorianCalendar();
+		end.add(Calendar.DAY_OF_MONTH, 7);
+		
+		params.add(new BasicNameValuePair("date_start",date_formatter.format(start.getTime())));
+		params.add(new BasicNameValuePair("date_end",date_formatter.format(end.getTime())));
 		String sResponse=HttpHelper.loadPostByUrl(JAM_EVENTS_LIST_URL, params);
 		Log.w("cinema", "Длинна ответа -"+Long.valueOf(sResponse.length()).toString());
 		try

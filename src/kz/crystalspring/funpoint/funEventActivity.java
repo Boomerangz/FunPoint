@@ -3,7 +3,9 @@ package kz.crystalspring.funpoint;
 import kz.crystalspring.funpoint.CinemaTimeTable.CinemaTime;
 import kz.crystalspring.funpoint.CinemaTimeTableAdapter.ViewHolder;
 import kz.crystalspring.funpoint.events.Event;
+import kz.crystalspring.funpoint.events.FilmEvent;
 import kz.crystalspring.funpoint.venues.FSQConnector;
+import kz.crystalspring.funpoint.venues.FileConnector;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.HttpHelper;
 import kz.crystalspring.pointplus.ProjectUtils;
@@ -37,83 +39,87 @@ public class funEventActivity extends Activity
 	TextView eventDescriptionText;
 	LoadingImageView lImageView;
 	LinearLayout listView;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fun_event_layout);
-		if (event==null)
+		if (event == null)
 		{
-			event=MainApplication.eventContainer.getEventById(MainApplication.selectedEventId);
+			event = MainApplication.eventContainer
+					.getEventById(MainApplication.selectedEventId);
 		}
-		eventNameText=(TextView) findViewById(R.id.event_name);
-		eventDescriptionText=(TextView) findViewById(R.id.event_desc);
-		lImageView=(LoadingImageView) findViewById(R.id.loading_imageview);
-		listView=(LinearLayout) findViewById(R.id.listView1);
+		eventNameText = (TextView) findViewById(R.id.event_name);
+		eventDescriptionText = (TextView) findViewById(R.id.event_desc);
+		lImageView = (LoadingImageView) findViewById(R.id.loading_imageview);
+		listView = (LinearLayout) findViewById(R.id.listView1);
 	}
-	
+
 	@Override
 	protected void onResume()
 	{
 		super.onResume();
 		if (MainApplication.getInstance().checkInternetConnection())
 		{
-		eventNameText.setText(event.getName());
-		eventDescriptionText.setText(Html.fromHtml(event.getDescription()));
-		
-		if (event.getImage()!=null)
-		{
-			lImageView.setDrawable(event.getImage());
-		}
-		else
-		{
-			final Event e=event;
-			Runnable preTask=new Runnable()
+			eventNameText.setText(event.getName());
+			eventDescriptionText.setText(Html.fromHtml(event.getDescription()));
+
+			if (event.getImage() != null)
 			{
-				@Override
-				public void run()
+				lImageView.setDrawable(event.getImage());
+			} else
+			{
+				final Event e = event;
+				Runnable preTask = new Runnable()
 				{
-						Drawable dr=HttpHelper.loadPictureByUrl(e.getImageUrl());
+					@Override
+					public void run()
+					{
+						Drawable dr = HttpHelper.loadPictureByUrl(e
+								.getImageUrl());
 						e.setImage(dr);
-				}
-			};
-			Runnable postTask=new Runnable()
-			{
-				@Override
-				public void run()
+					}
+				};
+				Runnable postTask = new Runnable()
 				{
-					lImageView.setDrawable(e.getImage());	
-				}
-			};
-			
-			MainApplication.pwAggregator.addPriorityTask(preTask, postTask);
-		}
-		event.loadPlaceTable();
-		EventTimeTableAdapter adapter=new EventTimeTableAdapter(event.getTimeTable(), this);
-		adapter.fillLayout(listView);
-		}
-		else
+					@Override
+					public void run()
+					{
+						lImageView.setDrawable(e.getImage());
+					}
+				};
+
+				MainApplication.pwAggregator.addPriorityTask(preTask, postTask);
+			}
+			if (FilmEvent.class.isInstance(event))
+			{
+				FilmEvent fEvent = (FilmEvent) event;
+				fEvent.loadPlaceTable();
+				EventTimeTableAdapter adapter = new EventTimeTableAdapter(
+						fEvent.getTimeTable(), this);
+				adapter.fillLayout(listView);
+			}
+		} else
 		{
 			MainApplication.loadNoInternetPage();
 			finish();
 		}
+		FileConnector.loadJSONPlaceList(Integer.toString(event.getId()));
 	}
 }
-
 
 class EventTimeTableAdapter extends BaseAdapter
 {
 	CinemaTimeTable table;
 	Context context;
-	
-	public EventTimeTableAdapter(CinemaTimeTable table,Context context)
+
+	public EventTimeTableAdapter(CinemaTimeTable table, Context context)
 	{
-		this.table=table;
-		this.context=context;
+		this.table = table;
+		this.context = context;
 	}
-	
-	
+
 	@Override
 	public int getCount()
 	{
@@ -140,69 +146,77 @@ class EventTimeTableAdapter extends BaseAdapter
 		convertView = mInflater.inflate(R.layout.object_list_item_cinema, null);
 		holder = new ViewHolder();
 		holder.text = (TextView) convertView.findViewById(R.id.text);
-		holder.tableLayout=(TableLayout) convertView.findViewById(R.id.table);
-		
+		holder.tableLayout = (TableLayout) convertView.findViewById(R.id.table);
+
 		convertView.setMinimumHeight(60);
 		convertView.setTag(holder);
 		String st = Integer.toString(position) + ". " + toString();
 
-		holder.text.setText(table.getTimeLines().get(position).getTitle()+" "+table.getTimeLines().get(position).getStrDate());
+		holder.text.setText(table.getTimeLines().get(position).getTitle() + " "
+				+ table.getTimeLines().get(position).getStrDate());
 		holder.text.setOnClickListener(new OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				MapItem item=MainApplication.mapItemContainer.getItemById(table.getTimeLines().get(position).filmId);
+				MapItem item = MainApplication.mapItemContainer
+						.getItemById(table.getTimeLines().get(position).filmId);
 				MainApplication.mapItemContainer.setSelectedItem(item);
 				Intent i = new Intent(context, funObjectDetail.class);
 				i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivity(i);
 			}
 		});
-		
-		int i=0;
-		TableRow row=null;
-		
-		for (final CinemaTime time:table.getTimeLines().get(position).times)
+
+		int i = 0;
+		TableRow row = null;
+
+		for (final CinemaTime time : table.getTimeLines().get(position).times)
 		{
-		
+
 			TextView timeView;
 			if (!table.getTimeLines().get(position).ticketable)
-				timeView=new TextView(context);
+				timeView = new TextView(context);
 			else
 			{
-				Button btn=new Button(context);
+				Button btn = new Button(context);
 				btn.setOnClickListener(new OnClickListener()
 				{
-					
+
 					@Override
 					public void onClick(View v)
 					{
-						String url="http://m.ticketon.kz/hallplan/"+time.getHash();
+						String url = "http://m.ticketon.kz/hallplan/"
+								+ time.getHash();
 						Dialog dialog = new Dialog(context);
-			            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			            View vi = inflater.inflate(R.layout.webview, null);
-			            dialog.setContentView(vi);
-			            dialog.setCancelable(true);
-			            WebView wb = (WebView) vi.findViewById(R.id.webview);
-			            wb.getSettings().setJavaScriptEnabled(true);
-			            wb.setWebViewClient(new WebViewClient());
-			            wb.loadUrl(url);
-			            System.out.println("..loading url..");
-			            dialog.show();
+						dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+						LayoutInflater inflater = (LayoutInflater) context
+								.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+						View vi = inflater.inflate(R.layout.webview, null);
+						dialog.setContentView(vi);
+						dialog.setCancelable(true);
+						WebView wb = (WebView) vi.findViewById(R.id.webview);
+						wb.getSettings().setJavaScriptEnabled(true);
+						wb.setWebViewClient(new WebViewClient());
+						wb.loadUrl(url);
+						System.out.println("..loading url..");
+						dialog.show();
 					}
 				});
-				timeView=btn;
+				timeView = btn;
 			}
-			
-			timeView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,TableRow.LayoutParams.FILL_PARENT));
-			timeView.setText(time.getStringTime()+" ");
-			
-			if (i%4==0)
+
+			timeView.setLayoutParams(new TableRow.LayoutParams(
+					TableRow.LayoutParams.WRAP_CONTENT,
+					TableRow.LayoutParams.FILL_PARENT));
+			timeView.setText(time.getStringTime() + " ");
+
+			if (i % 4 == 0)
 			{
-				row=new TableRow(context);
-				row.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT,TableLayout.LayoutParams.WRAP_CONTENT));
+				row = new TableRow(context);
+				row.setLayoutParams(new TableLayout.LayoutParams(
+						TableLayout.LayoutParams.WRAP_CONTENT,
+						TableLayout.LayoutParams.WRAP_CONTENT));
 				holder.tableLayout.addView(row);
 			}
 			row.addView(timeView);
@@ -210,7 +224,7 @@ class EventTimeTableAdapter extends BaseAdapter
 		}
 		return convertView;
 	}
-	
+
 	public void fillLayout(LinearLayout layout)
 	{
 		layout.removeAllViews();
@@ -220,18 +234,17 @@ class EventTimeTableAdapter extends BaseAdapter
 			layout.addView(v);
 		}
 	}
-	
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		return getView(position, convertView);
 	}
-	
+
 	class ViewHolder
 	{
 		TextView text;
 		TableLayout tableLayout;
 	}
-
 
 }

@@ -11,7 +11,7 @@ import kz.crystalspring.funpoint.events.Event;
 import kz.crystalspring.funpoint.venues.ListItem;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.R;
-import kz.crystalspring.visualities.TitleFragment;
+import kz.crystalspring.visualities.homescreen.TitleFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;

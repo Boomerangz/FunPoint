@@ -21,7 +21,7 @@ import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.CommentsWrapper;
 import kz.crystalspring.views.GalleryWrapper;
 import kz.crystalspring.views.LoadingImageView;
-import kz.crystalspring.visualities.TitleFragment;
+import kz.crystalspring.visualities.homescreen.TitleFragment;
 import kz.sbeyer.atmpoint1.types.ItemFood;
 import android.content.Intent;
 import android.graphics.Color;

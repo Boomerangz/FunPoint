@@ -198,9 +198,17 @@ public class MapItemContainer {
 		MainApplication.pwAggregator.addPriorityTask(task, postTask);
 	}
 
-	public void loadNearBy(GeoPoint point, Runnable action) {
+	public void loadNearBy(GeoPoint point) {
 		this.point = point;
 		RefreshItemsTask task = new RefreshItemsTask();
+		Runnable action = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				MainApplication.refreshMapItems();
+			}
+		};
 		MainApplication.pwAggregator.addTaskToQueue(task, action);
 	}
 
@@ -294,5 +302,10 @@ public class MapItemContainer {
 			addItem(item);
 		}
 		return item;
+	}
+
+	public List<String> getFlter()
+	{
+		return visibleFilterMap;
 	}
 }

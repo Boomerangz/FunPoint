@@ -1,6 +1,6 @@
 package com.viewpagerindicator;
 
-import kz.crystalspring.visualities.TitleFragment;
+import kz.crystalspring.visualities.homescreen.TitleFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Layout;

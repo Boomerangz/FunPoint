@@ -543,13 +543,13 @@ public class ProjectUtils
 		return phone;
 	}
 	
-//	public static <E> Class<E> ifnull(<E> a,<E> b)
-//	{
-//		if (a!=null)
-//		{
-//			return a;
-//		}
-//		return b;
-//	}
+	public static Object ifnull(Object a,Object b)
+	{
+		if (a!=null)
+		{
+			return a;
+		}
+		return b;
+	}
 
 }

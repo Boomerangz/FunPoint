@@ -26,6 +26,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
+import com.google.android.maps.GeoPoint;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -235,5 +237,12 @@ public class HttpHelper
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public static void loadFromProxy(GeoPoint geoPoint, String string)
+	{
+//		List<BasicNameValuePair> params=new ArrayList();
+//		params.add(object)
+//		String sResponse=loadByUrl(sUrl)
 	}
 }

@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.graphics.drawable.Drawable;
+import android.view.View;
 
 public class FSQItem extends MapItem
 {
@@ -239,4 +240,5 @@ public class FSQItem extends MapItem
 		};
 		MainApplication.pwAggregator.addPriorityTask(task, postTask);
 	}
+
 }

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.http.message.BasicNameValuePair;
+
 import net.londatiga.fsq.FoursquareApp;
 
 import com.boomerang.pending.PendingWorkAggregator;
@@ -20,6 +22,7 @@ import kz.crystalspring.funpoint.venues.FileConnector;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItemContainer;
 import kz.crystalspring.funpoint.venues.UserActivity;
+import kz.crystalspring.pointplus.HttpHelper;
 
 import android.app.Application;
 import android.content.Context;
@@ -107,30 +110,30 @@ public class MainApplication extends Application
 		Log.w("MainApplication", "Terminated");
 	}
 	
-	
 	public void onResume()
 	{
 		pwAggregator.setAbleToDo(true);
-		Runnable task = new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				MainApplication.refreshMapItems();
-			}
-		};
-		
 		if (checkInternetConnection())
 		{
 			System.out.println("ЗАГРУЗКА НАЧАТА");
-			MainApplication.mapItemContainer.loadNearBy(getCurrentLocation(),
-					task);
+			MainApplication.loadFromProxy();
+			MainApplication.loadPoints();
 			MainApplication.loadAdditionalContent();
 			new FileConnector(getApplicationContext());
 		} else
 			loadNoInternetPage();
 	}
 	
+	private static void loadFromProxy()
+	{
+		//HttpHelper.loadFromProxy();
+	}
+
+	private static void loadPoints()
+	{
+		MainApplication.mapItemContainer.loadNearBy(getCurrentLocation());
+	}
+
 	public static void loadNoInternetPage()
 	{
 		Intent i = new Intent(context, NoInternetActivity.class);
