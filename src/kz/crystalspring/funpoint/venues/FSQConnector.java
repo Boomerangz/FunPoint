@@ -11,6 +11,7 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -86,6 +87,7 @@ public class FSQConnector
 
 	private static final String TAG = "FoursquareApi";
 	private static final String API_VERSION = "&v=20120522";
+	private static final String SEARCH_URL = API_URL + "/venues/search?ll=";
 	public static final int AREA_RADIUS = 1500;
 
 	private static List<FSQTodo> todosList = new ArrayList<FSQTodo>(0);
@@ -133,7 +135,7 @@ public class FSQConnector
 		{
 			String ll = String.valueOf(latitude) + ","
 					+ String.valueOf(longitude);
-			String sUrl = API_URL + "/venues/search?ll=" + ll;
+			String sUrl = SEARCH_URL + ll;
 
 			if (category != null)
 				sUrl += "&categoryId=" + category;
@@ -690,7 +692,8 @@ public class FSQConnector
 				if (big_or_small == UrlDrawable.BIG_URL
 						&& urlDr.getBigDrawable() == null)
 				{
-					String sUrl = (String) ProjectUtils.ifnull(urlDr.bigUrl, urlDr.smallUrl);
+					String sUrl = (String) ProjectUtils.ifnull(urlDr.bigUrl,
+							urlDr.smallUrl);
 					if (sUrl != null)
 					{
 						Drawable dr = HttpHelper.loadPictureByUrl(sUrl);
@@ -699,7 +702,8 @@ public class FSQConnector
 				} else if (big_or_small == UrlDrawable.SMALL_URL
 						&& urlDr.getSmallDrawable() == null)
 				{
-					String sUrl = (String) ProjectUtils.ifnull(urlDr.smallUrl, urlDr.bigUrl);
+					String sUrl = (String) ProjectUtils.ifnull(urlDr.smallUrl,
+							urlDr.bigUrl);
 					if (sUrl != null)
 						urlDr.setSmallDrawable(HttpHelper.loadPictureByUrl(
 								urlDr.smallUrl, 80));
@@ -816,13 +820,14 @@ public class FSQConnector
 		return isFriendFeedLoaded;
 	}
 
-	public static void loadCategories()
+	public static synchronized void loadCategories()
 	{
 		Runnable preTask = new Runnable()
 		{
 			@Override
 			public void run()
 			{
+				Log.w("Categories", "Stared to load");
 				String st = "";
 				HashMap<String, String> map = new HashMap<String, String>();
 				try
@@ -831,8 +836,9 @@ public class FSQConnector
 							+ MainApplication.FsqApp.getAccesToken()
 							+ API_VERSION;
 					st = HttpHelper.loadByUrl(sUrl);
-
+					Log.w("Categories", "Point 1");
 					JSONObject response = new JSONObject(st);
+					Log.w("Categories", "Point 2");
 					if (response.getJSONObject("meta").getInt("code") == 200)
 					{
 						response = response.getJSONObject("response");
@@ -849,6 +855,7 @@ public class FSQConnector
 							}
 						}
 					}
+					Log.w("Categories", "Point 3");
 				} catch (Exception e)
 				{
 					e.printStackTrace();
@@ -858,6 +865,7 @@ public class FSQConnector
 					map.remove(str);
 					map.put(str, str);
 				}
+				Log.w("Categories", "Ended to load");
 				FSQCategories = map;
 				System.out.println(st);
 			}
@@ -896,8 +904,18 @@ public class FSQConnector
 
 	public static String getGlobalCategory(String localCategory)
 	{
-		String globalCat = FSQCategories.get(localCategory);
-		return globalCat;
+		String globalCat = null;
+		while (FSQCategories == null)
+		{
+			for (int i = 0; i < 32000; i++)
+			{
+			}
+		}
+		synchronized (FSQCategories)
+		{
+			globalCat = FSQCategories.get(localCategory);
+			return globalCat;
+		}
 	}
 
 	public static void loadBadgesPictureAsync(FSQBadge fsqBadge)
@@ -1092,5 +1110,84 @@ public class FSQConnector
 			};
 			MainApplication.pwAggregator.addTaskToQueue(preTask, postTask);
 		}
+	}
+
+	public static List<BasicNameValuePair> getUrlForProxy(GeoPoint point)
+	{
+		List<String> urlList = new ArrayList();
+
+		// 76.0,43.0
+		String ll = null;
+		if (MainApplication.FsqApp.hasAccessToken())
+		{
+			String getTodos = TODOS_GET_URL + "?oauth_token="
+					+ MainApplication.FsqApp.getAccesToken() + "&sort=recent"
+					+ API_VERSION;
+			String getBadges = BADGES_GET_URL + "?oauth_token="
+					+ MainApplication.FsqApp.getAccesToken() + "&sort=recent"
+					+ API_VERSION;
+			String getCheckins = CHECKINS_GET_URL + "?oauth_token="
+					+ MainApplication.FsqApp.getAccesToken() + "&sort=recent"
+					+ API_VERSION;
+			String getFriendCheckins = FRIEND_CHECKINS_GET_URL
+					+ "?oauth_token=" + MainApplication.FsqApp.getAccesToken()
+					+ "&sort=recent" + API_VERSION;
+			String getSelf = SELF_URL + "?oauth_token="
+					+ MainApplication.FsqApp.getAccesToken() + API_VERSION;
+			String getCategories = CATEGORIES_URL + "?oauth_token="
+					+ MainApplication.FsqApp.getAccesToken() + API_VERSION;
+			if (point != null)
+			{
+				Float lat = Float
+						.valueOf((float) (point.getLatitudeE6() / 1e6));
+				Float lon = Float
+						.valueOf((float) (point.getLongitudeE6() / 1e6));
+				ll = lat.toString() + "," + lon.toString();
+				String getExplore = EXPLORE_URL + "?oauth_token="
+						+ MainApplication.FsqApp.getAccesToken() + "&ll=" + ll
+						+ API_VERSION;
+				urlList.add(getExplore);
+			}
+			urlList.add(getCategories);
+			urlList.add(getTodos);
+			urlList.add(getBadges);
+			urlList.add(getCheckins);
+			urlList.add(getFriendCheckins);
+			urlList.add(getSelf);
+		}
+
+		if (point != null && ll != null)
+		{
+			ArrayList<String> filterArray = new ArrayList();
+			filterArray.addAll(Arrays.asList(MapItem.TYPES_ARRAY));
+			int radius;
+			for (String category : filterArray)
+			{
+				String sUrl = SEARCH_URL + ll;
+				if (!category.equals(MapItem.FSQ_TYPE_FOOD))
+					radius = 0;
+				else
+					radius = FSQConnector.AREA_RADIUS;
+				if (category.equals(MapItem.FSQ_UNDEFINED))
+					category = null;
+				if (category != null)
+					sUrl += "&categoryId=" + category;
+				if (radius > 0)
+					sUrl += "&radius=" + Integer.toString(radius);
+				sUrl += "&client_id=" + CLIENT_ID + "&client_secret="
+						+ CLIENT_SECRET + API_VERSION;
+				urlList.add(sUrl);
+			}
+		}
+
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		int i = 0;
+		for (String s : urlList)
+		{
+			i++;
+			String paramName = "url_" + Integer.toString(i);
+			params.add(new BasicNameValuePair(paramName, s));
+		}
+		return params;
 	}
 }

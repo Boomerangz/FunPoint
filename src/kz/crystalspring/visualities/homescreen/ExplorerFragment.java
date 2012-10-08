@@ -61,6 +61,7 @@ class ExplorerView
 	{
 		this.context=context;
 		exploreList=createExplorerList();
+		refresh();
 	}
 	
 	public View getExplorer()
@@ -108,7 +109,7 @@ class ExplorerView
 		}
 		
 		View progressBar=exploreList.findViewById(R.id.progressBar1);
-		if (listView.getAdapter().getCount()>0||!FSQConnector.isExploringLoaded())
+		if (FSQConnector.isExploringLoaded())
 			progressBar.setVisibility(View.GONE);
 		else
 			progressBar.setVisibility(View.VISIBLE);

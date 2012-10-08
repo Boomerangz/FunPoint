@@ -73,13 +73,13 @@ public class MainApplication extends Application
 			refreshable.refreshMapItems();
 	}
 
-	static int starts=0;
-	
+	static int starts = 0;
+
 	@Override
 	public void onCreate()
 	{
 		super.onCreate();
-		Log.w("MainApplication", "Created "+Integer.valueOf(++starts));
+		Log.w("MainApplication", "Created " + Integer.valueOf(++starts));
 		singleTon = this;
 
 		mDensity = getApplicationContext().getResources().getDisplayMetrics().density;
@@ -95,38 +95,53 @@ public class MainApplication extends Application
 		updater = new LocationUpdater(this);
 		onResume();
 	}
-	
+
 	@Override
 	public void onLowMemory()
 	{
 		super.onLowMemory();
 		Log.w("MainApplication", "Low Memory");
 	}
-	
+
 	@Override
 	public void onTerminate()
 	{
 		super.onTerminate();
 		Log.w("MainApplication", "Terminated");
 	}
-	
+
 	public void onResume()
 	{
 		pwAggregator.setAbleToDo(true);
 		if (checkInternetConnection())
 		{
 			System.out.println("ЗАГРУЗКА НАЧАТА");
-			MainApplication.loadFromProxy();
-			MainApplication.loadPoints();
-			MainApplication.loadAdditionalContent();
-			new FileConnector(getApplicationContext());
+			AsyncTask task=new AsyncTask()
+			{
+
+				@Override
+				protected Object doInBackground(Object... params)
+				{
+					MainApplication.loadFromProxy();
+					return null;
+				}
+				
+				@Override
+				protected void onPostExecute(Object o)
+				{
+					MainApplication.loadAdditionalContent();
+					MainApplication.loadPoints();
+					new FileConnector(getApplicationContext());
+				}
+			};
+			task.execute();
 		} else
 			loadNoInternetPage();
 	}
-	
+
 	private static void loadFromProxy()
 	{
-		//HttpHelper.loadFromProxy();
+		HttpHelper.loadFromProxy(getCurrentLocation());
 	}
 
 	private static void loadPoints()
@@ -141,7 +156,7 @@ public class MainApplication extends Application
 		i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 		context.startActivity(i);
 	}
-	
+
 	public boolean checkInternetConnection()
 	{
 		ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -186,7 +201,10 @@ public class MainApplication extends Application
 		{
 
 		}
-		return currLocation;
+		if (currLocation != null)
+			return currLocation;
+		else
+			return new GeoPoint(43240134, 76923185);
 	}
 
 	public static void setCurrLocation(GeoPoint point)
@@ -217,7 +235,7 @@ public class MainApplication extends Application
 			FSQConnector.loadFriendFeed();
 		if (!FSQConnector.getExploringLoaded())
 			FSQConnector.loadExploring(getCurrentLocation());
-		
+
 	}
 
 	public static void loadJamContent()
@@ -287,5 +305,3 @@ class LocationUpdater implements LocationListener
 	}
 
 }
-
-

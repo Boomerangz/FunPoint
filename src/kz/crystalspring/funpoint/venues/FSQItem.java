@@ -51,15 +51,14 @@ public class FSQItem extends MapItem
 			setLatitude(lat);
 			setLongitude(lng);
 			loadCategories(jObject.getJSONArray("categories"));
-			setHereNow(jObject.getJSONObject("hereNow").getInt("count"));
+			if (jObject.has("hereNow"))
+				setHereNow(jObject.getJSONObject("hereNow").getInt("count"));
 			getCategory();
-			
-			return this;
 		} catch (JSONException e)
 		{
 			e.printStackTrace();
-			return null;
 		}
+		return this;
 	}
 
 	@Override
