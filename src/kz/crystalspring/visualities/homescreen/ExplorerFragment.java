@@ -110,9 +110,19 @@ class ExplorerView
 		
 		View progressBar=exploreList.findViewById(R.id.progressBar1);
 		if (FSQConnector.isExploringLoaded())
+		{
 			progressBar.setVisibility(View.GONE);
-		else
-			progressBar.setVisibility(View.VISIBLE);
+		} else
+		{
+			if (MainApplication.FsqApp.hasAccessToken())
+				progressBar.setVisibility(View.VISIBLE);
+			else
+			{
+				View loginView = exploreList.findViewById(R.id.login_view);
+				loginView.setVisibility(View.VISIBLE);
+				progressBar.setVisibility(View.GONE);
+			}
+		}
 	}
 }
 

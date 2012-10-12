@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
@@ -13,8 +14,11 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import kz.crystalspring.android_client.C_FileHelper;
+import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -42,7 +46,7 @@ public class HttpHelper
 	private static final String GLOBAL_PROXY = "http://www.homeplus.kz/jam/4sq_gzip_curl.php";
 	private static final String LOCAL_PROXY = "http://192.168.1.50/jam/4sq_gzip_curl.php";
 	private static final String CURRENT_PROXY = GLOBAL_PROXY;
-	private static final boolean USE_PROXY = false;
+	private static boolean USE_PROXY = false;
 	static HttpClient client = new DefaultHttpClient();
 
 	private static HttpResponse loadResponse(HttpUriRequest request)
@@ -61,6 +65,10 @@ public class HttpHelper
 		} catch (IOException e)
 		{
 			e.printStackTrace();
+			if (java.net.UnknownHostException.class.isInstance(e))
+			{
+				USE_PROXY=true;
+			}
 		}
 		return null;
 	}
@@ -160,7 +168,7 @@ public class HttpHelper
 			if (USE_PROXY)
 			{
 				parameters.add(new BasicNameValuePair("url", sUrl));
-				parameters.add(new BasicNameValuePair("key",
+				parameters.add(new BasicNameValuePair("key_zip",
 						FSQConnector.CLIENT_SECRET));
 				usedUrl = CURRENT_PROXY;
 			}
@@ -271,6 +279,7 @@ public class HttpHelper
 	{
 		try
 		{
+			String sResponse1=HttpHelper.loadByUrl(FSQConnector.SELF_URL);
 			List<BasicNameValuePair> params = FSQConnector
 					.getUrlForProxy(geoPoint);
 			params.add(new BasicNameValuePair("count", Integer.toString(params

@@ -20,21 +20,26 @@ public class FriendFeedMenuFragment extends TitleFragment
 {
 	public static FriendFeedMenuFragment newInstance()
 	{
-		FriendFeedMenuFragment fragment=new FriendFeedMenuFragment();
+		FriendFeedMenuFragment fragment = new FriendFeedMenuFragment();
 		return fragment;
 	}
-	
-	 @Override  
-	 public void onCreate(Bundle savedInstanceState) {  
-	     super.onCreate(savedInstanceState);  
-	 }  
-	 FriendFeed menu;
-	 @Override  
-	 public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {  
-		 menu=new FriendFeed(getActivity());
- 	     View v=menu.getFriendFeed();
-	     return v;  
-	 }
+
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+	}
+
+	FriendFeed menu;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState)
+	{
+		menu = new FriendFeed(getActivity());
+		View v = menu.getFriendFeed();
+		return v;
+	}
 
 	@Override
 	public String getTitle()
@@ -44,28 +49,27 @@ public class FriendFeedMenuFragment extends TitleFragment
 
 	public void refresh()
 	{
-		if(menu!=null)
+		if (menu != null)
 			menu.refresh();
-	}  
+	}
 }
-
 
 class FriendFeed
 {
 	Activity context;
 	View friendFeedList;
-	
+
 	public FriendFeed(Activity context)
 	{
-		this.context=context;
-		friendFeedList=createFriendFeedList();
+		this.context = context;
+		friendFeedList = createFriendFeedList();
 	}
-	
+
 	public View getFriendFeed()
 	{
-			friendFeedList=createFriendFeedList();
-			refresh();
-			return friendFeedList;
+		friendFeedList = createFriendFeedList();
+		refresh();
+		return friendFeedList;
 	}
 
 	private View createFriendFeedList()
@@ -74,31 +78,44 @@ class FriendFeed
 		LayoutInflater layoutInf = context.getLayoutInflater();
 
 		friendFeed = layoutInf.inflate(R.layout.friend_feed, null);
-		if (friendFeed==null)		
+		if (friendFeed == null)
 			Log.w("HomeScree", "FriednFeed is null");
 		return friendFeed;
 	}
 
 	public void refresh()
 	{
-		ListView listView=(ListView) friendFeedList.findViewById(R.id.listView1);
-			listView.setAdapter(new FriendFeedAdapter(FSQConnector.getFriendFeed()));
-			listView.setMinimumHeight(Math.round(80*MainApplication.mDensity));
-		View progressBar=friendFeedList.findViewById(R.id.progressBar1);
+		ListView listView = (ListView) friendFeedList
+				.findViewById(R.id.listView1);
+		FriendFeedAdapter adapter = new FriendFeedAdapter(
+				FSQConnector.getFriendFeed());
+		listView.setAdapter(adapter);
+		listView.setMinimumHeight(Math.round(80 * MainApplication.mDensity));
+		View progressBar = friendFeedList.findViewById(R.id.progressBar1);
 		if (FSQConnector.isFriendFeedLoaded())
+		{
 			progressBar.setVisibility(View.GONE);
-		else
-			progressBar.setVisibility(View.VISIBLE);
+		} else
+		{
+			if (MainApplication.FsqApp.hasAccessToken())
+				progressBar.setVisibility(View.VISIBLE);
+			else
+			{
+				View loginView = friendFeedList.findViewById(R.id.login_view);
+				loginView.setVisibility(View.VISIBLE);
+				progressBar.setVisibility(View.GONE);
+			}
+		}
 	}
 }
-
 
 class FriendFeedAdapter extends BaseAdapter
 {
 	List<FSQFriendCheckin> list;
+
 	FriendFeedAdapter(List<FSQFriendCheckin> list)
 	{
-		this.list=list;
+		this.list = list;
 	}
 
 	@Override
@@ -124,5 +141,5 @@ class FriendFeedAdapter extends BaseAdapter
 	{
 		return list.get(arg0).getView();
 	}
-	
+
 }

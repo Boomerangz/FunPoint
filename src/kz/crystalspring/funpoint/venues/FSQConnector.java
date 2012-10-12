@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import kz.crystalspring.funpoint.FullScrLoadingImageActivity;
 import kz.crystalspring.funpoint.MainApplication;
@@ -70,6 +72,10 @@ public class FSQConnector
 	public static final String CLIENT_SECRET = "YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO";
 	public static final String CALLBACK_URL = "myapp://connect";
 	private static final String API_URL = "https://api.foursquare.com/v2";
+
+	private static final String CLIENT_STR = "&client_id=" + CLIENT_ID
+			+ "&client_secret=" + CLIENT_SECRET;
+
 	private static final String CHECK_IN_URL = API_URL + "/checkins/add";
 	private static final String TIP_ADD_URL = API_URL + "/tips/add";
 	private static final String TODO_ADD_URL = API_URL
@@ -83,15 +89,18 @@ public class FSQConnector
 	private static final String EXPLORE_URL = API_URL + "/venues/explore";
 	private static final String CATEGORIES_URL = API_URL + "/venues/categories";
 	private static final String PHOTO_URL = API_URL + "/venues/";
-	private static final String SELF_URL = API_URL + "/users/self";
+	public static final String SELF_URL = API_URL + "/users/self";
 
 	private static final String TAG = "FoursquareApi";
 	private static final String API_VERSION = "&v=20120522";
-	private static final String SEARCH_URL = API_URL + "/venues/search?ll=";
+	private static final String SEARCH_URL = API_URL + "/venues/search?";
 	public static final int AREA_RADIUS = 1500;
 
 	private static List<FSQTodo> todosList = new ArrayList<FSQTodo>(0);
-	private static List<String> checkinsList = new ArrayList<String>(0);
+
+	private static Set<String> todayCheckinsList = new HashSet<String>(0);
+	private static Set<String> everCheckinsList = new HashSet<String>(0);
+
 	private static List<FSQBadge> badgesList = new ArrayList<FSQBadge>(0);
 	private static List<FSQFriendCheckin> friendFeedList = new ArrayList<FSQFriendCheckin>(
 			0);
@@ -106,24 +115,25 @@ public class FSQConnector
 	public static List<MapItem> loadItems(GeoPoint point, String category,
 			int radius)
 	{
-		if (point != null)
+		try
 		{
-			try
-			{
-				if (category.equals(MapItem.FSQ_UNDEFINED))
-					category = null;
-				List<MapItem> list = getNearby(point.getLatitudeE6() / 1e6,
+			if (category.equals(MapItem.FSQ_UNDEFINED))
+				category = null;
+			List<MapItem> list;
+			if (point != null)
+				list = getNearby(point.getLatitudeE6() / 1e6,
 						point.getLongitudeE6() / 1e6, category, radius);
-				// list.addAll(getNearby(point.getLatitudeE6() / 1e6,
-				// point.getLongitudeE6() / 1e6, category, 0));
-				return list;
-			} catch (Exception e)
-			{
-				e.printStackTrace();
-				return new ArrayList<MapItem>();
-			}
-		} else
+			else
+				list = getByCity(MainApplication.cityManager
+						.getSelectedCityIfnull().toString(), category, radius);
+			// list.addAll(getNearby(point.getLatitudeE6() / 1e6,
+			// point.getLongitudeE6() / 1e6, category, 0));
+			return list;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
 			return new ArrayList<MapItem>();
+		}
 	}
 
 	public static ArrayList<MapItem> getNearby(double latitude,
@@ -135,7 +145,7 @@ public class FSQConnector
 		{
 			String ll = String.valueOf(latitude) + ","
 					+ String.valueOf(longitude);
-			String sUrl = SEARCH_URL + ll;
+			String sUrl = SEARCH_URL + "ll=" + ll;
 
 			if (category != null)
 				sUrl += "&categoryId=" + category;
@@ -143,8 +153,7 @@ public class FSQConnector
 			if (radius > 0)
 				sUrl += "&radius=" + Integer.toString(radius);
 
-			sUrl += "&client_id=" + CLIENT_ID + "&client_secret="
-					+ CLIENT_SECRET + API_VERSION;
+			sUrl += CLIENT_STR + API_VERSION;
 			System.out.println("на сервер отдан запрос на точки");
 			String response = HttpHelper.loadByUrl(sUrl);
 			System.out.println("получена строка с точками с сервера");
@@ -171,10 +180,69 @@ public class FSQConnector
 						venue = new ItemCinema();
 					else
 						venue = new FSQItem();
-					venue.loadFromJSON(item);
 					venue.setCategory(category);
-					if (venue != null)
+					if (venue.loadFromJSON(item) != null)
+					{
 						venueList.add(venue);
+					}
+				}
+			}
+		} catch (Exception ex)
+		{
+			throw ex;
+		}
+		System.out
+				.println("Составлен список объектов на основе ответа от сервера");
+		return venueList;
+	}
+
+	public static ArrayList<MapItem> getByCity(String city, String category,
+			int radius) throws Exception
+	{
+		ArrayList<MapItem> venueList = new ArrayList<MapItem>();
+
+		try
+		{
+			String sUrl = SEARCH_URL + "near=" + city;
+
+			if (category != null)
+				sUrl += "&categoryId=" + category;
+
+			if (radius > 0)
+				sUrl += "&radius=" + Integer.toString(radius);
+
+			sUrl += CLIENT_STR + API_VERSION;
+			System.out.println("на сервер отдан запрос на точки");
+			String response = HttpHelper.loadByUrl(sUrl);
+			System.out.println("получена строка с точками с сервера");
+			JSONObject jsonObj = new JSONObject(response);// (JSONObject) new
+															// JSONTokener(response).nextValue();
+
+			JSONArray items = (JSONArray) jsonObj.getJSONObject("response")
+					.getJSONArray("venues");
+
+			int length = items.length();
+
+			if (length > 0)
+			{
+				for (int i = 0; i < length; i++)
+				{
+					JSONObject item = (JSONObject) items.get(i);
+
+					FSQItem venue;
+					if (category.equals(MapItem.FSQ_TYPE_FOOD))
+						venue = new ItemFood();
+					else if (category.equals(MapItem.FSQ_TYPE_HOTEL))
+						venue = new ItemHotel();
+					else if (category.equals(MapItem.FSQ_TYPE_CINEMA))
+						venue = new ItemCinema();
+					else
+						venue = new FSQItem();
+					venue.setCategory(category);
+					if (venue.loadFromJSON(item) != null)
+					{
+						venueList.add(venue);
+					}
 				}
 			}
 		} catch (Exception ex)
@@ -197,7 +265,7 @@ public class FSQConnector
 
 			String sUrl = API_URL + "/venues/search?ll=" + ll;
 
-			if (category != null)
+			if (!(category == null || category.equals(MapItem.FSQ_UNDEFINED)))
 				sUrl += "&categoryId=" + category;
 
 			if (name != null)
@@ -355,7 +423,7 @@ public class FSQConnector
 			}
 		};
 		MainApplication.pwAggregator.addTaskToQueue(task, postTask);
-		checkinsList.add(venueID);
+		todayCheckinsList.add(venueID);
 	}
 
 	public static boolean isFSQConnected()
@@ -453,7 +521,8 @@ public class FSQConnector
 			@Override
 			public void run()
 			{
-				List<String> checkins = new ArrayList<String>();
+				Set<String> checkins = new HashSet<String>();
+				Set<String> everCheckins = new HashSet<String>();
 				if (isFSQConnected())
 				{
 					String st = "";
@@ -461,7 +530,7 @@ public class FSQConnector
 					{
 						String sUrl = CHECKINS_GET_URL + "?oauth_token="
 								+ MainApplication.FsqApp.getAccesToken()
-								+ "&sort=recent" + API_VERSION;
+								+ API_VERSION;
 						st = HttpHelper.loadByUrl(sUrl);
 
 						JSONArray response = new JSONObject(st)
@@ -480,17 +549,23 @@ public class FSQConnector
 
 							if (currTime.getDate() == time.getDate())
 								checkins.add(item);
+							everCheckins.add(item);
 						}
 					} catch (Exception e)
 					{
-						checkins = new ArrayList<String>();
+						checkins = new HashSet<String>();
 						e.printStackTrace();
 					}
 					System.out.println(st);
 				}
-				synchronized (checkinsList)
+				synchronized (todayCheckinsList)
 				{
-					checkinsList = checkins;
+					todayCheckinsList = checkins;
+
+				}
+				synchronized (todayCheckinsList)
+				{
+					everCheckinsList = everCheckins;
 				}
 				setCheckinsLoaded(true);
 			}
@@ -587,7 +662,7 @@ public class FSQConnector
 		if (getCheckinsLoaded())
 		{
 			boolean found = false;
-			for (String venueID : checkinsList)
+			for (String venueID : todayCheckinsList)
 			{
 				if (venueID.equals(id))
 				{
@@ -596,6 +671,15 @@ public class FSQConnector
 				}
 			}
 			return found;
+		} else
+			return false;
+	}
+
+	public static boolean isInEverCheckList(String id)
+	{
+		if (getCheckinsLoaded())
+		{
+			return everCheckinsList.contains(id);
 		} else
 			return false;
 	}
@@ -1020,8 +1104,7 @@ public class FSQConnector
 		if (!photosForVenues.containsKey(id))
 		{
 			String sUrl = PHOTO_URL + id + "/photos?limit=1&group=venue"
-					+ "&oauth_token=" + MainApplication.FsqApp.getAccesToken()
-					+ API_VERSION;
+					+ CLIENT_STR + API_VERSION;
 			String response = HttpHelper.loadByUrl(sUrl);
 			try
 			{
@@ -1163,7 +1246,7 @@ public class FSQConnector
 			int radius;
 			for (String category : filterArray)
 			{
-				String sUrl = SEARCH_URL + ll;
+				String sUrl = SEARCH_URL + "ll=" + ll;
 				if (!category.equals(MapItem.FSQ_TYPE_FOOD))
 					radius = 0;
 				else

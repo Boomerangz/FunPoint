@@ -32,6 +32,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.android.maps.GeoPoint;
+
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -169,6 +171,11 @@ public class ProjectUtils
 		float c = (float) (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 		float d = R * c;
 		return (d * 1000);
+	}
+	
+	public static float distance(GeoPoint point1, GeoPoint point2)
+	{
+		return distance((float)(point1.getLatitudeE6()/1e6), (float)(point1.getLongitudeE6()/1e6), (float)(point2.getLatitudeE6()/1e6), (float)(point2.getLongitudeE6()/1e6));
 	}
 
 	// ������������ String �� Float. ������������� ����������� �������
