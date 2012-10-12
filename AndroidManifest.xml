@@ -159,18 +159,6 @@
         <service
             android:name="kz.crystalspring.pointplus.C_ServiceHelper"
             android:enabled="true" />
-
-        <receiver
-            android:name="OnAlarmReceiver"
-            android:process=":remote" />
-        <receiver
-            android:name="OnBootReceiver"
-            android:enabled="true"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

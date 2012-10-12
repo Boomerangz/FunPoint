@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
@@ -12,8 +13,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import kz.crystalspring.android_client.C_FileHelper;
+import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -25,6 +30,8 @@ import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.android.maps.GeoPoint;
 
@@ -39,31 +46,36 @@ public class HttpHelper
 	private static final String GLOBAL_PROXY = "http://www.homeplus.kz/jam/4sq_gzip_curl.php";
 	private static final String LOCAL_PROXY = "http://192.168.1.50/jam/4sq_gzip_curl.php";
 	private static final String CURRENT_PROXY = GLOBAL_PROXY;
-	private static final boolean USE_PROXY = false;
+	private static boolean USE_PROXY = false;
 	static HttpClient client = new DefaultHttpClient();
 
 	private static HttpResponse loadResponse(HttpUriRequest request)
 	{
 		try
 		{
-			Date begin_d=new Date();
-			HttpResponse response=client.execute(request);
-			Date end_d=new Date();
-			Log.w("HTTPRequest", Long.toString(end_d.getTime()-begin_d.getTime()));
-			return response; 
+			Date begin_d = new Date();
+			HttpResponse response = client.execute(request);
+			Date end_d = new Date();
+			Log.w("HTTPRequest",
+					Long.toString(end_d.getTime() - begin_d.getTime()));
+			return response;
 		} catch (ClientProtocolException e)
 		{
 			e.printStackTrace();
 		} catch (IOException e)
 		{
 			e.printStackTrace();
+			if (java.net.UnknownHostException.class.isInstance(e))
+			{
+				USE_PROXY=true;
+			}
 		}
 		return null;
 	}
 
 	private static InputStream loadStream(HttpPost post)
 	{
-		try 
+		try
 		{
 			InputStream is = loadResponse(post).getEntity().getContent();
 			return is;
@@ -108,7 +120,27 @@ public class HttpHelper
 		}
 	}
 
-	public static synchronized String loadByUrl(String sUrl)
+	public static String loadByUrl(String sUrl)
+	{
+		if (jUrls!=null&&jUrls.has(sUrl))
+		{
+			String st;
+			try
+			{
+				st = jUrls.getString(sUrl);
+				return st;
+			} catch (JSONException e)
+			{
+				e.printStackTrace();
+				return privateLoadByUrl(sUrl);
+			}
+		} else
+		{
+			return privateLoadByUrl(sUrl);
+		}
+	}
+
+	private static synchronized String privateLoadByUrl(String sUrl)
 	{
 		HttpGet request = new HttpGet();
 		Log.w("HTTPRequest", sUrl);
@@ -136,7 +168,7 @@ public class HttpHelper
 			if (USE_PROXY)
 			{
 				parameters.add(new BasicNameValuePair("url", sUrl));
-				parameters.add(new BasicNameValuePair("key",
+				parameters.add(new BasicNameValuePair("key_zip",
 						FSQConnector.CLIENT_SECRET));
 				usedUrl = CURRENT_PROXY;
 			}
@@ -193,7 +225,7 @@ public class HttpHelper
 			try
 			{
 				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(is));
+						new InputStreamReader(is, "UTF-8"));
 				while ((line = reader.readLine()) != null)
 				{
 					sb.append(line);
@@ -226,9 +258,11 @@ public class HttpHelper
 			connection.setUseCaches(true);
 			InputStream response = (InputStream) connection.getContent();
 			Bitmap true_bitmap = BitmapFactory.decodeStream(response);
-			int h_coof=i;
-			int w_coof=Math.round(true_bitmap.getWidth()/((float)true_bitmap.getHeight()/i)); 
-			Bitmap small_bitmap = Bitmap.createScaledBitmap(true_bitmap,h_coof, w_coof, false);
+			int h_coof = i;
+			int w_coof = Math.round(true_bitmap.getWidth()
+					/ ((float) true_bitmap.getHeight() / i));
+			Bitmap small_bitmap = Bitmap.createScaledBitmap(true_bitmap,
+					h_coof, w_coof, false);
 			true_bitmap.recycle();
 			System.gc();
 			return new BitmapDrawable(small_bitmap);
@@ -239,10 +273,57 @@ public class HttpHelper
 		}
 	}
 
-	public static void loadFromProxy(GeoPoint geoPoint, String string)
+	private static JSONObject jUrls = null;
+
+	public static synchronized void loadFromProxy(GeoPoint geoPoint)
 	{
-//		List<BasicNameValuePair> params=new ArrayList();
-//		params.add(object)
-//		String sResponse=loadByUrl(sUrl)
+		try
+		{
+			String sResponse1=HttpHelper.loadByUrl(FSQConnector.SELF_URL);
+			List<BasicNameValuePair> params = FSQConnector
+					.getUrlForProxy(geoPoint);
+			params.add(new BasicNameValuePair("count", Integer.toString(params
+					.size())));
+			String sResponse = loadZipPostByUrl(
+					"http://jam-kz.appspot.com/myproject", params);
+			jUrls = new JSONObject(sResponse);
+			if (jUrls.has("Time"))
+			{
+				Log.w("HTTPResponse", "Proxy loaded in "+jUrls.getString("Time"));
+			}
+		} catch (Exception e)
+		{
+			jUrls = new JSONObject();
+			e.printStackTrace();
+		}
+	}
+
+	private static String loadZipPostByUrl(String sUrl,
+			List<BasicNameValuePair> parameters)
+	{
+		String usedUrl = sUrl;
+		Log.w("HTTPRequest", sUrl);
+		try
+		{
+			HttpPost post = new HttpPost(usedUrl);
+			post.setHeader("Accept-Language", "ru");
+			AbstractHttpEntity ent = new UrlEncodedFormEntity(parameters,
+					HTTP.UTF_8);
+			ent.setContentEncoding("UTF-8");
+			post.setEntity(ent);
+			// InputStream is = ;
+			InputStream is = loadStream(post);
+			GZIPInputStream gzipInputStream = new GZIPInputStream(is);
+			// is.
+			// byte[] bytes=new byte[is.available()];
+			// is.read(bytes);
+			// bytes=C_FileHelper.decompress(bytes);
+			String s = streamToString(gzipInputStream);// new String(bytes);
+			return s;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

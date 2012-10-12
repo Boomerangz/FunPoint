@@ -18,11 +18,13 @@ import kz.crystalspring.funpoint.events.EventContainer;
 import kz.crystalspring.funpoint.funMap.CustomMyLocationOverlay;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQTodo;
+import kz.crystalspring.funpoint.venues.FSQUser;
 import kz.crystalspring.funpoint.venues.FileConnector;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItemContainer;
 import kz.crystalspring.funpoint.venues.UserActivity;
 import kz.crystalspring.pointplus.HttpHelper;
+import kz.crystalspring.pointplus.ProjectUtils;
 
 import android.app.Application;
 import android.content.Context;
@@ -52,6 +54,7 @@ public class MainApplication extends Application
 	public static SharedPreferences mPrefs;
 	public static FoursquareApp FsqApp;
 	public static PendingWorkAggregator pwAggregator = new PendingWorkAggregator();
+	public static CityManager cityManager;
 	public static kz.crystalspring.funpoint.venues.UrlDrawable selectedItemPhoto;
 	public static String selectedEventId = null;
 	private static MainApplication singleTon;
@@ -73,13 +76,13 @@ public class MainApplication extends Application
 			refreshable.refreshMapItems();
 	}
 
-	static int starts=0;
-	
+	static int starts = 0;
+
 	@Override
 	public void onCreate()
 	{
 		super.onCreate();
-		Log.w("MainApplication", "Created "+Integer.valueOf(++starts));
+		Log.w("MainApplication", "Created " + Integer.valueOf(++starts));
 		singleTon = this;
 
 		mDensity = getApplicationContext().getResources().getDisplayMetrics().density;
@@ -91,47 +94,71 @@ public class MainApplication extends Application
 		context = getApplicationContext();
 		FsqApp = new FoursquareApp(this, FSQConnector.CLIENT_ID,
 				FSQConnector.CLIENT_SECRET);
+		cityManager = new CityManager(context);
 
 		updater = new LocationUpdater(this);
 		onResume();
 	}
-	
+
 	@Override
 	public void onLowMemory()
 	{
 		super.onLowMemory();
 		Log.w("MainApplication", "Low Memory");
 	}
-	
+
 	@Override
 	public void onTerminate()
 	{
 		super.onTerminate();
 		Log.w("MainApplication", "Terminated");
 	}
-	
+
 	public void onResume()
 	{
 		pwAggregator.setAbleToDo(true);
 		if (checkInternetConnection())
 		{
 			System.out.println("ЗАГРУЗКА НАЧАТА");
-			MainApplication.loadFromProxy();
-			MainApplication.loadPoints();
-			MainApplication.loadAdditionalContent();
-			new FileConnector(getApplicationContext());
+			AsyncTask task = new AsyncTask()
+			{
+
+				@Override
+				protected Object doInBackground(Object... params)
+				{
+					MainApplication.loadFromProxy();
+					return null;
+				}
+
+				@Override
+				protected void onPostExecute(Object o)
+				{
+					MainApplication.loadAdditionalContent();
+					MainApplication.loadPoints();
+					new FileConnector(getApplicationContext());
+				}
+			};
+			task.execute();
 		} else
 			loadNoInternetPage();
 	}
-	
+
 	private static void loadFromProxy()
 	{
-		//HttpHelper.loadFromProxy();
+		HttpHelper.loadFromProxy(getCurrentLocation());
 	}
 
 	private static void loadPoints()
 	{
-		MainApplication.mapItemContainer.loadNearBy(getCurrentLocation());
+		if (cityManager.getSelectedCity() == null)
+			MainApplication.mapItemContainer.loadNearBy(getCurrentLocation());
+		else if (MainApplication.getCurrentLocation() != null
+				&& ProjectUtils.distance(cityManager.getSelectedCity()
+						.getPoint(), MainApplication.getCurrentLocation()) < 10000)
+			MainApplication.mapItemContainer.loadNearBy(getCurrentLocation());
+		else
+			MainApplication.mapItemContainer.loadNearBy(null);
+		System.gc();
 	}
 
 	public static void loadNoInternetPage()
@@ -141,7 +168,12 @@ public class MainApplication extends Application
 		i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 		context.startActivity(i);
 	}
-	
+
+	public static CityManager getCityManager()
+	{
+		return cityManager;
+	}
+
 	public boolean checkInternetConnection()
 	{
 		ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -186,7 +218,10 @@ public class MainApplication extends Application
 		{
 
 		}
-		return currLocation;
+		if (currLocation != null)
+			return currLocation;
+		else
+			return new GeoPoint(43240134, 76923185);
 	}
 
 	public static void setCurrLocation(GeoPoint point)
@@ -207,6 +242,7 @@ public class MainApplication extends Application
 
 	public static void loadUserActivity()
 	{
+		FSQUser.getInstance().fillIfNot();
 		if (!FSQConnector.getTodosLoaded())
 			FSQConnector.loadTodosAsync();
 		if (!FSQConnector.getCheckinsLoaded())
@@ -217,7 +253,7 @@ public class MainApplication extends Application
 			FSQConnector.loadFriendFeed();
 		if (!FSQConnector.getExploringLoaded())
 			FSQConnector.loadExploring(getCurrentLocation());
-		
+
 	}
 
 	public static void loadJamContent()
@@ -229,6 +265,21 @@ public class MainApplication extends Application
 		return singleTon;
 	}
 
+	public static void setCity(City item)
+	{
+		if (item==null||!item.equals(cityManager.getSelectedCity()))
+		{
+			cityManager.selectCity(item);
+			MainApplication.mapItemContainer.clearContent();
+			MainApplication.loadPoints();
+		}
+	}
+
+	public static City getCity()
+	{
+		return cityManager.getSelectedCity();   // (String)
+	}
+
 }
 
 class LocationUpdater implements LocationListener
@@ -238,7 +289,6 @@ class LocationUpdater implements LocationListener
 
 	LocationUpdater(MainApplication context)
 	{
-
 		String sContext = Context.LOCATION_SERVICE;
 		locationManager = (LocationManager) context.getSystemService(sContext);
 		Criteria criteria = new Criteria();
@@ -287,5 +337,3 @@ class LocationUpdater implements LocationListener
 	}
 
 }
-
-

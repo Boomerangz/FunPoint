@@ -3,6 +3,8 @@ package kz.crystalspring.funpoint.venues;
 import java.util.ArrayList;
 import java.util.List;
 
+import kz.crystalspring.funpoint.MainApplication;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,6 +86,7 @@ public class FSQUser
 					photo = new UrlDrawable(null, jUser.getString("photo"));
 					i++;
 				case 5:
+					badges.clear();
 					JSONObject jBadges = jUser.getJSONObject("badges");
 					JSONArray jBadgesArray = jBadges.getJSONArray("items");
 					for (int j = 0; j < jBadgesArray.length(); j++)
@@ -180,6 +183,12 @@ public class FSQUser
 	public void setMaxScore(Integer maxScore)
 	{
 		this.maxScore = maxScore;
+	}
+
+	public static void reInit()
+	{
+		singletone = new FSQUser();
+		MainApplication.loadUserActivity();
 	}
 	
 	

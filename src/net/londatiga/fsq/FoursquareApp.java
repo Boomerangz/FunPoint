@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.venues.FSQConnector;
+import kz.crystalspring.funpoint.venues.FSQUser;
 import kz.crystalspring.pointplus.HttpHelper;
 
 import org.json.JSONArray;
@@ -129,7 +130,7 @@ public class FoursquareApp {
 					
 					ex.printStackTrace();
 				}
-				
+				FSQUser.reInit();
 				mHandler.sendMessage(mHandler.obtainMessage(what, 2, 0));
 			}
 		}.start();
