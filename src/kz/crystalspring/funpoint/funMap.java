@@ -188,20 +188,8 @@ public class funMap extends MapActivity implements LocationListener,
 					|| previousLocation.distanceTo(location) > 500)
 			{
 				previousLocation = location;
-
-				Runnable task = new Runnable()// ������ ��������, ������� ����
-												// ����������� ����� ���� ���
-												// ���������� ������� ��������
-												// �����.
-				{
-					@Override
-					public void run()
-					{
-						MainApplication.refreshMapItems();
-					}
-				};
 				MainApplication.mapItemContainer.loadNearBy(
-						mMyLocationOverlay.getMyLocation(), task);
+						mMyLocationOverlay.getMyLocation());
 				MainApplication.setCurrLocation(new GeoPoint((int) Math
 						.round(location.getLatitude() * 1e6), (int) Math
 						.round(location.getLongitude() * 1e6)));

@@ -239,6 +239,11 @@ public abstract class MapItem implements Serializable, ListItem
 			@Override
 			public int compare(MapItem lhs, MapItem rhs)
 			{
+				if (FSQConnector.isInEverCheckList(lhs.getId())&&!FSQConnector.isInEverCheckList(rhs.getId()))
+					return -1;
+				else
+					if (!FSQConnector.isInEverCheckList(lhs.getId())&&FSQConnector.isInEverCheckList(rhs.getId()))
+						return 1;
 				if (lhs.distanceTo(point) > rhs.distanceTo(point))
 				{
 					return 1;

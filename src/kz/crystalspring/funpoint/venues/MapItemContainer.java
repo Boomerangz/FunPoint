@@ -24,6 +24,7 @@ import com.google.android.maps.GeoPoint;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.SlidingDrawer;
 
 public class MapItemContainer {
 	private List<String> visibleFilterMap = new ArrayList<String>();
@@ -66,6 +67,11 @@ public class MapItemContainer {
 
 		@Override
 		public int compare(MapItem lhs, MapItem rhs) {
+			if (FSQConnector.isInEverCheckList(lhs.getId())&&!FSQConnector.isInEverCheckList(rhs.getId()))
+				return -1;
+			else
+				if (!FSQConnector.isInEverCheckList(lhs.getId())&&FSQConnector.isInEverCheckList(rhs.getId()))
+					return 1;
 			if (lhs.distanceTo(MainApplication.getCurrentLocation()) > rhs
 					.distanceTo(MainApplication.getCurrentLocation()))
 				return 1;
@@ -219,7 +225,7 @@ public class MapItemContainer {
 			filterArray.addAll(Arrays.asList(MapItem.TYPES_ARRAY));
 			for (String st : filterArray) {
 				if (!st.equals(MapItem.FSQ_TYPE_FOOD))
-					loadCategory(st, 0);
+  					loadCategory(st, 0);
 				else
 					loadCategory(st, FSQConnector.AREA_RADIUS);
 			}
@@ -278,7 +284,7 @@ public class MapItemContainer {
 		try {
 			localCat = place.getJSONArray("categories").getJSONObject(0)
 					.getString("id");
-			String globalCat = FSQConnector.getGlobalCategory(localCat);
+			String globalCat= FSQConnector.getGlobalCategory(localCat);
 			localCat = globalCat;
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -307,5 +313,10 @@ public class MapItemContainer {
 	public List<String> getFlter()
 	{
 		return visibleFilterMap;
+	}
+
+	public void clearContent()
+	{
+		mapItemArray=new ArrayList();
 	}
 }

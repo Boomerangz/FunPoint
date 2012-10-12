@@ -1,15 +1,26 @@
 package kz.sbeyer.atmpoint1.types;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import kz.crystalspring.android_client.C_FileHelper;
 import kz.crystalspring.funpoint.CinemaTimeTable;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.FileConnector;
+import kz.crystalspring.pointplus.HttpHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.Path.FillType;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
@@ -30,10 +41,23 @@ public class ItemCinema extends FSQItem
 		return FSQ_TYPE_CINEMA;
 	}
 
+	private static Set<String> jam_cinema_set=null;
 	public ItemCinema loadFromJSON(JSONObject jObject)
 	{
 		super.loadFromJSON(jObject);
-		return this;
+		
+		if (jam_cinema_set==null)
+		{
+			fillCinemaSet();
+		}
+		if (jam_cinema_set.contains(this.getId()))
+			return this;
+		else return null;
+	}
+
+	private void fillCinemaSet()
+	{
+		jam_cinema_set=FileConnector.getJamCinemaList();
 	}
 
 	public void loadHallTableFromJSON(JSONArray jCinemaEvents,

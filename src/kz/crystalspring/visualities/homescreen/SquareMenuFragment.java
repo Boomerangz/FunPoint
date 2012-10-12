@@ -34,22 +34,27 @@ public class SquareMenuFragment extends TitleFragment
 {
 	public static SquareMenuFragment newInstance()
 	{
-		SquareMenuFragment fragment=new SquareMenuFragment();
+		SquareMenuFragment fragment = new SquareMenuFragment();
 		return fragment;
 	}
-	
-	 @Override  
-	 public void onCreate(Bundle savedInstanceState) {  
-	     super.onCreate(savedInstanceState);  
-	 }  
-	 PlacesSquareMenu menu;
-	 @Override  
-	 public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {  
 
-	     menu=new PlacesSquareMenu(getActivity());
-	     View v=menu.getSquareMenu();
-	     return v;  
-	 }
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+
+	}
+
+	PlacesSquareMenu menu;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState)
+	{
+		menu = new PlacesSquareMenu(getActivity());
+		View v = getMenu().getSquareMenu();
+		return v;
+	}
 
 	@Override
 	public String getTitle()
@@ -59,26 +64,31 @@ public class SquareMenuFragment extends TitleFragment
 
 	public void runItemActivityWithFilter(String visibleFilter)
 	{
-		menu.runItemActivityWithFilter(visibleFilter);
-	}  
+		if (getMenu() != null)
+			getMenu().runItemActivityWithFilter(visibleFilter);
+	}
+
+	private PlacesSquareMenu getMenu()
+	{
+		return menu;
+	}
 }
-
-
 
 class PlacesSquareMenu
 {
 	View squareMenu;
 	Activity context;
 	boolean isMoving;
+
 	public PlacesSquareMenu(Activity context)
 	{
 		this.context = context;
 		squareMenu = createSquareMenu();
 	}
-	
+
 	public View getSquareMenu()
 	{
-		if (squareMenu!=null)
+		if (squareMenu != null)
 			return squareMenu;
 		else
 			squareMenu = createSquareMenu();
@@ -92,17 +102,16 @@ class PlacesSquareMenu
 		View squareMenu;
 		LayoutInflater layoutInf = context.getLayoutInflater();
 
-
-		
 		squareMenu = layoutInf.inflate(R.layout.jam_menu, null);
-		
-		TableLayout layout=(TableLayout) squareMenu.findViewById(R.id.main_layout);
-		for (int i=0; i<layout.getChildCount();i++)
+
+		TableLayout layout = (TableLayout) squareMenu
+				.findViewById(R.id.main_layout);
+		for (int i = 0; i < layout.getChildCount(); i++)
 		{
-			TableRow row=(TableRow) layout.getChildAt(i);
-			row.getLayoutParams().height=2;
+			TableRow row = (TableRow) layout.getChildAt(i);
+			row.getLayoutParams().height = 2;
 		}
-		
+
 		switchers.add((JamTextImageSwitcher) squareMenu
 				.findViewById(R.id.switcher1));
 		switchers.add((JamTextImageSwitcher) squareMenu
@@ -111,8 +120,7 @@ class PlacesSquareMenu
 				.findViewById(R.id.switcher3));
 		switchers.add((JamTextImageSwitcher) squareMenu
 				.findViewById(R.id.switcher4));
-		
-		
+
 		switchers.add((JamTextImageSwitcher) squareMenu
 				.findViewById(R.id.switcher5));
 		switchers.add((JamTextImageSwitcher) squareMenu
@@ -121,14 +129,14 @@ class PlacesSquareMenu
 				.findViewById(R.id.switcher7));
 		switchers.add((JamTextImageSwitcher) squareMenu
 				.findViewById(R.id.switcher8));
-		
-		for (JamTextImageSwitcher switcher:switchers)
+
+		for (JamTextImageSwitcher switcher : switchers)
 		{
-			Display display = context.getWindowManager().getDefaultDisplay(); 
+			Display display = context.getWindowManager().getDefaultDisplay();
 			int width = display.getWidth();
-			int size=width/2-3;
-			switcher.getLayoutParams().height=size;
-			switcher.getLayoutParams().width=size;
+			int size = width / 2 - 3;
+			switcher.getLayoutParams().height = size;
+			switcher.getLayoutParams().width = size;
 		}
 		SwitcherDescription[] swRest = {
 				new SwitcherDescription(R.drawable.rest0),
@@ -149,12 +157,12 @@ class PlacesSquareMenu
 				new SwitcherDescription(R.drawable.hotel1),
 				new SwitcherDescription(R.drawable.hotel2),
 				new SwitcherDescription(R.drawable.hotel3) };
-		
+
 		SwitcherDescription[] swСlub = {
 				new SwitcherDescription(R.drawable.club1),
 				new SwitcherDescription(R.drawable.club2),
 				new SwitcherDescription(R.drawable.club3) };
-		
+
 		SwitcherDescription[] a = { new SwitcherDescription(R.color.blue),
 				new SwitcherDescription(R.color.green),
 				new SwitcherDescription(android.R.color.white) };
@@ -175,7 +183,7 @@ class PlacesSquareMenu
 		switchers.get(3).setText("Отели");
 
 		switchers.get(2).setText("Магазины");
-		
+
 		switchers.get(4).setText("Ночные клубы");
 
 		for (int i = 0; i < switchers.size(); i++)
@@ -193,7 +201,7 @@ class PlacesSquareMenu
 			switcher.updateImage();
 		}
 		updateNext();
-		
+
 		switchers.get(0).setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -231,7 +239,7 @@ class PlacesSquareMenu
 			@Override
 			public void onClick(View arg0)
 			{
-				runItemActivityWithFilter(MapItem.FSQ_TYPE_CLUB);//openCheckIn();
+				runItemActivityWithFilter(MapItem.FSQ_TYPE_CLUB);// openCheckIn();
 			}
 		});
 		switchers.get(6).setOnClickListener(new OnClickListener()
@@ -250,11 +258,10 @@ class PlacesSquareMenu
 				openHelpdesk();
 			}
 		});
-		
-		
+
 		return squareMenu;
 	}
-	
+
 	static final int UPDATE_DELAY = 1000 + JamTextImageSwitcher.durationTime;
 	Handler mHandler = new Handler();
 
@@ -294,11 +301,10 @@ class PlacesSquareMenu
 	public void runItemActivityWithFilter(String visibleFilter)
 	{
 		MainApplication.mapItemContainer.setVisibleFilter(visibleFilter);
-		Intent intent = new Intent(context,
-				funWaitingActivity.class);
+		Intent intent = new Intent(context, funWaitingActivity.class);
 		context.startActivity(intent);
-		//MainMenu.currentListTab = MainMenu.OBJECT_LIST_TAB;
-		//continueUpdating = false;
+		// MainMenu.currentListTab = MainMenu.OBJECT_LIST_TAB;
+		// continueUpdating = false;
 	}
 
 	private void openHelpdesk()
@@ -321,8 +327,7 @@ class PlacesSquareMenu
 	{
 		openActivity(ProfilePage.class);
 	}
-	
-	
+
 	private Runnable mUpdateTimeTask = new Runnable()
 	{
 		public void run()
@@ -330,7 +335,7 @@ class PlacesSquareMenu
 			updateNext();
 		}
 	};
-	
+
 	abstract class OnSwitcherTouchListener implements OnTouchListener
 	{
 		boolean canceled = false;
@@ -381,4 +386,3 @@ class PlacesSquareMenu
 	}
 
 }
-

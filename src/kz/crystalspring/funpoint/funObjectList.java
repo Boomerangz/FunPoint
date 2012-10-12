@@ -18,9 +18,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -37,20 +39,18 @@ import android.widget.TextView;
 public class funObjectList extends FragmentActivity implements
 		RefreshableMapList, canBeRefreshing
 {
-	ListView objectListView;
-	ListView eventListView;
-	
 	List<MapItem> itemsList;
 	List<Event> eventsList;
 	ObjectAdapter objectAdapter;
 	ObjectAdapter eventAdapter;
+	ViewFragmentAdapter pagerAdapter;
 	
 	TextView categorySubHeader;
-	
+
 	ViewPager viewPager;
 	TabPageIndicator tabIndicator;
 
-	//Button mapBtn;
+	// Button mapBtn;
 	ImageView openSearchButton;
 	EditText searchEdit;
 
@@ -59,45 +59,45 @@ public class funObjectList extends FragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState);
+		super.onCreate(null);
 		setContentView(R.layout.object_list);
 
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		tabIndicator = (TabPageIndicator) findViewById(R.id.indicator);
-		//mapBtn = (Button) findViewById(R.id.mapBtn);
+		// mapBtn = (Button) findViewById(R.id.mapBtn);
 		pgBar = (ProgressBar) findViewById(R.id.progressBar1);
 
-		categorySubHeader=(TextView) findViewById(R.id.category_subheader);
-		View profileButton=findViewById(R.id.profile_button);
-		profileButton.setOnClickListener(new OnClickListener() {
+		categorySubHeader = (TextView) findViewById(R.id.category_subheader);
+		View profileButton = findViewById(R.id.profile_button);
+		profileButton.setOnClickListener(new OnClickListener()
+		{
 			@Override
-			public void onClick(View arg0) 
+			public void onClick(View arg0)
 			{
 				Intent j = new Intent(funObjectList.this, ProfilePage.class);
 				startActivity(j);
 			}
 		});
-
 		
-		List<TitleFragment> viewList = fillObjectAndEventLists(); 
-		ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
+
+		objectAdapter = new ObjectAdapter(this, this);
+		eventAdapter = new ObjectAdapter(this, this);
+
+		List<TitleFragment> viewList = fillObjectAndEventLists();
+		pagerAdapter = new ViewFragmentAdapter(
 				getSupportFragmentManager(), viewList);
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setCurrentItem(0);
 
 		tabIndicator.setViewPager(viewPager);
-
-		objectAdapter = new ObjectAdapter(this, this);
-		eventAdapter = new ObjectAdapter(this, this);
-		
-//		mapBtn.setOnClickListener(new OnClickListener()
-//		{
-//			@Override
-//			public void onClick(View v)
-//			{
-//				MainMenu.goToObjectMap();
-//			}
-//		});
+	// mapBtn.setOnClickListener(new OnClickListener()
+		// {
+		// @Override
+		// public void onClick(View v)
+		// {
+		// MainMenu.goToObjectMap();
+		// }
+		// });
 
 		searchEdit = (EditText) findViewById(R.id.search_edit);
 		searchEdit.addTextChangedListener(new TextWatcher()
@@ -107,16 +107,12 @@ public class funObjectList extends FragmentActivity implements
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count)
 			{
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after)
 			{
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
@@ -141,16 +137,21 @@ public class funObjectList extends FragmentActivity implements
 					searchEdit.setVisibility(View.GONE);
 			}
 		});
-		MainApplication.refreshable = this;
-		refreshList();
 	}
 
-	
 	@Override
 	public void onBackPressed()
 	{
-	//	super.onPause();
+		// super.onPause();
 		finish();
+	}
+
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		MainApplication.refreshable = this;
+		refreshMapItems();
 	}
 
 	private void filterByString(String filter)
@@ -164,45 +165,27 @@ public class funObjectList extends FragmentActivity implements
 		stopRefreshing();
 		itemsList = MainApplication.mapItemContainer.getFilteredItemList();
 		eventsList = MainApplication.eventContainer.getFilteredEventsList();
-		
-		categorySubHeader.setText(MainApplication.mapItemContainer.getCategoryName().toLowerCase());
-		
+
+		categorySubHeader.setText(MainApplication.mapItemContainer
+				.getCategoryName().toLowerCase());
+
 		objectAdapter.setData(itemsList);
 		objectAdapter.refreshState();
-		objectListView.setAdapter(objectAdapter);
-		
+
 		eventAdapter.setData(eventsList);
 		eventAdapter.refreshState();
-		eventListView.setAdapter(eventAdapter);
-		
+
+		pagerAdapter.notifyDataSetChanged();
 		System.gc();
 	}
 
 	private List<TitleFragment> fillObjectAndEventLists()
 	{
 		List<TitleFragment> viewList = new ArrayList();
-		
-		objectListView = new ListView(getBaseContext());
-		objectListView.setDivider(getResources().getDrawable(R.drawable.transperent_color));
-		objectListView.setDividerHeight(0);
-		objectListView.setCacheColorHint(0);
-		
-		
-		objectListView.setLayoutParams(new ScrollView.LayoutParams(
-				ScrollView.LayoutParams.FILL_PARENT,
-				ScrollView.LayoutParams.WRAP_CONTENT));
 
-		viewList.add(new ViewFragment(objectListView, "Места"));
-		
-		eventListView = new ListView(getBaseContext());
-		eventListView.setLayoutParams(new ScrollView.LayoutParams(
-				ScrollView.LayoutParams.FILL_PARENT,
-				ScrollView.LayoutParams.WRAP_CONTENT));
-		eventListView.setDivider(getResources().getDrawable(R.drawable.transperent_color));
-		eventListView.setDividerHeight(0);
-		eventListView.setCacheColorHint(0);
+		viewList.add(new ObjectListFragment(getBaseContext(), objectAdapter));
 
-		viewList.add(new ViewFragment(eventListView, "События"));
+		viewList.add(new EventListFragment(getBaseContext(), eventAdapter));
 
 		return viewList;
 	}
@@ -224,7 +207,7 @@ public class funObjectList extends FragmentActivity implements
 	{
 		pgBar.setVisibility(View.GONE);
 	}
-	
+
 }
 
 class ObjectAdapter extends BaseAdapter
@@ -269,15 +252,15 @@ class ObjectAdapter extends BaseAdapter
 
 	public View getView(int position)
 	{
-		View v=filteredData.get(position).getView(null, position);
-		v.setMinimumHeight(Math.round(70*MainApplication.mDensity));
+		View v = filteredData.get(position).getView(null, position);
+		v.setMinimumHeight(Math.round(70 * MainApplication.mDensity));
 		return v;
 	}
-	
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-			return getView(position);
+		return getView(position);
 	}
 
 	public void fillLayout(LinearLayout l)
@@ -359,8 +342,83 @@ class ObjectAdapter extends BaseAdapter
 			}
 		}
 	}
-	
+
 }
+
+class ObjectListFragment extends TitleFragment
+{
+	Context context;
+	ObjectAdapter adapter;
+
+	public ObjectListFragment(Context context, ObjectAdapter adapter)
+	{
+		this.context = context;
+		this.adapter=adapter;
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState)
+	{
+		// TODO Auto-generated method stub
+		ListView objectListView = new ListView(context);
+		objectListView.setDivider(getResources().getDrawable(
+				R.drawable.transperent_color));
+		objectListView.setDividerHeight(0);
+		objectListView.setCacheColorHint(0);
+		objectListView.setLayoutParams(new ScrollView.LayoutParams(
+				ScrollView.LayoutParams.FILL_PARENT,
+				ScrollView.LayoutParams.WRAP_CONTENT));
+		objectListView.setAdapter(adapter);
+		return objectListView;
+
+	}
+
+	@Override
+	public String getTitle()
+	{
+		return "Объекты";
+	}
+
+}
+
+class EventListFragment extends TitleFragment
+{
+	Context context;
+	ObjectAdapter adapter;
+
+	public EventListFragment(Context context, ObjectAdapter adapter)
+	{
+		this.context = context;
+		this.adapter=adapter;
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState)
+	{
+		// TODO Auto-generated method stub
+		
+		ListView eventListView = new ListView(context);
+		eventListView.setLayoutParams(new ScrollView.LayoutParams(
+				ScrollView.LayoutParams.FILL_PARENT,
+				ScrollView.LayoutParams.WRAP_CONTENT));
+		eventListView.setDivider(getResources().getDrawable(
+				R.drawable.transperent_color));
+		eventListView.setDividerHeight(0);
+		eventListView.setCacheColorHint(0);
+		eventListView.setAdapter(adapter);
+		return eventListView;
+	}
+
+	@Override
+	public String getTitle()
+	{
+		return "СССбытия";
+	}
+
+}
+
 
 interface canBeRefreshing
 {
