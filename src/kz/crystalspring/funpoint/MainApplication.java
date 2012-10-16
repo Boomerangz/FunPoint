@@ -24,6 +24,7 @@ import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItemContainer;
 import kz.crystalspring.funpoint.venues.UserActivity;
 import kz.crystalspring.pointplus.HttpHelper;
+import kz.crystalspring.pointplus.ImageCache;
 import kz.crystalspring.pointplus.ProjectUtils;
 
 import android.app.Application;
@@ -88,6 +89,7 @@ public class MainApplication extends Application
 		mDensity = getApplicationContext().getResources().getDisplayMetrics().density;
 		mapItemContainer = new MapItemContainer(getApplicationContext());
 		eventContainer = new EventContainer(getApplicationContext());
+		new ImageCache(getApplicationContext());
 
 		mPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
@@ -160,6 +162,19 @@ public class MainApplication extends Application
 			MainApplication.mapItemContainer.loadNearBy(null);
 		System.gc();
 	}
+	
+	private static void loadPointsSilent()
+	{
+		if (cityManager.getSelectedCity() == null)
+			MainApplication.mapItemContainer.loadNearBy(getCurrentLocation());
+		else if (MainApplication.getCurrentLocation() != null
+				&& ProjectUtils.distance(cityManager.getSelectedCity()
+						.getPoint(), MainApplication.getCurrentLocation()) < 10000)
+			MainApplication.mapItemContainer.loadNearBy(getCurrentLocation());
+		else;
+			//MainApplication.mapItemContainer.loadNearBy(null);
+		System.gc();
+	}
 
 	public static void loadNoInternetPage()
 	{
@@ -227,6 +242,7 @@ public class MainApplication extends Application
 	public static void setCurrLocation(GeoPoint point)
 	{
 		currLocation = point;
+		loadPoints();
 	}
 
 	public static void loadAdditionalContent()
@@ -269,8 +285,8 @@ public class MainApplication extends Application
 	{
 		if (item==null||!item.equals(cityManager.getSelectedCity()))
 		{
-			cityManager.selectCity(item);
 			MainApplication.mapItemContainer.clearContent();
+			cityManager.selectCity(item);
 			MainApplication.loadPoints();
 		}
 	}
@@ -299,7 +315,7 @@ class LocationUpdater implements LocationListener
 		Location location = locationManager.getLastKnownLocation(provider);
 		updateWithLocation(location);
 
-		locationManager.requestLocationUpdates(provider, 2000, 100, this);
+		locationManager.requestLocationUpdates(provider, 2000, 500, this);
 	}
 
 	public void disableUpdating()

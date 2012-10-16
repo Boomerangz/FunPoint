@@ -4,8 +4,10 @@ import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.events.Event;
 import kz.crystalspring.funpoint.events.SimpleEvent;
+import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.FileConnector;
+import kz.crystalspring.funpoint.venues.UrlDrawable;
 import kz.crystalspring.pointplus.HttpHelper;
 import kz.crystalspring.views.LoadingImageView;
 import android.app.Activity;
@@ -48,35 +50,7 @@ public class EventActivity extends Activity
 			eventNameText.setText(event.getName());
 			eventDescriptionText.setText(Html.fromHtml(event.getDescription()));
 
-			if (event.getImage() != null)
-			{
-				lImageView.setDrawable(event.getImage());
-			} else
-			{
-				final Event e = event;
-				Runnable preTask = new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						Drawable dr = HttpHelper.loadPictureByUrl(e
-								.getImageUrl());
-						e.setImage(dr);
-					}
-				};
-				Runnable postTask = new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						lImageView.setDrawable(e.getImage());
-					}
-				};
-
-				MainApplication.pwAggregator.addPriorityTask(preTask, postTask);
-				
-
-			}
+			FSQConnector.loadImageAsync(lImageView, event.getImageUrl(), UrlDrawable.BIG_URL, false, null);
 		} else
 		{
 			MainApplication.loadNoInternetPage();

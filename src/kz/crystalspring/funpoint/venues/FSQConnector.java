@@ -22,6 +22,7 @@ import java.util.Set;
 
 import kz.crystalspring.funpoint.FullScrLoadingImageActivity;
 import kz.crystalspring.funpoint.MainApplication;
+import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.WriteCommentActivity;
 import kz.crystalspring.pointplus.HttpHelper;
 import kz.crystalspring.pointplus.ProjectUtils;
@@ -772,7 +773,6 @@ public class FSQConnector
 			@Override
 			public void run()
 			{
-
 				if (big_or_small == UrlDrawable.BIG_URL
 						&& urlDr.getBigDrawable() == null)
 				{
@@ -789,8 +789,10 @@ public class FSQConnector
 					String sUrl = (String) ProjectUtils.ifnull(urlDr.smallUrl,
 							urlDr.bigUrl);
 					if (sUrl != null)
-						urlDr.setSmallDrawable(HttpHelper.loadPictureByUrl(
-								urlDr.smallUrl, 80));
+					{
+						Drawable dr = HttpHelper.loadPictureByUrl(sUrl);
+						urlDr.setSmallDrawable(dr);	
+					}
 				}
 			}
 		};
@@ -805,6 +807,9 @@ public class FSQConnector
 					pict = urlDr.getBigDrawable();
 				else
 					pict = urlDr.getSmallDrawable();
+//				if (pict==null)
+//						pict=context.getResources()
+//								.getDrawable(R.drawable.ic_launcher));
 				iv.setDrawable(pict);
 				OnClickListener localListner;
 				if (listner == null)

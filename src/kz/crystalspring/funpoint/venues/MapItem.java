@@ -317,8 +317,6 @@ public abstract class MapItem implements Serializable, ListItem
 		holder.range = (TextView) v.findViewById(R.id.range);
 		holder.shortDescription = (TextView) v
 				.findViewById(R.id.short_description);
-		holder.goIntoButton = (ImageView) v
-				.findViewById(R.id.go_into_btn);
 		holder.background = (View) v
 				.findViewById(R.id.list_block);
 		holder.loadingImageView = (LoadingImageView) v
@@ -362,7 +360,6 @@ public abstract class MapItem implements Serializable, ListItem
 		public TextView name;
 		public TextView shortDescription;
 		public TextView range;
-		public ImageView goIntoButton;
 		public View background;
 		public LoadingImageView loadingImageView;
 		// public View itemColorView;

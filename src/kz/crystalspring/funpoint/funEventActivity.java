@@ -7,6 +7,7 @@ import kz.crystalspring.funpoint.events.FilmEvent;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FileConnector;
 import kz.crystalspring.funpoint.venues.MapItem;
+import kz.crystalspring.funpoint.venues.UrlDrawable;
 import kz.crystalspring.pointplus.HttpHelper;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.LoadingImageView;
@@ -65,33 +66,7 @@ public class funEventActivity extends Activity
 			eventNameText.setText(event.getName());
 			eventDescriptionText.setText(Html.fromHtml(event.getDescription()));
 
-			if (event.getImage() != null)
-			{
-				lImageView.setDrawable(event.getImage());
-			} else
-			{
-				final Event e = event;
-				Runnable preTask = new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						Drawable dr = HttpHelper.loadPictureByUrl(e
-								.getImageUrl());
-						e.setImage(dr);
-					}
-				};
-				Runnable postTask = new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						lImageView.setDrawable(e.getImage());
-					}
-				};
-
-				MainApplication.pwAggregator.addPriorityTask(preTask, postTask);
-			}
+			FSQConnector.loadImageAsync(lImageView, event.getImageUrl(), UrlDrawable.BIG_URL, false, null);
 			if (FilmEvent.class.isInstance(event))
 			{
 				FilmEvent fEvent = (FilmEvent) event;

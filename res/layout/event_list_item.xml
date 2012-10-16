@@ -1,75 +1,58 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="wrap_content" >
 
     <LinearLayout
+        android:id="@+id/list_block"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin"
         android:layout_marginLeft="@dimen/margin"
-        android:layout_marginRight="@dimen/margin" >
+        android:layout_marginRight="@dimen/margin"
+        android:gravity="center_vertical"
+        android:background="@color/list_bg" >
+
+        <kz.crystalspring.views.LoadingImageView
+            android:id="@+id/loading_imageview"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_margin="5dp" />
 
         <LinearLayout
-            android:id="@+id/item_color_view"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.9"
-            android:background="#00AFEF" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="51dp"
+            android:orientation="vertical" >
 
-        <RelativeLayout
-            android:id="@+id/list_block"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.05"
-            android:background="@color/list_bg"
-            android:clickable="true" >
+            <TextView
+                android:id="@+id/event_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Шоколадница"
+                android:textColor="@color/black"
+                android:textSize="19dp"
+                android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/go_into_btn"
-                android:layout_width="51dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="11dp"
-                android:src="@drawable/next" />
+            <TextView
+                android:id="@+id/short_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="кофейня"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                android:typeface="serif" />
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="51dp"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Шоколадница"
-                    android:textColor="@color/black"
-                    android:textSize="19dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/short_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="кофейня"
-                    android:textColor="@color/black"
-                     android:textSize="15dp"
-                    android:typeface="serif" />
-                
-                <TextView
-                    android:id="@+id/date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="25 октября"
-                    android:textColor="@color/black"
-                    android:textStyle="italic"
-                     android:textSize="15dp"
-                    android:typeface="serif" />
-            </LinearLayout>
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="25 октября"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                android:textStyle="italic"
+                android:typeface="serif" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

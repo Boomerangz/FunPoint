@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
@@ -54,6 +55,7 @@ public class HttpHelper
 		try
 		{
 			Date begin_d = new Date();
+			Log.w("HTTPRequest", request.getURI().toString());
 			HttpResponse response = client.execute(request);
 			Date end_d = new Date();
 			Log.w("HTTPRequest",
@@ -67,7 +69,7 @@ public class HttpHelper
 			e.printStackTrace();
 			if (java.net.UnknownHostException.class.isInstance(e))
 			{
-				USE_PROXY=true;
+				USE_PROXY = true;
 			}
 		}
 		return null;
@@ -122,7 +124,7 @@ public class HttpHelper
 
 	public static String loadByUrl(String sUrl)
 	{
-		if (jUrls!=null&&jUrls.has(sUrl))
+		if (jUrls != null && jUrls.has(sUrl))
 		{
 			String st;
 			try
@@ -200,13 +202,26 @@ public class HttpHelper
 
 	public static synchronized Drawable loadPictureByUrl(String sUrl)
 	{
+		if (imageCache == null)
+		{
+			imageCache = ImageCache.getInstance();
+		}
 		try
 		{
-			URL url = new URL(sUrl);
-			URLConnection connection = url.openConnection();
-			connection.setUseCaches(true);
-			InputStream response = (InputStream) connection.getContent();
-			Bitmap bitmap = BitmapFactory.decodeStream(response);
+			Bitmap bitmap = null;
+			if (imageCache.hasImage(sUrl))
+			{
+				bitmap = imageCache.getImage(sUrl);
+			}
+			if (bitmap == null)
+			{
+				URL url = new URL(sUrl);
+				URLConnection connection = url.openConnection();
+				connection.setUseCaches(true);
+				InputStream response = (InputStream) connection.getContent();
+				bitmap = BitmapFactory.decodeStream(response);
+				imageCache.addToCache(sUrl, bitmap);
+			}
 			return new BitmapDrawable(bitmap);
 		} catch (Exception e)
 		{
@@ -249,23 +264,33 @@ public class HttpHelper
 		return d;
 	}
 
+	static ImageCache imageCache = null;
+
 	public static Drawable loadPictureByUrl(String sUrl, int i)
 	{
+		if (imageCache == null)
+		{
+			imageCache = ImageCache.getInstance();
+		}
 		try
 		{
-			URL url = new URL(sUrl);
-			URLConnection connection = url.openConnection();
-			connection.setUseCaches(true);
-			InputStream response = (InputStream) connection.getContent();
-			Bitmap true_bitmap = BitmapFactory.decodeStream(response);
-			int h_coof = i;
-			int w_coof = Math.round(true_bitmap.getWidth()
-					/ ((float) true_bitmap.getHeight() / i));
-			Bitmap small_bitmap = Bitmap.createScaledBitmap(true_bitmap,
-					h_coof, w_coof, false);
-			true_bitmap.recycle();
-			System.gc();
-			return new BitmapDrawable(small_bitmap);
+			if (!imageCache.hasImage(sUrl))
+			{
+				URL url = new URL(sUrl);
+				URLConnection connection = url.openConnection();
+				connection.setUseCaches(true);
+				InputStream response = (InputStream) connection.getContent();
+				Bitmap true_bitmap = BitmapFactory.decodeStream(response);
+				int h_coof = i;
+				int w_coof = Math.round(true_bitmap.getWidth()
+						/ ((float) true_bitmap.getHeight() / i));
+				Bitmap small_bitmap = Bitmap.createScaledBitmap(true_bitmap,
+						h_coof, w_coof, false);
+				true_bitmap.recycle();
+				System.gc();
+				return new BitmapDrawable(small_bitmap);
+			} else
+				return null;
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -279,7 +304,8 @@ public class HttpHelper
 	{
 		try
 		{
-			String sResponse1=HttpHelper.loadByUrl(FSQConnector.SELF_URL);
+		//	USE_PROXY=!isConnected();
+			//String sResponse1 = HttpHelper.loadByUrl(FSQConnector.SELF_URL);
 			List<BasicNameValuePair> params = FSQConnector
 					.getUrlForProxy(geoPoint);
 			params.add(new BasicNameValuePair("count", Integer.toString(params
@@ -289,13 +315,42 @@ public class HttpHelper
 			jUrls = new JSONObject(sResponse);
 			if (jUrls.has("Time"))
 			{
-				Log.w("HTTPResponse", "Proxy loaded in "+jUrls.getString("Time"));
+				Log.w("HTTPResponse",
+						"Proxy loaded in " + jUrls.getString("Time"));
 			}
 		} catch (Exception e)
 		{
 			jUrls = new JSONObject();
 			e.printStackTrace();
 		}
+	}
+	
+	
+	private static boolean isConnected()
+	{
+	    try{
+	            //Network is available but check if we can get access from the network.
+	            URL url = new URL("https://ru.foursquare.com/");
+	            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+	            urlc.setRequestProperty("Connection", "close");
+	            urlc.setConnectTimeout(500); // Timeout 2 seconds.
+	            urlc.connect();
+
+	            if (urlc.getResponseCode() == 200)  //Successful response.
+	            {
+	                return true;
+	            } 
+	            else 
+	            {
+	                 Log.d("NO INTERNET", "NO INTERNET");
+	                return false;
+	            }
+	    }
+	    catch(Exception e)
+	    {
+	        e.printStackTrace();
+	    }
+	    return false;
 	}
 
 	private static String loadZipPostByUrl(String sUrl,

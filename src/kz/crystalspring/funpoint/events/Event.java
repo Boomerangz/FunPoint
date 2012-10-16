@@ -10,10 +10,13 @@ import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.funEventActivity;
 import kz.crystalspring.funpoint.funObjectDetail;
+import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FileConnector;
 import kz.crystalspring.funpoint.venues.ListItem;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItem.ViewHolder;
+import kz.crystalspring.funpoint.venues.UrlDrawable;
+import kz.crystalspring.views.LoadingImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,20 +47,37 @@ public abstract class Event implements ListItem
 			"yyyy-MM-dd HH-mm");
 	public static final DateFormat time_formatter = new SimpleDateFormat(
 			"HH-mm");
-	
+
 	private String name;
 	private String description;
-	private String imageUrl;
+	private UrlDrawable imageUrl;
 	private Drawable image;
 	private String place_type;
 	private Integer eventType;
 	int id;
 
-
-	Event(int id, String name, String description, String imageUrl, Integer rubrId)
+	public Event(JSONObject jEvent)
 	{
 		initCategoryMapIfNot();
-		
+		try
+		{
+			id = jEvent.getInt("events_id");
+			setName(jEvent.getString("title"));
+			setDescription(jEvent.getString("description"));
+			setImageUrl(jEvent.getString("img_url"));
+			setEventType(jEvent.getInt("id_route"));
+			setPlace_type(getCatEquiv(getEventType()));
+		} catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	Event(int id, String name, String description, String imageUrl,
+			Integer rubrId)
+	{
+		initCategoryMapIfNot();
+
 		this.id = id;
 		setName(name);
 		setDescription(description);
@@ -77,11 +97,11 @@ public abstract class Event implements ListItem
 		if (JamGenresMap == null)
 		{
 			JamGenresMap = new HashMap<Integer, String>();
-			JamGenresMap.put(2,"Кино");
-			JamGenresMap.put(3,"Концерт");
-			JamGenresMap.put(4,"Вечеринка");
-			JamGenresMap.put(5,"Спектакль");
-			JamGenresMap.put(7,"Выставка");
+			JamGenresMap.put(2, "Кино");
+			JamGenresMap.put(3, "Концерт");
+			JamGenresMap.put(4, "Вечеринка");
+			JamGenresMap.put(5, "Спектакль");
+			JamGenresMap.put(7, "Выставка");
 		}
 	}
 
@@ -89,14 +109,15 @@ public abstract class Event implements ListItem
 	{
 	}
 
-	public String getImageUrl()
+	public UrlDrawable getImageUrl()
 	{
 		return imageUrl;
 	}
 
 	public void setImageUrl(String imageUrl)
 	{
-		this.imageUrl = imageUrl;
+		UrlDrawable urlDr = new UrlDrawable(null, imageUrl);
+		this.imageUrl = urlDr;
 	}
 
 	Event(Cursor cursor) throws Exception
@@ -134,23 +155,6 @@ public abstract class Event implements ListItem
 		{
 			throw new Exception(
 					"Name or Description or Image URI not found in cursor");
-		}
-	}
-
-	public Event(JSONObject jEvent)
-	{
-		initCategoryMapIfNot();
-		try
-		{
-			id = jEvent.getInt("events_id");
-			setName(jEvent.getString("title"));
-			setDescription(jEvent.getString("description"));
-			setImageUrl(jEvent.getString("img_url"));
-			setEventType(jEvent.getInt("id_route"));
-			setPlace_type(getCatEquiv(getEventType()));
-		} catch (JSONException e)
-		{
-			e.printStackTrace();
 		}
 	}
 
@@ -225,17 +229,16 @@ public abstract class Event implements ListItem
 		convertView = null;
 		ViewHolder holder;
 		LayoutInflater mInflater = LayoutInflater.from(context);
-		convertView = mInflater.inflate(R.layout.event_list_item, null);
+		if (convertView==null)
+			convertView = mInflater.inflate(R.layout.event_list_item, null);
 		holder = new ViewHolder();
-		holder.name = (TextView) convertView.findViewById(R.id.name);
+		holder.name = (TextView) convertView.findViewById(R.id.event_name);
 		holder.shortDescription = (TextView) convertView
 				.findViewById(R.id.short_description);
-		holder.goIntoButton = (ImageView) convertView
-				.findViewById(R.id.go_into_btn);
 		holder.background = (View) convertView.findViewById(R.id.list_block);
-		holder.itemColorView = (View) convertView
-				.findViewById(R.id.item_color_view);
-
+		holder.loadingImage = (LoadingImageView) convertView
+				.findViewById(R.id.loading_imageview);
+		
 		convertView.setMinimumHeight(80);
 		convertView.setTag(holder);
 		String st = getName();
@@ -253,9 +256,15 @@ public abstract class Event implements ListItem
 				context.startActivity(intent);
 			}
 		});
-
-		holder.itemColorView.setBackgroundColor(getItemColor());
-
+		if (getImageUrl().getSmallDrawable() != null)
+			holder.loadingImage.setDrawable(getImageUrl().getSmallDrawable());
+		else
+		{
+			holder.loadingImage.setDrawable(null);
+			FSQConnector.loadImageAsync(holder.loadingImage, getImageUrl(),
+					UrlDrawable.SMALL_URL, false, null);
+		}
+		System.gc();
 		return convertView;
 	}
 
@@ -269,9 +278,8 @@ public abstract class Event implements ListItem
 	{
 		public TextView name;
 		public TextView shortDescription;
-		public ImageView goIntoButton;
+		public LoadingImageView loadingImage;
 		public View background;
-		public View itemColorView;
 	}
 
 	@Override

@@ -47,7 +47,7 @@ public class EventContainer
 
 	public void loadEventList()
 	{
-		Runnable preTask = new Runnable()
+		Runnable preTaskEvent = new Runnable()
 		{
 
 			@Override
@@ -69,10 +69,17 @@ public class EventContainer
 					}
 				}
 				Log.w("cinema", "ЗАКОНЧИЛ СОЗДАНИЕ СПИСКА СОБЫТИЙ");
+			}
+		};
+		Runnable preTaskFilm = new Runnable()
+		{
 
+			@Override
+			public void run()
+			{
+				JSONArray cinemaJSONArray = FileConnector.loadJSONCinemaEventsList();
 				Log.w("cinema", "НАЧАЛ ЗАГРУЗКУ ФИЛЬМОВ");
-				JSONArray cinemaJSONArray = FileConnector
-						.loadJSONCinemaEventsList();
+				
 				Log.w("cinema", "НАЧАЛ СОЗДАНИЕ СПИСКА ФИЛЬМОВ");
 				for (int i = 0; i < cinemaJSONArray.length(); i++)
 				{
@@ -89,7 +96,17 @@ public class EventContainer
 				Log.w("cinema", "ЗАКОНЧИЛ СОЗДАНИЕ СПИСКА ФИЛЬМОВ");
 			}
 		};
-		MainApplication.pwAggregator.addTaskToQueue(preTask, null);
+		Runnable postTask=new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				MainApplication.refreshMapItems();
+			}
+		};
+		MainApplication.pwAggregator.addTaskToQueue(preTaskEvent, postTask);
+		MainApplication.pwAggregator.addTaskToQueue(preTaskFilm, postTask);
 	}
 
 	public void addEventToList(Event event)

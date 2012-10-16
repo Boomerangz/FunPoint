@@ -11,6 +11,7 @@ import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.ProfilePage;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.funCheckinNow;
+import kz.crystalspring.funpoint.funObjectList;
 import kz.crystalspring.funpoint.funWaitingActivity;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.Helpdesk;
@@ -301,7 +302,7 @@ class PlacesSquareMenu
 	public void runItemActivityWithFilter(String visibleFilter)
 	{
 		MainApplication.mapItemContainer.setVisibleFilter(visibleFilter);
-		Intent intent = new Intent(context, funWaitingActivity.class);
+		Intent intent = new Intent(context, funObjectList.class);
 		context.startActivity(intent);
 		// MainMenu.currentListTab = MainMenu.OBJECT_LIST_TAB;
 		// continueUpdating = false;

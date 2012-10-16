@@ -2,6 +2,7 @@ package kz.crystalspring.funpoint;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 import com.viewpagerindicator.TabPageIndicator;
 import com.viewpagerindicator.ViewFragment;
@@ -44,7 +45,7 @@ public class funObjectList extends FragmentActivity implements
 	ObjectAdapter objectAdapter;
 	ObjectAdapter eventAdapter;
 	ViewFragmentAdapter pagerAdapter;
-	
+
 	TextView categorySubHeader;
 
 	ViewPager viewPager;
@@ -56,19 +57,24 @@ public class funObjectList extends FragmentActivity implements
 
 	ProgressBar pgBar;
 
+	View mainView;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(null);
-		setContentView(R.layout.object_list);
 
-		viewPager = (ViewPager) findViewById(R.id.pager);
-		tabIndicator = (TabPageIndicator) findViewById(R.id.indicator);
-		// mapBtn = (Button) findViewById(R.id.mapBtn);
-		pgBar = (ProgressBar) findViewById(R.id.progressBar1);
+		LayoutInflater inflater= getLayoutInflater();
+		
+		mainView = inflater.inflate(R.layout.object_list, null);
+		
+		viewPager = (ViewPager) mainView.findViewById(R.id.pager);
+		tabIndicator = (TabPageIndicator) mainView.findViewById(R.id.indicator);
+		// mapBtn = (Button) mainView.findViewById(R.id.mapBtn);
+		pgBar = (ProgressBar) mainView.findViewById(R.id.progressBar1);
 
-		categorySubHeader = (TextView) findViewById(R.id.category_subheader);
-		View profileButton = findViewById(R.id.profile_button);
+		categorySubHeader = (TextView) mainView.findViewById(R.id.category_subheader);
+		View profileButton = mainView.findViewById(R.id.profile_button);
 		profileButton.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -99,10 +105,9 @@ public class funObjectList extends FragmentActivity implements
 		// }
 		// });
 
-		searchEdit = (EditText) findViewById(R.id.search_edit);
+		searchEdit = (EditText) mainView.findViewById(R.id.search_edit);
 		searchEdit.addTextChangedListener(new TextWatcher()
 		{
-
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count)
@@ -122,11 +127,10 @@ public class funObjectList extends FragmentActivity implements
 			}
 		});
 
-		openSearchButton = (ImageView) findViewById(R.id.search_btn);
+		openSearchButton = (ImageView) mainView.findViewById(R.id.search_btn);
 		openSearchButton.setOnClickListener(new OnClickListener()
 		{
 			boolean searchVisible = false;
-
 			@Override
 			public void onClick(View v)
 			{
@@ -150,6 +154,7 @@ public class funObjectList extends FragmentActivity implements
 	public void onResume()
 	{
 		super.onResume();
+		setContentView(R.layout.waiting_layout);
 		MainApplication.refreshable = this;
 		refreshMapItems();
 	}
@@ -176,17 +181,18 @@ public class funObjectList extends FragmentActivity implements
 		eventAdapter.refreshState();
 
 		pagerAdapter.notifyDataSetChanged();
+		if (objectAdapter.getCount()>0)
+		{
+			setContentView(mainView);
+		}
 		System.gc();
 	}
 
 	private List<TitleFragment> fillObjectAndEventLists()
 	{
 		List<TitleFragment> viewList = new ArrayList();
-
 		viewList.add(new ObjectListFragment(getBaseContext(), objectAdapter));
-
 		viewList.add(new EventListFragment(getBaseContext(), eventAdapter));
-
 		return viewList;
 	}
 
@@ -353,7 +359,7 @@ class ObjectListFragment extends TitleFragment
 	public ObjectListFragment(Context context, ObjectAdapter adapter)
 	{
 		this.context = context;
-		this.adapter=adapter;
+		this.adapter = adapter;
 	}
 
 	@Override
@@ -390,7 +396,7 @@ class EventListFragment extends TitleFragment
 	public EventListFragment(Context context, ObjectAdapter adapter)
 	{
 		this.context = context;
-		this.adapter=adapter;
+		this.adapter = adapter;
 	}
 
 	@Override
@@ -398,7 +404,6 @@ class EventListFragment extends TitleFragment
 			Bundle savedInstanceState)
 	{
 		// TODO Auto-generated method stub
-		
 		ListView eventListView = new ListView(context);
 		eventListView.setLayoutParams(new ScrollView.LayoutParams(
 				ScrollView.LayoutParams.FILL_PARENT,
@@ -414,11 +419,9 @@ class EventListFragment extends TitleFragment
 	@Override
 	public String getTitle()
 	{
-		return "СССбытия";
+		return "События";
 	}
-
 }
-
 
 interface canBeRefreshing
 {

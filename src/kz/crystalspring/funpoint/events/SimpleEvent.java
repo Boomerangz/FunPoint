@@ -69,42 +69,10 @@ public class SimpleEvent extends Event
 	@Override
 	public View getView(View convertView, int position)
 	{
-		convertView = null;
-		ViewHolder holder;
-		LayoutInflater mInflater = LayoutInflater.from(context);
-		convertView = mInflater.inflate(R.layout.event_list_item, null);
-		holder = new ViewHolder();
-		holder.name = (TextView) convertView.findViewById(R.id.name);
-		holder.shortDescription = (TextView) convertView
-				.findViewById(R.id.short_description);
-		holder.goIntoButton = (ImageView) convertView
-				.findViewById(R.id.go_into_btn);
-		holder.background = (View) convertView.findViewById(R.id.list_block);
-		holder.itemColorView = (View) convertView
-				.findViewById(R.id.item_color_view);
-		holder.date= (TextView) convertView.findViewById(R.id.date);
-
-		convertView.setMinimumHeight(80);
-		convertView.setTag(holder);
-		String st = Integer.toString(position) + ". " + getName();
-
-		holder.name.setText(st);
-		holder.shortDescription.setText(getShortCharacteristic());
-		holder.background.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				MainApplication.selectedEventId = Integer.toString(id);
-				Intent intent = new Intent(context, EventActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				context.startActivity(intent);
-			}
-		});
-		holder.date.setText(getDateText());
-		holder.itemColorView.setBackgroundColor(getItemColor());
-
-		return convertView;
+		View v=super.getView(convertView, position);
+		TextView date=(TextView) v.findViewById(R.id.date);
+		date.setText(getDateText());
+		return v;
 	}
 	
 	private String getDateText()
@@ -117,9 +85,7 @@ public class SimpleEvent extends Event
 		public TextView name;
 		public TextView shortDescription;
 		public TextView date;
-		public ImageView goIntoButton;
 		public View background;
-		public View itemColorView;
 	}
 	
 	
