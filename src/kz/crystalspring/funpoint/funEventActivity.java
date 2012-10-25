@@ -48,8 +48,7 @@ public class funEventActivity extends Activity
 		setContentView(R.layout.fun_event_layout);
 		if (event == null)
 		{
-			event = MainApplication.eventContainer
-					.getEventById(MainApplication.selectedEventId);
+			event = MainApplication.eventContainer.getEventById(MainApplication.selectedEventId);
 		}
 		eventNameText = (TextView) findViewById(R.id.event_name);
 		eventDescriptionText = (TextView) findViewById(R.id.event_desc);
@@ -66,13 +65,13 @@ public class funEventActivity extends Activity
 			eventNameText.setText(event.getName());
 			eventDescriptionText.setText(Html.fromHtml(event.getDescription()));
 
+			lImageView.setTag(Integer.toString(event.getId()));
 			FSQConnector.loadImageAsync(lImageView, event.getImageUrl(), UrlDrawable.BIG_URL, false, null);
 			if (FilmEvent.class.isInstance(event))
 			{
 				FilmEvent fEvent = (FilmEvent) event;
 				fEvent.loadPlaceTable();
-				EventTimeTableAdapter adapter = new EventTimeTableAdapter(
-						fEvent.getTimeTable(), this);
+				EventTimeTableAdapter adapter = new EventTimeTableAdapter(fEvent.getTimeTable(), this);
 				adapter.fillLayout(listView);
 			}
 		} else
@@ -127,15 +126,13 @@ class EventTimeTableAdapter extends BaseAdapter
 		convertView.setTag(holder);
 		String st = Integer.toString(position) + ". " + toString();
 
-		holder.text.setText(table.getTimeLines().get(position).getTitle() + " "
-				+ table.getTimeLines().get(position).getStrDate());
+		holder.text.setText(table.getTimeLines().get(position).getTitle() + " " + table.getTimeLines().get(position).getStrDate());
 		holder.text.setOnClickListener(new OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				MapItem item = MainApplication.mapItemContainer
-						.getItemById(table.getTimeLines().get(position).filmId);
+				MapItem item = MainApplication.mapItemContainer.getItemById(table.getTimeLines().get(position).filmId);
 				MainApplication.mapItemContainer.setSelectedItem(item);
 				Intent i = new Intent(context, funObjectDetail.class);
 				i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -161,12 +158,10 @@ class EventTimeTableAdapter extends BaseAdapter
 					@Override
 					public void onClick(View v)
 					{
-						String url = "http://m.ticketon.kz/hallplan/"
-								+ time.getHash();
+						String url = "http://m.ticketon.kz/hallplan/" + time.getHash();
 						Dialog dialog = new Dialog(context);
 						dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-						LayoutInflater inflater = (LayoutInflater) context
-								.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+						LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 						View vi = inflater.inflate(R.layout.webview, null);
 						dialog.setContentView(vi);
 						dialog.setCancelable(true);
@@ -181,16 +176,13 @@ class EventTimeTableAdapter extends BaseAdapter
 				timeView = btn;
 			}
 
-			timeView.setLayoutParams(new TableRow.LayoutParams(
-					TableRow.LayoutParams.WRAP_CONTENT,
-					TableRow.LayoutParams.FILL_PARENT));
+			timeView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.FILL_PARENT));
 			timeView.setText(time.getStringTime() + " ");
 
 			if (i % 4 == 0)
 			{
 				row = new TableRow(context);
-				row.setLayoutParams(new TableLayout.LayoutParams(
-						TableLayout.LayoutParams.WRAP_CONTENT,
+				row.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT,
 						TableLayout.LayoutParams.WRAP_CONTENT));
 				holder.tableLayout.addView(row);
 			}

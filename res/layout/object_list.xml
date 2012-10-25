@@ -57,9 +57,15 @@
             <EditText
                 android:id="@+id/search_edit"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/black_line"
-                android:layout_margin="@dimen/margin"
+                android:layout_height="@dimen/button_radius"
+                android:layout_toLeftOf="@id/search_btn"
+                android:layout_above="@id/black_line"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_marginLeft="@dimen/margin"
+                android:hint="Что вы ищете.."
+                android:textSize="7pt"
+                android:padding="6dp"
                 android:visibility="gone" />
 
 

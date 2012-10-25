@@ -55,7 +55,9 @@ public class EventContainer
 			{
 				Log.w("cinema", "НАЧАЛ ЗАГРУЗКУ СОБЫТИЙ");
 				JSONArray eventsJSONArray = FileConnector.loadJSONEventsList();
+
 				Log.w("cinema", "НАЧАЛ СОЗДАНИЕ СПИСКА СОБЫТИЙ");
+				if (eventsJSONArray!=null)
 				for (int i = 0; i < eventsJSONArray.length(); i++)
 				{
 					try
@@ -77,10 +79,11 @@ public class EventContainer
 			@Override
 			public void run()
 			{
-				JSONArray cinemaJSONArray = FileConnector.loadJSONCinemaEventsList();
+
 				Log.w("cinema", "НАЧАЛ ЗАГРУЗКУ ФИЛЬМОВ");
-				
+				JSONArray cinemaJSONArray = FileConnector.loadJSONCinemaEventsList();	
 				Log.w("cinema", "НАЧАЛ СОЗДАНИЕ СПИСКА ФИЛЬМОВ");
+				if (cinemaJSONArray!=null)
 				for (int i = 0; i < cinemaJSONArray.length(); i++)
 				{
 					try

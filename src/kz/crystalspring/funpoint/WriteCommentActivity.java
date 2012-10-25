@@ -57,6 +57,7 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fun_comment_write);
 		TextView header = (TextView) findViewById(R.id.header);
+		TextView placeName = (TextView) findViewById(R.id.place_name);
 		Button okButton = (Button) findViewById(R.id.ok_button);
 		Button cancelButton = (Button) findViewById(R.id.cancel_button);
 		clearButton = (Button) findViewById(R.id.clear_button);
@@ -68,12 +69,13 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 		switch (getIntent().getExtras().getInt("requestCode"))
 		{
 		case COMMENT_MODE:
-			header.setText("Оставить комментарий");
+			header.setText("Комментарий");
 			break;
 		case CHECKIN_MODE:
-			header.setText("Комментарий к чекину");
+			header.setText("Отметиться");
 			break;
 		}
+		placeName.setText(MainApplication.mapItemContainer.getSelectedMapItem().toString());
 
 		okButton.setOnClickListener(new OnClickListener()
 		{
@@ -122,6 +124,7 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 	public void onResume()
 	{
 		super.onResume();
+		
 		MainApplication.refreshable=this;
 	}
 

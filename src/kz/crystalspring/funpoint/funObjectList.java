@@ -64,16 +64,17 @@ public class funObjectList extends FragmentActivity implements
 	{
 		super.onCreate(null);
 
-		LayoutInflater inflater= getLayoutInflater();
-		
+		LayoutInflater inflater = getLayoutInflater();
+
 		mainView = inflater.inflate(R.layout.object_list, null);
-		
+
 		viewPager = (ViewPager) mainView.findViewById(R.id.pager);
 		tabIndicator = (TabPageIndicator) mainView.findViewById(R.id.indicator);
 		// mapBtn = (Button) mainView.findViewById(R.id.mapBtn);
 		pgBar = (ProgressBar) mainView.findViewById(R.id.progressBar1);
 
-		categorySubHeader = (TextView) mainView.findViewById(R.id.category_subheader);
+		categorySubHeader = (TextView) mainView
+				.findViewById(R.id.category_subheader);
 		View profileButton = mainView.findViewById(R.id.profile_button);
 		profileButton.setOnClickListener(new OnClickListener()
 		{
@@ -84,19 +85,18 @@ public class funObjectList extends FragmentActivity implements
 				startActivity(j);
 			}
 		});
-		
 
 		objectAdapter = new ObjectAdapter(this, this);
 		eventAdapter = new ObjectAdapter(this, this);
 
 		List<TitleFragment> viewList = fillObjectAndEventLists();
-		pagerAdapter = new ViewFragmentAdapter(
-				getSupportFragmentManager(), viewList);
+		pagerAdapter = new ViewFragmentAdapter(getSupportFragmentManager(),
+				viewList);
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setCurrentItem(0);
 
 		tabIndicator.setViewPager(viewPager);
-	// mapBtn.setOnClickListener(new OnClickListener()
+		// mapBtn.setOnClickListener(new OnClickListener()
 		// {
 		// @Override
 		// public void onClick(View v)
@@ -131,6 +131,7 @@ public class funObjectList extends FragmentActivity implements
 		openSearchButton.setOnClickListener(new OnClickListener()
 		{
 			boolean searchVisible = false;
+
 			@Override
 			public void onClick(View v)
 			{
@@ -147,6 +148,7 @@ public class funObjectList extends FragmentActivity implements
 	public void onBackPressed()
 	{
 		// super.onPause();
+		MainApplication.mapItemContainer.setVisibleFilter(null);
 		finish();
 	}
 
@@ -181,7 +183,7 @@ public class funObjectList extends FragmentActivity implements
 		eventAdapter.refreshState();
 
 		pagerAdapter.notifyDataSetChanged();
-		if (objectAdapter.getCount()>0)
+		if (objectAdapter.getCount() > 0)
 		{
 			setContentView(mainView);
 		}
@@ -317,6 +319,12 @@ class ObjectAdapter extends BaseAdapter
 			System.out.println("Фильтрация в списке объектов окончена");
 		} else
 			filteredData.addAll(data);
+		if (filteredData.size() > 0)
+		{
+			int size = filteredData.size();
+			size = (size < 30) ? size - 1 : 30 - 1;
+			filteredData = filteredData.subList(0, size);
+		}
 	}
 
 	SearchRunnable myRunnable = new SearchRunnable();
@@ -376,6 +384,7 @@ class ObjectListFragment extends TitleFragment
 				ScrollView.LayoutParams.FILL_PARENT,
 				ScrollView.LayoutParams.WRAP_CONTENT));
 		objectListView.setAdapter(adapter);
+		// objectListView.setFastScrollEnabled(true);
 		return objectListView;
 
 	}

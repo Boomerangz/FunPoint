@@ -66,38 +66,12 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="18dp"
-        android:src="@drawable/eye_map" />
-
-    <ImageView
-        android:id="@+id/ImageView03"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:paddingBottom="5dp"
-        android:paddingLeft="5dp"
-        android:src="@drawable/location_map" />
-
-    <ImageView
-        android:id="@+id/ListBtn"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_above="@+id/ImageView03"
-        android:layout_alignParentLeft="true"
-        android:paddingBottom="5dp"
-        android:paddingLeft="5dp"
-        android:src="@drawable/list_map" />
-
-    <ImageView
         android:id="@+id/ImageView01"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_above="@+id/ListBtn"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:src="@drawable/location_map" />

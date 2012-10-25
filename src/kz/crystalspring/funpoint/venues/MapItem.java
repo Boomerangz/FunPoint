@@ -24,6 +24,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.sax.StartElementListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -239,11 +240,12 @@ public abstract class MapItem implements Serializable, ListItem
 			@Override
 			public int compare(MapItem lhs, MapItem rhs)
 			{
-				if (FSQConnector.isInEverCheckList(lhs.getId())&&!FSQConnector.isInEverCheckList(rhs.getId()))
+				if (FSQConnector.isInEverCheckList(lhs.getId())
+						&& !FSQConnector.isInEverCheckList(rhs.getId()))
 					return -1;
-				else
-					if (!FSQConnector.isInEverCheckList(lhs.getId())&&FSQConnector.isInEverCheckList(rhs.getId()))
-						return 1;
+				else if (!FSQConnector.isInEverCheckList(lhs.getId())
+						&& FSQConnector.isInEverCheckList(rhs.getId()))
+					return 1;
 				if (lhs.distanceTo(point) > rhs.distanceTo(point))
 				{
 					return 1;
@@ -271,15 +273,58 @@ public abstract class MapItem implements Serializable, ListItem
 	}
 
 	View v = null;
+
 	@Override
 	public View getView(View convertView, int position)
 	{
-		convertView=null;
-		if (v == null)
+		Log.w("MapItem","getView begin");
+		ViewHolder holder;
+		if (convertView == null)
 		{
-			v = getNewView();
+			LayoutInflater mInflater = LayoutInflater.from(context);
+			convertView = mInflater.inflate(R.layout.object_list_item, null);
 		}
-			return v;
+		convertView.setTag(getObjTypeId());
+		holder = new ViewHolder();
+		holder.name = (TextView) convertView.findViewById(R.id.name);
+		holder.range = (TextView) convertView.findViewById(R.id.range);
+		holder.shortDescription = (TextView) convertView
+				.findViewById(R.id.short_description);
+		holder.background = (View) convertView.findViewById(R.id.list_block);
+		holder.loadingImageView = (LoadingImageView) convertView
+				.findViewById(R.id.loading_imageview);
+		// holder.itemColorView = (View) convertView
+		// .findViewById(R.id.item_color_view);
+
+		convertView.setMinimumHeight(Math.round(90 * MainApplication.mDensity));
+		convertView.setTag(holder);
+		String st = toString();
+
+		holder.name.setText(st);
+		if (MainApplication.getCurrentLocation() != null)
+			st = Integer.toString(Math.round(distanceTo(MainApplication
+					.getCurrentLocation()))) + " м";
+		else
+			st = "";
+		holder.shortDescription.setText(getShortCharacteristic());
+		// holder.background.getBackground().setAlpha(MainApplication.ALPHA);
+		holder.range.setText(st);
+
+		holder.background.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				MainApplication.mapItemContainer.setSelectedItem(MapItem.this);
+				Intent intent = new Intent(context, funObjectDetail.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(intent);
+			}
+		});
+		Log.w("MapItem","getView image begin");
+		loadImageToView(holder.loadingImageView);
+		Log.w("MapItem","getView end");
+		return convertView;
 	}
 
 	protected void loadImageToView(final LoadingImageView loadingImageView)
@@ -305,7 +350,7 @@ public abstract class MapItem implements Serializable, ListItem
 		};
 		task.execute();
 	}
-	
+
 	public View getNewView()
 	{
 		View v;
@@ -317,15 +362,13 @@ public abstract class MapItem implements Serializable, ListItem
 		holder.range = (TextView) v.findViewById(R.id.range);
 		holder.shortDescription = (TextView) v
 				.findViewById(R.id.short_description);
-		holder.background = (View) v
-				.findViewById(R.id.list_block);
+		holder.background = (View) v.findViewById(R.id.list_block);
 		holder.loadingImageView = (LoadingImageView) v
 				.findViewById(R.id.loading_imageview);
 		// holder.itemColorView = (View) convertView
 		// .findViewById(R.id.item_color_view);
 
-		v.setMinimumHeight(Math
-				.round(90 * MainApplication.mDensity));
+		v.setMinimumHeight(Math.round(90 * MainApplication.mDensity));
 		v.setTag(holder);
 		String st = toString();
 
@@ -344,8 +387,7 @@ public abstract class MapItem implements Serializable, ListItem
 			@Override
 			public void onClick(View v)
 			{
-				MainApplication.mapItemContainer
-						.setSelectedItem(MapItem.this);
+				MainApplication.mapItemContainer.setSelectedItem(MapItem.this);
 				Intent intent = new Intent(context, funObjectDetail.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivity(intent);

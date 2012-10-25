@@ -1,9 +1,8 @@
-package kz.crystalspring.visualities;
+package kz.crystalspring.visualities.gallery;
 
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
-import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
 import kz.crystalspring.views.LoadingImageView;
 import android.app.Activity;
@@ -16,7 +15,7 @@ import android.widget.LinearLayout;
 public class ImageTableActivity extends Activity {
 	LinearLayout mainLayout;
 	private static final int PHOTOS_IN_ROW = 3;
-	private String filledItem;
+	private Integer filledItem;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,15 +27,14 @@ public class ImageTableActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		FSQItem item = (FSQItem) MainApplication.mapItemContainer
-				.getSelectedMapItem();
-		if (filledItem == null || !filledItem.equals(item.getId()))
+		ImageContainer item = MainApplication.getSelectedImageContainer();
+		if (filledItem == null || !filledItem.equals(item.hashCode()))
 		{
 			fillLayout(item);
 		}
 	}
 
-	private void fillLayout(FSQItem item) 
+	private void fillLayout(ImageContainer item) 
 	{
 		mainLayout.removeAllViews();
 		LinearLayout horizLayout = null;
@@ -46,7 +44,7 @@ public class ImageTableActivity extends Activity {
 			LoadingImageView iv = new LoadingImageView(this);
 			fillLoadingImageView(iv, item.getUrlAndPhoto(i),i);
 			horizLayout.addView(iv);
-			filledItem = item.getId();
+			filledItem = item.hashCode();
 		}
 	}
 
@@ -57,6 +55,7 @@ public class ImageTableActivity extends Activity {
 				LinearLayout.LayoutParams.FILL_PARENT, w);
 		lp.weight = 1;
 		iv.setLayoutParams(lp);
+		iv.setBackgroundColor(getResources().getColor(R.color.white));
 		OnClickListener listner=new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {

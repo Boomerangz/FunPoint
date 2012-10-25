@@ -49,15 +49,6 @@ public class funMap extends MapActivity implements LocationListener,
 			}
 		});
 
-		ImageView objectListButton = (ImageView) findViewById(R.id.ListBtn);
-		objectListButton.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				//MainMenu.goToObjectList();
-			}
-		});
 		mMyLocationOverlay = new CustomMyLocationOverlay(this, mapView);
 		MainApplication.gMyLocationOverlay = mMyLocationOverlay;
 		mapOverlays = mapView.getOverlays();
@@ -104,8 +95,11 @@ public class funMap extends MapActivity implements LocationListener,
 	public void refreshMap()
 	{
 			clearMap();
+			
 			addItemListOnMap(MainApplication.mapItemContainer
 					.getFilteredItemList());
+			addItemOnMap(MainApplication.mapItemContainer.getSelectedMapItem());
+			myIO.populateNow();
 			mapView.invalidate();
 	}
 	

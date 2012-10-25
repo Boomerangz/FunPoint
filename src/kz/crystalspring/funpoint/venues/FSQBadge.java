@@ -1,23 +1,22 @@
 package kz.crystalspring.funpoint.venues;
 
+import java.io.Serializable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.graphics.drawable.Drawable;
 
-public class FSQBadge
+public class FSQBadge extends UrlDrawable
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8319211027451219320L;
 	private String name;
 	private String description;
-	private String pictureBigURL;
-	private String pictureMiddleURL;
-	
-	private Drawable pictureMiddle;
-	private Drawable pictureBig;
-	
-	private Drawable picture;
 	
 	public String getName()
 	{
@@ -35,27 +34,6 @@ public class FSQBadge
 	{
 		this.description = description;
 	}
-	public String getPictureBigURL()
-	{
-		return pictureBigURL;
-	}
-	public void setPictureBigURL(String pictureBigURL)
-	{
-		this.pictureBigURL = pictureBigURL;
-	}
-	public String getPictureMiddleURL()
-	{
-		return pictureMiddleURL;
-	}
-	public void setPictureMiddleURL(String pictureMiddleURL)
-	{
-		this.pictureMiddleURL = pictureMiddleURL;
-	}
-	public String getPictureSmallURL()
-	{
-		return pictureMiddleURL;
-	}
-	
 	
 	public static FSQBadge loadFromJSON(JSONObject jObject)
 	{
@@ -69,8 +47,8 @@ public class FSQBadge
 			JSONArray sizes=jObject.getJSONObject("image").getJSONArray("sizes");
 			String smallPictureSize=sizes.getString(Math.round((sizes.length()/2)));
 			String bigPictureSize=sizes.getString(sizes.length()-1);
-			badge.setPictureBigURL(begUrl+bigPictureSize+endUrl);
-			badge.setPictureMiddleURL(begUrl+smallPictureSize+endUrl);
+			badge.bigUrl=begUrl+bigPictureSize+endUrl;
+			badge.smallUrl=begUrl+smallPictureSize+endUrl;
 		} catch (JSONException e)
 		{
 			badge=null;

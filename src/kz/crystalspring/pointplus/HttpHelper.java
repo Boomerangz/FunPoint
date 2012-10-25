@@ -48,29 +48,46 @@ public class HttpHelper
 	private static final String LOCAL_PROXY = "http://192.168.1.50/jam/4sq_gzip_curl.php";
 	private static final String CURRENT_PROXY = GLOBAL_PROXY;
 	private static boolean USE_PROXY = false;
+	private static final int NEED_TO_COMPLETE = 3;
+
+	private static final boolean NEED_TO_TEST = true;
+	private static final float CHANCE = (float) 0;
+
 	static HttpClient client = new DefaultHttpClient();
 
 	private static HttpResponse loadResponse(HttpUriRequest request)
 	{
-		try
+		int complete = 0;
+		while (complete < NEED_TO_COMPLETE)
 		{
-			Date begin_d = new Date();
-			Log.w("HTTPRequest", request.getURI().toString());
-			HttpResponse response = client.execute(request);
-			Date end_d = new Date();
-			Log.w("HTTPRequest",
-					Long.toString(end_d.getTime() - begin_d.getTime()));
-			return response;
-		} catch (ClientProtocolException e)
-		{
-			e.printStackTrace();
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-			if (java.net.UnknownHostException.class.isInstance(e))
+			try
 			{
-				USE_PROXY = true;
+				Date begin_d = new Date();
+				Log.w("HTTPRequest", request.getURI().toString());
+				if (NEED_TO_TEST && Math.random() < CHANCE)
+				{
+					Log.w("HTTPRequest","Test Exception on "+request.getURI().toString());
+					throw new IOException();
+				}
+				HttpResponse response = client.execute(request);
+				Date end_d = new Date();
+				Log.w("HTTPRequest",
+						Long.toString(end_d.getTime() - begin_d.getTime()));
+				complete = NEED_TO_COMPLETE;
+				return response;
+			} catch (ClientProtocolException e)
+			{
+				e.printStackTrace();
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+				if (java.net.UnknownHostException.class.isInstance(e))
+				{
+					USE_PROXY = true;
+					complete = NEED_TO_COMPLETE;
+				}
 			}
+			complete++;
 		}
 		return null;
 	}
@@ -124,12 +141,20 @@ public class HttpHelper
 
 	public static String loadByUrl(String sUrl)
 	{
+		while (jUrls == null)
+		{
+			for (int i = 0; i < 65000; i++)
+				;
+		}
+
 		if (jUrls != null && jUrls.has(sUrl))
 		{
+			// jUrls.names()
 			String st;
 			try
 			{
 				st = jUrls.getString(sUrl);
+				Log.w("HTTPResponse", "Loaded from proxy");
 				return st;
 			} catch (JSONException e)
 			{
@@ -200,7 +225,7 @@ public class HttpHelper
 		}
 	}
 
-	public static synchronized Drawable loadPictureByUrl(String sUrl)
+	public static synchronized Bitmap loadPictureByUrl(String sUrl)
 	{
 		if (imageCache == null)
 		{
@@ -221,8 +246,9 @@ public class HttpHelper
 				InputStream response = (InputStream) connection.getContent();
 				bitmap = BitmapFactory.decodeStream(response);
 				imageCache.addToCache(sUrl, bitmap);
+				System.gc();
 			}
-			return new BitmapDrawable(bitmap);
+			return bitmap;
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -286,7 +312,7 @@ public class HttpHelper
 						/ ((float) true_bitmap.getHeight() / i));
 				Bitmap small_bitmap = Bitmap.createScaledBitmap(true_bitmap,
 						h_coof, w_coof, false);
-				true_bitmap.recycle();
+				// true_bitmap.recycle();
 				System.gc();
 				return new BitmapDrawable(small_bitmap);
 			} else
@@ -304,8 +330,6 @@ public class HttpHelper
 	{
 		try
 		{
-		//	USE_PROXY=!isConnected();
-			//String sResponse1 = HttpHelper.loadByUrl(FSQConnector.SELF_URL);
 			List<BasicNameValuePair> params = FSQConnector
 					.getUrlForProxy(geoPoint);
 			params.add(new BasicNameValuePair("count", Integer.toString(params
@@ -324,33 +348,32 @@ public class HttpHelper
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	private static boolean isConnected()
 	{
-	    try{
-	            //Network is available but check if we can get access from the network.
-	            URL url = new URL("https://ru.foursquare.com/");
-	            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-	            urlc.setRequestProperty("Connection", "close");
-	            urlc.setConnectTimeout(500); // Timeout 2 seconds.
-	            urlc.connect();
+		try
+		{
+			// Network is available but check if we can get access from the
+			// network.
+			URL url = new URL("https://ru.foursquare.com/");
+			HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+			urlc.setRequestProperty("Connection", "close");
+			urlc.setConnectTimeout(500); // Timeout 2 seconds.
+			urlc.connect();
 
-	            if (urlc.getResponseCode() == 200)  //Successful response.
-	            {
-	                return true;
-	            } 
-	            else 
-	            {
-	                 Log.d("NO INTERNET", "NO INTERNET");
-	                return false;
-	            }
-	    }
-	    catch(Exception e)
-	    {
-	        e.printStackTrace();
-	    }
-	    return false;
+			if (urlc.getResponseCode() == 200) // Successful response.
+			{
+				return true;
+			} else
+			{
+				Log.d("NO INTERNET", "NO INTERNET");
+				return false;
+			}
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	private static String loadZipPostByUrl(String sUrl,

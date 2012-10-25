@@ -6,19 +6,13 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class LoadingImageView extends LinearLayout
 {
 	private ImageView image;
-	private ProgressBar progressBar;
+	private View progressBar;
 
 	public LoadingImageView(Context context, AttributeSet attrs)
 	{
@@ -39,7 +33,7 @@ public class LoadingImageView extends LinearLayout
 				infService);
 		li.inflate(R.layout.loading_image, this, true);
 		image = (ImageView) findViewById(R.id.image);
-		progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+		progressBar = (View) findViewById(R.id.progress_bar);
 	}
 
 	public void setDrawable(Drawable drawable)
@@ -60,6 +54,11 @@ public class LoadingImageView extends LinearLayout
 	public void onClick()
 	{
 
+	}
+
+	public boolean hasDrawable()
+	{
+		return (image.getVisibility()==View.VISIBLE);
 	}
 
 }

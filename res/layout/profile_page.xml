@@ -3,22 +3,21 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    <TextView
+                android:id="@+id/category_subheader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin"
+                android:text="профиль"
+                android:textColor="#e80044"
+                android:textSize="18pt"
+                android:typeface="sans" />
+
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button" />
-
-    <Spinner
-        android:id="@+id/spinner_city"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="Log In" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -27,47 +26,82 @@
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="fill_parent"
+        android:background="@color/menu_light_gray" >
 
         <LinearLayout
             android:id="@+id/main_info_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone" >
-
-            <kz.crystalspring.views.LoadingImageView
-                android:id="@+id/loading_imageview"
-                android:layout_width="50dp"
-                android:layout_height="50dp" />
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/user_name"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="user_name" />
+                android:layout_marginBottom="3dp"
+                android:background="@color/light_grey"
+                android:paddingLeft="@dimen/margin"
+                android:text="user_name"
+                android:textSize="10pt"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin" >
+
+                <kz.crystalspring.views.LoadingImageView
+                    android:id="@+id/loading_imageview"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/recent_score"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="user_email" />
+
+                    <TextView
+                        android:id="@+id/user_email"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="user_email" />
+                    <TextView
+                        android:id="@+id/user_checkins"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="user_email" />
+                     <TextView
+                        android:id="@+id/user_friends"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="user_email" />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/max_score"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="user_email" />
-
-            <TextView
-                android:id="@+id/recent_score"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="user_email" />
-
-            <TextView
-                android:id="@+id/user_email"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="user_email" />
+                android:text="user_email"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/badge_gallery"
                 android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin" />
+
+            <Spinner
+                android:id="@+id/spinner_city"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>

@@ -21,6 +21,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -52,8 +53,15 @@ public class SquareMenuFragment extends TitleFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
-		menu = new PlacesSquareMenu(getActivity());
+		if (getMenu()==null)
+		{
+			menu = new PlacesSquareMenu(getActivity());
+		}
 		View v = getMenu().getSquareMenu();
+		if (v.getParent()!=null)
+		{
+			((ViewGroup)v.getParent()).removeView(v);
+		}
 		return v;
 	}
 
@@ -67,6 +75,29 @@ public class SquareMenuFragment extends TitleFragment
 	{
 		if (getMenu() != null)
 			getMenu().runItemActivityWithFilter(visibleFilter);
+	}
+
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		Log.w("SquareFragment", "onPause");
+		menu.onStop();
+	}
+
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		Log.w("SquareFragment", "onResume");
+		menu.onResume();
+	}
+
+	@Override
+	public void onStop()
+	{
+		super.onStop();
+		Log.w("SquareFragment", "onStop");
 	}
 
 	private PlacesSquareMenu getMenu()
@@ -85,6 +116,23 @@ class PlacesSquareMenu
 	{
 		this.context = context;
 		squareMenu = createSquareMenu();
+	}
+
+	public void onResume()
+	{
+		mHandler.removeCallbacks(mUpdateTimeTask);
+		mHandler.postDelayed(mUpdateTimeTask, UPDATE_DELAY);
+	}
+
+	public void onStop()
+	{
+		mHandler.removeCallbacks(mUpdateTimeTask);
+	}
+
+	public void clear()
+	{
+		onStop();
+		((ViewGroup) squareMenu).removeAllViews();
 	}
 
 	public View getSquareMenu()
@@ -164,6 +212,9 @@ class PlacesSquareMenu
 				new SwitcherDescription(R.drawable.club2),
 				new SwitcherDescription(R.drawable.club3) };
 
+		SwitcherDescription[] swTiketon = { new SwitcherDescription(
+				R.drawable.tiketon) };
+
 		SwitcherDescription[] a = { new SwitcherDescription(R.color.blue),
 				new SwitcherDescription(R.color.green),
 				new SwitcherDescription(android.R.color.white) };
@@ -176,6 +227,7 @@ class PlacesSquareMenu
 		switchers.get(2).setImageSource(Arrays.asList(swShopping));
 		switchers.get(3).setImageSource(Arrays.asList(swHotel));
 		switchers.get(4).setImageSource(Arrays.asList(swСlub));
+		switchers.get(5).setImageSource(Arrays.asList(swTiketon));
 
 		switchers.get(0).setText("Рестораны");
 
@@ -187,12 +239,14 @@ class PlacesSquareMenu
 
 		switchers.get(4).setText("Ночные клубы");
 
+		switchers.get(5).setText("");
+
 		for (int i = 0; i < switchers.size(); i++)
 		{
 			JamTextImageSwitcher switcher;
 			switcher = switchers.get(i);
 
-			if (i > 4)
+			if (i > 5)
 			{
 				if (i % 2 == 0)
 					switcher.setImageSource(Arrays.asList(a));
@@ -281,8 +335,7 @@ class PlacesSquareMenu
 					currButton = 0;
 				if (currButton < 0)
 					currButton = switchers.size() - 1;
-				mHandler.removeCallbacks(mUpdateTimeTask);
-				mHandler.postDelayed(mUpdateTimeTask, UPDATE_DELAY);
+				onResume();
 				return switchers.get(currButton);
 			}
 

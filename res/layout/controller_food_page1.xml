@@ -40,72 +40,6 @@
             android:gravity="left"
             android:orientation="vertical" >
         </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/gallery_list_layout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin"
-                    android:layout_marginRight="@dimen/margin"
-                    android:background="#ffffff"
-                    android:orientation="vertical"
-                    android:padding="@dimen/margin" />
-        
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
-            android:layout_marginTop="3dp"
-            android:maxLines="2"
-            android:paddingLeft="3dp"
-            android:text="Советы"
-            android:textSize="10pt" />
-
-        <LinearLayout
-            android:id="@+id/comment_list_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-
-
-
-        <RelativeLayout
-            android:id="@+id/major_header_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin"
-            android:background="@color/white" >
-
-            <LinearLayout
-                android:id="@+id/minor_header_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin"
-                android:layout_marginRight="@dimen/margin"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/food_kitchen"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Индийская кухня, Китайская кухня"
-                    android:textSize="7pt" />
-
-                <TextView
-                    android:id="@+id/food_avg_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Food lunch price" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="5dp"
-                android:layout_below="@id/minor_header_layout"
-                android:background="@color/restaurant" />
-        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -230,6 +164,71 @@
                     android:src="@drawable/map_icon" />
             </RelativeLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/gallery_list_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
+            android:layout_marginTop="@dimen/margin"
+            android:background="#ffffff"
+            android:orientation="vertical"
+            android:padding="@dimen/margin" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="3dp"
+            android:maxLines="2"
+            android:paddingLeft="3dp"
+            android:text="Советы"
+            android:textSize="10pt" />
+
+        <LinearLayout
+            android:id="@+id/comment_list_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <RelativeLayout
+            android:id="@+id/major_header_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin"
+            android:background="@color/white" >
+
+            <LinearLayout
+                android:id="@+id/minor_header_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/food_kitchen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Индийская кухня, Китайская кухня"
+                    android:textSize="7pt" />
+
+                <TextView
+                    android:id="@+id/food_avg_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Food lunch price" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="5dp"
+                android:layout_below="@id/minor_header_layout"
+                android:background="@color/restaurant" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"

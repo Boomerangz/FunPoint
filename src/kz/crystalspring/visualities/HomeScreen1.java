@@ -41,8 +41,9 @@ public class HomeScreen1 extends FragmentActivity implements RefreshableMapList
 
 	View placesMenu;
 	FriendFeedMenuFragment friendFeed;
-	SquareMenuFragment spm;
 	ExplorerFragment explorer;
+	EventsFragment events;
+	SquareMenuFragment spm;
 
 	static int cuurPage = 0;
 	ViewFragmentAdapter pagerAdapter;
@@ -137,9 +138,13 @@ public class HomeScreen1 extends FragmentActivity implements RefreshableMapList
 	@Override
 	public void refreshMapItems()
 	{
-		pagerAdapter.notifyDataSetChanged();
-		// if (friendFeed!=null)
-		// friendFeed.refresh();
+		// pagerAdapter.notifyDataSetChanged();
+		if (friendFeed != null)
+			friendFeed.refresh();
+		if (events != null)
+			events.refresh();
+		if (explorer != null)
+			explorer.refresh();
 	}
 
 	@Override
@@ -178,18 +183,10 @@ public class HomeScreen1 extends FragmentActivity implements RefreshableMapList
 		spm = SquareMenuFragment.newInstance();
 		Log.w("HomeScreen_Filling", "Filling SquareMenu");
 
-		ListView eventListView1 = new ListView(getBaseContext());
-		eventListView1.setLayoutParams(new ScrollView.LayoutParams(
-				ScrollView.LayoutParams.FILL_PARENT,
-				ScrollView.LayoutParams.WRAP_CONTENT));
-		eventListView1.setDivider(getResources().getDrawable(
-				R.drawable.transperent_color));
-		eventListView1.setDividerHeight(0);
-		eventListView1.setCacheColorHint(0);
-
+		events = new EventsFragment();
 		explorer = new ExplorerFragment();
 		viewList.add(spm);
-		viewList.add(new EventsFragment());
+		viewList.add(events);
 		viewList.add(friendFeed);
 		viewList.add(explorer);
 		return viewList;

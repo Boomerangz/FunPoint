@@ -4,6 +4,7 @@ import java.io.ObjectInputStream.GetField;
 import java.nio.channels.FileChannel;
 import java.security.acl.Owner;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import com.google.android.maps.GeoPoint;
 import kz.crystalspring.funpoint.events.EventContainer;
 import kz.crystalspring.funpoint.funMap.CustomMyLocationOverlay;
 import kz.crystalspring.funpoint.venues.FSQConnector;
+import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.FSQTodo;
 import kz.crystalspring.funpoint.venues.FSQUser;
 import kz.crystalspring.funpoint.venues.FileConnector;
@@ -26,6 +28,7 @@ import kz.crystalspring.funpoint.venues.UserActivity;
 import kz.crystalspring.pointplus.HttpHelper;
 import kz.crystalspring.pointplus.ImageCache;
 import kz.crystalspring.pointplus.ProjectUtils;
+import kz.crystalspring.visualities.gallery.ImageContainer;
 
 import android.app.Application;
 import android.content.Context;
@@ -107,6 +110,7 @@ public class MainApplication extends Application
 	{
 		super.onLowMemory();
 		Log.w("MainApplication", "Low Memory");
+		FSQItem.photoMap.clear();
 	}
 
 	@Override
@@ -119,6 +123,7 @@ public class MainApplication extends Application
 	public void onResume()
 	{
 		pwAggregator.setAbleToDo(true);
+		// lastUpdate=new Date();
 		if (checkInternetConnection())
 		{
 			System.out.println("ЗАГРУЗКА НАЧАТА");
@@ -162,7 +167,7 @@ public class MainApplication extends Application
 			MainApplication.mapItemContainer.loadNearBy(null);
 		System.gc();
 	}
-	
+
 	private static void loadPointsSilent()
 	{
 		if (cityManager.getSelectedCity() == null)
@@ -171,8 +176,9 @@ public class MainApplication extends Application
 				&& ProjectUtils.distance(cityManager.getSelectedCity()
 						.getPoint(), MainApplication.getCurrentLocation()) < 10000)
 			MainApplication.mapItemContainer.loadNearBy(getCurrentLocation());
-		else;
-			//MainApplication.mapItemContainer.loadNearBy(null);
+		else
+			;
+		// MainApplication.mapItemContainer.loadNearBy(null);
 		System.gc();
 	}
 
@@ -239,10 +245,18 @@ public class MainApplication extends Application
 			return new GeoPoint(43240134, 76923185);
 	}
 
+	static Date lastUpdate = null;
+
 	public static void setCurrLocation(GeoPoint point)
 	{
-		currLocation = point;
-		loadPoints();
+		Date nowDate = new Date();
+		if (lastUpdate == null
+				|| nowDate.getTime() - lastUpdate.getTime() > 30000)
+		{
+			lastUpdate = nowDate;
+			currLocation = point;
+			loadPoints();
+		}
 	}
 
 	public static void loadAdditionalContent()
@@ -283,7 +297,7 @@ public class MainApplication extends Application
 
 	public static void setCity(City item)
 	{
-		if (item==null||!item.equals(cityManager.getSelectedCity()))
+		if (item == null || !item.equals(cityManager.getSelectedCity()))
 		{
 			MainApplication.mapItemContainer.clearContent();
 			cityManager.selectCity(item);
@@ -293,7 +307,19 @@ public class MainApplication extends Application
 
 	public static City getCity()
 	{
-		return cityManager.getSelectedCity();   // (String)
+		return cityManager.getSelectedCity(); // (String)
+	}
+
+	public static ImageContainer getSelectedImageContainer()
+	{
+		if (ProfilePage.class.isInstance(refreshable))
+		{
+			return FSQUser.getInstance();
+		}
+		else
+		{
+			return (FSQItem)mapItemContainer.getSelectedMapItem();
+		}
 	}
 
 }
@@ -315,7 +341,7 @@ class LocationUpdater implements LocationListener
 		Location location = locationManager.getLastKnownLocation(provider);
 		updateWithLocation(location);
 
-		locationManager.requestLocationUpdates(provider, 2000, 500, this);
+		locationManager.requestLocationUpdates(provider, 30*1000, 1000, this);
 	}
 
 	public void disableUpdating()

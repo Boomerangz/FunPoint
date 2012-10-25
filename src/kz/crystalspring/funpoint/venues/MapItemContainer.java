@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.events.Event;
+import kz.crystalspring.visualities.gallery.ImageContainer;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
 import kz.sbeyer.atmpoint1.types.ItemFood;
 import kz.sbeyer.atmpoint1.types.ItemHotel;
@@ -74,7 +75,7 @@ public class MapItemContainer
 		final int LHS_WIN = -1;
 		final int RHS_WIN = 1;
 		final int DRAW = 0;
-		final int MAGIC_CONST=500;
+		final int MAGIC_CONST = 500;
 
 		@Override
 		public int compare(MapItem lhs, MapItem rhs)
@@ -131,7 +132,7 @@ public class MapItemContainer
 
 	private List<MapItem> filterList(List<MapItem> itemArray)
 	{
-		synchronized (itemArray)
+		synchronized (visibleFilterMap)
 		{
 			List<MapItem> filteredList = new ArrayList<MapItem>();
 			for (MapItem item : itemArray)
@@ -297,7 +298,8 @@ public class MapItemContainer
 	public void setVisibleFilter(String visibleFilter)
 	{
 		visibleFilterMap.clear();
-		addVisibleFilter(visibleFilter);
+		if (visibleFilter != null)
+			addVisibleFilter(visibleFilter);
 	}
 
 	public String getCategoryName(String categoryID)

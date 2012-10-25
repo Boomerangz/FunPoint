@@ -1,26 +1,33 @@
 package kz.crystalspring.funpoint.venues;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
+import kz.crystalspring.pointplus.ImageCache;
+import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.LoadingImageView;
+import kz.crystalspring.visualities.gallery.ImageContainer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 
-public class FSQItem extends MapItem
+public class FSQItem extends MapItem implements ImageContainer
 {
 	String name;
 	String address;
 	String category = FSQ_UNDEFINED;
 	int hereNow;
-	List<String> categoryList = new ArrayList<String>(); 
+	List<String> categoryList = new ArrayList<String>();
 
 	OptionalInfo optInfo;
 
@@ -97,7 +104,7 @@ public class FSQItem extends MapItem
 	{
 		return category;
 	}
-	
+
 	public void loadSimpleOptionalInfo(JSONObject fsqJObject)
 	{
 		optInfo = new OptionalInfo();
@@ -116,7 +123,7 @@ public class FSQItem extends MapItem
 	{
 		loadSimpleOptionalInfo(fsqJObject);
 	}
-	
+
 	public void itemCinemaLoadOptionalInfo(JSONObject fsqJObject)
 	{
 		loadSimpleOptionalInfo(fsqJObject);
@@ -137,10 +144,9 @@ public class FSQItem extends MapItem
 		this.hereNow = hereNow;
 	}
 
-
 	public List<String> getPhones()
 	{
-		if (optInfo!=null)
+		if (optInfo != null)
 			return optInfo.getFSQPhonesList();
 		else
 			return null;
@@ -155,16 +161,15 @@ public class FSQItem extends MapItem
 	{
 		return FSQConnector.isInTodoList(getId());
 	}
-	
-	
+
 	public void loadCategories(JSONArray jArray)
 	{
-		for (int i=0; i<jArray.length(); i++)
+		for (int i = 0; i < jArray.length(); i++)
 		{
 			try
 			{
-				JSONObject jCateg=jArray.getJSONObject(i);
-				String sCateg=jCateg.getString("name");
+				JSONObject jCateg = jArray.getJSONObject(i);
+				String sCateg = jCateg.getString("name");
 				categoryList.add(sCateg);
 			} catch (JSONException e)
 			{
@@ -172,36 +177,37 @@ public class FSQItem extends MapItem
 			}
 		}
 		if (ArrayList.class.isInstance(categoryList))
-			((ArrayList<String>)categoryList).trimToSize();
+			((ArrayList<String>) categoryList).trimToSize();
 	}
-	
+
 	public String getCategoriesString()
 	{
-		String st="";
-		for (String s:categoryList)
+		String st = "";
+		for (String s : categoryList)
 		{
-			st+=", "+s;
+			st += ", " + s;
 		}
-		if (st.length()>2)
-			st=st.substring(2).trim();
+		if (st.length() > 2)
+			st = st.substring(2).trim();
 		return st;
 	}
-	
+
 	@Override
 	public String getShortCharacteristic()
 	{
 		return getCategoriesString();
 	}
-	
+
 	public int getPhotosCount()
 	{
 		return optInfo.getPhotosCount();
 	}
-	
+
 	public UrlDrawable getUrlAndPhoto(int i)
 	{
 		return optInfo.getUrlAndPhoto(i);
 	}
+
 	@Override
 	public int getItemColor()
 	{
@@ -209,35 +215,152 @@ public class FSQItem extends MapItem
 			return context.getResources().getColor(R.color.shop);
 		return context.getResources().getColor(R.color.selected_blue);
 	}
-	
-	Drawable photo=null;
+
+	public static HashMap<String, Bitmap> photoMap = new HashMap<String, Bitmap>();
+
+	// @Override
+	// protected void loadImageToView(final LoadingImageView loadingImageView)
+	// {
+	// final Drawable photo;
+	// if (photoMap.containsKey(getId()))
+	// photo = new BitmapDrawable(photoMap.get(getId()));
+	// else
+	// photo = null;
+	// loadingImageView.setDrawable(photo);
+	// if (photo == null)
+	// {
+	//
+	// Runnable task = new Runnable()
+	// {
+	// @Override
+	// public void run()
+	// {
+	// loadingImageView.setTag(getId());
+	// if (photo == null)
+	// {
+	// Bitmap btm = FSQConnector
+	// .loadTitlePhotoForVenue(getId());
+	// Bitmap scaledBtm = null;
+	// if (btm != null)
+	// {
+	// scaledBtm = Bitmap.createScaledBitmap(btm,
+	// Math.round(90 * MainApplication.mDensity),
+	// Math.round(90 * MainApplication.mDensity),
+	// true);
+	// btm.recycle();
+	// }
+	// photoMap.put(getId(), scaledBtm);
+	// }
+	// }
+	// };
+	// Runnable postTask = new Runnable()
+	// {
+	// @Override
+	// public void run()
+	// {
+	// Drawable photo = new BitmapDrawable(photoMap.get(getId()));
+	// if (!loadingImageView.hasDrawable()
+	// && getId().equals(loadingImageView.getTag()))
+	// {
+	// if (photo != null && !loadingImageView.hasDrawable())
+	// loadingImageView
+	// .setDrawable((Drawable) ProjectUtils
+	// .ifnull(photo,
+	// context.getResources()
+	// .getDrawable(
+	// R.drawable.ic_launcher)));
+	// else
+	// loadingImageView.setDrawable(context.getResources()
+	// .getDrawable(R.drawable.ic_launcher));
+	// }
+	// }
+	// };
+	// MainApplication.pwAggregator.addPriorityTask(task, postTask);
+	// }
+	// }
+
 	@Override
-	protected void loadImageToView(final LoadingImageView loadingImageView) 
+	protected void loadImageToView(final LoadingImageView loadingImageView)
 	{
-		
-		Runnable task=new Runnable()
+		Log.w("FSQItem", "loadImage begin");
+		final Drawable photo;
+		ImageCache imageCache = ImageCache.getInstance();
+		String photoUrl = imageCache.getTitlePhotoUrlIfHave(getId());
+		if (photoUrl!=null&&photoUrl.equals(""))
+		{
+			loadingImageView.setDrawable(context.getResources().getDrawable(
+					R.drawable.ic_launcher));
+		} else
 		{
 
-			@Override
-			public void run() 
+			if (photoUrl != null && imageCache.hasImage(photoUrl))
+				photo = new BitmapDrawable(imageCache.getImage(photoUrl));
+			else
+				photo = null;
+			if (photo == null)
 			{
-				if (photo==null)
-					photo=FSQConnector.loadTitlePhotoForVenue(getId());
-			}
-		};
-		Runnable postTask=new Runnable() {
-			
-			@Override
-			public void run() 
+				Runnable task = new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						Log.w("FSQItem", "loadImage 2 begin");
+						loadingImageView.setTag(getId());
+						if (photo == null)
+						{
+							Bitmap btm = FSQConnector
+									.loadTitlePhotoForVenue(getId());
+							Bitmap scaledBtm = null;
+							if (btm != null)
+							{
+								scaledBtm = Bitmap
+										.createScaledBitmap(
+												btm,
+												Math.round(90 * MainApplication.mDensity),
+												Math.round(90 * MainApplication.mDensity),
+												true);
+								// btm.recycle();
+							}
+							photoMap.put(getId(), scaledBtm);
+						}
+					}
+				};
+				Runnable postTask = new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						Drawable photo = new BitmapDrawable(
+								photoMap.get(getId()));
+						if (!loadingImageView.hasDrawable()
+								&& getId().equals(loadingImageView.getTag()))
+						{
+							if (photo != null
+									&& !loadingImageView.hasDrawable())
+								loadingImageView
+										.setDrawable((Drawable) ProjectUtils
+												.ifnull(photo,
+														context.getResources()
+																.getDrawable(
+																		R.drawable.ic_launcher)));
+							else
+								loadingImageView.setDrawable(context
+										.getResources().getDrawable(
+												R.drawable.ic_launcher));
+							System.gc();
+							Log.w("FSQItem", "loadImage 2 ended");
+						}
+					}
+				};
+				MainApplication.pwAggregator.addPriorityTask(task, postTask);
+				loadingImageView.setDrawable(null);
+			} else
 			{
-				if (photo!=null)
-					loadingImageView.setDrawable(photo);
-				else
-					loadingImageView.setDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
-				photo=null;
+				Log.w("FSQItem", "loadImage ended");
+				loadingImageView.setDrawable(photo);
+				Log.w("FSQItem", "loadImage draw ended");
 			}
-		};
-		MainApplication.pwAggregator.addPriorityTask(task, postTask);
+			Log.w("FSQItem", "loadImage gc ended");
+		}
 	}
-
 }

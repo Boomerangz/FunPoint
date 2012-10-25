@@ -8,8 +8,8 @@ import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
-import kz.crystalspring.visualities.GalleryActivity;
-import kz.crystalspring.visualities.ImageTableActivity;
+import kz.crystalspring.visualities.gallery.GalleryActivity;
+import kz.crystalspring.visualities.gallery.ImageTableActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -38,10 +39,11 @@ public class GalleryWrapper
 		LayoutInflater inflater = context.getLayoutInflater();
 		mainLayout = (LinearLayout) inflater.inflate(R.layout.gallery_widget,
 				null);
+		mainLayout.setBackgroundColor(context.getResources().getColor(R.color.white));
 		drawList = new ArrayList<UrlDrawable>();
 		moreButton = (TextView) mainLayout.findViewById(R.id.more_button);
-		if (mode==MODE_BADGES)
-			moreButton.setEnabled(false);
+//		if (mode==MODE_BADGES)
+//			moreButton.setEnabled(false);
 	}
 
 	public void addDrawable(UrlDrawable drawabl)
@@ -81,7 +83,7 @@ public class GalleryWrapper
 			moreButton.setText("Фотографий этого места нет");
 			moreButton.setOnClickListener(null);
 		}
-
+		
 	}
 
 	private View createImageView(final UrlDrawable drw, final int position)

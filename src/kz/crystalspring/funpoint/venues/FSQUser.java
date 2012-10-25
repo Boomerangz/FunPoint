@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kz.crystalspring.funpoint.MainApplication;
+import kz.crystalspring.pointplus.ProjectUtils;
+import kz.crystalspring.visualities.gallery.ImageContainer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FSQUser
+public class FSQUser implements ImageContainer
 {
 	String firstName;
 	String lastName;
@@ -18,6 +20,28 @@ public class FSQUser
 	List<UrlDrawable> badges;
 	Integer recentScore;
 	Integer maxScore;
+	Integer checkinCount;
+	Integer friendCount;
+
+	public Integer getCheckinCount()
+	{
+		return checkinCount;
+	}
+
+	public void setCheckinCount(Integer checkinCount)
+	{
+		this.checkinCount = checkinCount;
+	}
+
+	public Integer getFriendCount()
+	{
+		return friendCount;
+	}
+
+	public void setFriendCount(Integer friendCount)
+	{
+		this.friendCount = friendCount;
+	}
 
 	static FSQUser singletone;
 
@@ -66,7 +90,7 @@ public class FSQUser
 	public void modify(JSONObject jObject)
 	{
 		int i = 1;
-		while (i < 6)
+		while (i < 8)
 		{
 			try
 			{
@@ -108,6 +132,12 @@ public class FSQUser
 				case 6:
 					setRecentScore(jUser.getJSONObject("scores").getInt("recent"));
 					setMaxScore(jUser.getJSONObject("scores").getInt("max"));
+					i++;
+				case 7:
+					setCheckinCount(jUser.getJSONObject("checkins").getInt("count"));
+					i++;
+				case 8:
+					setFriendCount(jUser.getJSONObject("friends").getInt("count"));
 					i++;
 				}
 			} catch (JSONException e)
@@ -160,9 +190,9 @@ public class FSQUser
 		this.photo = photo;
 	}
 
-	public List<UrlDrawable> getBadgesList()
+	public List<FSQBadge> getBadgesList()
 	{
-		return badges;
+		return FSQConnector.getBadgesList();
 	}
 
 	public Integer getRecentScore()
@@ -173,6 +203,8 @@ public class FSQUser
 	public void setRecentScore(Integer recentScore)
 	{
 		this.recentScore = recentScore;
+		if (getMaxScore()!=null&&getRecentScore()>getMaxScore())
+			setMaxScore(getRecentScore());
 	}
 
 	public Integer getMaxScore()
@@ -189,6 +221,25 @@ public class FSQUser
 	{
 		singletone = new FSQUser();
 		MainApplication.loadUserActivity();
+	}
+
+	@Override
+	public int getPhotosCount()
+	{
+		return getBadgesList().size();
+	}
+
+	@Override
+	public UrlDrawable getUrlAndPhoto(int i)
+	{
+		return getBadgesList().get(i);
+	}
+
+	public void addCheckin(int score)
+	{
+		if (checkinCount!=null)
+			checkinCount++;
+		setRecentScore((Integer)ProjectUtils.ifnull(getRecentScore(),0)+score);
 	}
 	
 	

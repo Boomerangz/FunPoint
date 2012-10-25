@@ -192,8 +192,8 @@ public class FileConnector
 		params.add(key_pair);
 		String sResponse = HttpHelper
 				.loadPostByUrl(JAM_EVENTS_LIST_URL, params);
-		Log.w("cinema", "Длинна ответа -"
-				+ Long.valueOf(sResponse.length()).toString());
+//		Log.w("cinema", "Длинна ответа -"
+//				+ Long.valueOf(sResponse.length()).toString());
 		try
 		{
 			return new JSONArray(sResponse);
@@ -223,8 +223,8 @@ public class FileConnector
 				.getTime())));
 		String sResponse = HttpHelper
 				.loadPostByUrl(JAM_EVENTS_LIST_URL, params);
-		Log.w("cinema", "Длинна ответа -"
-				+ Long.valueOf(sResponse.length()).toString());
+//		Log.w("cinema", "Длинна ответа -"
+//				+ Long.valueOf(sResponse.length()).toString());
 		try
 		{
 			return new JSONArray(sResponse);

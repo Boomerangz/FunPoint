@@ -3,6 +3,7 @@ package kz.crystalspring.funpoint.venues;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -40,9 +41,14 @@ public class FSQFriend extends Friend
 	{
 		return id;
 	}
+	
+	public UrlDrawable getUrlDrawable()
+	{
+		return photo;
+	}
 
 	@Override
-	public View getView(Context context)
+	public View getView(Activity context)
 	{
 		TextView tv=new TextView(context);
 		tv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));

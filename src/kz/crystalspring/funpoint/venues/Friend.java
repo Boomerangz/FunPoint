@@ -1,5 +1,6 @@
 package kz.crystalspring.funpoint.venues;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
@@ -19,5 +20,5 @@ public abstract class Friend
 		this.name = name;
 	}
 	
-	public abstract View getView(Context context);
+	public abstract View getView(Activity context);
 }

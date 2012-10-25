@@ -1,47 +1,27 @@
 package kz.crystalspring.funpoint;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import net.londatiga.fsq.FoursquareApp;
 import net.londatiga.fsq.FoursquareApp.FsqAuthListener;
-import kz.crystalspring.android_client.C_FileHelper;
+import kz.crystalspring.funpoint.venues.FSQBadge;
 import kz.crystalspring.funpoint.venues.FSQConnector;
-import kz.crystalspring.funpoint.venues.FSQTodo;
 import kz.crystalspring.funpoint.venues.FSQUser;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
 import kz.crystalspring.funpoint.R;
-import kz.crystalspring.pointplus.HttpHelper;
-import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.GalleryWrapper;
 import kz.crystalspring.views.LoadingImageView;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,17 +33,12 @@ public class ProfilePage extends Activity implements RefreshableMapList
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState);
+		super.onCreate(null);
 		setContentView(R.layout.profile_page);
 
 		spinner = (Spinner) findViewById(R.id.spinner_city);
 		Button button1 = (Button) findViewById(R.id.button1);
-		button1.setText("Log In");
-		final TextView text1 = (TextView) findViewById(R.id.textView1);
 		final FoursquareApp mFsqApp = MainApplication.FsqApp;
-		if (mFsqApp.hasAccessToken())
-			text1.setText("Connected as " + mFsqApp.getUserName());
-
 		FsqAuthListener listener = new FsqAuthListener()
 		{
 			@Override
@@ -72,7 +47,6 @@ public class ProfilePage extends Activity implements RefreshableMapList
 				Toast.makeText(ProfilePage.this,
 						"Connected as " + mFsqApp.getUserName(),
 						Toast.LENGTH_SHORT).show();
-				text1.setText("Connected as " + mFsqApp.getUserName());
 			}
 
 			@Override
@@ -181,16 +155,23 @@ public class ProfilePage extends Activity implements RefreshableMapList
 			TextView usermailTV = (TextView) findViewById(R.id.user_email);
 			TextView recentScoreTV = (TextView) findViewById(R.id.recent_score);
 			TextView maxScoreTV = (TextView) findViewById(R.id.max_score);
+			TextView checkinsTV = (TextView) findViewById(R.id.user_checkins);
+			TextView friendsTV = (TextView) findViewById(R.id.user_friends);
+			
 			LoadingImageView loadingImage = (LoadingImageView) findViewById(R.id.loading_imageview);
 			LinearLayout badgeGallery = (LinearLayout) findViewById(R.id.badge_gallery);
 
 			usernameTV.setText(user.getName());
 			usermailTV.setText(user.getEmail());
+			loadingImage.setTag(user.getName());
 			FSQConnector.loadImageAsync(loadingImage, user.getPhoto(),
 					UrlDrawable.BIG_URL, false, null);
 			loadBadgesGallery(badgeGallery);
-			recentScoreTV.setText(user.getRecentScore().toString());
+			recentScoreTV.setText(user.getRecentScore().toString()+" баллов");
 			maxScoreTV.setText(user.getMaxScore().toString());
+			checkinsTV.setText(user.getCheckinCount().toString()+" чекинов");
+			friendsTV.setText(user.getFriendCount().toString()+" друзей");
+			
 
 			pg.setVisibility(View.GONE);
 			infLayout.setVisibility(View.VISIBLE);
@@ -205,7 +186,13 @@ public class ProfilePage extends Activity implements RefreshableMapList
 	{
 		GalleryWrapper galleryWrapper = new GalleryWrapper(this,
 				GalleryWrapper.MODE_BADGES);
-		galleryWrapper.addDrawableList(user.getBadgesList());
+		List<FSQBadge> badges=user.getBadgesList();
+		List<UrlDrawable> drawable=new ArrayList<UrlDrawable>(badges.size());
+		for(FSQBadge badge:badges)
+		{
+			drawable.add(badge);
+		}
+		galleryWrapper.addDrawableList(drawable);
 		badgeGallery.removeAllViews();
 		badgeGallery.addView(galleryWrapper.getView());
 	}

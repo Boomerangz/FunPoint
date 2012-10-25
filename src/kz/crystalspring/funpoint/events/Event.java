@@ -16,6 +16,8 @@ import kz.crystalspring.funpoint.venues.ListItem;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItem.ViewHolder;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
+import kz.crystalspring.pointplus.ImageCache;
+import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.LoadingImageView;
 
 import org.json.JSONArray;
@@ -25,7 +27,9 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,12 +45,9 @@ public abstract class Event implements ListItem
 	protected static Map<Integer, String> JamCategoryMap;
 	protected static Map<Integer, String> JamGenresMap;
 
-	protected static final DateFormat date_formatter = new SimpleDateFormat(
-			"yyyy-MM-dd");
-	protected static final DateFormat datetime_formatter = new SimpleDateFormat(
-			"yyyy-MM-dd HH-mm");
-	public static final DateFormat time_formatter = new SimpleDateFormat(
-			"HH-mm");
+	protected static final DateFormat date_formatter = new SimpleDateFormat("yyyy-MM-dd");
+	protected static final DateFormat datetime_formatter = new SimpleDateFormat("yyyy-MM-dd HH-mm");
+	public static final DateFormat time_formatter = new SimpleDateFormat("HH-mm");
 
 	private String name;
 	private String description;
@@ -73,8 +74,7 @@ public abstract class Event implements ListItem
 		}
 	}
 
-	Event(int id, String name, String description, String imageUrl,
-			Integer rubrId)
+	Event(int id, String name, String description, String imageUrl, Integer rubrId)
 	{
 		initCategoryMapIfNot();
 
@@ -129,18 +129,15 @@ public abstract class Event implements ListItem
 		int i = 0;
 		for (String columName : columnNames)
 		{
-			if (columName.trim().toUpperCase()
-					.equals(COLUMN_NAME.toUpperCase().trim()))
+			if (columName.trim().toUpperCase().equals(COLUMN_NAME.toUpperCase().trim()))
 			{
 				nm = cursor.getString(i);
 			}
-			if (columName.trim().toUpperCase()
-					.equals(COLUMN_DESC.toUpperCase().trim()))
+			if (columName.trim().toUpperCase().equals(COLUMN_DESC.toUpperCase().trim()))
 			{
 				dsc = cursor.getString(i);
 			}
-			if (columName.trim().toUpperCase()
-					.equals(COLUMN_IMGURL.toUpperCase().trim()))
+			if (columName.trim().toUpperCase().equals(COLUMN_IMGURL.toUpperCase().trim()))
 			{
 				imgurl = cursor.getString(i);
 			}
@@ -153,8 +150,7 @@ public abstract class Event implements ListItem
 			setImageUrl(imgurl);
 		} else
 		{
-			throw new Exception(
-					"Name or Description or Image URI not found in cursor");
+			throw new Exception("Name or Description or Image URI not found in cursor");
 		}
 	}
 
@@ -226,19 +222,16 @@ public abstract class Event implements ListItem
 	@Override
 	public View getView(View convertView, int position)
 	{
-		convertView = null;
 		ViewHolder holder;
 		LayoutInflater mInflater = LayoutInflater.from(context);
-		if (convertView==null)
+		if (convertView == null)
 			convertView = mInflater.inflate(R.layout.event_list_item, null);
 		holder = new ViewHolder();
 		holder.name = (TextView) convertView.findViewById(R.id.event_name);
-		holder.shortDescription = (TextView) convertView
-				.findViewById(R.id.short_description);
+		holder.shortDescription = (TextView) convertView.findViewById(R.id.short_description);
 		holder.background = (View) convertView.findViewById(R.id.list_block);
-		holder.loadingImage = (LoadingImageView) convertView
-				.findViewById(R.id.loading_imageview);
-		
+		holder.loadingImage = (LoadingImageView) convertView.findViewById(R.id.loading_imageview);
+
 		convertView.setMinimumHeight(80);
 		convertView.setTag(holder);
 		String st = getName();
@@ -256,15 +249,18 @@ public abstract class Event implements ListItem
 				context.startActivity(intent);
 			}
 		});
-		if (getImageUrl().getSmallDrawable() != null)
-			holder.loadingImage.setDrawable(getImageUrl().getSmallDrawable());
+
+		String imageUrl = (String) ProjectUtils.ifnull(getImageUrl().smallUrl, getImageUrl().bigUrl);
+		ImageCache imageCache = ImageCache.getInstance();
+		holder.loadingImage.setTag(getName());
+		if (imageCache.hasImage(imageUrl))
+		{
+			holder.loadingImage.setDrawable(new BitmapDrawable(imageCache.getImage(imageUrl)));
+		}
 		else
 		{
-			holder.loadingImage.setDrawable(null);
-			FSQConnector.loadImageAsync(holder.loadingImage, getImageUrl(),
-					UrlDrawable.SMALL_URL, false, null);
+			FSQConnector.loadImageAsync(holder.loadingImage, getImageUrl(), UrlDrawable.SMALL_URL, false, null);
 		}
-		System.gc();
 		return convertView;
 	}
 

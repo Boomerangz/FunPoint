@@ -1,4 +1,4 @@
-package kz.crystalspring.visualities;
+package kz.crystalspring.visualities.gallery;
 
 import kz.crystalspring.funpoint.FullScrLoadingImageActivity;
 import kz.crystalspring.funpoint.MainApplication;
@@ -21,17 +21,19 @@ import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
 
-public class GalleryActivity extends Activity {
+public class GalleryActivity extends Activity
+{
 	LinearLayout mainLayout;
 	private static final int PHOTOS_IN_ROW = 3;
 	private String filledItem;
 	private WebViewGallery galleryView;
 	private ImageAdapter adapter;
-	
-	public static int selectedImage=-1;
+
+	public static int selectedImage = -1;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gallery_page);
 		galleryView = (WebViewGallery) findViewById(R.id.gallery);
@@ -39,31 +41,33 @@ public class GalleryActivity extends Activity {
 	}
 
 	@Override
-	public void onResume() {
+	public void onResume()
+	{
 		super.onResume();
-		FSQItem item = (FSQItem) MainApplication.mapItemContainer
-				.getSelectedMapItem();
-		if (filledItem == null || !filledItem.equals(item.getId()))
+		ImageContainer item = MainApplication.getSelectedImageContainer();
+		if (filledItem == null || !(filledItem.hashCode() == item.hashCode()))
 		{
 			fillLayout(item);
 		}
-		if (selectedImage>-1)
+		if (selectedImage > -1)
 		{
-			if (selectedImage>(galleryView.getAdapter().getCount()-1))
-				selectedImage=0;
+			if (selectedImage > (galleryView.getAdapter().getCount() - 1))
+				selectedImage = 0;
 			galleryView.setSelection(selectedImage);
 		}
 	}
 
-	private void fillLayout(FSQItem item) {
+	private void fillLayout(ImageContainer item)
+	{
 		galleryView.setAdapter(new ImageAdapter(item, this));
 	}
 
-	private void fillLayout1(FSQItem item) 
+	private void fillLayout1(FSQItem item)
 	{
 		mainLayout.removeAllViews();
 		LinearLayout horizLayout = null;
-		for (int i = 0; i < item.getPhotosCount(); i++) {
+		for (int i = 0; i < item.getPhotosCount(); i++)
+		{
 			if (i % PHOTOS_IN_ROW == 0)
 				horizLayout = getNewHorizontalLayout();
 			LoadingImageView iv = new LoadingImageView(this);
@@ -74,16 +78,19 @@ public class GalleryActivity extends Activity {
 	}
 
 	private void fillLoadingImageView(LoadingImageView iv,
-			final UrlDrawable urlAndPhoto) {
+			final UrlDrawable urlAndPhoto)
+	{
 		int w = Math.round(80 * MainApplication.mDensity);
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.FILL_PARENT, w);
 		lp.weight = 1;
 		iv.setLayoutParams(lp);
-		OnClickListener listner=new OnClickListener() {
+		OnClickListener listner = new OnClickListener()
+		{
 
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View arg0)
+			{
 				MainApplication.selectedItemPhoto = urlAndPhoto;
 				Intent intent = new Intent(getBaseContext(),
 						FullScrLoadingImageActivity.class);
@@ -91,10 +98,12 @@ public class GalleryActivity extends Activity {
 				getBaseContext().startActivity(intent);
 			}
 		};
-		if (urlAndPhoto.getSmallDrawable() == null) {
+		if (urlAndPhoto.getSmallDrawable() == null)
+		{
 			FSQConnector.loadImageAsync(iv, urlAndPhoto, urlAndPhoto.SMALL_URL,
-					false,listner);
-		} else {
+					false, listner);
+		} else
+		{
 			iv.setDrawable(urlAndPhoto.getSmallDrawable());
 			iv.setOnClickListener(listner);
 		}
@@ -102,8 +111,10 @@ public class GalleryActivity extends Activity {
 
 	LinearLayout.LayoutParams lp = null;
 
-	private LinearLayout.LayoutParams getStandartLayoutParams() {
-		if (lp == null) {
+	private LinearLayout.LayoutParams getStandartLayoutParams()
+	{
+		if (lp == null)
+		{
 			lp = new LinearLayout.LayoutParams(
 					LinearLayout.LayoutParams.FILL_PARENT,
 					LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -114,7 +125,8 @@ public class GalleryActivity extends Activity {
 		return lp;
 	}
 
-	private LinearLayout getNewHorizontalLayout() {
+	private LinearLayout getNewHorizontalLayout()
+	{
 		LinearLayout horizLayout = new LinearLayout(this);
 		horizLayout.setOrientation(LinearLayout.HORIZONTAL);
 		LinearLayout.LayoutParams lp = getStandartLayoutParams();
@@ -122,22 +134,24 @@ public class GalleryActivity extends Activity {
 		mainLayout.addView(horizLayout);
 		return horizLayout;
 	}
-	
+
 	@Override
 	public void onPause()
 	{
 		super.onPause();
-		selectedImage=-1;
+		selectedImage = -1;
 	}
 }
 
 @SuppressLint("SetJavaScriptEnabled")
-class ImageAdapter extends BaseAdapter {
-	FSQItem item;
+class ImageAdapter extends BaseAdapter
+{
+	ImageContainer item;
 	Activity context;
 	Gallery.LayoutParams lp;
 
-	ImageAdapter(FSQItem item, Activity context) {
+	ImageAdapter(ImageContainer item, Activity context)
+	{
 		this.item = item;
 		this.context = context;
 
@@ -151,23 +165,28 @@ class ImageAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public int getCount() {
+	public int getCount()
+	{
 		return item.getPhotosCount();
 	}
 
 	@Override
-	public Object getItem(int arg0) {
+	public Object getItem(int arg0)
+	{
 		return item.getUrlAndPhoto(arg0);
 	}
 
 	@Override
-	public long getItemId(int arg0) {
+	public long getItemId(int arg0)
+	{
 		return arg0;
 	}
 
 	@Override
-	public View getView(int position, View view, ViewGroup arg2) {
-		if (view == null) {
+	public View getView(int position, View view, ViewGroup arg2)
+	{
+		if (view == null)
+		{
 			WebView wv = new WebView(context);
 			wv.setLayoutParams(lp);
 			UrlDrawable urlDr = (UrlDrawable) getItem(position);
@@ -176,14 +195,14 @@ class ImageAdapter extends BaseAdapter {
 			DisplayMetrics metrics = new DisplayMetrics();
 			context.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 			long width = Math.round(metrics.widthPixels
-					/ MainApplication.mDensity * 0.9);
+					/ MainApplication.mDensity * 0.6);
 
 			final String mimeType = "text/html";
 			final String encoding = "utf-8";
 			final String html = ""
 					+ "<body style=\"width:100%; height:100%; background: #000;\" >"
 					+ "<center >"
-					+ "<p><img src=\"file:///android_asset/icon_set_circle.gif\" name=\"myImage\"/></p><"
+					+ "<p><img style=\"margin:10%\" src=\"file:///android_asset/icon_set_circle.gif\" name=\"myImage\"/></p><"
 					+ "/center></body>" + "<script type=\"text/javascript\"> "
 					+ "hiddenImg= new Image(); " + "hiddenImg.src= \""
 					+ imageUrl + "\"; "

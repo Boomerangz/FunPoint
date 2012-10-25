@@ -19,14 +19,17 @@ public class Splash extends Activity
 {
 	public static Context context;
 
+	private static final int DELAY_IN_SECONDS=4;
+	Intent openMainPage;
 	/** Called when the activity is first created. */
 	@Override
+
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
 		context = getApplicationContext();
-
+		
 		Thread t = new Thread()
 		{
 			@Override
@@ -35,14 +38,15 @@ public class Splash extends Activity
 				try
 				{
 					CheckForFirstStart();
-					sleep(1500);
+					openMainPage = new Intent(Splash.this,
+							HomeScreen1.class);
+					sleep(DELAY_IN_SECONDS*1000);
 				} catch (InterruptedException e)
 				{
 					e.printStackTrace();
 				} finally
 				{
-					Intent openMainPage = new Intent(Splash.this,
-							HomeScreen1.class);
+					
 					startActivity(openMainPage);
 				}
 			}

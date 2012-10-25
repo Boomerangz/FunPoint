@@ -139,7 +139,7 @@ class FriendFeedAdapter extends BaseAdapter
 	@Override
 	public View getView(int arg0, View arg1, ViewGroup arg2)
 	{
-		return list.get(arg0).getView();
+		return list.get(arg0).getView(arg1);
 	}
 
 }
