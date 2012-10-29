@@ -129,7 +129,7 @@ public class FSQItem extends MapItem implements ImageContainer
 	{
 		loadSimpleOptionalInfo(fsqJObject);
 	}
-
+	
 	public OptionalInfo getOptionalInfo()
 	{
 		return optInfo;
