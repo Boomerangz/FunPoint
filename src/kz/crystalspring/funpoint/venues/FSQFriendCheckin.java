@@ -8,10 +8,12 @@ import org.json.JSONObject;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.funObjectDetail;
+import kz.crystalspring.pointplus.ImageCache;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.LoadingImageView;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,11 +91,18 @@ public class FSQFriendCheckin
 		userPlace.setText(ProjectUtils.ifnull(place, "").toString());
 
 		LoadingImageView LVI = (LoadingImageView) view.findViewById(R.id.loading_imageview);
-		LVI.setTag(friendName);
-		if (friendPhoto.getBigDrawable() == null)
-			FSQConnector.loadImageAsync(LVI, friendPhoto, UrlDrawable.BIG_URL, false, null);
+		ImageCache imageCache = ImageCache.getInstance();
+		String sUrl = (String) ProjectUtils.ifnull(friendPhoto.smallUrl, friendPhoto.bigUrl);
+		if (imageCache.hasImage(sUrl))
+			LVI.setDrawable(new BitmapDrawable(imageCache.getImage(sUrl)));
 		else
-			LVI.setDrawable(friendPhoto.getBigDrawable());
+		{
+			LVI.setTag(friendName);
+			if (friendPhoto.getBigDrawable() == null)
+				FSQConnector.loadImageAsync(LVI, friendPhoto, UrlDrawable.BIG_URL, false, null);
+			else
+				LVI.setDrawable(friendPhoto.getBigDrawable());
+		}
 		final Context locContext = context;
 		View clickView = view.findViewById(R.id.list_block);
 		clickView.setOnClickListener(new OnClickListener()

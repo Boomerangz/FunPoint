@@ -116,8 +116,12 @@ public abstract class Event implements ListItem
 
 	public void setImageUrl(String imageUrl)
 	{
-		UrlDrawable urlDr = new UrlDrawable(null, imageUrl);
-		this.imageUrl = urlDr;
+		if (imageUrl != null&&!imageUrl.equals("null"))
+		{
+			UrlDrawable urlDr = new UrlDrawable(null, imageUrl);
+			this.imageUrl = urlDr;
+		} else
+			this.imageUrl = null;
 	}
 
 	Event(Cursor cursor) throws Exception
@@ -250,16 +254,22 @@ public abstract class Event implements ListItem
 			}
 		});
 
-		String imageUrl = (String) ProjectUtils.ifnull(getImageUrl().smallUrl, getImageUrl().bigUrl);
-		ImageCache imageCache = ImageCache.getInstance();
-		holder.loadingImage.setTag(getName());
-		if (imageCache.hasImage(imageUrl))
+		if (getImageUrl() != null)
 		{
-			holder.loadingImage.setDrawable(new BitmapDrawable(imageCache.getImage(imageUrl)));
+			String imageUrl = (String) ProjectUtils.ifnull(getImageUrl().smallUrl, getImageUrl().bigUrl);
+			ImageCache imageCache = ImageCache.getInstance();
+			holder.loadingImage.setTag(getName());
+			if (imageCache.hasImage(imageUrl))
+			{
+				holder.loadingImage.setDrawable(new BitmapDrawable(imageCache.getImage(imageUrl)));
+			} else
+			{
+				FSQConnector.loadImageAsync(holder.loadingImage, getImageUrl(), UrlDrawable.SMALL_URL, false, null);
+			}
 		}
 		else
 		{
-			FSQConnector.loadImageAsync(holder.loadingImage, getImageUrl(), UrlDrawable.SMALL_URL, false, null);
+			holder.loadingImage.setDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
 		}
 		return convertView;
 	}

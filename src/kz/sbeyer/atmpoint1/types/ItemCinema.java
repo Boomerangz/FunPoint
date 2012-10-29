@@ -29,9 +29,8 @@ public class ItemCinema extends FSQItem
 {
 	boolean hallInfoFilled = false;
 	CinemaTimeTable timeTable;
-	
-	
-	public static final String TICKETON_URL="http://m.ticketon.kz/hallplan/";
+
+	public static final String TICKETON_URL = "http://m.ticketon.kz/hallplan/";
 
 	public static final String CINEMA_IMG = "m_2";
 
@@ -41,27 +40,28 @@ public class ItemCinema extends FSQItem
 		return FSQ_TYPE_CINEMA;
 	}
 
-	private static Set<String> jam_cinema_set=null;
+	private static Set<String> jam_cinema_set = null;
+
 	public ItemCinema loadFromJSON(JSONObject jObject)
 	{
 		super.loadFromJSON(jObject);
-		
-		if (jam_cinema_set==null)
+
+		if (jam_cinema_set == null)
 		{
 			fillCinemaSet();
 		}
-		if (jam_cinema_set.contains(this.getId()))
+		if (jam_cinema_set.contains(this.getId())||jam_cinema_set.size()==0)
 			return this;
-		else return null;
+		else
+			return null;
 	}
 
 	private void fillCinemaSet()
 	{
-		jam_cinema_set=FileConnector.getJamCinemaList();
+		jam_cinema_set = FileConnector.getJamCinemaList();
 	}
 
-	public void loadHallTableFromJSON(JSONArray jCinemaEvents,
-			JSONArray jCinemaPlaces, JSONArray jCinemaSection)
+	public void loadHallTableFromJSON(JSONArray jCinemaEvents, JSONArray jCinemaPlaces, JSONArray jCinemaSection)
 	{
 		try
 		{
@@ -77,18 +77,27 @@ public class ItemCinema extends FSQItem
 	public void loadAdditionalInfo()
 	{
 		timeTable = new CinemaTimeTable();
-		JSONObject jObject = FileConnector.loadCinemaInfo(getId());
-		if (jObject != null)
+		JSONObject jObject;
+		try
 		{
-			try
+			jObject = FileConnector.loadCinemaInfo(getId());
+
+			if (jObject != null)
 			{
-				timeTable.loadFromJSONArray(jObject.getJSONArray("events"));
-			} catch (JSONException e)
-			{
-				e.printStackTrace();
+				try
+				{
+					timeTable.loadFromJSONArray(jObject.getJSONArray("events"));
+				} catch (JSONException e)
+				{
+					e.printStackTrace();
+				}
 			}
-			hallInfoFilled = true;
+		} catch (Exception e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		hallInfoFilled = true;
 	}
 
 	public CinemaTimeTable getTimeTable()
@@ -123,7 +132,7 @@ public class ItemCinema extends FSQItem
 		public Button okButton;
 		public Button cancelButton;
 	}
-	
+
 	@Override
 	public int getItemColor()
 	{

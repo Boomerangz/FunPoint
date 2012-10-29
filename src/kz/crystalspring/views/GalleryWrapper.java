@@ -28,8 +28,9 @@ public class GalleryWrapper
 	Context context;
 	List<UrlDrawable> drawList;
 	TextView moreButton;
-	public static final int MODE_PLACE=999;
-	public static final int MODE_BADGES=9999;
+	Integer mode;
+	public static final int MODE_PLACE = 999;
+	public static final int MODE_BADGES = 9999;
 
 	private final static int PHOTOS_COUNT = 3;
 
@@ -37,13 +38,13 @@ public class GalleryWrapper
 	{
 		this.context = context;
 		LayoutInflater inflater = context.getLayoutInflater();
-		mainLayout = (LinearLayout) inflater.inflate(R.layout.gallery_widget,
-				null);
+		mainLayout = (LinearLayout) inflater.inflate(R.layout.gallery_widget, null);
 		mainLayout.setBackgroundColor(context.getResources().getColor(R.color.white));
 		drawList = new ArrayList<UrlDrawable>();
 		moreButton = (TextView) mainLayout.findViewById(R.id.more_button);
-//		if (mode==MODE_BADGES)
-//			moreButton.setEnabled(false);
+		this.mode = mode;
+		// if (mode==MODE_BADGES)
+		// moreButton.setEnabled(false);
 	}
 
 	public void addDrawable(UrlDrawable drawabl)
@@ -54,8 +55,7 @@ public class GalleryWrapper
 
 	private void refreshLayout()
 	{
-		LinearLayout layout = (LinearLayout) mainLayout
-				.findViewById(R.id.gallery_layout);
+		LinearLayout layout = (LinearLayout) mainLayout.findViewById(R.id.gallery_layout);
 		layout.removeAllViews();
 		for (int i = 0; i < drawList.size() && i < PHOTOS_COUNT; i++)
 		{
@@ -65,15 +65,15 @@ public class GalleryWrapper
 		}
 		if (drawList.size() > 0)
 		{
-			moreButton.setText("Посмотреть все " + drawList.size()
-					+ " фотографий");
+			String moreText = (mode.intValue() == MODE_BADGES) ? "Посмотреть все " + drawList.size() + " фотографий" : "Посмотреть все "
+					+ drawList.size() + " значков";
+			moreButton.setText(moreText);
 			moreButton.setOnClickListener(new OnClickListener()
 			{
 				@Override
 				public void onClick(View arg0)
 				{
-					Intent intent = new Intent(GalleryWrapper.this.context,
-							ImageTableActivity.class);
+					Intent intent = new Intent(GalleryWrapper.this.context, ImageTableActivity.class);
 					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					GalleryWrapper.this.context.startActivity(intent);
 				}
@@ -83,13 +83,12 @@ public class GalleryWrapper
 			moreButton.setText("Фотографий этого места нет");
 			moreButton.setOnClickListener(null);
 		}
-		
+
 	}
 
 	private View createImageView(final UrlDrawable drw, final int position)
 	{
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.FILL_PARENT,
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 				Math.round(80 * MainApplication.mDensity));
 		lp.weight = 1;
 		final LoadingImageView iv = new LoadingImageView(context);
@@ -111,8 +110,7 @@ public class GalleryWrapper
 			iv.setDrawable(drw.getSmallDrawable());
 		} else
 		{
-			FSQConnector.loadImageAsync(iv, drw, UrlDrawable.SMALL_URL, false,
-					listner);
+			FSQConnector.loadImageAsync(iv, drw, UrlDrawable.SMALL_URL, false, listner);
 		}
 		iv.setOnClickListener(listner);
 		return iv;

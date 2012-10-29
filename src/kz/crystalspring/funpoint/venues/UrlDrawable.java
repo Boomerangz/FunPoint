@@ -18,8 +18,8 @@ public class UrlDrawable implements Serializable
 	public static final int BIG_URL = 1;
 	public static final int SMALL_URL = 2;
 
-	public String bigUrl = "";
-	public String smallUrl = "";
+	public String bigUrl = null;
+	public String smallUrl = null;
 	private Drawable bigDrawable = null;
 	private Drawable smallDrawable = null;
 
@@ -31,6 +31,7 @@ public class UrlDrawable implements Serializable
 
 	public UrlDrawable()
 	{
+		
 	}
 
 	public synchronized Drawable getBigDrawable()

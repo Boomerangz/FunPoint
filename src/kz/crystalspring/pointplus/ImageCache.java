@@ -41,8 +41,7 @@ public class ImageCache
 	{
 		this.context = context;
 		singletone = this;
-		File nDirectory = new File(Environment.getExternalStorageDirectory(),
-				"jamkz/");
+		File nDirectory = new File(Environment.getExternalStorageDirectory(), "jamkz/");
 
 		nDirectory.mkdirs();
 		if (!nDirectory.exists())
@@ -54,8 +53,7 @@ public class ImageCache
 		}
 		mapBit = new HashMap<String, Bitmap>(BUFFER_SIZE);
 		listBit = new LinkedList<String>();
-		mPrefs = context.getSharedPreferences("title_photos",
-				Context.MODE_PRIVATE);
+		mPrefs = context.getSharedPreferences("title_photos", Context.MODE_PRIVATE);
 	}
 
 	public static ImageCache getInstance()
@@ -120,8 +118,21 @@ public class ImageCache
 			if (imageFile.exists() && imageFile.canRead())
 			{
 				String fName = imageFile.getAbsolutePath();
-				Bitmap bitmap = BitmapFactory.decodeFile(fName);
-				// System.out.println(bitmap.toString());
+				int i = 0;
+				Bitmap bitmap = null;
+				while (i == 0)
+				{
+					try
+					{
+						i = 1;
+						bitmap = BitmapFactory.decodeFile(fName);
+					} catch (OutOfMemoryError e)
+					{
+						e.printStackTrace();
+						i = 0;
+						System.gc();
+					}
+				}
 				pushBitmapToBuffer(sUrl, bitmap);
 				return bitmap;
 			} else
@@ -139,13 +150,12 @@ public class ImageCache
 		if (listBit.size() > BUFFER_SIZE)
 		{
 			String st = listBit.get(BUFFER_SIZE);
-			// mapBit.get(st).recycle();
+			//mapBit.get(st).
 			mapBit.remove(st);
 			listBit.remove(st);
 			Log.w("ImageCache", "Removed from buffer");
 		}
-		Log.w("ImageCache",
-				"Buffer size now=" + Integer.toString(listBit.size()));
+		Log.w("ImageCache", "Buffer size now=" + Integer.toString(listBit.size()));
 		System.gc();
 	}
 
@@ -165,11 +175,8 @@ public class ImageCache
 				jObject = new JSONObject(str);
 				final int MAX_EXPIRE_DAYS = 6;
 				final int MIN_EXPIRE_DAYS = 3;
-				int days = (int) Math
-						.round(Math.random()
-								* (MAX_EXPIRE_DAYS - MIN_EXPIRE_DAYS)
-								+ MIN_EXPIRE_DAYS);
-				long expireTime=days*24*60*60*1000;
+				int days = (int) Math.round(Math.random() * (MAX_EXPIRE_DAYS - MIN_EXPIRE_DAYS) + MIN_EXPIRE_DAYS);
+				long expireTime = days * 24 * 60 * 60 * 1000;
 				long expirationDate = new Date().getTime() - expireTime;
 				if (jObject.getLong("date") > expirationDate)
 					return jObject.getString("url");

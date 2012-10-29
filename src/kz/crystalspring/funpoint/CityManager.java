@@ -43,7 +43,7 @@ public class CityManager
 			} else
 			{
 				InputStream is = context.getAssets().open("city_list.json");
-				st = HttpHelper.streamToString(is);
+				st = HttpHelper.getInstance().streamToString(is);
 			}
 
 			JSONArray jCityList = new JSONArray(st);

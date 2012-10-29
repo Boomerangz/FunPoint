@@ -84,7 +84,7 @@ public class FoursquareApp {
 					
 					Log.i(TAG, "Opening URL " + url.toString());
 					
-					JSONObject jsonObj  = (JSONObject) new JSONTokener(HttpHelper.loadByUrl(url)).nextValue();
+					JSONObject jsonObj  = (JSONObject) new JSONTokener(HttpHelper.getInstance().loadByUrl(url)).nextValue();
 		        	mAccessToken 		= jsonObj.getString("access_token");
 		        	FSQConnector.dropUserActivity();
 		        	MainApplication.loadAdditionalContent();
@@ -113,7 +113,7 @@ public class FoursquareApp {
 					
 					Log.d(TAG, "Opening URL " + url.toString());
 					
-					String response		= HttpHelper.loadByUrl(url);
+					String response		= HttpHelper.getInstance().loadByUrl(url);
 					JSONObject jsonObj 	= (JSONObject) new JSONTokener(response).nextValue();
 		       
 					JSONObject resp		= (JSONObject) jsonObj.get("response");

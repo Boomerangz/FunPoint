@@ -170,7 +170,13 @@ public class funObjectList extends FragmentActivity implements
 	private void refreshList()
 	{
 		stopRefreshing();
-		itemsList = MainApplication.mapItemContainer.getFilteredItemList();
+		try
+		{
+			itemsList = MainApplication.mapItemContainer.getFilteredItemList();
+		} catch (Exception e)
+		{
+			exit();
+		}
 		eventsList = MainApplication.eventContainer.getFilteredEventsList();
 
 		categorySubHeader.setText(MainApplication.mapItemContainer
@@ -188,6 +194,15 @@ public class funObjectList extends FragmentActivity implements
 			setContentView(mainView);
 		}
 		System.gc();
+//		if (pagerAdapter.getCount()==0&&MainApplication.mapItemContainer.getFlter().size()>0)
+//		{
+//			finish();
+//		}
+	}
+
+	private void exit()
+	{
+		finish();
 	}
 
 	private List<TitleFragment> fillObjectAndEventLists()

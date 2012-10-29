@@ -133,7 +133,7 @@ public class simpleController extends ActivityController
 							.getId());
 					item.loadSimpleOptionalInfo(jObject);
 				}
-				FileConnector.loadCinemaInfo(item.getId());
+			//	FileConnector.loadCinemaInfo(item.getId());
 				return null;
 			}
 

@@ -28,6 +28,7 @@ public class FSQItem extends MapItem implements ImageContainer
 	String category = FSQ_UNDEFINED;
 	int hereNow;
 	List<String> categoryList = new ArrayList<String>();
+	
 
 	OptionalInfo optInfo;
 
@@ -216,68 +217,7 @@ public class FSQItem extends MapItem implements ImageContainer
 		return context.getResources().getColor(R.color.selected_blue);
 	}
 
-	public static HashMap<String, Bitmap> photoMap = new HashMap<String, Bitmap>();
-
-	// @Override
-	// protected void loadImageToView(final LoadingImageView loadingImageView)
-	// {
-	// final Drawable photo;
-	// if (photoMap.containsKey(getId()))
-	// photo = new BitmapDrawable(photoMap.get(getId()));
-	// else
-	// photo = null;
-	// loadingImageView.setDrawable(photo);
-	// if (photo == null)
-	// {
-	//
-	// Runnable task = new Runnable()
-	// {
-	// @Override
-	// public void run()
-	// {
-	// loadingImageView.setTag(getId());
-	// if (photo == null)
-	// {
-	// Bitmap btm = FSQConnector
-	// .loadTitlePhotoForVenue(getId());
-	// Bitmap scaledBtm = null;
-	// if (btm != null)
-	// {
-	// scaledBtm = Bitmap.createScaledBitmap(btm,
-	// Math.round(90 * MainApplication.mDensity),
-	// Math.round(90 * MainApplication.mDensity),
-	// true);
-	// btm.recycle();
-	// }
-	// photoMap.put(getId(), scaledBtm);
-	// }
-	// }
-	// };
-	// Runnable postTask = new Runnable()
-	// {
-	// @Override
-	// public void run()
-	// {
-	// Drawable photo = new BitmapDrawable(photoMap.get(getId()));
-	// if (!loadingImageView.hasDrawable()
-	// && getId().equals(loadingImageView.getTag()))
-	// {
-	// if (photo != null && !loadingImageView.hasDrawable())
-	// loadingImageView
-	// .setDrawable((Drawable) ProjectUtils
-	// .ifnull(photo,
-	// context.getResources()
-	// .getDrawable(
-	// R.drawable.ic_launcher)));
-	// else
-	// loadingImageView.setDrawable(context.getResources()
-	// .getDrawable(R.drawable.ic_launcher));
-	// }
-	// }
-	// };
-	// MainApplication.pwAggregator.addPriorityTask(task, postTask);
-	// }
-	// }
+	Bitmap localBtm = null;
 
 	@Override
 	protected void loadImageToView(final LoadingImageView loadingImageView)
@@ -286,10 +226,9 @@ public class FSQItem extends MapItem implements ImageContainer
 		final Drawable photo;
 		ImageCache imageCache = ImageCache.getInstance();
 		String photoUrl = imageCache.getTitlePhotoUrlIfHave(getId());
-		if (photoUrl!=null&&photoUrl.equals(""))
+		if (photoUrl != null && photoUrl.equals(""))
 		{
-			loadingImageView.setDrawable(context.getResources().getDrawable(
-					R.drawable.ic_launcher));
+			loadingImageView.setDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
 		} else
 		{
 
@@ -308,20 +247,15 @@ public class FSQItem extends MapItem implements ImageContainer
 						loadingImageView.setTag(getId());
 						if (photo == null)
 						{
-							Bitmap btm = FSQConnector
-									.loadTitlePhotoForVenue(getId());
+							Bitmap btm = FSQConnector.loadTitlePhotoForVenue(getId());
 							Bitmap scaledBtm = null;
 							if (btm != null)
 							{
-								scaledBtm = Bitmap
-										.createScaledBitmap(
-												btm,
-												Math.round(90 * MainApplication.mDensity),
-												Math.round(90 * MainApplication.mDensity),
-												true);
+								scaledBtm = Bitmap.createScaledBitmap(btm, Math.round(90 * MainApplication.mDensity),
+										Math.round(90 * MainApplication.mDensity), true);
 								// btm.recycle();
 							}
-							photoMap.put(getId(), scaledBtm);
+							localBtm = scaledBtm;
 						}
 					}
 				};
@@ -330,23 +264,15 @@ public class FSQItem extends MapItem implements ImageContainer
 					@Override
 					public void run()
 					{
-						Drawable photo = new BitmapDrawable(
-								photoMap.get(getId()));
-						if (!loadingImageView.hasDrawable()
-								&& getId().equals(loadingImageView.getTag()))
+						Drawable photo = (localBtm!=null)?new BitmapDrawable(localBtm):context.getResources().getDrawable(R.drawable.ic_launcher);
+						localBtm=null;
+						if (!loadingImageView.hasDrawable() && getId().equals(loadingImageView.getTag()))
 						{
-							if (photo != null
-									&& !loadingImageView.hasDrawable())
-								loadingImageView
-										.setDrawable((Drawable) ProjectUtils
-												.ifnull(photo,
-														context.getResources()
-																.getDrawable(
-																		R.drawable.ic_launcher)));
+							if (photo != null && !loadingImageView.hasDrawable())
+								loadingImageView.setDrawable((Drawable) ProjectUtils.ifnull(photo,
+										context.getResources().getDrawable(R.drawable.ic_launcher)));
 							else
-								loadingImageView.setDrawable(context
-										.getResources().getDrawable(
-												R.drawable.ic_launcher));
+								loadingImageView.setDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
 							System.gc();
 							Log.w("FSQItem", "loadImage 2 ended");
 						}

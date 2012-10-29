@@ -96,13 +96,25 @@ public class funMap extends MapActivity implements LocationListener,
 	{
 			clearMap();
 			
-			addItemListOnMap(MainApplication.mapItemContainer
-					.getFilteredItemList());
+			try
+			{
+				addItemListOnMap(MainApplication.mapItemContainer
+						.getFilteredItemList());
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+				exit();
+			}
 			addItemOnMap(MainApplication.mapItemContainer.getSelectedMapItem());
 			myIO.populateNow();
 			mapView.invalidate();
 	}
 	
+	private void exit()
+	{
+		finish();
+	}
+
 	private void addItemOnMap(MapItem item)
 	{
 		CustomOverlayItem oi = new CustomOverlayItem(item.getGeoPoint(),

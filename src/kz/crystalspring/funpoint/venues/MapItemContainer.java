@@ -114,7 +114,7 @@ public class MapItemContainer
 		}
 	};
 
-	public synchronized List<MapItem> getFilteredItemList()
+	public synchronized List<MapItem> getFilteredItemList() throws Exception
 	{
 		List<MapItem> filteredList = filterList(mapItemArray);
 		if (filteredList.size() == 0)
@@ -130,10 +130,12 @@ public class MapItemContainer
 		return filteredList;
 	}
 
-	private List<MapItem> filterList(List<MapItem> itemArray)
+	private List<MapItem> filterList(List<MapItem> itemArray) throws Exception
 	{
 		synchronized (visibleFilterMap)
 		{
+			if (visibleFilterMap.size()==0)
+				throw new Exception("Empty Filter List");
 			List<MapItem> filteredList = new ArrayList<MapItem>();
 			for (MapItem item : itemArray)
 				if (visibleFilterMap.contains(item.getObjTypeId())

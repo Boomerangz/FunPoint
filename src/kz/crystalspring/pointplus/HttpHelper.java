@@ -44,18 +44,33 @@ import android.util.Log;
 
 public class HttpHelper
 {
-	private static final String GLOBAL_PROXY = "http://www.homeplus.kz/jam/4sq_gzip_curl.php";
-	private static final String LOCAL_PROXY = "http://192.168.1.50/jam/4sq_gzip_curl.php";
-	private static final String CURRENT_PROXY = GLOBAL_PROXY;
-	private static boolean USE_PROXY = false;
-	private static final int NEED_TO_COMPLETE = 3;
+	private final String GLOBAL_PROXY = "http://www.homeplus.kz/jam/4sq_gzip_curl.php";
+	private final String LOCAL_PROXY = "http://192.168.1.50/jam/4sq_gzip_curl.php";
+	private final String CURRENT_PROXY = GLOBAL_PROXY;
+	private boolean USE_PROXY = false;
+	private final int NEED_TO_COMPLETE = 3;
 
-	private static final boolean NEED_TO_TEST = true;
-	private static final float CHANCE = (float) 0;
+	private final boolean NEED_TO_TEST = true;
+	private final float CHANCE = (float) 0;
 
-	static HttpClient client = new DefaultHttpClient();
+	HttpClient client;
+	private static HttpHelper singletone;
 
-	private static HttpResponse loadResponse(HttpUriRequest request)
+	private HttpHelper()
+	{
+		client = new DefaultHttpClient();
+	}
+
+	public static HttpHelper getInstance()
+	{
+		if (singletone == null)
+		{
+			singletone = new HttpHelper();
+		}
+		return singletone;
+	}
+
+	private HttpResponse loadResponse(HttpUriRequest request)
 	{
 		int complete = 0;
 		while (complete < NEED_TO_COMPLETE)
@@ -66,13 +81,12 @@ public class HttpHelper
 				Log.w("HTTPRequest", request.getURI().toString());
 				if (NEED_TO_TEST && Math.random() < CHANCE)
 				{
-					Log.w("HTTPRequest","Test Exception on "+request.getURI().toString());
+					Log.w("HTTPRequest", "Test Exception on " + request.getURI().toString());
 					throw new IOException();
 				}
 				HttpResponse response = client.execute(request);
 				Date end_d = new Date();
-				Log.w("HTTPRequest",
-						Long.toString(end_d.getTime() - begin_d.getTime()));
+				Log.w("HTTPRequest", Long.toString(end_d.getTime() - begin_d.getTime()));
 				complete = NEED_TO_COMPLETE;
 				return response;
 			} catch (ClientProtocolException e)
@@ -92,7 +106,7 @@ public class HttpHelper
 		return null;
 	}
 
-	private static InputStream loadStream(HttpPost post)
+	private InputStream loadStream(HttpPost post)
 	{
 		try
 		{
@@ -105,7 +119,7 @@ public class HttpHelper
 		}
 	}
 
-	private static InputStream loadStream(HttpGet get)
+	private InputStream loadStream(HttpGet get)
 	{
 		try
 		{
@@ -117,8 +131,7 @@ public class HttpHelper
 				ArrayList<BasicNameValuePair> params = new ArrayList();
 				String url = get.getURI().toString();
 				params.add(new BasicNameValuePair("url", url));
-				params.add(new BasicNameValuePair("key_zip",
-						FSQConnector.CLIENT_SECRET));
+				params.add(new BasicNameValuePair("key_zip", FSQConnector.CLIENT_SECRET));
 				post.setEntity(new UrlEncodedFormEntity(params));
 				is = loadResponse(post).getEntity().getContent();
 				try
@@ -139,7 +152,7 @@ public class HttpHelper
 		}
 	}
 
-	public static String loadByUrl(String sUrl)
+	public String loadByUrl(String sUrl)
 	{
 		while (jUrls == null)
 		{
@@ -167,7 +180,7 @@ public class HttpHelper
 		}
 	}
 
-	private static synchronized String privateLoadByUrl(String sUrl)
+	private synchronized String privateLoadByUrl(String sUrl)
 	{
 		HttpGet request = new HttpGet();
 		Log.w("HTTPRequest", sUrl);
@@ -184,8 +197,7 @@ public class HttpHelper
 		}
 	}
 
-	public static synchronized String loadPostByUrl(String sUrl,
-			List<BasicNameValuePair> parameters)
+	public synchronized String loadPostByUrl(String sUrl, List<BasicNameValuePair> parameters)
 	{
 
 		String usedUrl = sUrl;
@@ -195,14 +207,12 @@ public class HttpHelper
 			if (USE_PROXY)
 			{
 				parameters.add(new BasicNameValuePair("url", sUrl));
-				parameters.add(new BasicNameValuePair("key_zip",
-						FSQConnector.CLIENT_SECRET));
+				parameters.add(new BasicNameValuePair("key_zip", FSQConnector.CLIENT_SECRET));
 				usedUrl = CURRENT_PROXY;
 			}
 			HttpPost post = new HttpPost(usedUrl);
 			post.setHeader("Accept-Language", "ru");
-			AbstractHttpEntity ent = new UrlEncodedFormEntity(parameters,
-					HTTP.UTF_8);
+			AbstractHttpEntity ent = new UrlEncodedFormEntity(parameters, HTTP.UTF_8);
 			ent.setContentEncoding("UTF-8");
 			post.setEntity(ent);
 			InputStream is = loadStream(post);
@@ -225,7 +235,7 @@ public class HttpHelper
 		}
 	}
 
-	public static synchronized Bitmap loadPictureByUrl(String sUrl)
+	public synchronized Bitmap loadPictureByUrl(String sUrl)
 	{
 		if (imageCache == null)
 		{
@@ -244,7 +254,20 @@ public class HttpHelper
 				URLConnection connection = url.openConnection();
 				connection.setUseCaches(true);
 				InputStream response = (InputStream) connection.getContent();
-				bitmap = BitmapFactory.decodeStream(response);
+				boolean succes = false;
+				while (!succes)
+				{
+					try
+					{
+						succes = true;
+						bitmap = BitmapFactory.decodeStream(response);
+					} catch (OutOfMemoryError e)
+					{
+						e.printStackTrace();
+						succes = false;
+						System.gc();
+					}
+				}
 				imageCache.addToCache(sUrl, bitmap);
 				System.gc();
 			}
@@ -256,7 +279,7 @@ public class HttpHelper
 		}
 	}
 
-	public static String streamToString(InputStream is) throws IOException
+	public String streamToString(InputStream is) throws IOException
 	{
 		String zippedSt = null;
 		if (is != null)
@@ -265,8 +288,7 @@ public class HttpHelper
 			String line;
 			try
 			{
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(is, "UTF-8"));
+				BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 				while ((line = reader.readLine()) != null)
 				{
 					sb.append(line);
@@ -282,7 +304,7 @@ public class HttpHelper
 		return zippedSt;
 	}
 
-	private static Drawable streamToDrawable(InputStream is) throws IOException
+	private Drawable streamToDrawable(InputStream is) throws IOException
 	{
 		Bitmap b = BitmapFactory.decodeStream(is);
 		b.setDensity(Bitmap.DENSITY_NONE);
@@ -290,9 +312,9 @@ public class HttpHelper
 		return d;
 	}
 
-	static ImageCache imageCache = null;
+	ImageCache imageCache = null;
 
-	public static Drawable loadPictureByUrl(String sUrl, int i)
+	public Drawable loadPictureByUrl(String sUrl, int i)
 	{
 		if (imageCache == null)
 		{
@@ -306,15 +328,27 @@ public class HttpHelper
 				URLConnection connection = url.openConnection();
 				connection.setUseCaches(true);
 				InputStream response = (InputStream) connection.getContent();
-				Bitmap true_bitmap = BitmapFactory.decodeStream(response);
-				int h_coof = i;
-				int w_coof = Math.round(true_bitmap.getWidth()
-						/ ((float) true_bitmap.getHeight() / i));
-				Bitmap small_bitmap = Bitmap.createScaledBitmap(true_bitmap,
-						h_coof, w_coof, false);
-				// true_bitmap.recycle();
-				System.gc();
-				return new BitmapDrawable(small_bitmap);
+				boolean succes = false;
+				while (!succes)
+				{
+					try
+					{
+						succes = true;
+						Bitmap true_bitmap = BitmapFactory.decodeStream(response);
+						int h_coof = i;
+						int w_coof = Math.round(true_bitmap.getWidth() / ((float) true_bitmap.getHeight() / i));
+						Bitmap small_bitmap = Bitmap.createScaledBitmap(true_bitmap, h_coof, w_coof, false);
+						// true_bitmap.recycle();
+						System.gc();
+						return new BitmapDrawable(small_bitmap);
+					} catch (OutOfMemoryError e)
+					{
+						succes = false;
+						System.gc();
+						e.printStackTrace();
+					}
+				}
+				return null;
 			} else
 				return null;
 		} catch (Exception e)
@@ -324,23 +358,19 @@ public class HttpHelper
 		}
 	}
 
-	private static JSONObject jUrls = null;
+	private JSONObject jUrls = null;
 
-	public static synchronized void loadFromProxy(GeoPoint geoPoint)
+	public synchronized void loadFromProxy(GeoPoint geoPoint)
 	{
 		try
 		{
-			List<BasicNameValuePair> params = FSQConnector
-					.getUrlForProxy(geoPoint);
-			params.add(new BasicNameValuePair("count", Integer.toString(params
-					.size())));
-			String sResponse = loadZipPostByUrl(
-					"http://jam-kz.appspot.com/myproject", params);
+			List<BasicNameValuePair> params = FSQConnector.getUrlForProxy(geoPoint);
+			params.add(new BasicNameValuePair("count", Integer.toString(params.size())));
+			String sResponse = loadZipPostByUrl("http://jam-kz.appspot.com/myproject", params);
 			jUrls = new JSONObject(sResponse);
 			if (jUrls.has("Time"))
 			{
-				Log.w("HTTPResponse",
-						"Proxy loaded in " + jUrls.getString("Time"));
+				Log.w("HTTPResponse", "Proxy loaded in " + jUrls.getString("Time"));
 			}
 		} catch (Exception e)
 		{
@@ -349,7 +379,7 @@ public class HttpHelper
 		}
 	}
 
-	private static boolean isConnected()
+	private boolean isConnected()
 	{
 		try
 		{
@@ -376,8 +406,7 @@ public class HttpHelper
 		return false;
 	}
 
-	private static String loadZipPostByUrl(String sUrl,
-			List<BasicNameValuePair> parameters)
+	private String loadZipPostByUrl(String sUrl, List<BasicNameValuePair> parameters)
 	{
 		String usedUrl = sUrl;
 		Log.w("HTTPRequest", sUrl);
@@ -385,8 +414,7 @@ public class HttpHelper
 		{
 			HttpPost post = new HttpPost(usedUrl);
 			post.setHeader("Accept-Language", "ru");
-			AbstractHttpEntity ent = new UrlEncodedFormEntity(parameters,
-					HTTP.UTF_8);
+			AbstractHttpEntity ent = new UrlEncodedFormEntity(parameters, HTTP.UTF_8);
 			ent.setContentEncoding("UTF-8");
 			post.setEntity(ent);
 			// InputStream is = ;

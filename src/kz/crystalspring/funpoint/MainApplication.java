@@ -110,7 +110,6 @@ public class MainApplication extends Application
 	{
 		super.onLowMemory();
 		Log.w("MainApplication", "Low Memory");
-		FSQItem.photoMap.clear();
 	}
 
 	@Override
@@ -152,7 +151,7 @@ public class MainApplication extends Application
 
 	private static void loadFromProxy()
 	{
-		HttpHelper.loadFromProxy(getCurrentLocation());
+		HttpHelper.getInstance().loadFromProxy(getCurrentLocation());
 	}
 
 	private static void loadPoints()
