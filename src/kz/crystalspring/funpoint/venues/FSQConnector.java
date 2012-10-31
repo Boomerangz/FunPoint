@@ -273,7 +273,7 @@ public class FSQConnector
 		return venueList;
 	}
 
-	public static JSONObject getVenueInformation(String id)
+	public static JSONObject loadVenueInformation(String id)
 	{
 		String sUrl = API_URL + "/venues/" + id;
 

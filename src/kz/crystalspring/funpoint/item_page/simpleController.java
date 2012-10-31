@@ -17,6 +17,7 @@ import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.FileConnector;
+import kz.crystalspring.funpoint.venues.OptionalInfo;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.CommentsWrapper;
@@ -123,17 +124,13 @@ public class simpleController extends ActivityController
 		super.onResume();
 		AsyncTask task = new AsyncTask()
 		{
-
 			@Override
 			protected Object doInBackground(Object... params)
 			{
-				if (item.getOptionalInfo() == null)
+				if (item.getOptionalInfo() == null||item.getOptionalInfo().getLoadingStatus()!=OptionalInfo.LOADED_SUCCES)
 				{
-					JSONObject jObject = FSQConnector.getVenueInformation(item
-							.getId());
-					item.loadSimpleOptionalInfo(jObject);
+					item.loadSimpleOptionalInfo();
 				}
-			//	FileConnector.loadCinemaInfo(item.getId());
 				return null;
 			}
 
@@ -147,7 +144,6 @@ public class simpleController extends ActivityController
 		};
 		currentTask = task;
 		task.execute();
-
 	}
 
 	private View loadTitlePage()

@@ -13,13 +13,15 @@ import kz.crystalspring.views.GalleryWrapper;
 import kz.crystalspring.views.LoadingImageView;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,7 +39,7 @@ public class ProfilePage extends Activity implements RefreshableMapList
 		setContentView(R.layout.profile_page);
 
 		spinner = (Spinner) findViewById(R.id.spinner_city);
-		Button button1 = (Button) findViewById(R.id.button1);
+		View button1 = findViewById(R.id.button1);
 		final FoursquareApp mFsqApp = MainApplication.FsqApp;
 		FsqAuthListener listener = new FsqAuthListener()
 		{
@@ -110,7 +112,7 @@ public class ProfilePage extends Activity implements RefreshableMapList
 			super(context, android.R.layout.simple_spinner_item,
 					new ArrayList<String>());
 			cityNamesList = MainApplication.getCityManager().getCityList();
-			add("По местоположению");
+			add("Рядом");
 			for (City st : cityNamesList)
 			{
 				add(st.getRusName());
@@ -131,6 +133,15 @@ public class ProfilePage extends Activity implements RefreshableMapList
 				return cityNamesList.indexOf(selectedCity);
 			else
 				return 0;
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent)
+		{
+			TextView v=(TextView) super.getView(position, convertView, parent);
+			v.setTextSize(TypedValue.COMPLEX_UNIT_PT, 6);
+			v.setTypeface(null, Typeface.BOLD);
+			return v;
 		}
 	}
 

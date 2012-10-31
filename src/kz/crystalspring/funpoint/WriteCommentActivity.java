@@ -11,6 +11,7 @@ import java.net.URI;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
+import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.visualities.RatingActivity;
 import android.app.Activity;
 import android.app.Dialog;
@@ -37,6 +38,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class WriteCommentActivity extends Activity implements RefreshableMapList
@@ -49,7 +51,7 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 	public static final int COMMENT_MODE = 1;
 	public static final int CHECKIN_MODE = 2;
 	Button clearButton;
-	private static String response=null;
+	private static String response = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -63,8 +65,7 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 		clearButton = (Button) findViewById(R.id.clear_button);
 
 		mImageView = (ImageView) findViewById(R.id.imageView1);
-		_path = Environment.getExternalStorageDirectory()
-				+ "/images/make_machine_example.jpg";
+		_path = Environment.getExternalStorageDirectory() + "/images/make_machine_example.jpg";
 
 		switch (getIntent().getExtras().getInt("requestCode"))
 		{
@@ -115,17 +116,18 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 				mImageView.setImageResource(R.drawable.camera);
 				clearButton.setVisibility(View.GONE);
 				mImageView.setOnClickListener(takePhotoListner);
+				mImageView.getLayoutParams().height = Math.round(MainApplication.mDensity * 40);
 			}
 		});
 
 	}
-	
+
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-		
-		MainApplication.refreshable=this;
+
+		MainApplication.refreshable = this;
 	}
 
 	@Override
@@ -144,13 +146,12 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 	{
 		EditText edit = (EditText) findViewById(R.id.comment_text);
 		String comment = edit.getText().toString();
-		String venueId = MainApplication.mapItemContainer.getSelectedMapItem()
-				.getId();
+		String venueId = MainApplication.mapItemContainer.getSelectedMapItem().getId();
 		if (getIntent().getExtras().getInt("requestCode") == COMMENT_MODE)
 			sendTip(comment, venueId);
 		else
 			sendCheckin(comment, venueId);
-		//finish();
+		// finish();
 	}
 
 	private void sendTip(String comment, String venueId)
@@ -159,31 +160,31 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 		finish();
 	}
 
-	
-	Dialog pd=null;
+	Dialog pd = null;
+
 	private void sendCheckin(String comment, String venueId)
 	{
-		pd=ProgressDialog.show(this, "Checkin", "Checkining now");
+		pd = ProgressDialog.show(this, "Checkin", "Checkining now");
 		FSQConnector.checkIn(venueId, comment, bitmapToBytes(imageBitmap));
-		//loadRatingPage();
+		// loadRatingPage();
 	}
-	
+
 	@Override
 	public void refreshMapItems()
 	{
-		if (pd!=null&&response!=null)
+		if (pd != null && response != null)
 		{
 			pd.dismiss();
-			pd=null;
+			pd = null;
 			loadRatingPage(response);
-			response=null;
+			response = null;
 			finish();
 		}
 	}
-	
+
 	private void loadRatingPage(String checkinResponse)
 	{
-		Intent intent=new Intent(this,RatingActivity.class);
+		Intent intent = new Intent(this, RatingActivity.class);
 		intent.putExtra("checkinResponse", checkinResponse);
 		startActivity(intent);
 	}
@@ -201,8 +202,7 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 		LayoutInflater mInflater = LayoutInflater.from(getBaseContext());
 		View dialogView = mInflater.inflate(R.layout.image_pick_dialog, null);
 		Button takePhoto = (Button) dialogView.findViewById(R.id.take_photo);
-		Button pickFromGallery = (Button) dialogView
-				.findViewById(R.id.pick_from_gallery);
+		Button pickFromGallery = (Button) dialogView.findViewById(R.id.pick_from_gallery);
 		final Dialog dialog = new Dialog(this);
 		takePhoto.setOnClickListener(new OnClickListener()
 		{
@@ -232,10 +232,8 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 
 	private void takePhotoFromCamera()
 	{
-		_path = Environment.getExternalStorageDirectory().getAbsolutePath()
-				+ File.separatorChar + "Android/data/"
-				+ WriteCommentActivity.this.getPackageName()
-				+ "/files/1111.jpg";
+		_path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separatorChar + "Android/data/"
+				+ WriteCommentActivity.this.getPackageName() + "/files/1111.jpg";
 		File _photoFile = new File(_path);
 		try
 		{
@@ -261,8 +259,7 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 
 	private void takePhotoFromGallery()
 	{
-		Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		startActivityForResult(pickPhoto, TAKE_GALLERY_IMAGE_CODE);
 	}
 
@@ -290,12 +287,11 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 				Uri selectedImage = data.getData();
 				try
 				{
-					Bitmap btm = MediaStore.Images.Media.getBitmap(
-							this.getContentResolver(), selectedImage);
+					Bitmap btm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
 					if (btm.getHeight() > 1000 || (btm.getWidth() > 1000))
-						btm = Bitmap.createScaledBitmap(btm,
-								btm.getWidth() / 2, btm.getHeight() / 2, true);
+						btm = Bitmap.createScaledBitmap(btm, btm.getWidth() / 2, btm.getHeight() / 2, true);
 					mImageView.setImageBitmap(btm);
+					mImageView.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
 					imageBitmap = btm;
 					mImageView.setOnClickListener(openPhotoListner);
 					clearButton.setVisibility(View.VISIBLE);
@@ -314,39 +310,16 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 
 	private void handlePhotoResult(Intent intent)
 	{
-		// Bundle extras = intent.getExtras();
-		// Bitmap mImageBitmap = (Bitmap) extras.get("data");
 		_taken = true;
-
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inSampleSize = 2;
-
-		FileInputStream fis = null;
-		byte[] image = new byte[0];
-		Bitmap mLargeBitmap=null;
-//		try
-//		{
-		//	fis = new FileInputStream(new File(_path));
-//			image = new byte[fis.available()];
-//			fis.read(image);
-			mLargeBitmap = BitmapFactory.decodeFile(_path, options);
-//		} catch (FileNotFoundException e)
-//		{
-//			e.printStackTrace();
-//		} catch (IOException e)
-//		{
-//			e.printStackTrace();
-//		}
-		
-//		Bitmap mLargeBitmap = BitmapFactory.decodeByteArray(image, 0,
-//				image.length);
-
-		Bitmap mImageBitmap =mLargeBitmap;// Bitmap
-//				.createScaledBitmap(mLargeBitmap, mLargeBitmap.getWidth() / 2,
-//						mLargeBitmap.getHeight() / 2, true);
+		Bitmap mLargeBitmap = null;
+		mLargeBitmap = BitmapFactory.decodeFile(_path, options);
+		Bitmap mImageBitmap = mLargeBitmap;// Bitmap
 		mImageView.setImageBitmap(mImageBitmap);
 		imageBitmap = mImageBitmap;
 		mImageView.setOnClickListener(openPhotoListner);
+		mImageView.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
 		clearButton.setVisibility(View.VISIBLE);
 	}
 
@@ -362,14 +335,17 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 
 	private void openPhotoViewActivity()
 	{
-		Intent intent = new Intent(this, FullScrLoadingImageActivity.class);
-		UrlDrawable drwbl = new UrlDrawable();
-		drwbl.setBigDrawable(new BitmapDrawable(imageBitmap));
+		if (!ProjectUtils.ifnull(_path, "").equals(""))
+		{
+			Intent intent = new Intent(this, FullScrLoadingImageActivity.class);
+			UrlDrawable drwbl = new UrlDrawable();
+			drwbl.bigUrl="file://"+_path;
 
-		MainApplication.selectedItemPhoto = drwbl;
+			MainApplication.selectedItemPhoto = drwbl;
 
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(intent);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent);
+		}
 	}
 
 	public byte[] bitmapToBytes(Bitmap btm)
@@ -386,7 +362,7 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 
 	public static synchronized void setResponse(String st)
 	{
-		response=st;
+		response = st;
 	}
 
 }

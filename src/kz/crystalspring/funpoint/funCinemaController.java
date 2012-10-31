@@ -115,7 +115,7 @@ public class funCinemaController extends ActivityController
 					indicator.setViewPager(viewPager);
 
 					cinema.loadAdditionalInfo();
-					cinema.itemCinemaLoadOptionalInfo();
+					cinema.loadOptionalInfo();
 					return null;
 				}
 

@@ -65,7 +65,7 @@ public class GalleryWrapper
 		}
 		if (drawList.size() > 0)
 		{
-			String moreText = (mode.intValue() == MODE_BADGES) ? "Посмотреть все " + drawList.size() + " фотографий" : "Посмотреть все "
+			String moreText = (mode.intValue() == MODE_PLACE) ? "Посмотреть все " + drawList.size() + " фотографий" : "Посмотреть все "
 					+ drawList.size() + " значков";
 			moreButton.setText(moreText);
 			moreButton.setOnClickListener(new OnClickListener()

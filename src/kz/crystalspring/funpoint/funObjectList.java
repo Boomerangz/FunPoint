@@ -37,8 +37,7 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-public class funObjectList extends FragmentActivity implements
-		RefreshableMapList, canBeRefreshing
+public class funObjectList extends FragmentActivity implements RefreshableMapList, canBeRefreshing
 {
 	List<MapItem> itemsList;
 	List<Event> eventsList;
@@ -73,8 +72,7 @@ public class funObjectList extends FragmentActivity implements
 		// mapBtn = (Button) mainView.findViewById(R.id.mapBtn);
 		pgBar = (ProgressBar) mainView.findViewById(R.id.progressBar1);
 
-		categorySubHeader = (TextView) mainView
-				.findViewById(R.id.category_subheader);
+		categorySubHeader = (TextView) mainView.findViewById(R.id.category_subheader);
 		View profileButton = mainView.findViewById(R.id.profile_button);
 		profileButton.setOnClickListener(new OnClickListener()
 		{
@@ -90,8 +88,7 @@ public class funObjectList extends FragmentActivity implements
 		eventAdapter = new ObjectAdapter(this, this);
 
 		List<TitleFragment> viewList = fillObjectAndEventLists();
-		pagerAdapter = new ViewFragmentAdapter(getSupportFragmentManager(),
-				viewList);
+		pagerAdapter = new ViewFragmentAdapter(getSupportFragmentManager(), viewList);
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setCurrentItem(0);
 
@@ -109,14 +106,12 @@ public class funObjectList extends FragmentActivity implements
 		searchEdit.addTextChangedListener(new TextWatcher()
 		{
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count)
+			public void onTextChanged(CharSequence s, int start, int before, int count)
 			{
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after)
+			public void beforeTextChanged(CharSequence s, int start, int count, int after)
 			{
 			}
 
@@ -152,11 +147,12 @@ public class funObjectList extends FragmentActivity implements
 		finish();
 	}
 
+	static int a = 0;
+
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-		setContentView(R.layout.waiting_layout);
 		MainApplication.refreshable = this;
 		refreshMapItems();
 	}
@@ -170,34 +166,52 @@ public class funObjectList extends FragmentActivity implements
 	private void refreshList()
 	{
 		stopRefreshing();
+
+		List<MapItem> newItemsList;
 		try
 		{
-			itemsList = MainApplication.mapItemContainer.getFilteredItemList();
+			newItemsList = MainApplication.mapItemContainer.getFilteredItemList();
 		} catch (Exception e)
 		{
 			exit();
+			return;
 		}
 		eventsList = MainApplication.eventContainer.getFilteredEventsList();
 
-		categorySubHeader.setText(MainApplication.mapItemContainer
-				.getCategoryName().toLowerCase());
+		categorySubHeader.setText(MainApplication.mapItemContainer.getCategoryName().toLowerCase());
 
+		boolean needToRefreshItems = true;
+
+		if (itemsList != null && newItemsList != null)
+		{
+			if (newItemsList.equals(itemsList) && objectAdapter.haveData())
+				needToRefreshItems = false;
+		}
+
+		itemsList = newItemsList;
 		objectAdapter.setData(itemsList);
 		objectAdapter.refreshState();
-
+		a++;
 		eventAdapter.setData(eventsList);
 		eventAdapter.refreshState();
 
-		pagerAdapter.notifyDataSetChanged();
-		if (objectAdapter.getCount() > 0)
+		if (needToRefreshItems)
 		{
-			setContentView(mainView);
+			if (objectAdapter.getCount() > 0)
+			{
+				setContentView(mainView);
+			} else
+			{
+				setContentView(R.layout.waiting_layout);
+			}
 		}
 		System.gc();
-//		if (pagerAdapter.getCount()==0&&MainApplication.mapItemContainer.getFlter().size()>0)
-//		{
-//			finish();
-//		}
+
+		// if
+		// (pagerAdapter.getCount()==0&&MainApplication.mapItemContainer.getFlter().size()>0)
+		// {
+		// finish();
+		// }
 	}
 
 	private void exit()
@@ -251,6 +265,11 @@ class ObjectAdapter extends BaseAdapter
 		this.context = context;
 		this.handler = new Handler();
 		this.refresher = refresher;
+	}
+
+	public boolean haveData()
+	{
+		return data != null;
 	}
 
 	public void setData(List _data)
@@ -317,16 +336,13 @@ class ObjectAdapter extends BaseAdapter
 			System.out.println("Фильтрация в списке объектов начата");
 			for (ListItem item : data)
 			{
-				String shortCharacteristic = item.getShortCharacteristic()
-						.toUpperCase();
+				String shortCharacteristic = item.getShortCharacteristic().toUpperCase();
 				String itemName = item.toString().toUpperCase();
 
-				if (itemName.contains(filterString)
-						|| shortCharacteristic.contains(filterString))
+				if (itemName.contains(filterString) || shortCharacteristic.contains(filterString))
 					filteredData.add(item);
 			}
-			if (filteredData.size() == 0
-					&& !usedSearches.contains(filterString))
+			if (filteredData.size() == 0 && !usedSearches.contains(filterString))
 			{
 				myRunnable.setSearchString(filterString);
 				handler.postDelayed(myRunnable, 1000);
@@ -364,9 +380,7 @@ class ObjectAdapter extends BaseAdapter
 			refresher.startRefreshing();
 			if (searchString != null)
 			{
-				MainApplication.mapItemContainer.loadItemsByNameAsync(
-						MainApplication.mapItemContainer.getCategory(),
-						searchString);
+				MainApplication.mapItemContainer.loadItemsByNameAsync(MainApplication.mapItemContainer.getCategory(), searchString);
 				usedSearches.add(searchString);
 			}
 		}
@@ -386,17 +400,14 @@ class ObjectListFragment extends TitleFragment
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState)
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		// TODO Auto-generated method stub
 		ListView objectListView = new ListView(context);
-		objectListView.setDivider(getResources().getDrawable(
-				R.drawable.transperent_color));
+		objectListView.setDivider(getResources().getDrawable(R.drawable.transperent_color));
 		objectListView.setDividerHeight(0);
 		objectListView.setCacheColorHint(0);
-		objectListView.setLayoutParams(new ScrollView.LayoutParams(
-				ScrollView.LayoutParams.FILL_PARENT,
+		objectListView.setLayoutParams(new ScrollView.LayoutParams(ScrollView.LayoutParams.FILL_PARENT,
 				ScrollView.LayoutParams.WRAP_CONTENT));
 		objectListView.setAdapter(adapter);
 		// objectListView.setFastScrollEnabled(true);
@@ -424,16 +435,13 @@ class EventListFragment extends TitleFragment
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState)
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		// TODO Auto-generated method stub
 		ListView eventListView = new ListView(context);
-		eventListView.setLayoutParams(new ScrollView.LayoutParams(
-				ScrollView.LayoutParams.FILL_PARENT,
-				ScrollView.LayoutParams.WRAP_CONTENT));
-		eventListView.setDivider(getResources().getDrawable(
-				R.drawable.transperent_color));
+		eventListView
+				.setLayoutParams(new ScrollView.LayoutParams(ScrollView.LayoutParams.FILL_PARENT, ScrollView.LayoutParams.WRAP_CONTENT));
+		eventListView.setDivider(getResources().getDrawable(R.drawable.transperent_color));
 		eventListView.setDividerHeight(0);
 		eventListView.setCacheColorHint(0);
 		eventListView.setAdapter(adapter);

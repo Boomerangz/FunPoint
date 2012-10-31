@@ -120,19 +120,7 @@ public class ImageCache
 				String fName = imageFile.getAbsolutePath();
 				int i = 0;
 				Bitmap bitmap = null;
-				while (i == 0)
-				{
-					try
-					{
-						i = 1;
-						bitmap = BitmapFactory.decodeFile(fName);
-					} catch (OutOfMemoryError e)
-					{
-						e.printStackTrace();
-						i = 0;
-						System.gc();
-					}
-				}
+				bitmap = BitmapFactory.decodeFile(fName);
 				pushBitmapToBuffer(sUrl, bitmap);
 				return bitmap;
 			} else
@@ -150,7 +138,7 @@ public class ImageCache
 		if (listBit.size() > BUFFER_SIZE)
 		{
 			String st = listBit.get(BUFFER_SIZE);
-			//mapBit.get(st).
+			// mapBit.get(st).
 			mapBit.remove(st);
 			listBit.remove(st);
 			Log.w("ImageCache", "Removed from buffer");

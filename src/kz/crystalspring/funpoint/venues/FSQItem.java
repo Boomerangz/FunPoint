@@ -28,7 +28,6 @@ public class FSQItem extends MapItem implements ImageContainer
 	String category = FSQ_UNDEFINED;
 	int hereNow;
 	List<String> categoryList = new ArrayList<String>();
-	
 
 	OptionalInfo optInfo;
 
@@ -106,30 +105,19 @@ public class FSQItem extends MapItem implements ImageContainer
 		return category;
 	}
 
-	public void loadSimpleOptionalInfo(JSONObject fsqJObject)
+	public void loadSimpleOptionalInfo()
 	{
-		optInfo = new OptionalInfo();
-		try
-		{
-			optInfo.loadComments(fsqJObject.getJSONObject("tips"));
-			optInfo.loadPhones(fsqJObject.getJSONObject("contact"));
-			optInfo.loadPhotoUrls(fsqJObject.getJSONObject("photos"));
-		} catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
+		if (optInfo == null)
+			optInfo = new OptionalInfo();
+		if (optInfo.getLoadingStatus() != optInfo.LOADED_SUCCES)
+			optInfo.loadById(getId());
 	}
 
-	public void itemFoodLoadOptionalInfo(JSONObject fsqJObject)
+	public void loadOptionalInfo()
 	{
-		loadSimpleOptionalInfo(fsqJObject);
+		loadSimpleOptionalInfo();
 	}
 
-	public void itemCinemaLoadOptionalInfo(JSONObject fsqJObject)
-	{
-		loadSimpleOptionalInfo(fsqJObject);
-	}
-	
 	public OptionalInfo getOptionalInfo()
 	{
 		return optInfo;
@@ -222,66 +210,59 @@ public class FSQItem extends MapItem implements ImageContainer
 	@Override
 	protected void loadImageToView(final LoadingImageView loadingImageView)
 	{
+		if (optInfo == null)
+			optInfo = new OptionalInfo();
 		Log.w("FSQItem", "loadImage begin");
 		final Drawable photo;
-		ImageCache imageCache = ImageCache.getInstance();
+		final ImageCache imageCache = ImageCache.getInstance();
 		String photoUrl = imageCache.getTitlePhotoUrlIfHave(getId());
+		loadingImageView.setTag(null);
 		if (photoUrl != null && photoUrl.equals(""))
 		{
 			loadingImageView.setDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
 		} else
 		{
-
 			if (photoUrl != null && imageCache.hasImage(photoUrl))
 				photo = new BitmapDrawable(imageCache.getImage(photoUrl));
 			else
 				photo = null;
+			loadingImageView.setTag(this.hashCode());
+			Runnable preTask = new Runnable()
+			{
+
+				@Override
+				public void run()
+				{
+					optInfo.loadById(getId());
+				}
+
+			};
+
 			if (photo == null)
 			{
-				Runnable task = new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						Log.w("FSQItem", "loadImage 2 begin");
-						loadingImageView.setTag(getId());
-						if (photo == null)
-						{
-							Bitmap btm = FSQConnector.loadTitlePhotoForVenue(getId());
-							Bitmap scaledBtm = null;
-							if (btm != null)
-							{
-								scaledBtm = Bitmap.createScaledBitmap(btm, Math.round(90 * MainApplication.mDensity),
-										Math.round(90 * MainApplication.mDensity), true);
-								// btm.recycle();
-							}
-							localBtm = scaledBtm;
-						}
-					}
-				};
 				Runnable postTask = new Runnable()
 				{
 					@Override
 					public void run()
 					{
-						Drawable photo = (localBtm!=null)?new BitmapDrawable(localBtm):context.getResources().getDrawable(R.drawable.ic_launcher);
-						localBtm=null;
-						if (!loadingImageView.hasDrawable() && getId().equals(loadingImageView.getTag()))
+						if (optInfo.getLoadingStatus() == optInfo.LOADED_SUCCES && optInfo.getPhotosCount() > 0)
 						{
-							if (photo != null && !loadingImageView.hasDrawable())
-								loadingImageView.setDrawable((Drawable) ProjectUtils.ifnull(photo,
-										context.getResources().getDrawable(R.drawable.ic_launcher)));
-							else
-								loadingImageView.setDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
-							System.gc();
-							Log.w("FSQItem", "loadImage 2 ended");
+							UrlDrawable urlDr= optInfo.getUrlAndPhoto(0);
+							FSQConnector.loadImageAsync(loadingImageView, urlDr, UrlDrawable.SMALL_URL, false, null);
+							imageCache.addPhotoUrl(getId(), (String)ProjectUtils.ifnull(urlDr.smallUrl, urlDr.bigUrl));
+						} else
+						{
+							imageCache.addPhotoUrl(getId(), "");
+							loadingImageView.setDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
 						}
 					}
 				};
-				MainApplication.pwAggregator.addPriorityTask(task, postTask);
 				loadingImageView.setDrawable(null);
+				MainApplication.pwAggregator.addPriorityTask(preTask, postTask);
 			} else
 			{
+				if (optInfo.getLoadingStatus()!=optInfo.LOADED_SUCCES&&optInfo.getLoadingStatus()!=optInfo.LOADING_NOW)
+					MainApplication.pwAggregator.addBackroundTaskToQueue(preTask);
 				Log.w("FSQItem", "loadImage ended");
 				loadingImageView.setDrawable(photo);
 				Log.w("FSQItem", "loadImage draw ended");

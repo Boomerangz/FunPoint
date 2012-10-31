@@ -13,16 +13,36 @@
         android:textSize="18pt"
         android:typeface="sans" />
 
-    <TextView
-        android:id="@+id/place_name"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="3dp"
         android:background="@color/light_grey"
-        android:paddingLeft="@dimen/margin"
-        android:text="user_name"
-        android:textSize="10pt"
-        android:textStyle="bold" />
+        android:padding="4dp" >
+
+        <TextView
+            android:id="@+id/place_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/margin"
+            android:text="user_name"
+            android:textSize="10pt"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/ok_button"
+            android:layout_width="fill_parent"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:background="#00A859"
+            android:paddingBottom="@dimen/margin"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="@dimen/margin"
+            android:text="Ok" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -31,47 +51,47 @@
         android:orientation="vertical" >
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
 
             <EditText
                 android:id="@+id/comment_text"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
+                android:layout_margin="@dimen/margin"
+                android:layout_weight="5.90"
+                android:background="#f0f0f0"
                 android:ems="10"
                 android:gravity="top|left"
+                android:hint="Ваш комментарий.."
                 android:inputType="textMultiLine"
                 android:lines="6"
-                android:hint="Ваш комментарий.."
-                android:background="#f0f0f0"
-                android:layout_margin="@dimen/margin"
                 android:padding="6dp" >
+
                 <requestFocus />
             </EditText>
-
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="fill_parent"
-                android:layout_height="96dp"
-                android:src="@drawable/camera"
-                android:layout_margin="@dimen/margin"  />
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="@dimen/margin"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
+            android:background="@color/background"
+            android:src="@drawable/camera" />
+        <Button
+            android:id="@+id/clear_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear"
+            android:visibility="gone" />
+        
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/margin" >
-
-            <Button
-                android:id="@+id/ok_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ok"
-                android:background="@color/background"
-                android:paddingBottom="@dimen/margin"
-                android:paddingTop="@dimen/margin"
-                android:paddingRight="15dp"
-                android:paddingLeft="15dp" />
 
             <Button
                 android:id="@+id/cancel_button"
@@ -80,13 +100,6 @@
                 android:text="Cancel"
                 android:visibility="gone" />
         </LinearLayout>
-
-        <Button
-            android:id="@+id/clear_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Clear"
-            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

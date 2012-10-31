@@ -4,25 +4,95 @@
     android:orientation="vertical" >
 
     <TextView
-                android:id="@+id/category_subheader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin"
-                android:text="профиль"
-                android:textColor="#e80044"
-                android:textSize="18pt"
-                android:typeface="sans" />
-
-    <Button
-        android:id="@+id/button1"
+        android:id="@+id/category_subheader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log In" />
+        android:layout_marginLeft="@dimen/margin"
+        android:text="профиль"
+        android:textColor="#e80044"
+        android:textSize="18pt"
+        android:typeface="sans" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/button1"
+            android:layout_width="fill_parent"
+             android:layout_weight="1"
+            android:layout_height="33dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="#5dcae7"
+            android:gravity="center_vertical" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="2dp"
+                android:padding="2dp"
+                android:src="@drawable/icons_08" >
+            </ImageView>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="@dimen/margin"
+                android:background="#2993c2" >
+            </View>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Подключиться"
+                android:textSize="6pt"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="33dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:background="@color/background"
+            android:gravity="center_vertical" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="2dp"
+                android:src="@drawable/icons_11" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="@dimen/margin"
+                android:background="#474646" >
+            </View>
+
+            <Spinner
+                android:id="@+id/spinner_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000" />
+        </LinearLayout>
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -73,12 +143,14 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:text="user_email" />
+
                     <TextView
                         android:id="@+id/user_checkins"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:text="user_email" />
-                     <TextView
+
+                    <TextView
                         android:id="@+id/user_friends"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -98,11 +170,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin" />
-
-            <Spinner
-                android:id="@+id/spinner_city"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 

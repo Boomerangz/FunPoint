@@ -139,13 +139,4 @@ public class ItemCinema extends FSQItem
 		return context.getResources().getColor(R.color.cinema);
 	}
 
-	public void itemCinemaLoadOptionalInfo()
-	{
-		if (getOptionalInfo() == null)
-		{
-			JSONObject jObject = FSQConnector.getVenueInformation(getId());
-			itemCinemaLoadOptionalInfo(jObject);
-		}
-	}
-
 }

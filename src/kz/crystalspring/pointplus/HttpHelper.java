@@ -30,6 +30,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,6 +60,7 @@ public class HttpHelper
 	private HttpHelper()
 	{
 		client = new DefaultHttpClient();
+		HttpParams params=client.getParams();
 	}
 
 	public static HttpHelper getInstance()
@@ -364,16 +366,19 @@ public class HttpHelper
 	{
 		try
 		{
+			final String PROXY_APP="android_1";
 			List<BasicNameValuePair> params = FSQConnector.getUrlForProxy(geoPoint);
 			params.add(new BasicNameValuePair("count", Integer.toString(params.size())));
+			params.add(new BasicNameValuePair("key", FSQConnector.CLIENT_SECRET));
+			params.add(new BasicNameValuePair("version_id", PROXY_APP));
 			String sResponse = loadZipPostByUrl("http://jam-kz.appspot.com/myproject", params);
 			jUrls = new JSONObject(sResponse);
 			if (jUrls.has("Time"))
 			{
 				Log.w("HTTPResponse", "Proxy loaded in " + jUrls.getString("Time"));
 			}
-		} catch (Exception e)
-		{
+			} catch (Exception e)
+			{
 			jUrls = new JSONObject();
 			e.printStackTrace();
 		}
@@ -417,13 +422,8 @@ public class HttpHelper
 			AbstractHttpEntity ent = new UrlEncodedFormEntity(parameters, HTTP.UTF_8);
 			ent.setContentEncoding("UTF-8");
 			post.setEntity(ent);
-			// InputStream is = ;
 			InputStream is = loadStream(post);
 			GZIPInputStream gzipInputStream = new GZIPInputStream(is);
-			// is.
-			// byte[] bytes=new byte[is.available()];
-			// is.read(bytes);
-			// bytes=C_FileHelper.decompress(bytes);
 			String s = streamToString(gzipInputStream);// new String(bytes);
 			return s;
 		} catch (Exception e)

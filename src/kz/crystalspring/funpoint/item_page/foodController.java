@@ -16,6 +16,7 @@ import kz.crystalspring.funpoint.PhoneTextView;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FileConnector;
+import kz.crystalspring.funpoint.venues.OptionalInfo;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.CommentsWrapper;
@@ -120,27 +121,26 @@ public class foodController extends ActivityController {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		AsyncTask task = new AsyncTask() {
-
+		AsyncTask task = new AsyncTask()
+		{
 			@Override
-			protected Object doInBackground(Object... params) {
-				if (itemFood.getOptionalInfo() == null) {
-					JSONObject jObject = FSQConnector
-							.getVenueInformation(itemFood.getId());
-					itemFood.itemFoodLoadOptionalInfo(jObject);
+			protected Object doInBackground(Object... params)
+			{
+				if (itemFood.getOptionalInfo() == null||itemFood.getOptionalInfo().getLoadingStatus()!=OptionalInfo.LOADED_SUCCES)
+				{
+					itemFood.loadSimpleOptionalInfo();
 				}
-
 				if (itemFood.getFoodOptions() == null) {
 					JSONObject jObject = FileConnector
 							.getFoodInfoFromFile(itemFood.getId());
 					itemFood.loadFoodOptions(jObject);
 				}
-				System.out.println("Загрузка в фоне");
 				return null;
 			}
 
 			@Override
-			public void onPostExecute(Object result) {
+			public void onPostExecute(Object result)
+			{
 				showFood(itemFood);
 				context.setContentView(mainView);
 				currentTask = null;
