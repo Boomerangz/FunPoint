@@ -16,32 +16,37 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class ExplorerFragment  extends TitleFragment
+public class ExplorerFragment extends TitleFragment
 {
 	public static ExplorerFragment newInstance()
 	{
-		 ExplorerFragment fragment=new ExplorerFragment();
+		ExplorerFragment fragment = new ExplorerFragment();
 		return fragment;
 	}
-	
-	 @Override  
-	 public void onCreate(Bundle savedInstanceState) {  
-	     super.onCreate(savedInstanceState);  
-	 }  
-	 ExplorerView menu;
-	 @Override  
-	 public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {  
-		 menu=new ExplorerView(getActivity());
-		 refresh();
-	     View v=menu.getExplorer();
-	     return v;  
-	 }
+
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+	}
+
+	ExplorerView menu;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
+		menu = new ExplorerView(getActivity());
+		refresh();
+		View v = menu.getExplorer();
+		return v;
+	}
+
 	public void refresh()
 	{
-		if(menu!=null)
+		if (menu != null)
 			menu.refresh();
-	} 
-	
+	}
+
 	@Override
 	public String getTitle()
 	{
@@ -50,27 +55,25 @@ public class ExplorerFragment  extends TitleFragment
 
 }
 
-
 class ExplorerView
 {
 	Activity context;
 	View exploreList;
-	
-	
+
 	public ExplorerView(Activity context)
 	{
-		this.context=context;
-		exploreList=createExplorerList();
+		this.context = context;
+		exploreList = createExplorerList();
 		refresh();
 	}
-	
+
 	public View getExplorer()
 	{
-		if (exploreList!=null)
+		if (exploreList != null)
 			return exploreList;
 		else
 		{
-			exploreList=createExplorerList();
+			exploreList = createExplorerList();
 			return getExplorer();
 		}
 	}
@@ -81,44 +84,46 @@ class ExplorerView
 		LayoutInflater layoutInf = context.getLayoutInflater();
 
 		explorer = layoutInf.inflate(R.layout.friend_feed, null);
-				
+
 		return explorer;
 	}
 
 	public void refresh()
 	{
-		ListView listView=(ListView) exploreList.findViewById(R.id.listView1);
-		if (listView.getAdapter()==null||listView.getAdapter().getCount()==0)
+		ListView listView = (ListView) exploreList.findViewById(R.id.listView1);
+		if (listView.getAdapter() == null || listView.getAdapter().getCount() == 0)
 		{
-			ExplorerAdapter adapter=new ExplorerAdapter(FSQConnector.getExplorer());
+			ExplorerAdapter adapter = new ExplorerAdapter(FSQConnector.getExplorer());
 			listView.setAdapter(adapter);
-			listView.setMinimumHeight(Math.round(100*MainApplication.mDensity));
-			listView.setOnItemClickListener(new OnItemClickListener() {
+			listView.setMinimumHeight(Math.round(100 * MainApplication.mDensity));
+			listView.setOnItemClickListener(new OnItemClickListener()
+			{
 
 				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int arg2, long arg3) 
+				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
 				{
 					System.out.println("LISTCLICK!!!!");
 				}
 			});
-		}
-		else
+		} else
 		{
 			listView.invalidate();
 		}
-		
-		View progressBar=exploreList.findViewById(R.id.progressBar1);
+
+		View progressBar = exploreList.findViewById(R.id.progressBar1);
+		View loginView = exploreList.findViewById(R.id.login_view);
 		if (FSQConnector.isExploringLoaded())
 		{
 			progressBar.setVisibility(View.GONE);
+			loginView.setVisibility(View.GONE);
 		} else
 		{
 			if (MainApplication.FsqApp.hasAccessToken())
-				progressBar.setVisibility(View.VISIBLE);
-			else
 			{
-				View loginView = exploreList.findViewById(R.id.login_view);
+				loginView.setVisibility(View.GONE);
+				progressBar.setVisibility(View.VISIBLE);
+			} else
+			{
 				loginView.setVisibility(View.VISIBLE);
 				progressBar.setVisibility(View.GONE);
 			}
@@ -126,13 +131,13 @@ class ExplorerView
 	}
 }
 
-
 class ExplorerAdapter extends BaseAdapter
 {
 	List<FSQItem> list;
+
 	ExplorerAdapter(List<FSQItem> list)
 	{
-		this.list=list;
+		this.list = list;
 	}
 
 	@Override
@@ -158,5 +163,5 @@ class ExplorerAdapter extends BaseAdapter
 	{
 		return list.get(arg0).getView(arg1, arg0);
 	}
-	
+
 }

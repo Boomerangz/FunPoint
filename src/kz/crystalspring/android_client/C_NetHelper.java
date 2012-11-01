@@ -29,7 +29,6 @@ import android.util.Log;
 
 public class C_NetHelper extends android.app.Application{
 	private static String C_TAG = "NetHelper";
-	private static ProgressDialog fPD = null;
 	public static boolean fIsWorking = false;
 //	private static Context fContext;
 	
@@ -624,7 +623,6 @@ public class C_NetHelper extends android.app.Application{
 		}
 
 		if (pShowProgress) {
-			fPD = ProgressDialog.show(vContext, "", vContext.getString(R.string.loading_msg), true);
 		}
 		C_Log.v(3, C_TAG, "SyncData - exec thread");	
 		new Thread(new Runnable() {
@@ -645,7 +643,6 @@ public class C_NetHelper extends android.app.Application{
 					C_Log.v(0, C_TAG, "e:SyncData - err:" + e.getMessage());	
 				} finally {
 					if (pShowProgress) {
-						fPD.dismiss();
 					}
 					fIsWorking = false;
 // при обращении к CS_Vars.fMainActivityInstance - ошибка при вызове из сервиса!					

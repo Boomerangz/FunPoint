@@ -46,16 +46,13 @@ public class ProfilePage extends Activity implements RefreshableMapList
 			@Override
 			public void onSuccess()
 			{
-				Toast.makeText(ProfilePage.this,
-						"Connected as " + mFsqApp.getUserName(),
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(ProfilePage.this, "Connected as " + mFsqApp.getUserName(), Toast.LENGTH_SHORT).show();
 			}
 
 			@Override
 			public void onFail(String error)
 			{
-				Toast.makeText(ProfilePage.this, error, Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(ProfilePage.this, error, Toast.LENGTH_SHORT).show();
 			}
 		};
 
@@ -73,17 +70,14 @@ public class ProfilePage extends Activity implements RefreshableMapList
 		list.add("list 1");
 		list.add("list 2");
 		list.add("list 3");
-		final CitySpinnerAdapter dataAdapter = new CitySpinnerAdapter(this,
-				android.R.layout.simple_spinner_item);
-		dataAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		final CitySpinnerAdapter dataAdapter = new CitySpinnerAdapter(this, android.R.layout.simple_spinner_item);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(dataAdapter);
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener()
 		{
 
 			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3)
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3)
 			{
 				MainApplication.setCity(dataAdapter.getCity(arg2));
 			}
@@ -96,8 +90,7 @@ public class ProfilePage extends Activity implements RefreshableMapList
 		});
 		City selectedCity = MainApplication.getCityManager().getSelectedCity();
 		if (selectedCity != null)
-			spinner.setSelection(dataAdapter.positionOf(MainApplication
-					.getCityManager().getSelectedCity()) + 1);
+			spinner.setSelection(dataAdapter.positionOf(MainApplication.getCityManager().getSelectedCity()) + 1);
 		else
 			spinner.setSelection(0);
 	}
@@ -109,8 +102,7 @@ public class ProfilePage extends Activity implements RefreshableMapList
 
 		public CitySpinnerAdapter(Context context, int resource)
 		{
-			super(context, android.R.layout.simple_spinner_item,
-					new ArrayList<String>());
+			super(context, android.R.layout.simple_spinner_item, new ArrayList<String>());
 			cityNamesList = MainApplication.getCityManager().getCityList();
 			add("Рядом");
 			for (City st : cityNamesList)
@@ -134,11 +126,11 @@ public class ProfilePage extends Activity implements RefreshableMapList
 			else
 				return 0;
 		}
-		
+
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent)
 		{
-			TextView v=(TextView) super.getView(position, convertView, parent);
+			TextView v = (TextView) super.getView(position, convertView, parent);
 			v.setTextSize(TypedValue.COMPLEX_UNIT_PT, 6);
 			v.setTypeface(null, Typeface.BOLD);
 			return v;
@@ -149,9 +141,9 @@ public class ProfilePage extends Activity implements RefreshableMapList
 	public void onResume()
 	{
 		super.onResume();
+		MainApplication.refreshable = this;
 		user = FSQUser.getInstance();
 		user.fillIfNot();
-		MainApplication.refreshable = this;
 		refreshMapItems();
 	}
 
@@ -168,38 +160,35 @@ public class ProfilePage extends Activity implements RefreshableMapList
 			TextView maxScoreTV = (TextView) findViewById(R.id.max_score);
 			TextView checkinsTV = (TextView) findViewById(R.id.user_checkins);
 			TextView friendsTV = (TextView) findViewById(R.id.user_friends);
-			
+
 			LoadingImageView loadingImage = (LoadingImageView) findViewById(R.id.loading_imageview);
 			LinearLayout badgeGallery = (LinearLayout) findViewById(R.id.badge_gallery);
 
 			usernameTV.setText(user.getName());
 			usermailTV.setText(user.getEmail());
 			loadingImage.setTag(user.getName());
-			FSQConnector.loadImageAsync(loadingImage, user.getPhoto(),
-					UrlDrawable.BIG_URL, false, null);
+			FSQConnector.loadImageAsync(loadingImage, user.getPhoto(), UrlDrawable.BIG_URL, false, null);
 			loadBadgesGallery(badgeGallery);
-			recentScoreTV.setText(user.getRecentScore().toString()+" баллов");
+			recentScoreTV.setText(user.getRecentScore().toString() + " баллов");
 			maxScoreTV.setText(user.getMaxScore().toString());
-			checkinsTV.setText(user.getCheckinCount().toString()+" чекинов");
-			friendsTV.setText(user.getFriendCount().toString()+" друзей");
-			
-
+			checkinsTV.setText(user.getCheckinCount().toString() + " чекинов");
+			friendsTV.setText(user.getFriendCount().toString() + " друзей");
 			pg.setVisibility(View.GONE);
 			infLayout.setVisibility(View.VISIBLE);
 		} else
 		{
-			pg.setVisibility(View.VISIBLE);
+			if (MainApplication.FsqApp.hasAccessToken())
+				pg.setVisibility(View.VISIBLE);
 			infLayout.setVisibility(View.GONE);
 		}
 	}
 
 	private void loadBadgesGallery(LinearLayout badgeGallery)
 	{
-		GalleryWrapper galleryWrapper = new GalleryWrapper(this,
-				GalleryWrapper.MODE_BADGES);
-		List<FSQBadge> badges=user.getBadgesList();
-		List<UrlDrawable> drawable=new ArrayList<UrlDrawable>(badges.size());
-		for(FSQBadge badge:badges)
+		GalleryWrapper galleryWrapper = new GalleryWrapper(this, GalleryWrapper.MODE_BADGES);
+		List<FSQBadge> badges = user.getBadgesList();
+		List<UrlDrawable> drawable = new ArrayList<UrlDrawable>(badges.size());
+		for (FSQBadge badge : badges)
 		{
 			drawable.add(badge);
 		}

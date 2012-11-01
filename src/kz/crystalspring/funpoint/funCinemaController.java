@@ -10,8 +10,11 @@ import com.viewpagerindicator.ViewFragmentAdapter;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.CommentsWrapper;
 import kz.crystalspring.visualities.homescreen.TitleFragment;
+import kz.crystalspring.cinema.CinemaTimeTable2;
+import kz.crystalspring.cinema.FilmLine;
 import kz.crystalspring.funpoint.CinemaTimeTable.CinemaTime;
 import kz.crystalspring.funpoint.R;
+import kz.crystalspring.funpoint.events.FilmEvent;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
 
 import android.app.Activity;
@@ -304,10 +307,10 @@ public class funCinemaController extends ActivityController
 
 class CinemaTimeTableAdapter extends BaseAdapter
 {
-	CinemaTimeTable table;
-	Context context;
+	CinemaTimeTable2 table;
+	Activity context;
 
-	public CinemaTimeTableAdapter(CinemaTimeTable table, Context context)
+	public CinemaTimeTableAdapter(CinemaTimeTable2 table, Activity context)
 	{
 		this.table = table;
 		this.context = context;
@@ -316,14 +319,13 @@ class CinemaTimeTableAdapter extends BaseAdapter
 	@Override
 	public int getCount()
 	{
-		// TODO Auto-generated method stub
-		return table.getTimeLines().size();
+		return table.getFilmsCount();
 	}
 
 	@Override
 	public Object getItem(int position)
 	{
-		return table.getTimeLines().get(position);
+		return table.getFilmStr(position);
 	}
 
 	@Override
@@ -335,88 +337,8 @@ class CinemaTimeTableAdapter extends BaseAdapter
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent1)
 	{
-		ViewHolder holder;
-		LayoutInflater mInflater = LayoutInflater.from(context);
-		convertView = mInflater.inflate(R.layout.object_list_item_cinema, null);
-		holder = new ViewHolder();
-		holder.text = (TextView) convertView.findViewById(R.id.text);
-		holder.tableLayout = (TableLayout) convertView.findViewById(R.id.table);
-
+		convertView = ((FilmLine)table.getFilmStr(position)).getView(context);
 		convertView.setMinimumHeight(60);
-		convertView.setTag(holder);
-		holder.text.setText(table.getTimeLines().get(position).getTitle() + " "
-				+ table.getTimeLines().get(position).getStrDate());
-		holder.text.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				MainApplication.selectedEventId = table.getTimeLines().get(
-						position).filmId;
-				Intent i = new Intent(context, funEventActivity.class);
-				i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				context.startActivity(i);
-			}
-		});
-
-		int i = 0;
-		TableRow row = null;
-
-		TableRow.LayoutParams ll=new TableRow.LayoutParams(
-				TableRow.LayoutParams.WRAP_CONTENT,
-				TableRow.LayoutParams.FILL_PARENT);
-		ll.setMargins(3, 0, 0, 3);
-		for (final CinemaTime time : table.getTimeLines().get(position).times)
-		{
-
-			TextView timeView;
-			if (ProjectUtils.ifnull(time.getHash(), "").equals(""))
-			{
-				timeView = new Button(context);
-				timeView.setBackgroundColor(context.getResources().getColor(R.color.vpi__dark_theme));
-			}
-			else
-			{
-				Button btn = new Button(context);
-				btn.setOnClickListener(new OnClickListener()
-				{
-
-					@Override
-					public void onClick(View v)
-					{
-						String url = time.getHash();
-						Dialog dialog = new Dialog(context);
-						dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-						LayoutInflater inflater = (LayoutInflater) context
-								.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-						View vi = inflater.inflate(R.layout.webview, null);
-						dialog.setContentView(vi);
-						dialog.setCancelable(true);
-						WebView wb = (WebView) vi.findViewById(R.id.webview);
-						wb.getSettings().setJavaScriptEnabled(true);
-						wb.setWebViewClient(new WebViewClient());
-						wb.loadUrl(url);
-						System.out.println("..loading url..");
-						dialog.show();
-					}
-				});
-				timeView = btn;
-			}
-
-			timeView.setLayoutParams(ll);
-			timeView.setText(time.getStringTime() + " ");
-
-			if (i % 4 == 0)
-			{
-				row = new TableRow(context);
-				row.setLayoutParams(new TableLayout.LayoutParams(
-						TableLayout.LayoutParams.WRAP_CONTENT,
-						TableLayout.LayoutParams.WRAP_CONTENT));
-				holder.tableLayout.addView(row);
-			}
-			row.addView(timeView);
-			i++;
-		}
 		return convertView;
 	}
 
@@ -429,10 +351,10 @@ class CinemaTimeTableAdapter extends BaseAdapter
 			layout.addView(v);
 		}
 	}
-
 	class ViewHolder
 	{
 		TextView text;
 		TableLayout tableLayout;
 	}
+
 }

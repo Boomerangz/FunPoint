@@ -22,7 +22,9 @@ public class FSQUser implements ImageContainer
 	Integer maxScore;
 	Integer checkinCount;
 	Integer friendCount;
-
+	boolean isFilled;
+	
+	
 	public Integer getCheckinCount()
 	{
 		return checkinCount;
@@ -55,6 +57,7 @@ public class FSQUser implements ImageContainer
 	FSQUser()
 	{
 		badges = new ArrayList();
+		isFilled=false;
 	}
 
 	public String getFirstName()
@@ -162,8 +165,6 @@ public class FSQUser implements ImageContainer
 		FSQConnector.loadUserInfo(this);
 	}
 
-	boolean isFilled = false;
-
 	public boolean isFilled()
 	{
 		return isFilled;
@@ -217,11 +218,11 @@ public class FSQUser implements ImageContainer
 		this.maxScore = maxScore;
 	}
 
-	public static void reInit()
-	{
-		singletone = new FSQUser();
-		MainApplication.loadUserActivity();
-	}
+//	public static void reInit()
+//	{
+//		singletone = new FSQUser();
+//		MainApplication.loadUserActivity();
+//	}
 
 	@Override
 	public int getPhotosCount()

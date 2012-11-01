@@ -161,12 +161,7 @@ public class ImageCache
 			try
 			{
 				jObject = new JSONObject(str);
-				final int MAX_EXPIRE_DAYS = 6;
-				final int MIN_EXPIRE_DAYS = 3;
-				int days = (int) Math.round(Math.random() * (MAX_EXPIRE_DAYS - MIN_EXPIRE_DAYS) + MIN_EXPIRE_DAYS);
-				long expireTime = days * 24 * 60 * 60 * 1000;
-				long expirationDate = new Date().getTime() - expireTime;
-				if (jObject.getLong("date") > expirationDate)
+				if (jObject.getLong("date") > getRandomExpireDate())//случайная дата "протухания" кэша. от 3 до 6 дней
 					return jObject.getString("url");
 				else
 					return null;
@@ -177,6 +172,16 @@ public class ImageCache
 			}
 		}
 		return null;
+	}
+	
+	private long getRandomExpireDate()
+	{
+		final int MAX_EXPIRE_DAYS = 6;
+		final int MIN_EXPIRE_DAYS = 3;
+		int days = (int) Math.round(Math.random() * (MAX_EXPIRE_DAYS - MIN_EXPIRE_DAYS) + MIN_EXPIRE_DAYS);
+		long expireTime = days * 24 * 60 * 60 * 1000;
+		long expirationDate = new Date().getTime() - expireTime;
+		return expirationDate;
 	}
 
 	public void addPhotoUrl(String key, String url)

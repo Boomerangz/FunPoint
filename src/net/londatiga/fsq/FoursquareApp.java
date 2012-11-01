@@ -130,7 +130,7 @@ public class FoursquareApp {
 					
 					ex.printStackTrace();
 				}
-				FSQUser.reInit();
+				//FSQUser.reInit();
 				mHandler.sendMessage(mHandler.obtainMessage(what, 2, 0));
 			}
 		}.start();

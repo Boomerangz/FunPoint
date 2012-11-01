@@ -44,8 +44,7 @@ import android.graphics.drawable.Drawable;
 public class ProjectUtils
 {
 
-	public static String getObjectTextById(Context c, String pLangId,
-			String pObjId)
+	public static String getObjectTextById(Context c, String pLangId, String pObjId)
 	{
 		AssetManager assetManager = c.getAssets();
 		InputStream input;
@@ -164,18 +163,17 @@ public class ProjectUtils
 		float R = 6371; // km (change this constant to get miles)
 		float dLat = (float) ((lat2 - lat1) * Math.PI / 180);
 		float dLon = (float) ((lon2 - lon1) * Math.PI / 180);
-		float a = (float) (Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math
-				.cos(lat1 * Math.PI / 180)
-				* Math.cos(lat2 * Math.PI / 180)
+		float a = (float) (Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180)
 				* Math.sin(dLon / 2) * Math.sin(dLon / 2));
 		float c = (float) (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 		float d = R * c;
 		return (d * 1000);
 	}
-	
+
 	public static float distance(GeoPoint point1, GeoPoint point2)
 	{
-		return distance((float)(point1.getLatitudeE6()/1e6), (float)(point1.getLongitudeE6()/1e6), (float)(point2.getLatitudeE6()/1e6), (float)(point2.getLongitudeE6()/1e6));
+		return distance((float) (point1.getLatitudeE6() / 1e6), (float) (point1.getLongitudeE6() / 1e6),
+				(float) (point2.getLatitudeE6() / 1e6), (float) (point2.getLongitudeE6() / 1e6));
 	}
 
 	// ������������ String �� Float. ������������� ����������� �������
@@ -232,6 +230,30 @@ public class ProjectUtils
 	final static int PERIOD_HOUR = 4;
 	final static int PERIOD_MINUTE = 5;
 
+	public static String dateToTomorrow(final Date fDate, final Date nDate)
+	{
+		Date _fDate = new Date(fDate.getTime());
+		Date _nDate = new Date(nDate.getTime());
+		_fDate.setHours(0);
+		_fDate.setMinutes(0);
+		_fDate.setSeconds(0);
+		_nDate.setHours(0);
+		_nDate.setMinutes(0);
+		_nDate.setSeconds(0);
+		int differenceInDays = (int) Math.round(((double)_nDate.getTime() - _fDate.getTime())/1000/3600/24);
+		switch (differenceInDays)
+		{
+		case 0:
+			return "Cегодня";
+		case 1:
+			return "Завтра";
+		case 2:
+			return "Послезавтра";
+		default:
+			return "???";
+		}
+	}
+
 	public static String dateToRelativeString(Date date)
 	{
 		final long MINUTE_IN_MILLIS = 1000 * 60;
@@ -276,8 +298,7 @@ public class ProjectUtils
 		if (count == 0 && period == PERIOD_MINUTE)
 			return "только что";
 		else
-			return IntegerToWords(count, period) + " "
-					+ periodToWords(count, period) + " " + postWord;
+			return IntegerToWords(count, period) + " " + periodToWords(count, period) + " " + postWord;
 	}
 
 	public static String periodToWords(int n, int period)
@@ -407,15 +428,11 @@ public class ProjectUtils
 	{
 		String str = "";
 		final int COUNT_DEX = 3;// количество разрядов
-		final String[] words_one_male = { "", "один", "два", "три", "четыре",
-				"пять", "шесть", "семь", "восемь", "девять" };
-		final String[] words_one_female = { "", "одну", "две", "три", "четыре",
-				"пять", "шесть", "семь", "восемь", "девять" };
-		final String[] words_ten = { "", "десять", "двадцать", "тридцать",
-				"сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят",
+		final String[] words_one_male = { "", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять" };
+		final String[] words_one_female = { "", "одну", "две", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять" };
+		final String[] words_ten = { "", "десять", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят",
 				"девяносто" };
-		final String[] words_hundred = { "", "сто", "двести", "триста",
-				"четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот",
+		final String[] words_hundred = { "", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот",
 				"девятьсот" };
 		final String[][] words;
 		if (mode == PERIOD_MINUTE || mode == PERIOD_WEEK)
@@ -496,9 +513,6 @@ public class ProjectUtils
 		return newList;
 	}
 
-
-
-
 	public static JSONObject XML2JSON(String xml)
 	{
 		org.json.JSONObject xmlJSONObj = null;
@@ -517,42 +531,44 @@ public class ProjectUtils
 		}
 		return null;
 	}
-	
-	public static byte[] getBytes(InputStream is) throws IOException {
 
-	    int len;
-	    int size = 1024;
-	    byte[] buf;
+	public static byte[] getBytes(InputStream is) throws IOException
+	{
 
-	    if (is instanceof ByteArrayInputStream) {
-	      size = is.available();
-	      buf = new byte[size];
-	      len = is.read(buf, 0, size);
-	    } else {
-	      ByteArrayOutputStream bos = new ByteArrayOutputStream();
-	      buf = new byte[size];
-	      while ((len = is.read(buf, 0, size)) != -1)
-	        bos.write(buf, 0, len);
-	      buf = bos.toByteArray();
-	    }
-	    return buf;
-	  }
-	
-	
+		int len;
+		int size = 1024;
+		byte[] buf;
+
+		if (is instanceof ByteArrayInputStream)
+		{
+			size = is.available();
+			buf = new byte[size];
+			len = is.read(buf, 0, size);
+		} else
+		{
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			buf = new byte[size];
+			while ((len = is.read(buf, 0, size)) != -1)
+				bos.write(buf, 0, len);
+			buf = bos.toByteArray();
+		}
+		return buf;
+	}
+
 	public static String formatPhone(String phone)
 	{
-		if (phone.length()==10)
+		if (phone.length() == 10)
 		{
-			phone="+7"+phone;
+			phone = "+7" + phone;
 		}
-		if (phone.substring(0,1).equals("7")|| phone.substring(0,1).equals("8"))
-		   phone="+7"+phone.substring(1);
+		if (phone.substring(0, 1).equals("7") || phone.substring(0, 1).equals("8"))
+			phone = "+7" + phone.substring(1);
 		return phone;
 	}
-	
-	public static Object ifnull(Object a,Object b)
+
+	public static Object ifnull(Object a, Object b)
 	{
-		if (a!=null)
+		if (a != null)
 		{
 			return a;
 		}

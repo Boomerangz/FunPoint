@@ -31,7 +31,8 @@ public class CinemaTimeTable
 		String filmId;
 		String title;
 		Date date;
-		boolean ticketable = false;;
+		boolean ticketable = false;
+		
 		List<CinemaTime> times = new ArrayList<CinemaTime>(0);
 
 		public String getStrDate()
@@ -86,9 +87,8 @@ public class CinemaTimeTable
 		{
 			this.hash = hash;
 		}
-
 	}
-
+	
 	private List<TimeLine> timeLines = new ArrayList();
 
 	public List<TimeLine> getTimeLines()
@@ -96,116 +96,6 @@ public class CinemaTimeTable
 		return timeLines;
 	}
 
-	// public void loadFromDBCursor(Cursor cursor)
-	// {
-	// cursor.moveToFirst();
-	// for (int i=0; i<cursor.getCount(); i++)
-	// {
-	// cursor.moveToPosition(i);
-	// int filmId=cursor.getInt(2);
-	// String filmTitle=cursor.getString(3);
-	// String date=cursor.getString(4);
-	// String sTime=cursor.getString(6);
-	// String sHash=cursor.getString(8);
-	// boolean ticketAble=cursor.getInt(7)==1;
-	//
-	// TimeLine timeline=null;
-	// for (int j=0;j<timeLines.size();j++)
-	// {
-	// if (timeLines.get(j).filmId==filmId&&timeLines.get(j).date.equals(date))
-	// {
-	// timeline=timeLines.get(j);
-	// break;
-	// }
-	// }
-	// if (timeline==null)
-	// {
-	// timeline=new TimeLine();
-	// timeLines.add(timeline);
-	// }
-	//
-	// timeline.filmId=filmId;
-	// timeline.filmName=filmTitle;
-	// timeline.times.add(new CinemaTime(sTime,sHash));
-	// timeline.date=date;
-	// timeline.ticketable=ticketAble;
-	// }
-	// Collections.sort(timeLines, new Comparator<TimeLine>()
-	// {
-	// @Override
-	// public int compare(TimeLine lhs, TimeLine rhs)
-	// {
-	// if (lhs.date.compareTo(rhs.date)!=0)
-	// return lhs.date.compareTo(rhs.date);
-	// return lhs.filmName.compareTo(rhs.filmName);
-	// }
-	// });
-	// System.out.println(0);
-	// }
-
-	public void loadFromJSONArray(JSONArray jsonArray)
-	{
-		for (int i = 0; i < jsonArray.length(); i++)
-		{
-			try
-			{
-				JSONObject jEvent = jsonArray.getJSONObject(i);
-
-				String filmId = jEvent.getString("events_id");
-				String filmTitle = jEvent.getString("title");
-				Date clearDate;
-				try
-				{
-					clearDate = full_formatter.parse(jEvent.getString("ts"));
-				} catch (ParseException e)
-				{
-					clearDate = new Date();
-					e.printStackTrace();
-				}
-				clearDate.setHours(0);
-				clearDate.setMinutes(0);
-				clearDate.setSeconds(0);
-				String sHash = jEvent.getString("url_mobile");//"3:128:1348659300";//"1:71:1340860800";// jEvent.getString("hash");
-				boolean ticketAble = true;
-
-				TimeLine timeline = null;
-				for (int j = 0; j < timeLines.size(); j++)
-				{
-					if (timeLines.get(j).filmId.equals(filmId)
-							&& timeLines.get(j).date.equals(clearDate))
-					{
-						timeline = timeLines.get(j);
-						break;
-					}
-				}
-				if (timeline == null)
-				{
-					timeline = new TimeLine();
-					timeLines.add(timeline);
-				}
-				timeline.filmId = filmId;
-				timeline.title = filmTitle;
-				timeline.times
-						.add(new CinemaTime(jEvent.getString("ts"), sHash));
-				timeline.date = clearDate;
-				timeline.ticketable = ticketAble;
-			} catch (JSONException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		Collections.sort(timeLines, new Comparator<TimeLine>()
-		{
-			@Override
-			public int compare(TimeLine lhs, TimeLine rhs)
-			{
-				if (lhs.date.compareTo(rhs.date) != 0)
-					return lhs.date.compareTo(rhs.date);
-				return lhs.title.compareTo(rhs.title);
-			}
-		});
-		System.out.println(0);
-	}
 
 	public void loadFromCinemaJSONArray(JSONArray jsonArray)
 	{

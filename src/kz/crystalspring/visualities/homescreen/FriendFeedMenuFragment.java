@@ -33,8 +33,7 @@ public class FriendFeedMenuFragment extends TitleFragment
 	FriendFeed menu;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState)
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		menu = new FriendFeed(getActivity());
 		View v = menu.getFriendFeed();
@@ -85,23 +84,25 @@ class FriendFeed
 
 	public void refresh()
 	{
-		ListView listView = (ListView) friendFeedList
-				.findViewById(R.id.listView1);
-		FriendFeedAdapter adapter = new FriendFeedAdapter(
-				FSQConnector.getFriendFeed());
+		ListView listView = (ListView) friendFeedList.findViewById(R.id.listView1);
+		FriendFeedAdapter adapter = new FriendFeedAdapter(FSQConnector.getFriendFeed());
 		listView.setAdapter(adapter);
 		listView.setMinimumHeight(Math.round(80 * MainApplication.mDensity));
 		View progressBar = friendFeedList.findViewById(R.id.progressBar1);
+		View loginView = friendFeedList.findViewById(R.id.login_view);
 		if (FSQConnector.isFriendFeedLoaded())
 		{
 			progressBar.setVisibility(View.GONE);
+			loginView.setVisibility(View.GONE);
 		} else
 		{
 			if (MainApplication.FsqApp.hasAccessToken())
-				progressBar.setVisibility(View.VISIBLE);
-			else
 			{
-				View loginView = friendFeedList.findViewById(R.id.login_view);
+				progressBar.setVisibility(View.VISIBLE);
+				loginView.setVisibility(View.GONE);
+			} else
+			{
+
 				loginView.setVisibility(View.VISIBLE);
 				progressBar.setVisibility(View.GONE);
 			}

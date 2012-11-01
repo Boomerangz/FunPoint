@@ -692,13 +692,15 @@ public class FSQConnector
 		if (urlDr != null)
 		{
 			final Integer unicHash = ProjectUtils.ifnull(urlDr, new Object()).hashCode();
-			iv.setDrawable(null);
+			if (iv != null)
+				iv.setDrawable(null);
 			Runnable preTask = new Runnable()
 			{
 				@Override
 				public void run()
 				{
-					iv.setTag(unicHash);
+					if (iv != null)
+						iv.setTag(unicHash);
 					if (big_or_small == UrlDrawable.BIG_URL && urlDr.getBigDrawable() == null)
 					{
 						String sUrl = (String) ProjectUtils.ifnull(urlDr.bigUrl, urlDr.smallUrl);
@@ -724,7 +726,7 @@ public class FSQConnector
 				@Override
 				public void run()
 				{
-					if (iv.getTag().equals(unicHash))
+					if (iv != null && iv.getTag() != null && iv.getTag().equals(unicHash))
 					{
 						Drawable pict;
 						if (big_or_small == UrlDrawable.BIG_URL)

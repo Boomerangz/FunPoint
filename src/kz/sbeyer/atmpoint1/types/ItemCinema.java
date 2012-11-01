@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import kz.crystalspring.android_client.C_FileHelper;
+import kz.crystalspring.cinema.CinemaTimeTable2;
 import kz.crystalspring.funpoint.CinemaTimeTable;
 import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
@@ -28,7 +29,7 @@ import android.widget.ViewSwitcher;
 public class ItemCinema extends FSQItem
 {
 	boolean hallInfoFilled = false;
-	CinemaTimeTable timeTable;
+	CinemaTimeTable2 timeTable;
 
 	public static final String TICKETON_URL = "http://m.ticketon.kz/hallplan/";
 
@@ -76,7 +77,7 @@ public class ItemCinema extends FSQItem
 
 	public void loadAdditionalInfo()
 	{
-		timeTable = new CinemaTimeTable();
+		timeTable = new CinemaTimeTable2();
 		JSONObject jObject;
 		try
 		{
@@ -100,12 +101,12 @@ public class ItemCinema extends FSQItem
 		hallInfoFilled = true;
 	}
 
-	public CinemaTimeTable getTimeTable()
+	public CinemaTimeTable2 getTimeTable()
 	{
 		return timeTable;
 	}
 
-	public void setTimeTable(CinemaTimeTable timeTable)
+	public void setTimeTable(CinemaTimeTable2 timeTable)
 	{
 		this.timeTable = timeTable;
 	}

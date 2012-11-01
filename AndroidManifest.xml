@@ -157,7 +157,6 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
-
         <provider
             android:name="kz.crystalspring.pointplus.C_ContentProvider"
             android:authorities="kz.pointplus.db_provider1"

@@ -1,6 +1,7 @@
 package kz.crystalspring.pointplus;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -46,8 +47,10 @@ import android.util.Log;
 public class HttpHelper
 {
 	private final String GLOBAL_PROXY = "http://www.homeplus.kz/jam/4sq_gzip_curl.php";
-	private final String LOCAL_PROXY = "http://192.168.1.50/jam/4sq_gzip_curl.php";
-	private final String CURRENT_PROXY = GLOBAL_PROXY;
+	// private final String LOCAL_PROXY =
+	// "http://192.168.1.50/jam/4sq_gzip_curl.php";
+	private final String CURRENT_PROXY;
+	private final String GAE_PROXY;
 	private boolean USE_PROXY = false;
 	private final int NEED_TO_COMPLETE = 3;
 
@@ -60,10 +63,12 @@ public class HttpHelper
 	private HttpHelper()
 	{
 		client = new DefaultHttpClient();
-		HttpParams params=client.getParams();
+		HttpParams params = client.getParams();
+		CURRENT_PROXY = getOurProxyURL();
+		GAE_PROXY = getGAEProxyURL();
 	}
 
-	public static HttpHelper getInstance()
+	public static HttpHelper getInstance() 
 	{
 		if (singletone == null)
 		{
@@ -237,7 +242,7 @@ public class HttpHelper
 		}
 	}
 
-	public synchronized Bitmap loadPictureByUrl(String sUrl)
+	public Bitmap loadPictureByUrl(String sUrl)
 	{
 		if (imageCache == null)
 		{
@@ -366,21 +371,80 @@ public class HttpHelper
 	{
 		try
 		{
-			final String PROXY_APP="android_1";
+			final String PROXY_APP = "android_1";
 			List<BasicNameValuePair> params = FSQConnector.getUrlForProxy(geoPoint);
 			params.add(new BasicNameValuePair("count", Integer.toString(params.size())));
 			params.add(new BasicNameValuePair("key", FSQConnector.CLIENT_SECRET));
 			params.add(new BasicNameValuePair("version_id", PROXY_APP));
-			String sResponse = loadZipPostByUrl("http://jam-kz.appspot.com/myproject", params);
+			String sResponse = loadZipPostByUrl(GAE_PROXY, params);
 			jUrls = new JSONObject(sResponse);
 			if (jUrls.has("Time"))
 			{
 				Log.w("HTTPResponse", "Proxy loaded in " + jUrls.getString("Time"));
 			}
-			} catch (Exception e)
-			{
+		} catch (Exception e)
+		{
 			jUrls = new JSONObject();
 			e.printStackTrace();
+		}
+	}
+
+	private String getGAEProxyURL()
+	{
+		try
+		{
+			JSONObject jConfig = getConfigJSON();
+			String GaeProxyUrl = jConfig.getString("GAEProxy");
+			return GaeProxyUrl;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return "http://jam-kz.appspot.com/myproject";
+	}
+
+	private String getOurProxyURL()
+	{
+		try
+		{
+			JSONObject jConfig = getConfigJSON();
+			String GaeProxyUrl = jConfig.getString("OurProxy");
+			return GaeProxyUrl;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return GLOBAL_PROXY;
+	}
+
+	private JSONObject configJSON;
+
+	private JSONObject getConfigJSON()
+	{
+		if (configJSON != null)
+		{
+			return configJSON;
+		} else
+		{
+			try
+			{
+				String configs;
+				File configFile = new File(MainApplication.context.getFilesDir() + "/" + "config.json");
+				if (configFile.exists() && configFile.canRead())
+				{
+					byte[] bytes = C_FileHelper.ReadFile(configFile);
+					configs = new String(bytes);
+				} else
+				{
+					configs = streamToString(MainApplication.context.getAssets().open("config.json"));
+				}
+				configJSON = new JSONObject(configs);
+				return configJSON;
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+				return null;
+			}
 		}
 	}
 

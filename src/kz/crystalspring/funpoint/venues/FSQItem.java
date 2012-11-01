@@ -248,7 +248,10 @@ public class FSQItem extends MapItem implements ImageContainer
 						if (optInfo.getLoadingStatus() == optInfo.LOADED_SUCCES && optInfo.getPhotosCount() > 0)
 						{
 							UrlDrawable urlDr= optInfo.getUrlAndPhoto(0);
-							FSQConnector.loadImageAsync(loadingImageView, urlDr, UrlDrawable.SMALL_URL, false, null);
+							if (loadingImageView.getTag().equals(FSQItem.this.hashCode()))
+								FSQConnector.loadImageAsync(loadingImageView, urlDr, UrlDrawable.SMALL_URL, false, null);
+							else
+								FSQConnector.loadImageAsync(null, urlDr, UrlDrawable.SMALL_URL, false, null);
 							imageCache.addPhotoUrl(getId(), (String)ProjectUtils.ifnull(urlDr.smallUrl, urlDr.bigUrl));
 						} else
 						{
