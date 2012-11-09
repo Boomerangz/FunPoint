@@ -16,7 +16,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin"
                 android:text="кино"
-                android:textColor="#e80044"
+                android:textColor="@color/jam_pink"
                 android:textSize="18pt"
                 android:typeface="sans" />
 

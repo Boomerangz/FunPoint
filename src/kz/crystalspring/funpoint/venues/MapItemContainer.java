@@ -14,6 +14,7 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import kz.crystalspring.funpoint.CinemaTimeTable;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.events.Event;
 import kz.crystalspring.visualities.gallery.ImageContainer;
@@ -188,42 +189,43 @@ public class MapItemContainer
 
 	private void saveItemListToFile()
 	{
-		try
-		{
-			FileOutputStream fos = context.openFileOutput(FILENAME,
-					Context.MODE_PRIVATE);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(mapItemArray);
-			oos.close();
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+//		try
+//		{
+//			FileOutputStream fos = context.openFileOutput(FILENAME,
+//					Context.MODE_PRIVATE);
+//			ObjectOutputStream oos = new ObjectOutputStream(fos);
+//			oos.writeObject(mapItemArray);
+//			oos.close();
+//		} catch (Exception e)
+//		{
+//			e.printStackTrace();
+//		}
 	}
 
 	private List<MapItem> itemListFromFile = null;
 
 	private List<MapItem> getMapItemListFromFile()
 	{
-		if (itemListFromFile != null)
-			return itemListFromFile;
-		else
-		{
-			List<MapItem> itemArray = null;
-			try
-			{
-				FileInputStream fos = context.openFileInput(FILENAME);
-				ObjectInputStream ois = new ObjectInputStream(fos);
-				itemArray = (List<MapItem>) ois.readObject();
-				ois.close();
-			} catch (Exception e)
-			{
-				itemArray = new ArrayList(0);
-				e.printStackTrace();
-			}
-			itemListFromFile = itemArray;
-			return itemArray;
-		}
+//		if (itemListFromFile != null)
+//			return itemListFromFile;
+//		else
+//		{
+//			List<MapItem> itemArray = null;
+//			try
+//			{
+//				FileInputStream fos = context.openFileInput(FILENAME);
+//				ObjectInputStream ois = new ObjectInputStream(fos);
+//				itemArray = (List<MapItem>) ois.readObject();
+//				ois.close();
+//			} catch (Exception e)
+//			{
+//				itemArray = new ArrayList(0);
+//				e.printStackTrace();
+//			}
+//			itemListFromFile = itemArray;
+//			return itemArray;
+//		}
+		return new ArrayList(0);
 	}
 
 	public void loadCategory(String sCategoryId, int radius)
@@ -362,10 +364,8 @@ public class MapItemContainer
 			localCat = globalCat;
 		} catch (JSONException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		if (localCat != null)
 		{
 			if (localCat.equals(MapItem.FSQ_TYPE_CINEMA))

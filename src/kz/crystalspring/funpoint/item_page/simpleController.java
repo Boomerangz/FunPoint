@@ -9,11 +9,13 @@ import com.viewpagerindicator.TabPageIndicator;
 import com.viewpagerindicator.ViewFragment;
 import com.viewpagerindicator.ViewFragmentAdapter;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.ActivityController;
 import kz.crystalspring.funpoint.FullScrLoadingImageActivity;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.PhoneTextView;
-import kz.crystalspring.funpoint.R;
+import kz.crystalspring.funpoint.ProfilePage;
+import kz.crystalspring.funpoint.funObjectList;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.FileConnector;
@@ -82,9 +84,9 @@ public class simpleController extends ActivityController
 	@Override
 	protected void onCreate()
 	{
-		if (!MainApplication.mapItemContainer.getSelectedItem().equals(item))
+		if (!MainApplication.getMapItemContainer().getSelectedItem().equals(item))
 		{
-			item = (FSQItem) MainApplication.mapItemContainer.getSelectedItem();
+			item = (FSQItem) MainApplication.getMapItemContainer().getSelectedItem();
 
 			context.setContentView(R.layout.waiting_layout);
 			mainView = inflater.inflate(R.layout.controller_simple, null);
@@ -104,6 +106,31 @@ public class simpleController extends ActivityController
 			viewPager.setAdapter(pagerAdapter);
 			viewPager.setCurrentItem(0);
 
+
+			View profileButton = mainView.findViewById(R.id.profile_button);
+			profileButton.setOnClickListener(new OnClickListener()
+			{
+				@Override
+				public void onClick(View v)
+				{
+					Intent intent=new Intent(context,ProfilePage.class);
+					context.startActivity(intent);
+				}
+			});
+			
+			View checkListButton = mainView.findViewById(R.id.fast_check_btn);
+			checkListButton.setOnClickListener(new OnClickListener()
+			{
+				@Override
+				public void onClick(View v)
+				{
+					Intent intent=new Intent(context,funObjectList.class);
+					intent.putExtra("fast_checkin", true);
+					context.startActivity(intent);
+				}
+			});
+			
+			
 			TabPageIndicator indicator = (TabPageIndicator) mainView
 					.findViewById(R.id.indicator);
 			indicator.setViewPager(viewPager);
@@ -157,8 +184,6 @@ public class simpleController extends ActivityController
 		kitchenTV = (TextView) v.findViewById(R.id.food_kitchen);
 		hereNowTV = (TextView) v.findViewById(R.id.here_now_tv);
 		phoneLayout = (LinearLayout) v.findViewById(R.id.phone_block);
-		commentsListLayout = (LinearLayout) v
-				.findViewById(R.id.comment_list_layout);
 		galleryLayout = (LinearLayout) v.findViewById(R.id.gallery_list_layout);
 		createGallery();
 
@@ -222,6 +247,10 @@ public class simpleController extends ActivityController
 			}
 		});
 
+		commentsListLayout = (LinearLayout) v
+				.findViewById(R.id.comment_list_layout);
+
+		
 		return v;
 	}
 
@@ -246,7 +275,7 @@ public class simpleController extends ActivityController
 			addressTV.setText(item.getAddress());
 			addressTV.setVisibility(View.VISIBLE);
 		} else
-			addressTV.setVisibility(View.GONE);
+			
 		hereNowTV.setText(Integer.toString(item.getHereNow()));
 		kitchenTV.setText(item.getCategoriesString());
 		// kitchenTV.setVisibility(View.VISIBLE);

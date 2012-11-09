@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import net.londatiga.fsq.FoursquareApp;
 import net.londatiga.fsq.FoursquareApp.FsqAuthListener;
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.venues.FSQBadge;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQUser;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.views.GalleryWrapper;
 import kz.crystalspring.views.LoadingImageView;
 import android.app.Activity;
@@ -40,6 +40,7 @@ public class ProfilePage extends Activity implements RefreshableMapList
 
 		spinner = (Spinner) findViewById(R.id.spinner_city);
 		View button1 = findViewById(R.id.button1);
+		
 		final FoursquareApp mFsqApp = MainApplication.FsqApp;
 		FsqAuthListener listener = new FsqAuthListener()
 		{
@@ -62,6 +63,7 @@ public class ProfilePage extends Activity implements RefreshableMapList
 			@Override
 			public void onClick(View v)
 			{
+				MainApplication.tracker.trackPageView("/ProfilePage authorization began");
 				mFsqApp.authorize(ProfilePage.this);
 			}
 		});
@@ -144,6 +146,8 @@ public class ProfilePage extends Activity implements RefreshableMapList
 		MainApplication.refreshable = this;
 		user = FSQUser.getInstance();
 		user.fillIfNot();
+		if (user.isFilled())
+			MainApplication.tracker.trackPageView("/ProfilePage User_Filled="+Boolean.valueOf(user.isFilled()).toString());
 		refreshMapItems();
 	}
 
@@ -152,8 +156,10 @@ public class ProfilePage extends Activity implements RefreshableMapList
 	{
 		View pg = (View) findViewById(R.id.progress_bar);
 		View infLayout = (View) findViewById(R.id.main_info_layout);
+		View learnView = findViewById(R.id.learnView);
 		if (user.isFilled())
 		{
+			learnView.setVisibility(View.GONE);
 			TextView usernameTV = (TextView) findViewById(R.id.user_name);
 			TextView usermailTV = (TextView) findViewById(R.id.user_email);
 			TextView recentScoreTV = (TextView) findViewById(R.id.recent_score);
@@ -178,7 +184,10 @@ public class ProfilePage extends Activity implements RefreshableMapList
 		} else
 		{
 			if (MainApplication.FsqApp.hasAccessToken())
+			{
+				learnView.setVisibility(View.VISIBLE);
 				pg.setVisibility(View.VISIBLE);
+			}
 			infLayout.setVisibility(View.GONE);
 		}
 	}

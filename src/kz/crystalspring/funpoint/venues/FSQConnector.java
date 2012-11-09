@@ -300,8 +300,8 @@ public class FSQConnector
 		if (MainApplication.FsqApp.hasAccessToken())
 		{
 			String oAuthToken = MainApplication.FsqApp.getAccesToken();
-			String ll = Float.toString(MainApplication.mapItemContainer.getSelectedMapItem().getLatitude()) + ","
-					+ Float.toString(MainApplication.mapItemContainer.getSelectedMapItem().getLongitude());
+			String ll = Float.toString(MainApplication.getMapItemContainer().getSelectedMapItem().getLatitude()) + ","
+					+ Float.toString(MainApplication.getMapItemContainer().getSelectedMapItem().getLongitude());
 			FoursquareApi foursquareApi = new FoursquareApi(CLIENT_ID, CLIENT_SECRET, CALLBACK_URL);
 			foursquareApi.setoAuthToken(oAuthToken);
 			try
@@ -406,7 +406,7 @@ public class FSQConnector
 					e.printStackTrace();
 				}
 				System.out.println(st);
-				FSQItem item = (FSQItem) MainApplication.mapItemContainer.getItemById(venueID);
+				FSQItem item = (FSQItem) MainApplication.getMapItemContainer().getItemById(venueID);
 				item.getOptionalInfo().addCommentFromResponse(st);
 			}
 		};
@@ -735,26 +735,11 @@ public class FSQConnector
 							pict = urlDr.getSmallDrawable();
 						iv.setDrawable(pict);
 						OnClickListener localListner;
-						if (listner == null)
-							localListner = new OnClickListener()
-							{
-								@Override
-								public void onClick(View v)
-								{
-									Toast.makeText(iv.getContext(), "On Click", Toast.LENGTH_SHORT).show();
-									Intent intent = new Intent(iv.getContext(), FullScrLoadingImageActivity.class);
-									MainApplication.selectedItemPhoto = urlDr;
-									intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-									iv.getContext().startActivity(intent);
-								}
-							};
-						else
-							localListner = listner;
-						iv.setOnClickListener(localListner);
+						if (listner != null)
+							iv.setOnClickListener(listner);
 					}
 				}
 			};
-
 			if (!prioity)
 				MainApplication.pwAggregator.addTaskToQueue(preTask, postTask);
 			else
@@ -966,7 +951,7 @@ public class FSQConnector
 							for (int i = 0; i < array.length(); i++)
 							{
 								JSONObject place = array.getJSONObject(i).getJSONObject("venue");
-								FSQItem item = (FSQItem) MainApplication.mapItemContainer.addItem(place);
+								FSQItem item = (FSQItem) MainApplication.getMapItemContainer().addItem(place);
 								exploreItems.add(item);
 							}
 						}

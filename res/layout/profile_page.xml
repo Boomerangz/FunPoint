@@ -23,10 +23,10 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/button1"
             android:layout_width="fill_parent"
-             android:layout_weight="1"
             android:layout_height="33dp"
-            android:layout_marginLeft="3dp"
             android:layout_marginBottom="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_weight="1"
             android:background="#5dcae7"
             android:gravity="center_vertical" >
 
@@ -53,7 +53,7 @@
                 android:textSize="6pt"
                 android:textStyle="bold" />
         </LinearLayout>
-
+
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
@@ -100,76 +100,89 @@
         android:background="@color/menu_light_gray" >
 
         <LinearLayout
-            android:id="@+id/main_info_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/user_name"
+                android:id="@+id/learnView"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
-                android:background="@color/light_grey"
-                android:paddingLeft="@dimen/margin"
-                android:text="user_name"
-                android:textSize="10pt"
-                android:textStyle="bold" />
+                android:padding="@dimen/margin"
+                android:text="Подключитесь бла-бла-бла" />
 
             <LinearLayout
+                android:id="@+id/main_info_layout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/margin" >
+                android:orientation="vertical" >
 
-                <kz.crystalspring.views.LoadingImageView
-                    android:id="@+id/loading_imageview"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp" />
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:background="@color/light_grey"
+                    android:paddingLeft="@dimen/margin"
+                    android:text="user_name"
+                    android:textSize="10pt"
+                    android:textStyle="bold" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin"
-                    android:orientation="vertical" >
+                    android:padding="@dimen/margin" >
 
-                    <TextView
-                        android:id="@+id/recent_score"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="user_email" />
+                    <kz.crystalspring.views.LoadingImageView
+                        android:id="@+id/loading_imageview"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp" />
 
-                    <TextView
-                        android:id="@+id/user_email"
-                        android:layout_width="fill_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="user_email" />
+                        android:layout_marginLeft="@dimen/margin"
+                        android:orientation="vertical" >
 
-                    <TextView
-                        android:id="@+id/user_checkins"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="user_email" />
+                        <TextView
+                            android:id="@+id/recent_score"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="user_email" />
 
-                    <TextView
-                        android:id="@+id/user_friends"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="user_email" />
+                        <TextView
+                            android:id="@+id/user_email"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="user_email" />
+
+                        <TextView
+                            android:id="@+id/user_checkins"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="user_email" />
+
+                        <TextView
+                            android:id="@+id/user_friends"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="user_email" />
+                    </LinearLayout>
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/max_score"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="user_email"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/badge_gallery"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/max_score"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="user_email"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:id="@+id/badge_gallery"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin" />
         </LinearLayout>
     </ScrollView>
 

@@ -3,9 +3,9 @@ package kz.crystalspring.pointplus;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.android_client.C_JavascriptInterface;
 import kz.crystalspring.android_client.C_NetHelper;
-import kz.crystalspring.funpoint.R;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;

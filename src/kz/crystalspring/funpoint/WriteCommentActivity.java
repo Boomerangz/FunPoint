@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
@@ -67,17 +68,25 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 		mImageView = (ImageView) findViewById(R.id.imageView1);
 		_path = Environment.getExternalStorageDirectory() + "/images/make_machine_example.jpg";
 
+		String mode="";
 		switch (getIntent().getExtras().getInt("requestCode"))
 		{
 		case COMMENT_MODE:
+			mode="Checkin";
 			header.setText("Комментарий");
 			break;
 		case CHECKIN_MODE:
+			mode="Write Comment";
 			header.setText("Отметиться");
 			break;
 		}
-		placeName.setText(MainApplication.mapItemContainer.getSelectedMapItem().toString());
+		String sPlaceName=MainApplication.getMapItemContainer().getSelectedMapItem().toString();
+		placeName.setText(sPlaceName);
 
+		
+		MainApplication.tracker.trackPageView("/"+mode+"Page Place_Name="+placeName);
+		
+		
 		okButton.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -126,7 +135,6 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 	public void onResume()
 	{
 		super.onResume();
-
 		MainApplication.refreshable = this;
 	}
 
@@ -146,7 +154,7 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 	{
 		EditText edit = (EditText) findViewById(R.id.comment_text);
 		String comment = edit.getText().toString();
-		String venueId = MainApplication.mapItemContainer.getSelectedMapItem().getId();
+		String venueId = MainApplication.getMapItemContainer().getSelectedMapItem().getId();
 		if (getIntent().getExtras().getInt("requestCode") == COMMENT_MODE)
 			sendTip(comment, venueId);
 		else

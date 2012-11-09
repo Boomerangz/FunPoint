@@ -15,7 +15,7 @@
 
 package com.readystatesoftware.mapviewballoons;
 
-import kz.crystalspring.funpoint.R;
+import kz.com.pack.jam.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;

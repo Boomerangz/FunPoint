@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.nikkoaiello.mobile.android.PinchImageView;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -129,8 +129,6 @@ public class JamTextImageSwitcher extends FrameLayout implements ViewFactory
 			Drawable drw;
 			Bitmap btm=null;
 			int errorcode = 1;
-			while (errorcode == 1)
-			{
 				try
 				{
 					btm = BitmapFactory.decodeResource(getContext().getResources(), ImageSource.get(currImage).source);
@@ -138,10 +136,8 @@ public class JamTextImageSwitcher extends FrameLayout implements ViewFactory
 				} catch (OutOfMemoryError e)
 				{
 					e.printStackTrace();
-					btm = null;
 					errorcode = 1;
 				}
-			}
 			if (btm != null)
 			{
 				Bitmap scaledBtm = Bitmap.createScaledBitmap(btm, Math.round(150 * MainApplication.mDensity),

@@ -3,16 +3,19 @@ package kz.crystalspring.visualities.homescreen;
 import java.util.ArrayList;
 import java.util.List;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.R;
+import kz.crystalspring.funpoint.ProfilePage;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQFriendCheckin;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
@@ -90,6 +93,15 @@ class FriendFeed
 		listView.setMinimumHeight(Math.round(80 * MainApplication.mDensity));
 		View progressBar = friendFeedList.findViewById(R.id.progressBar1);
 		View loginView = friendFeedList.findViewById(R.id.login_view);
+		loginView.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				Intent intent=new Intent(context,ProfilePage.class);
+				context.startActivity(intent);
+			}
+		});
 		if (FSQConnector.isFriendFeedLoaded())
 		{
 			progressBar.setVisibility(View.GONE);

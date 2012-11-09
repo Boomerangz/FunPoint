@@ -6,29 +6,49 @@
     android:orientation="horizontal" >
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:gravity="center_horizontal" >
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
 
         <ImageView
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/jam_logo_splash"
-            android:layout_marginBottom="0dp" />
+            android:layout_marginBottom="0dp"
+            android:src="@drawable/jam_logo_splash" />
 
         <ProgressBar
             android:layout_width="60dp"
-            android:layout_height="60dp" 
-            android:layout_margin="@dimen/margin"/>
-        
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
+            android:layout_height="60dp"
+            android:layout_margin="@dimen/margin" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin"
             android:text="Подождите, идет загрузка"
-            android:textSize="8pt"/>
+            android:textSize="8pt" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/logo_cs"
+        android:layout_margin="@dimen/margin" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/glatis"
+        android:layout_margin="@dimen/margin" />
 
 </RelativeLayout>

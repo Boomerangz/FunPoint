@@ -3,9 +3,9 @@ package kz.crystalspring.views;
 import java.util.ArrayList;
 import java.util.List;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.FullScrLoadingImageActivity;
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
 import kz.crystalspring.visualities.gallery.GalleryActivity;

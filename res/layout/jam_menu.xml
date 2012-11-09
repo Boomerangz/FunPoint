@@ -4,14 +4,12 @@
     android:layout_height="fill_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingLeft="3dp"
-    android:paddingRight="3dp" >
+    android:paddingLeft="6dp"
+    android:paddingRight="6dp" >
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp" >
+        android:layout_height="fill_parent">
 
         <TableLayout
             android:id="@+id/main_layout"
@@ -22,7 +20,6 @@
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
                 android:orientation="horizontal"
                 android:layout_weight="1"  >
 
@@ -39,11 +36,10 @@
                     android:layout_height="fill_parent"
                     android:layout_weight="1" />
             </TableRow>
-
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="6dp"
                 android:orientation="horizontal"
                 android:layout_weight="1"  >
 
@@ -64,9 +60,10 @@
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="6dp"
                 android:orientation="horizontal" 
-                android:layout_weight="1" >
+                android:layout_weight="1"
+                android:layout_marginBottom="@dimen/margin" >
 
                 <com.boomerang.jam_menu.JamTextImageSwitcher
                     android:id="@+id/switcher4"
@@ -77,27 +74,6 @@
 
                 <com.boomerang.jam_menu.JamTextImageSwitcher
                     android:id="@+id/switcher6"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:orientation="horizontal" 
-                android:layout_weight="1" >
-
-                <com.boomerang.jam_menu.JamTextImageSwitcher
-                    android:id="@+id/switcher7"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_marginRight="6dp"
-                    android:layout_weight="1" />
-
-                <com.boomerang.jam_menu.JamTextImageSwitcher
-                    android:id="@+id/switcher8"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_weight="1" />

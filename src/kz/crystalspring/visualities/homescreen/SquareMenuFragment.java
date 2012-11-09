@@ -7,9 +7,9 @@ import java.util.List;
 import com.boomerang.jam_menu.JamTextImageSwitcher;
 import com.boomerang.jam_menu.SwitcherDescription;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.ProfilePage;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.funCheckinNow;
 import kz.crystalspring.funpoint.funObjectList;
 import kz.crystalspring.funpoint.funWaitingActivity;
@@ -174,10 +174,6 @@ class PlacesSquareMenu
 				.findViewById(R.id.switcher5));
 		switchers.add((JamTextImageSwitcher) squareMenu
 				.findViewById(R.id.switcher6));
-		switchers.add((JamTextImageSwitcher) squareMenu
-				.findViewById(R.id.switcher7));
-		switchers.add((JamTextImageSwitcher) squareMenu
-				.findViewById(R.id.switcher8));
 
 		for (JamTextImageSwitcher switcher : switchers)
 		{
@@ -273,6 +269,14 @@ class PlacesSquareMenu
 				runItemActivityWithFilter(MapItem.FSQ_TYPE_CINEMA);
 			}
 		});
+		switchers.get(5).setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View arg0)
+			{
+				runItemActivityWithFilter(MapItem.FSQ_TYPE_CINEMA);
+			}
+		});
 		switchers.get(2).setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -297,23 +301,6 @@ class PlacesSquareMenu
 				runItemActivityWithFilter(MapItem.FSQ_TYPE_CLUB);// openCheckIn();
 			}
 		});
-		switchers.get(6).setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View arg0)
-			{
-				openUserInfo();
-			}
-		});
-		switchers.get(7).setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View arg0)
-			{
-				openHelpdesk();
-			}
-		});
-
 		return squareMenu;
 	}
 
@@ -354,7 +341,7 @@ class PlacesSquareMenu
 
 	public void runItemActivityWithFilter(String visibleFilter)
 	{
-		MainApplication.mapItemContainer.setVisibleFilter(visibleFilter);
+		MainApplication.getMapItemContainer().setVisibleFilter(visibleFilter);
 		Intent intent = new Intent(context, funObjectList.class);
 		context.startActivity(intent);
 		// MainMenu.currentListTab = MainMenu.OBJECT_LIST_TAB;

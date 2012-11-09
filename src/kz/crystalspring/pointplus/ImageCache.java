@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +35,10 @@ public class ImageCache
 
 	final int BUFFER_SIZE = 40;
 	Map<String, Bitmap> mapBit;
-	LinkedList<String> listBit;
+	List<String> listBit;
 	SharedPreferences mPrefs;
+
+	private HashSet<Bitmap> unUsedBitmaps;
 
 	public ImageCache(Context context)
 	{
@@ -52,6 +55,7 @@ public class ImageCache
 			directory = nDirectory;
 		}
 		mapBit = new HashMap<String, Bitmap>(BUFFER_SIZE);
+		unUsedBitmaps = new HashSet<Bitmap>();
 		listBit = new LinkedList<String>();
 		mPrefs = context.getSharedPreferences("title_photos", Context.MODE_PRIVATE);
 	}
@@ -110,6 +114,7 @@ public class ImageCache
 		{
 			Log.w("ImageCache", "load from RAM");
 			Bitmap bit = mapBit.get(sUrl);
+			useBitmap(bit);
 			return bit;
 		} else
 		{
@@ -122,7 +127,12 @@ public class ImageCache
 				Bitmap bitmap = null;
 				bitmap = BitmapFactory.decodeFile(fName);
 				pushBitmapToBuffer(sUrl, bitmap);
-				return bitmap;
+				if (bitmap.isRecycled())
+				{
+					Log.w("ImageCache","Loaded recycled Bitmap");
+					return null;
+				} else
+					return bitmap;
 			} else
 				return null;
 		}
@@ -135,16 +145,32 @@ public class ImageCache
 			listBit.remove(sUrl);
 		listBit.add(0, sUrl);
 		mapBit.put(sUrl, bitmap);
+		cleanJunk();
+		Log.w("ImageCache", "Buffer size now=" + Integer.toString(listBit.size()));
+		useBitmap(bitmap);
+		System.gc();
+	}
+
+	private void cleanJunk()
+	{
 		if (listBit.size() > BUFFER_SIZE)
 		{
 			String st = listBit.get(BUFFER_SIZE);
-			// mapBit.get(st).
+			// Bitmap btm = mapBit.get(st);
 			mapBit.remove(st);
 			listBit.remove(st);
+			for (Object o : unUsedBitmaps.toArray())
+			{
+				Bitmap btm1 = (Bitmap) o;
+				if (!listBit.contains(btm1) && !mapBit.containsValue(btm1))
+				{
+					unUsedBitmaps.remove(btm1);
+					//btm1.recycle();
+					Log.w("ImageCache", "Recycled");
+				}
+			}
 			Log.w("ImageCache", "Removed from buffer");
 		}
-		Log.w("ImageCache", "Buffer size now=" + Integer.toString(listBit.size()));
-		System.gc();
 	}
 
 	public byte[] getBytes(String sUrl)
@@ -161,7 +187,12 @@ public class ImageCache
 			try
 			{
 				jObject = new JSONObject(str);
-				if (jObject.getLong("date") > getRandomExpireDate())//случайная дата "протухания" кэша. от 3 до 6 дней
+				if (jObject.getLong("date") > getRandomExpireDate())// случайная
+																	// дата
+																	// "протухания"
+																	// кэша. от
+																	// 3 до 6
+																	// дней
 					return jObject.getString("url");
 				else
 					return null;
@@ -173,7 +204,7 @@ public class ImageCache
 		}
 		return null;
 	}
-	
+
 	private long getRandomExpireDate()
 	{
 		final int MAX_EXPIRE_DAYS = 6;
@@ -198,5 +229,44 @@ public class ImageCache
 			e.printStackTrace();
 		}
 		editor.commit();
+	}
+
+	public void useBitmap(Bitmap btm)
+	{
+//		if (unUsedBitmaps.contains(btm))
+//		{
+//			//unUsedBitmaps.remove(btm);
+//			Log.w("ImageCache", "Removed from Unused");
+//			upBitmapinList(btm);
+//		}
+	}
+
+	private void upBitmapinList(Bitmap btm)
+	{
+		String sUrl = getUrlByBitmap(btm);
+		if (listBit.contains(sUrl))
+		{
+			listBit.remove(sUrl);
+			listBit.add(0, sUrl);
+		}
+	}
+
+	private String getUrlByBitmap(Bitmap btm)
+	{
+		for (String sUrl : listBit)
+		{
+			if (mapBit.get(listBit) != null && mapBit.get(listBit).equals(btm))
+			{
+				return sUrl;
+			}
+		}
+		return null;
+	}
+
+	public void unUse(Bitmap btm)
+	{
+		Log.w("ImageCache", "Added to Unused");
+		//unUsedBitmaps.add(btm);
+		Log.w("ImageCache", "unused_size=" + Integer.toString(unUsedBitmaps.size()));
 	}
 }

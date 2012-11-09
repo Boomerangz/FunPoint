@@ -24,7 +24,6 @@ public class EventContainer
 	Context context;
 	List<Event> eventsList = new ArrayList(0);
 
-
 	public EventContainer(Context applicationContext)
 	{
 		context = applicationContext;
@@ -57,19 +56,19 @@ public class EventContainer
 				JSONArray eventsJSONArray = FileConnector.loadJSONEventsList();
 
 				Log.w("cinema", "НАЧАЛ СОЗДАНИЕ СПИСКА СОБЫТИЙ");
-				if (eventsJSONArray!=null)
-				for (int i = 0; i < eventsJSONArray.length(); i++)
-				{
-					try
+				if (eventsJSONArray != null)
+					for (int i = 0; i < eventsJSONArray.length(); i++)
 					{
-						JSONObject jEvent = eventsJSONArray.getJSONObject(i);
-						Event event = new SimpleEvent(jEvent);
-						addEventToList(event);
-					} catch (JSONException e)
-					{
-						e.printStackTrace();
+						try
+						{
+							JSONObject jEvent = eventsJSONArray.getJSONObject(i);
+							Event event = new SimpleEvent(jEvent);
+							addEventToList(event);
+						} catch (JSONException e)
+						{
+							e.printStackTrace();
+						}
 					}
-				}
 				Log.w("cinema", "ЗАКОНЧИЛ СОЗДАНИЕ СПИСКА СОБЫТИЙ");
 			}
 		};
@@ -79,29 +78,28 @@ public class EventContainer
 			@Override
 			public void run()
 			{
-
 				Log.w("cinema", "НАЧАЛ ЗАГРУЗКУ ФИЛЬМОВ");
-				JSONArray cinemaJSONArray = FileConnector.loadJSONCinemaEventsList();	
+				JSONArray cinemaJSONArray = FileConnector.loadJSONCinemaEventsList();
 				Log.w("cinema", "НАЧАЛ СОЗДАНИЕ СПИСКА ФИЛЬМОВ");
-				if (cinemaJSONArray!=null)
-				for (int i = 0; i < cinemaJSONArray.length(); i++)
-				{
-					try
+				if (cinemaJSONArray != null)
+					for (int i = 0; i < cinemaJSONArray.length(); i++)
 					{
-						JSONObject jEvent = cinemaJSONArray.getJSONObject(i);
-						FilmEvent event = new FilmEvent(jEvent);
-						addEventToList(event);
-					} catch (JSONException e)
-					{
-						e.printStackTrace();
+						try
+						{
+							JSONObject jEvent = cinemaJSONArray.getJSONObject(i);
+							FilmEvent event = new FilmEvent(jEvent);
+							addEventToList(event);
+						} catch (JSONException e)
+						{
+							e.printStackTrace();
+						}
 					}
-				}
 				Log.w("cinema", "ЗАКОНЧИЛ СОЗДАНИЕ СПИСКА ФИЛЬМОВ");
 			}
 		};
-		Runnable postTask=new Runnable()
+		Runnable postTask = new Runnable()
 		{
-			
+
 			@Override
 			public void run()
 			{
@@ -122,8 +120,7 @@ public class EventContainer
 
 	public List<Event> getFilteredEventsList()
 	{
-		List<Event> filteredEvents = filterEventsList(eventsList,
-				MainApplication.mapItemContainer.getFlter());
+		List<Event> filteredEvents = filterEventsList(eventsList, MainApplication.getMapItemContainer().getFlter());
 		return filteredEvents;
 	}
 
@@ -137,23 +134,50 @@ public class EventContainer
 				list.add(e);
 			}
 		}
+		Collections.sort(list, new Comparator<Event>()
+		{
+
+			@Override
+			public int compare(Event lhs, Event rhs)
+			{
+				if (lhs != null && rhs != null)
+					return lhs.getName().compareTo(rhs.getName());
+				else
+					return 0;
+			}
+		});
 		return list;
 	}
 
-	public List<SimpleEvent> getUnFilteredEventsList()
+	public List<Event> getUnFilteredEventsList()
 	{
-		List<SimpleEvent> eventsWithoutCinema = new ArrayList();
+		List<Event> eventsWithoutCinema = new ArrayList();
 		for (Event event : eventsList)
 		{
 			if (SimpleEvent.class.isInstance(event))
 				eventsWithoutCinema.add((SimpleEvent) event);
 		}
-		Collections.sort(eventsWithoutCinema, new Comparator<SimpleEvent>()
+		Collections.sort(eventsWithoutCinema, new Comparator<Event>()
 		{
 			@Override
-			public int compare(SimpleEvent lhs, SimpleEvent rhs)
+			public int compare(Event lhs, Event rhs)
 			{
-				return lhs.getEventDate().compareTo(rhs.getEventDate());
+				if (SimpleEvent.class.isInstance(lhs) && SimpleEvent.class.isInstance(rhs))
+					return ((SimpleEvent) lhs).getEventDate().compareTo(((SimpleEvent) rhs).getEventDate());
+				else
+					return lhs.getName().compareTo(rhs.getName());
+			}
+		});
+		Collections.sort(eventsWithoutCinema, new Comparator<Event>()
+		{
+
+			@Override
+			public int compare(Event lhs, Event rhs)
+			{
+				if (lhs != null && rhs != null)
+					return lhs.getName().compareTo(rhs.getName());
+				else
+					return 0;
 			}
 		});
 		return eventsWithoutCinema;

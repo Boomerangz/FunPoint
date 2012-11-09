@@ -1,5 +1,6 @@
 package kz.crystalspring.funpoint;
 
+import kz.com.pack.jam.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +15,7 @@ public class funWaitingActivity extends Activity implements RefreshableMapList
 		MainApplication.refreshable = this;
 		try
 		{
-			if (MainApplication.mapItemContainer.getFilteredItemList().size() > 0)
+			if (MainApplication.getMapItemContainer().getFilteredItemList().size() > 0)
 			{
 				refreshMapItems();
 			}
@@ -30,7 +31,7 @@ public class funWaitingActivity extends Activity implements RefreshableMapList
 	{
 		try
 		{
-			if (MainApplication.mapItemContainer.getFilteredItemList().size() > 0)
+			if (MainApplication.getMapItemContainer().getFilteredItemList().size() > 0)
 			{
 				Intent intent = new Intent(funWaitingActivity.this,
 						funObjectList.class);

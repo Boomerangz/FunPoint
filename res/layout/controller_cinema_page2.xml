@@ -5,48 +5,8 @@
     android:id="@+id/main_info_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:layout_marginTop="@dimen/margin"
     android:orientation="vertical" >
-
-    <RelativeLayout
-        android:layout_margin="@dimen/margin"
-        android:id="@+id/major_header_layout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white" >
-
-        <LinearLayout
-            android:id="@+id/minor_header_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="33dp"
-            android:layout_marginRight="33dp"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/food_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:maxLines="2"
-                android:text="Food title"
-                android:textSize="14pt" />
-
-            <TextView
-                android:id="@+id/food_kitchen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:text="Индийская кухня, Китайская кухня"
-                android:textSize="7pt" />
-            
-        </LinearLayout>
-        <View android:layout_width="fill_parent"
-                  android:layout_height="5dp"
-                  android:background="@color/cinema"
-                  android:layout_below="@id/minor_header_layout"/>
-    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -66,8 +26,9 @@
 
             <View android:layout_width="fill_parent"
                   android:layout_height="5dp"
-                  android:background="@color/cinema"
-                  android:layout_below="@id/minor_header_layout"/>
+                  android:background="@color/jam_pink"
+                  android:layout_alignParentTop="true"
+                  />
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
@@ -88,7 +49,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/checkin_icon" />
+                android:src="@drawable/icon_zdes"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -102,8 +63,8 @@
             android:background="#ffffff" >
             <View android:layout_width="fill_parent"
                   android:layout_height="5dp"
-                  android:background="@color/cinema"
-                  android:layout_below="@id/minor_header_layout"/>
+                  android:background="@color/jam_pink"
+                   android:layout_alignParentTop="true"/>
 
             <TextView
                 android:id="@+id/textView1"
@@ -125,7 +86,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/map_icon" />
+                android:src="@drawable/icon_karta" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -140,8 +101,8 @@
             
             <View android:layout_width="fill_parent"
                   android:layout_height="5dp"
-                  android:background="@color/cinema"
-                  android:layout_below="@id/minor_header_layout"/>
+                  android:background="@color/jam_pink"
+                   android:layout_alignParentTop="true"/>
 
             <TextView
                 android:id="@+id/textView1"
@@ -163,7 +124,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/map_icon" />
+                android:src="@drawable/icon_oblako" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -186,8 +147,8 @@
             
             <View android:layout_width="fill_parent"
                   android:layout_height="5dp"
-                  android:background="@color/cinema"
-                  android:layout_below="@id/minor_header_layout"/>
+                  android:background="@color/jam_pink"
+                   android:layout_alignParentTop="true"/>
 
             <TextView
                 android:id="@+id/textView1"
@@ -209,43 +170,6 @@
                 android:layout_centerHorizontal="true"
                 android:text="5"
                 android:textSize="55dp"
-                android:textStyle="bold"
-                android:typeface="sans" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/avg_price_block"
-            android:layout_width="fill_parent"
-            android:layout_height="85dp"
-            android:layout_marginRight="@dimen/margin"
-            android:layout_weight="1"
-            android:background="#ffffff" >
-            
-            <View android:layout_width="fill_parent"
-                  android:layout_height="5dp"
-                  android:background="@color/cinema"
-                  android:layout_below="@id/minor_header_layout"/>
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="5dp"
-                android:text="ланч"
-                android:textSize="15dp"
-                android:textStyle="bold"
-                android:typeface="sans" />
-
-            <TextView
-                android:id="@+id/food_lunch_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:text="80000"
-                android:textSize="50dp"
                 android:textStyle="bold"
                 android:typeface="sans" />
         </RelativeLayout>

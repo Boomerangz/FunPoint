@@ -2,6 +2,8 @@ package kz.crystalspring.funpoint;
 
 import java.util.List;
 
+import kz.com.pack.jam.R;
+
 
 import android.app.Activity;
 import android.app.ActivityManager;

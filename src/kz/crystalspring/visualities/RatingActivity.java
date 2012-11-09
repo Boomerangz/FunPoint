@@ -9,8 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.RefreshableMapList;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQFriend;

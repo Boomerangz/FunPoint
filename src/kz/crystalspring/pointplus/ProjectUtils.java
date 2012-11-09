@@ -234,12 +234,9 @@ public class ProjectUtils
 	{
 		Date _fDate = new Date(fDate.getTime());
 		Date _nDate = new Date(nDate.getTime());
-		_fDate.setHours(0);
+		_fDate.setHours(2);
 		_fDate.setMinutes(0);
 		_fDate.setSeconds(0);
-		_nDate.setHours(0);
-		_nDate.setMinutes(0);
-		_nDate.setSeconds(0);
 		int differenceInDays = (int) Math.round(((double)_nDate.getTime() - _fDate.getTime())/1000/3600/24);
 		switch (differenceInDays)
 		{

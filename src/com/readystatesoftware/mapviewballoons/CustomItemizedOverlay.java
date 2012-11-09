@@ -63,8 +63,8 @@ public class CustomItemizedOverlay<Item extends OverlayItem> extends BalloonItem
 
 	@Override
 	protected boolean onBalloonTap(int index, CustomOverlayItem item) {
-		Toast.makeText(c, "onBalloonTap for overlay index " + index,
-				Toast.LENGTH_LONG).show();
+//		Toast.makeText(c, "onBalloonTap for overlay index " + index,
+//				Toast.LENGTH_LONG).show();
 		activity.showInfo(index);
 		return true;
 	}

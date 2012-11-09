@@ -7,9 +7,9 @@ import com.viewpagerindicator.TabPageIndicator;
 import com.viewpagerindicator.ViewFragment;
 import com.viewpagerindicator.ViewFragmentAdapter;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.ProfilePage;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.RefreshableMapList;
 import kz.crystalspring.funpoint.funWaitingActivity;
 import kz.crystalspring.funpoint.venues.MapItem;
@@ -104,11 +104,12 @@ public class HomeScreen1 extends FragmentActivity implements RefreshableMapList
 				}
 			}
 		}, 10);
+		MainApplication.tracker.startNewSession(MainApplication.ANALYTIC_SESSION,20,this);
 	}
 
 	protected void runItemActivityWithFilter(String visibleFilter)
 	{
-		MainApplication.mapItemContainer.setVisibleFilter(visibleFilter);
+		MainApplication.getMapItemContainer().setVisibleFilter(visibleFilter);
 		Intent intent = new Intent(getBaseContext(), funWaitingActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		getBaseContext().startActivity(intent);
@@ -169,6 +170,7 @@ public class HomeScreen1 extends FragmentActivity implements RefreshableMapList
 	{
 		super.onDestroy();
 		Log.w("HomeScreen", "Destroyed");
+		MainApplication.tracker.stopSession();
 	}
 
 	private List<TitleFragment> fillObjectAndEventLists()

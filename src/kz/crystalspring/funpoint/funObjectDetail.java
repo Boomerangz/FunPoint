@@ -26,7 +26,7 @@ public class funObjectDetail extends FragmentActivity
 	{
 		try
 		{
-			FSQItem selectedItem = (FSQItem) MainApplication.mapItemContainer.getSelectedMapItem();
+			FSQItem selectedItem = (FSQItem) MainApplication.getMapItemContainer().getSelectedMapItem();
 			String objType = selectedItem.getCategory();
 			if (objType.equals(MapItem.FSQ_TYPE_FOOD))
 				controller = new foodController(this);

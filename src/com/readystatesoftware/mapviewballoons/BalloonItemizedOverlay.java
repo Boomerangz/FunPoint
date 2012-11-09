@@ -17,8 +17,8 @@ package com.readystatesoftware.mapviewballoons;
 
 import java.util.List;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.funMap;
-import kz.crystalspring.funpoint.R;
 
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -280,7 +280,6 @@ public abstract class BalloonItemizedOverlay<Item extends OverlayItem> extends
 				{
 					return false;
 				}
-
 			}
 		};
 	}

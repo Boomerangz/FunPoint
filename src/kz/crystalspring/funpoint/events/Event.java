@@ -5,9 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.CinemaTimeTable;
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.funEventActivity;
 import kz.crystalspring.funpoint.funObjectDetail;
 import kz.crystalspring.funpoint.venues.FSQConnector;

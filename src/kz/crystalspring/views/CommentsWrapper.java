@@ -1,6 +1,7 @@
 package kz.crystalspring.views;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -10,7 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import kz.crystalspring.funpoint.R;
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.VenueComment;
 import kz.crystalspring.pointplus.ProjectUtils;
@@ -22,7 +23,10 @@ public class CommentsWrapper
 
 	public CommentsWrapper(FSQItem item, Context context)
 	{
-		commentsList = item.getOptionalInfo().getCommentsList();
+		if (item.getOptionalInfo()!=null)
+			commentsList = item.getOptionalInfo().getCommentsList();
+		else
+			commentsList = new ArrayList();
 		this.context = context;
 	}
 

@@ -6,23 +6,21 @@ import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-
 import org.apache.http.message.BasicNameValuePair;
 
 import net.londatiga.fsq.FoursquareApp;
 
 import com.boomerang.pending.PendingWorkAggregator;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.maps.GeoPoint;
 
+import kz.crystalspring.android_client.C_NetHelper;
 import kz.crystalspring.funpoint.events.EventContainer;
 import kz.crystalspring.funpoint.funMap.CustomMyLocationOverlay;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQItem;
-import kz.crystalspring.funpoint.venues.FSQTodo;
 import kz.crystalspring.funpoint.venues.FSQUser;
 import kz.crystalspring.funpoint.venues.FileConnector;
-import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.funpoint.venues.MapItemContainer;
 import kz.crystalspring.funpoint.venues.UserActivity;
 import kz.crystalspring.pointplus.HttpHelper;
@@ -38,6 +36,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -50,8 +49,6 @@ public class MainApplication extends Application
 {
 	public static Context context;
 	public static float mDensity;
-	public static MapItemContainer mapItemContainer;
-	public static EventContainer eventContainer;
 	public static RefreshableMapList refreshable;
 	public static CustomMyLocationOverlay gMyLocationOverlay;
 	private static GeoPoint currLocation;
@@ -59,6 +56,7 @@ public class MainApplication extends Application
 	public static FoursquareApp FsqApp;
 	public static PendingWorkAggregator pwAggregator = new PendingWorkAggregator();
 	public static CityManager cityManager;
+	public static ContentService contentService;
 	public static kz.crystalspring.funpoint.venues.UrlDrawable selectedItemPhoto;
 	public static String selectedEventId = null;
 	private static MainApplication singleTon;
@@ -70,6 +68,10 @@ public class MainApplication extends Application
 	public static final int NO_CONNECTION = 4;
 	public static int internetConnection = -1;
 
+	
+	public static final String ANALYTIC_SESSION = "UA-32200316-5";
+	public static GoogleAnalyticsTracker tracker;
+	
 	LocationUpdater updater;
 
 	public static final int ALPHA = 100;
@@ -86,21 +88,23 @@ public class MainApplication extends Application
 	public void onCreate()
 	{
 		super.onCreate();
+		getFilesDir().listFiles();
 		Log.w("MainApplication", "Created " + Integer.valueOf(++starts));
 		singleTon = this;
+		startService(new Intent(this, ContentService.class));
 
 		mDensity = getApplicationContext().getResources().getDisplayMetrics().density;
-		mapItemContainer = new MapItemContainer(getApplicationContext());
-		eventContainer = new EventContainer(getApplicationContext());
 		new ImageCache(getApplicationContext());
 
-		mPrefs = PreferenceManager
-				.getDefaultSharedPreferences(getApplicationContext());
+		mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		context = getApplicationContext();
-		FsqApp = new FoursquareApp(this, FSQConnector.CLIENT_ID,
-				FSQConnector.CLIENT_SECRET);
+		FsqApp = new FoursquareApp(this, FSQConnector.CLIENT_ID, FSQConnector.CLIENT_SECRET);
 		cityManager = new CityManager(context);
 
+		tracker=GoogleAnalyticsTracker.getInstance();
+		
+		C_NetHelper.SyncData(getApplicationContext(), false, false); 
+		
 		updater = new LocationUpdater(this);
 		onResume();
 	}
@@ -121,8 +125,8 @@ public class MainApplication extends Application
 
 	public void onResume()
 	{
+		contentService=ContentService.getSingletone();
 		pwAggregator.setAbleToDo(true);
-		// lastUpdate=new Date();
 		if (checkInternetConnection())
 		{
 			System.out.println("ЗАГРУЗКА НАЧАТА");
@@ -154,30 +158,43 @@ public class MainApplication extends Application
 		HttpHelper.getInstance().loadFromProxy(getCurrentLocation());
 	}
 
+	public static MapItemContainer getMapItemContainer()
+	{
+		contentService=ContentService.getSingletone();
+		return (MapItemContainer) ProjectUtils.ifnull(contentService.mapItemContainer,new MapItemContainer(context));
+	}
+
+	public static EventContainer getEventContainer()
+	{
+		contentService=ContentService.getSingletone();
+		return (EventContainer) ProjectUtils.ifnull(contentService.eventContainer,new EventContainer(context));
+	}
+
 	private static void loadPoints()
 	{
-		if (cityManager.getSelectedCity() == null)
-			MainApplication.mapItemContainer.loadNearBy(getCurrentLocation());
-		else if (MainApplication.getCurrentLocation() != null
-				&& ProjectUtils.distance(cityManager.getSelectedCity()
-						.getPoint(), MainApplication.getCurrentLocation()) < 10000)
-			MainApplication.mapItemContainer.loadNearBy(getCurrentLocation());
-		else
-			MainApplication.mapItemContainer.loadNearBy(null);
-		System.gc();
+		if (contentService != null)
+		{
+			if (cityManager.getSelectedCity() == null)
+				MainApplication.contentService.mapItemContainer.loadNearBy(getCurrentLocation());
+			else if (MainApplication.getCurrentLocation() != null
+					&& ProjectUtils.distance(cityManager.getSelectedCity().getPoint(), MainApplication.getCurrentLocation()) < 10000)
+				MainApplication.contentService.mapItemContainer.loadNearBy(getCurrentLocation());
+			else
+				MainApplication.contentService.mapItemContainer.loadNearBy(null);
+			System.gc();
+		}
 	}
 
 	private static void loadPointsSilent()
 	{
 		if (cityManager.getSelectedCity() == null)
-			MainApplication.mapItemContainer.loadNearBy(getCurrentLocation());
+			MainApplication.contentService.mapItemContainer.loadNearBy(getCurrentLocation());
 		else if (MainApplication.getCurrentLocation() != null
-				&& ProjectUtils.distance(cityManager.getSelectedCity()
-						.getPoint(), MainApplication.getCurrentLocation()) < 10000)
-			MainApplication.mapItemContainer.loadNearBy(getCurrentLocation());
+				&& ProjectUtils.distance(cityManager.getSelectedCity().getPoint(), MainApplication.getCurrentLocation()) < 10000)
+			MainApplication.contentService.mapItemContainer.loadNearBy(getCurrentLocation());
 		else
 			;
-		// MainApplication.mapItemContainer.loadNearBy(null);
+		// MainApplication.contentService.mapItemContainer.loadNearBy(null);
 		System.gc();
 	}
 
@@ -197,11 +214,9 @@ public class MainApplication extends Application
 	public boolean checkInternetConnection()
 	{
 		ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		android.net.NetworkInfo wifi = connec
-				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-		android.net.NetworkInfo mobile = connec
-				.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+		android.net.NetworkInfo mobile = connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
 		NetworkInfo info = connec.getActiveNetworkInfo();
 		if (info != null)
@@ -231,8 +246,7 @@ public class MainApplication extends Application
 
 	public static GeoPoint getCurrentLocation()
 	{
-		if (gMyLocationOverlay != null
-				&& gMyLocationOverlay.getMyLocation() != null)
+		if (gMyLocationOverlay != null && gMyLocationOverlay.getMyLocation() != null)
 			setCurrLocation(gMyLocationOverlay.getMyLocation());
 		else
 		{
@@ -249,8 +263,7 @@ public class MainApplication extends Application
 	public static void setCurrLocation(GeoPoint point)
 	{
 		Date nowDate = new Date();
-		if (lastUpdate == null
-				|| nowDate.getTime() - lastUpdate.getTime() > 30000)
+		if (lastUpdate == null || nowDate.getTime() - lastUpdate.getTime() > 30000)
 		{
 			lastUpdate = nowDate;
 			currLocation = point;
@@ -265,7 +278,7 @@ public class MainApplication extends Application
 		{
 			MainApplication.loadUserActivity();
 		}
-		eventContainer.loadEventList();
+		contentService.eventContainer.loadEventList();
 		// loadJamContent();
 	}
 
@@ -298,7 +311,7 @@ public class MainApplication extends Application
 	{
 		if (item == null || !item.equals(cityManager.getSelectedCity()))
 		{
-			MainApplication.mapItemContainer.clearContent();
+			MainApplication.contentService.mapItemContainer.clearContent();
 			cityManager.selectCity(item);
 			MainApplication.loadPoints();
 		}
@@ -314,10 +327,9 @@ public class MainApplication extends Application
 		if (ProfilePage.class.isInstance(refreshable))
 		{
 			return FSQUser.getInstance();
-		}
-		else
+		} else
 		{
-			return (FSQItem)mapItemContainer.getSelectedMapItem();
+			return (FSQItem) contentService.mapItemContainer.getSelectedMapItem();
 		}
 	}
 
@@ -336,11 +348,10 @@ class LocationUpdater implements LocationListener
 		criteria.setAccuracy(Criteria.ACCURACY_COARSE);
 		criteria.setPowerRequirement(Criteria.POWER_LOW);
 		String provider = locationManager.getBestProvider(criteria, true);
-
+		provider=(String) ProjectUtils.ifnull(provider,LocationManager.NETWORK_PROVIDER);
 		Location location = locationManager.getLastKnownLocation(provider);
 		updateWithLocation(location);
-
-		locationManager.requestLocationUpdates(provider, 30*1000, 1000, this);
+		locationManager.requestLocationUpdates(provider, 30 * 1000, 1000, this);
 	}
 
 	public void disableUpdating()
@@ -351,9 +362,7 @@ class LocationUpdater implements LocationListener
 	private void updateWithLocation(Location location)
 	{
 		if (location != null)
-			MainApplication.setCurrLocation(new GeoPoint((int) (location
-					.getLatitude() * 1e6 * 1),
-					(int) (location.getLongitude() * 1e6)));
+			MainApplication.setCurrLocation(new GeoPoint((int) (location.getLatitude() * 1e6 * 1), (int) (location.getLongitude() * 1e6)));
 	}
 
 	@Override

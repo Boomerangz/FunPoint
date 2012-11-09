@@ -20,7 +20,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import kz.crystalspring.funpoint.R;
+import kz.com.pack.jam.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;

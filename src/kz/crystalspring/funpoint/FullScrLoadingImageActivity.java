@@ -1,5 +1,6 @@
 package kz.crystalspring.funpoint;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
 import kz.crystalspring.pointplus.HttpHelper;

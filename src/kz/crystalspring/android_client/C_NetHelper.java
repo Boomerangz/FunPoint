@@ -9,7 +9,7 @@ import java.util.Properties;
 
 import javax.crypto.SecretKey;
 
-import kz.crystalspring.funpoint.R;
+import kz.com.pack.jam.R;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -192,7 +192,7 @@ public class C_NetHelper extends android.app.Application{
 //vJLastID = "13699";
 //vUrl = "http://109.233.240.226/cs/sync.php&r=1id=78e9fe73a57d4960"; //!!!!	
 
-					vUrl = vUrl + "?d=Android&app=Pointplus&r=" + vJLastID + "&id=" + C_Utils.GetDeviceID(context) + "&n=" + new Date().getTime();
+					vUrl = vUrl + "?d=Android&app=Jamkz&r=" + vJLastID + "&id=" + C_Utils.GetDeviceID(context) + "&n=" + new Date().getTime();
 //vUrl = "http://www.homeplus.kz/cs/sync.php?d=Android&r=36540&id=78e9fe73a57d4960&n=1329726894417"; //!!!!
 
 					Log.i( C_TAG, "RequestData - try id=" + vUrlCode + " url=" + vUrl);

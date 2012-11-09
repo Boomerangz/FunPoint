@@ -6,11 +6,11 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.funObjectDetail;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.LoadingImageView;
-import kz.crystalspring.funpoint.R;
 
 import org.json.JSONObject;
 
@@ -129,12 +129,16 @@ public abstract class MapItem implements Serializable, ListItem
 
 	public Drawable getIcon()
 	{
-
-		int id = getImgId(getIconName());
-		Drawable icon = context.getResources().getDrawable(id);
+		Drawable icon =getIconDrawable();
 		icon.setBounds(-icon.getIntrinsicWidth() / 2,
 				-icon.getIntrinsicHeight(), icon.getIntrinsicWidth() / 2, 0);
-
+		return icon;
+	}
+	
+	protected Drawable getIconDrawable()
+	{
+		int id = getImgId(getIconName());
+		Drawable icon = context.getResources().getDrawable(id);
 		return icon;
 	}
 
@@ -315,7 +319,7 @@ public abstract class MapItem implements Serializable, ListItem
 			@Override
 			public void onClick(View v)
 			{
-				MainApplication.mapItemContainer.setSelectedItem(MapItem.this);
+				MainApplication.getMapItemContainer().setSelectedItem(MapItem.this);
 				Intent intent = new Intent(context, funObjectDetail.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivity(intent);
@@ -387,7 +391,7 @@ public abstract class MapItem implements Serializable, ListItem
 			@Override
 			public void onClick(View v)
 			{
-				MainApplication.mapItemContainer.setSelectedItem(MapItem.this);
+				MainApplication.getMapItemContainer().setSelectedItem(MapItem.this);
 				Intent intent = new Intent(context, funObjectDetail.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				context.startActivity(intent);

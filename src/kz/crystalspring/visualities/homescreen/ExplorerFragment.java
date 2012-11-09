@@ -2,14 +2,17 @@ package kz.crystalspring.visualities.homescreen;
 
 import java.util.List;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.R;
+import kz.crystalspring.funpoint.ProfilePage;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -96,15 +99,6 @@ class ExplorerView
 			ExplorerAdapter adapter = new ExplorerAdapter(FSQConnector.getExplorer());
 			listView.setAdapter(adapter);
 			listView.setMinimumHeight(Math.round(100 * MainApplication.mDensity));
-			listView.setOnItemClickListener(new OnItemClickListener()
-			{
-
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
-				{
-					System.out.println("LISTCLICK!!!!");
-				}
-			});
 		} else
 		{
 			listView.invalidate();
@@ -112,6 +106,15 @@ class ExplorerView
 
 		View progressBar = exploreList.findViewById(R.id.progressBar1);
 		View loginView = exploreList.findViewById(R.id.login_view);
+		loginView.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				Intent intent=new Intent(context,ProfilePage.class);
+				context.startActivity(intent);
+			}
+		});
 		if (FSQConnector.isExploringLoaded())
 		{
 			progressBar.setVisibility(View.GONE);

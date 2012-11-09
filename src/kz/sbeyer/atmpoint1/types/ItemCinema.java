@@ -8,10 +8,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.android_client.C_FileHelper;
 import kz.crystalspring.cinema.CinemaTimeTable2;
 import kz.crystalspring.funpoint.CinemaTimeTable;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.FileConnector;
@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.graphics.Path.FillType;
+import android.graphics.drawable.Drawable;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
@@ -77,7 +78,7 @@ public class ItemCinema extends FSQItem
 
 	public void loadAdditionalInfo()
 	{
-		timeTable = new CinemaTimeTable2();
+		timeTable = new CinemaTimeTable2(CinemaTimeTable2.MODE_CINEMA);
 		JSONObject jObject;
 		try
 		{
@@ -121,6 +122,12 @@ public class ItemCinema extends FSQItem
 		return hallInfoFilled;
 	}
 
+	@Override
+	public Drawable getIconDrawable()
+	{
+		return context.getResources().getDrawable(R.drawable.icon_cin);
+	}
+	
 	public String getIconName()
 	{
 		return CINEMA_IMG;

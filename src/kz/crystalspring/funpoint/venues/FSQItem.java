@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.pointplus.ImageCache;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.LoadingImageView;
@@ -205,6 +205,19 @@ public class FSQItem extends MapItem implements ImageContainer
 		return context.getResources().getColor(R.color.selected_blue);
 	}
 
+	@Override
+	public Drawable getIconDrawable()
+	{
+		int id;
+		if (getCategory().equals(FSQ_TYPE_MARKET))
+			id = R.drawable.icon_markt;
+		else if (getCategory().equals(FSQ_TYPE_CLUB))
+			id = R.drawable.icon_disc;
+		else
+			id = R.drawable.icon_drug;
+		return context.getResources().getDrawable(id);
+	}
+
 	Bitmap localBtm = null;
 
 	@Override
@@ -247,12 +260,12 @@ public class FSQItem extends MapItem implements ImageContainer
 					{
 						if (optInfo.getLoadingStatus() == optInfo.LOADED_SUCCES && optInfo.getPhotosCount() > 0)
 						{
-							UrlDrawable urlDr= optInfo.getUrlAndPhoto(0);
-							if (loadingImageView.getTag().equals(FSQItem.this.hashCode()))
+							UrlDrawable urlDr = optInfo.getUrlAndPhoto(0);
+							if (Integer.valueOf(FSQItem.this.hashCode()).equals(loadingImageView.getTag()))
 								FSQConnector.loadImageAsync(loadingImageView, urlDr, UrlDrawable.SMALL_URL, false, null);
 							else
 								FSQConnector.loadImageAsync(null, urlDr, UrlDrawable.SMALL_URL, false, null);
-							imageCache.addPhotoUrl(getId(), (String)ProjectUtils.ifnull(urlDr.smallUrl, urlDr.bigUrl));
+							imageCache.addPhotoUrl(getId(), (String) ProjectUtils.ifnull(urlDr.smallUrl, urlDr.bigUrl));
 						} else
 						{
 							imageCache.addPhotoUrl(getId(), "");
@@ -264,7 +277,7 @@ public class FSQItem extends MapItem implements ImageContainer
 				MainApplication.pwAggregator.addPriorityTask(preTask, postTask);
 			} else
 			{
-				if (optInfo.getLoadingStatus()!=optInfo.LOADED_SUCCES&&optInfo.getLoadingStatus()!=optInfo.LOADING_NOW)
+				if (optInfo.getLoadingStatus() != optInfo.LOADED_SUCCES && optInfo.getLoadingStatus() != optInfo.LOADING_NOW)
 					MainApplication.pwAggregator.addBackroundTaskToQueue(preTask);
 				Log.w("FSQItem", "loadImage ended");
 				loadingImageView.setDrawable(photo);

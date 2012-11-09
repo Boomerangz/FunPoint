@@ -8,10 +8,10 @@ import com.viewpagerindicator.TabPageIndicator;
 import com.viewpagerindicator.ViewFragment;
 import com.viewpagerindicator.ViewFragmentAdapter;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.events.Event;
 import kz.crystalspring.funpoint.venues.ListItem;
 import kz.crystalspring.funpoint.venues.MapItem;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.visualities.homescreen.TitleFragment;
 import android.content.Context;
 import android.content.Intent;
@@ -137,13 +137,20 @@ public class funObjectList extends FragmentActivity implements RefreshableMapLis
 					searchEdit.setVisibility(View.GONE);
 			}
 		});
+		try
+		{
+			MainApplication.tracker.trackPageView("/PlacesList placeCategory=" + MainApplication.getMapItemContainer().getCategoryName());
+		} catch (NullPointerException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void onBackPressed()
 	{
 		// super.onPause();
-		MainApplication.mapItemContainer.setVisibleFilter(null);
+		MainApplication.getMapItemContainer().setVisibleFilter(null);
 		finish();
 	}
 
@@ -167,18 +174,32 @@ public class funObjectList extends FragmentActivity implements RefreshableMapLis
 	{
 		stopRefreshing();
 
+		Bundle extras = getIntent().getExtras();
+		boolean fast_checkin;
+		if (extras != null)
+			fast_checkin = extras.getBoolean("fast_checkin");
+		else
+			fast_checkin = false;
+
 		List<MapItem> newItemsList;
 		try
 		{
-			newItemsList = MainApplication.mapItemContainer.getFilteredItemList();
+			if (!fast_checkin)
+			{
+				newItemsList = MainApplication.getMapItemContainer().getFilteredItemList();
+				eventsList = MainApplication.getEventContainer().getFilteredEventsList();
+			} else
+			{
+				newItemsList = MainApplication.getMapItemContainer().getUnFilteredItemList();
+				eventsList = MainApplication.getEventContainer().getUnFilteredEventsList();
+			}
 		} catch (Exception e)
 		{
 			exit();
 			return;
 		}
-		eventsList = MainApplication.eventContainer.getFilteredEventsList();
 
-		categorySubHeader.setText(MainApplication.mapItemContainer.getCategoryName().toLowerCase());
+		categorySubHeader.setText(MainApplication.getMapItemContainer().getCategoryName().toLowerCase());
 
 		boolean needToRefreshItems = true;
 
@@ -208,7 +229,7 @@ public class funObjectList extends FragmentActivity implements RefreshableMapLis
 		System.gc();
 
 		// if
-		// (pagerAdapter.getCount()==0&&MainApplication.mapItemContainer.getFlter().size()>0)
+		// (pagerAdapter.getCount()==0&&MainApplication.getMapItemContainer().getFlter().size()>0)
 		// {
 		// finish();
 		// }
@@ -292,33 +313,28 @@ class ObjectAdapter extends BaseAdapter
 		return position;
 	}
 
-	public View getView(int position)
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		View v = filteredData.get(position).getView(null, position);
+		View v = filteredData.get(position).getView(convertView, position);
 		v.setMinimumHeight(Math.round(70 * MainApplication.mDensity));
 		return v;
 	}
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		return getView(position);
-	}
-
-	public void fillLayout(LinearLayout l)
-	{
-		ArrayList<View> viewList = new ArrayList<View>(getCount());
-		for (int i = 0; i < getCount(); i++)
-		{
-			View v = getView(i);
-			viewList.add(v);
-		}
-		l.removeAllViews();
-		for (View v : viewList)
-		{
-			l.addView(v);
-		}
-	}
+	// public void fillLayout(LinearLayout l)
+	// {
+	// ArrayList<View> viewList = new ArrayList<View>(getCount());
+	// for (int i = 0; i < getCount(); i++)
+	// {
+	// View v = getView(i);
+	// viewList.add(v);
+	// }
+	// l.removeAllViews();
+	// for (View v : viewList)
+	// {
+	// l.addView(v);
+	// }
+	// }
 
 	public void setStringFilter(String s)
 	{
@@ -342,7 +358,7 @@ class ObjectAdapter extends BaseAdapter
 				if (itemName.contains(filterString) || shortCharacteristic.contains(filterString))
 					filteredData.add(item);
 			}
-			if (filteredData.size() == 0 && !usedSearches.contains(filterString))
+			if (!usedSearches.contains(filterString))
 			{
 				myRunnable.setSearchString(filterString);
 				handler.postDelayed(myRunnable, 1000);
@@ -380,7 +396,8 @@ class ObjectAdapter extends BaseAdapter
 			refresher.startRefreshing();
 			if (searchString != null)
 			{
-				MainApplication.mapItemContainer.loadItemsByNameAsync(MainApplication.mapItemContainer.getCategory(), searchString);
+				MainApplication.getMapItemContainer().loadItemsByNameAsync(MainApplication.getMapItemContainer().getCategory(),
+						searchString);
 				usedSearches.add(searchString);
 			}
 		}
@@ -451,6 +468,14 @@ class EventListFragment extends TitleFragment
 	@Override
 	public String getTitle()
 	{
+		try
+		{
+			if (MainApplication.getMapItemContainer().getCategoryName().toUpperCase().equals("КИНО"))
+				return "Фильмы";
+		} catch (NullPointerException e)
+		{
+			return "События";
+		}
 		return "События";
 	}
 }

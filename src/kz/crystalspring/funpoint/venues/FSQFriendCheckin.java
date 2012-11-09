@@ -5,8 +5,8 @@ import java.util.Date;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.funObjectDetail;
 import kz.crystalspring.pointplus.ImageCache;
 import kz.crystalspring.pointplus.ProjectUtils;
@@ -59,7 +59,7 @@ public class FSQFriendCheckin
 					i++;
 				case 6:
 					JSONObject place = checkin.getJSONObject("venue");
-					this.place = MainApplication.mapItemContainer.addItem(place);
+					this.place = MainApplication.getMapItemContainer().addItem(place);
 					i++;
 				}
 			} catch (Exception e)
@@ -111,7 +111,7 @@ public class FSQFriendCheckin
 			@Override
 			public void onClick(View v)
 			{
-				MainApplication.mapItemContainer.setSelectedItem(place);
+				MainApplication.getMapItemContainer().setSelectedItem(place);
 				Intent intent = new Intent(locContext, funObjectDetail.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				locContext.startActivity(intent);

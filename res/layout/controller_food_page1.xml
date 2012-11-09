@@ -7,35 +7,17 @@
         android:id="@+id/main_info_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical" >
-
-        <LinearLayout
-            android:id="@+id/address_block"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin"
-            android:layout_marginRight="@dimen/margin"
-            android:layout_marginTop="@dimen/margin"
-            android:background="#ffffff"
-            android:gravity="left"
-            android:padding="@dimen/margin" >
-
-            <TextView
-                android:id="@+id/food_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="ул. Гоголя, д. 84, г. Алматы"
-                android:typeface="sans" />
-        </LinearLayout>
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/margin"
+        android:paddingTop="@dimen/margin" >
 
         <LinearLayout
             android:id="@+id/phone_block"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin"
             android:layout_marginLeft="@dimen/margin"
             android:layout_marginRight="@dimen/margin"
+            android:layout_marginBottom="@dimen/margin"
             android:background="#ffffff"
             android:gravity="left"
             android:orientation="vertical" >
@@ -60,8 +42,8 @@
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="5dp"
-                    android:layout_below="@id/minor_header_layout"
-                    android:background="@color/restaurant" />
+                    android:layout_alignParentTop="true"
+                    android:background="@color/jam_pink" />
 
                 <TextView
                     android:id="@+id/textView1"
@@ -83,7 +65,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/checkin_icon" />
+                    android:src="@drawable/icon_zdes" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -99,8 +81,8 @@
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="5dp"
-                    android:layout_below="@id/minor_header_layout"
-                    android:background="@color/restaurant" />
+                    android:layout_alignParentTop="true"
+                    android:background="@color/jam_pink" />
 
                 <TextView
                     android:id="@+id/textView1"
@@ -122,7 +104,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/map_icon" />
+                    android:src="@drawable/icon_karta" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -138,8 +120,8 @@
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="5dp"
-                    android:layout_below="@id/minor_header_layout"
-                    android:background="@color/restaurant" />
+                    android:layout_alignParentTop="true"
+                    android:background="@color/jam_pink" />
 
                 <TextView
                     android:id="@+id/textView1"
@@ -161,42 +143,17 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/map_icon" />
+                    android:src="@drawable/icon_oblako" />
             </RelativeLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/gallery_list_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin"
-            android:layout_marginRight="@dimen/margin"
-            android:layout_marginTop="@dimen/margin"
-            android:background="#ffffff"
-            android:orientation="vertical"
-            android:padding="@dimen/margin" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
-            android:layout_marginTop="3dp"
-            android:maxLines="2"
-            android:paddingLeft="3dp"
-            android:text="Советы"
-            android:textSize="10pt" />
-
-        <LinearLayout
-            android:id="@+id/comment_list_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
 
         <RelativeLayout
             android:id="@+id/major_header_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
+            android:layout_marginTop="@dimen/margin"
             android:background="@color/white" >
 
             <LinearLayout
@@ -222,13 +179,38 @@
                     android:layout_height="wrap_content"
                     android:text="Food lunch price" />
             </LinearLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="5dp"
-                android:layout_below="@id/minor_header_layout"
-                android:background="@color/restaurant" />
         </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/address_block"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
+            android:layout_marginTop="@dimen/margin"
+            android:background="#ffffff"
+            android:gravity="left"
+            android:padding="@dimen/margin" >
+
+            <TextView
+                android:id="@+id/food_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="ул. Гоголя, д. 84, г. Алматы"
+                android:typeface="sans" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/gallery_list_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
+            android:layout_marginTop="@dimen/margin"
+            android:background="#ffffff"
+            android:orientation="vertical"
+            android:padding="@dimen/margin" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -250,8 +232,8 @@
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="5dp"
-                    android:layout_below="@id/minor_header_layout"
-                    android:background="@color/restaurant" />
+                    android:layout_alignParentTop="true"
+                    android:background="@color/jam_pink" />
 
                 <TextView
                     android:id="@+id/textView1"
@@ -288,8 +270,8 @@
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="5dp"
-                    android:layout_below="@id/minor_header_layout"
-                    android:background="@color/restaurant" />
+                    android:layout_alignParentTop="true"
+                    android:background="@color/jam_pink" />
 
                 <TextView
                     android:id="@+id/textView1"
@@ -314,18 +296,6 @@
                     android:textStyle="bold"
                     android:typeface="sans" />
             </RelativeLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin" >
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin" >
         </LinearLayout>
     </LinearLayout>
 

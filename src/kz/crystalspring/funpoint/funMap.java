@@ -3,9 +3,9 @@ package kz.crystalspring.funpoint;
 import java.util.ArrayList;
 import java.util.List;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.venues.MapItem;
 import kz.crystalspring.pointplus.MyMapView;
-import kz.crystalspring.funpoint.R;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -23,8 +23,7 @@ import com.google.android.maps.Overlay;
 import com.readystatesoftware.mapviewballoons.CustomItemizedOverlay;
 import com.readystatesoftware.mapviewballoons.CustomOverlayItem;
 
-public class funMap extends MapActivity implements LocationListener,
-		RefreshableMapList
+public class funMap extends MapActivity implements LocationListener, RefreshableMapList
 {
 	MyMapView mapView;
 	List<Overlay> mapOverlays;
@@ -39,7 +38,9 @@ public class funMap extends MapActivity implements LocationListener,
 		setContentView(R.layout.map);
 		mapView = (MyMapView) findViewById(R.id.mvMain);
 		mapView.displayZoomControls(true);
+		mapView.getController().setZoom(16);
 		ImageView currLocationButton = (ImageView) findViewById(R.id.ImageView01);
+
 		currLocationButton.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -57,8 +58,7 @@ public class funMap extends MapActivity implements LocationListener,
 	protected void toCurrentLocation()
 	{
 		if (mMyLocationOverlay.getMyLocation() != null)
-			mapView.getController().animateTo(
-					mMyLocationOverlay.getMyLocation());
+			mapView.getController().animateTo(mMyLocationOverlay.getMyLocation());
 	}
 
 	@Override
@@ -68,15 +68,15 @@ public class funMap extends MapActivity implements LocationListener,
 		MainApplication.refreshable = this;
 		putItemsOnMap();
 		refreshMap();
-		if (MainApplication.mapItemContainer.getSelectedItem()!=null)
-			selectItem(MainApplication.mapItemContainer.getSelectedMapItem());
+		if (MainApplication.getMapItemContainer().getSelectedItem() != null)
+			selectItem(MainApplication.getMapItemContainer().getSelectedMapItem());
+		MainApplication.tracker.trackPageView("/Map");
 	}
 
 	private void putItemsOnMap()
 	{
 		mapOverlays.clear();
-		myIO = new CustomItemizedOverlay(getResources().getDrawable(
-				R.drawable.c_1), mapView, this);
+		myIO = new CustomItemizedOverlay(getResources().getDrawable(R.drawable.c_1), mapView, this);
 		myIO.funmap = this;
 		myItemsArray = new ArrayList<MapItem>();
 		System.gc();
@@ -94,22 +94,24 @@ public class funMap extends MapActivity implements LocationListener,
 
 	public void refreshMap()
 	{
-			clearMap();
-			
-			try
-			{
-				addItemListOnMap(MainApplication.mapItemContainer
-						.getFilteredItemList());
-			} catch (Exception e)
+		clearMap();
+
+		try
+		{
+			addItemListOnMap(MainApplication.getMapItemContainer().getFilteredItemList());
+		} catch (Exception e)
+		{
+			if (!e.getMessage().trim().toUpperCase().equals("Empty Filter List".toUpperCase()))
 			{
 				e.printStackTrace();
 				exit();
 			}
-			addItemOnMap(MainApplication.mapItemContainer.getSelectedMapItem());
-			myIO.populateNow();
-			mapView.invalidate();
+		}
+		addItemOnMap(MainApplication.getMapItemContainer().getSelectedMapItem());
+		myIO.populateNow();
+		mapView.invalidate();
 	}
-	
+
 	private void exit()
 	{
 		finish();
@@ -117,8 +119,7 @@ public class funMap extends MapActivity implements LocationListener,
 
 	private void addItemOnMap(MapItem item)
 	{
-		CustomOverlayItem oi = new CustomOverlayItem(item.getGeoPoint(),
-				item.toString(), "");
+		CustomOverlayItem oi = new CustomOverlayItem(item.getGeoPoint(), item.toString(), "");
 		oi.setMarker(item.getIcon());
 		myIO.addOverlay(oi);
 		myItemsArray.add(item);
@@ -190,15 +191,12 @@ public class funMap extends MapActivity implements LocationListener,
 		public void onLocationChanged(Location location)
 		{
 			super.onLocationChanged(location);
-			if (previousLocation == null
-					|| previousLocation.distanceTo(location) > 500)
+			if (previousLocation == null || previousLocation.distanceTo(location) > 500)
 			{
 				previousLocation = location;
-				MainApplication.mapItemContainer.loadNearBy(
-						mMyLocationOverlay.getMyLocation());
-				MainApplication.setCurrLocation(new GeoPoint((int) Math
-						.round(location.getLatitude() * 1e6), (int) Math
-						.round(location.getLongitude() * 1e6)));
+				MainApplication.getMapItemContainer().loadNearBy(mMyLocationOverlay.getMyLocation());
+				MainApplication.setCurrLocation(new GeoPoint((int) Math.round(location.getLatitude() * 1e6), (int) Math.round(location
+						.getLongitude() * 1e6)));
 			}
 		}
 
@@ -216,8 +214,8 @@ public class funMap extends MapActivity implements LocationListener,
 
 	public void showInfo(MapItem item)
 	{
-		MainApplication.mapItemContainer.setSelectedItem(item);
-		//MainMenu.tabHost.setCurrentTab(MainMenu.OBJECT_DETAIL_TAB);
+		MainApplication.getMapItemContainer().setSelectedItem(item);
+		// MainMenu.tabHost.setCurrentTab(MainMenu.OBJECT_DETAIL_TAB);
 		startActivity(new Intent(this, funObjectDetail.class));
 	}
 

@@ -2,10 +2,9 @@ package kz.crystalspring.visualities.homescreen;
 
 import java.util.List;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.events.Event;
-import kz.crystalspring.funpoint.events.EventContainer;
 import kz.crystalspring.funpoint.events.SimpleEvent;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQItem;
@@ -92,7 +91,7 @@ class EventsWrapper
 		ListView listView=(ListView) exploreList.findViewById(R.id.listView1);
 		if (listView.getAdapter()==null||listView.getAdapter().getCount()==0)
 		{
-			EventsAdapter adapter=new EventsAdapter(MainApplication.eventContainer.getUnFilteredEventsList());
+			EventsAdapter adapter=new EventsAdapter(MainApplication.getEventContainer().getUnFilteredEventsList());
 			listView.setAdapter(adapter);
 			listView.setMinimumHeight(Math.round(100*MainApplication.mDensity));
 			listView.setOnItemClickListener(new OnItemClickListener() {
@@ -121,8 +120,8 @@ class EventsWrapper
 
 class EventsAdapter extends BaseAdapter
 {
-	List<SimpleEvent> list;
-	EventsAdapter(List<SimpleEvent> list2)
+	List<Event> list;
+	EventsAdapter(List<Event> list2)
 	{
 		this.list=list2;
 	}

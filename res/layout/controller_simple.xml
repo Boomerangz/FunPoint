@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin"
-            android:text="кафе"
+            android:text="место"
             android:textColor="@color/jam_pink"
             android:textSize="18pt"
             android:typeface="sans" />
@@ -32,7 +32,7 @@
             android:text="" />
 
         <Button
-            android:id="@+id/btn2"
+            android:id="@+id/fast_check_btn"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_toLeftOf="@id/profile_button"

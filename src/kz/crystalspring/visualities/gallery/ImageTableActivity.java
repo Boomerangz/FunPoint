@@ -1,7 +1,7 @@
 package kz.crystalspring.visualities.gallery;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
 import kz.crystalspring.views.LoadingImageView;

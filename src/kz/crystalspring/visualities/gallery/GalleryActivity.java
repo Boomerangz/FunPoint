@@ -1,8 +1,8 @@
 package kz.crystalspring.visualities.gallery;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.FullScrLoadingImageActivity;
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.UrlDrawable;
@@ -200,7 +200,7 @@ class ImageAdapter extends BaseAdapter
 			final String mimeType = "text/html";
 			final String encoding = "utf-8";
 			final String html = ""
-					+ "<body style=\"width:100%; height:100%; background: #000;\" >"
+					+ "<body style=\"width:100%; height:100%;\" >"
 					+ "<center >"
 					+ "<p><img style=\"margin:10%\" src=\"file:///android_asset/icon_set_circle.gif\" name=\"myImage\"/></p><"
 					+ "/center></body>" + "<script type=\"text/javascript\"> "

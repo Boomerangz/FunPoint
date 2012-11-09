@@ -9,13 +9,11 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import kz.crystalspring.funpoint.CinemaTimeTable.CinemaTime;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.database.Cursor;
 
 public class CinemaTimeTable
 {
@@ -106,7 +104,7 @@ public class CinemaTimeTable
 				JSONObject jEvent = jsonArray.getJSONObject(i);
 
 				String cinemaId = jEvent.getString("fsq_id");
-				if (MainApplication.mapItemContainer.getItemById(cinemaId) != null)
+				if (MainApplication.getMapItemContainer().getItemById(cinemaId) != null)
 				{
 					String filmTitle = jEvent.getString("name");
 					Date clearDate;
@@ -122,8 +120,8 @@ public class CinemaTimeTable
 					clearDate.setHours(0);
 					clearDate.setMinutes(0);
 					clearDate.setSeconds(0);
-					String sHash = "1:71:1340860800";// jEvent.getString("hash");
-					boolean ticketAble = true;
+					String sHash = jEvent.getString("url_mobile");
+					boolean ticketAble = !sHash.toUpperCase().equals("");
 
 					TimeLine timeline = null;
 					for (int j = 0; j < timeLines.size(); j++)

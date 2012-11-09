@@ -1,11 +1,13 @@
 package kz.sbeyer.atmpoint1.types;
 
-import kz.crystalspring.funpoint.R;
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.venues.FSQItem;
 import kz.crystalspring.funpoint.venues.MapItem;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.graphics.drawable.Drawable;
 
 
 public class ItemHotel extends FSQItem 
@@ -31,6 +33,12 @@ public class ItemHotel extends FSQItem
 	public int getItemColor()
 	{
 		return context.getResources().getColor(R.color.hotel);
+	}
+	
+	@Override
+	public Drawable getIconDrawable()
+	{
+		return context.getResources().getDrawable(R.drawable.icon_hot);
 	}
 	
 }

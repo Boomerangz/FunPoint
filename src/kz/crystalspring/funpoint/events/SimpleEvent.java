@@ -3,8 +3,8 @@ package kz.crystalspring.funpoint.events;
 import java.text.ParseException;
 import java.util.Date;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.funEventActivity;
 import kz.crystalspring.funpoint.events.Event.ViewHolder;
 import kz.crystalspring.funpoint.venues.FSQConnector;
@@ -102,7 +102,7 @@ public class SimpleEvent extends Event
 		try
 		{
 			String place_id=jObject.getJSONObject(0).getString("fsq_id");
-			item=(FSQItem) MainApplication.mapItemContainer.getItemById(place_id);
+			item=(FSQItem) MainApplication.getMapItemContainer().getItemById(place_id);
 		} catch (JSONException e)
 		{
 			e.printStackTrace();

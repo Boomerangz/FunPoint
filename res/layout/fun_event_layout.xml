@@ -6,6 +6,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:orientation="vertical" >
 
         <RelativeLayout
@@ -24,24 +25,25 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
         </RelativeLayout>
 
-            <kz.crystalspring.views.LoadingImageView
-                android:id="@+id/loading_imageview"
-                android:layout_width="fill_parent"
-                android:layout_height="200dp" />
+        <kz.crystalspring.views.LoadingImageView
+            android:id="@+id/loading_imageview"
+            android:layout_width="fill_parent"
+            android:layout_height="150dp"
+            android:layout_margin="@dimen/margin" />
 
-            <RelativeLayout
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin"
+            android:background="@color/white"
+            android:padding="@dimen/margin" >
+
+            <TextView
+                android:id="@+id/event_desc"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin"
-                android:background="@color/white"
-                android:padding="@dimen/margin" >
-
-                <TextView
-                    android:id="@+id/event_desc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TextView" />
-            </RelativeLayout>
+                android:text="TextView" />
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/listView1"

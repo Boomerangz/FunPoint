@@ -1,6 +1,6 @@
 package kz.crystalspring.android_client;
 
-import kz.crystalspring.funpoint.R;
+import kz.com.pack.jam.R;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;

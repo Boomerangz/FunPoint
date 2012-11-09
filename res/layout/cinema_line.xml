@@ -16,7 +16,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:background="@color/cinema"
+            android:background="@color/jam_pink"
             android:gravity="center" >
 
             <TextView
@@ -25,11 +25,11 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:gravity="center_horizontal"
-                android:text="TextView"
+                android:text="Сироп"
                 android:textSize="7pt"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_margin="4dp" />
+                android:layout_marginBottom="2dp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -37,7 +37,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_layout"
-            android:orientation="horizontal" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp" />
 
         <ViewFlipper
             android:id="@+id/switcher"

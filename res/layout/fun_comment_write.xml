@@ -29,19 +29,6 @@
             android:text="user_name"
             android:textSize="10pt"
             android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/ok_button"
-            android:layout_width="fill_parent"
-            android:layout_weight="5"
-            android:layout_height="wrap_content"
-            android:background="#00A859"
-            android:paddingBottom="@dimen/margin"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingTop="@dimen/margin"
-            android:text="Ok" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -81,17 +68,19 @@
             android:layout_marginRight="@dimen/margin"
             android:background="@color/background"
             android:src="@drawable/camera" />
+
         <Button
             android:id="@+id/clear_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Clear"
             android:visibility="gone" />
-        
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin" >
+            android:padding="@dimen/margin"
+            android:visibility="gone" >
 
             <Button
                 android:id="@+id/cancel_button"
@@ -100,6 +89,22 @@
                 android:text="Cancel"
                 android:visibility="gone" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/ok_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin"
+            android:layout_marginLeft="@dimen/margin"
+            android:layout_marginRight="@dimen/margin"
+            android:background="@color/background"
+            android:paddingBottom="@dimen/margin"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="@dimen/margin"
+            android:text="OK"
+            android:textSize="8pt"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </LinearLayout>

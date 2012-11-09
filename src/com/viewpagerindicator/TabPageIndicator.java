@@ -16,7 +16,7 @@
  */
 package com.viewpagerindicator;
 
-import kz.crystalspring.funpoint.R;
+import kz.com.pack.jam.R;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -114,7 +114,7 @@ public class TabPageIndicator extends HorizontalScrollView implements
 		{
 			if (childCount > 2)
 			{
-				mMaxTabWidth = (int) (MeasureSpec.getSize(widthMeasureSpec) * 0.8f);
+				mMaxTabWidth = (int) (MeasureSpec.getSize(widthMeasureSpec) * 2f);
 			} else
 			{
 				mMaxTabWidth = (int) (MeasureSpec.getSize(widthMeasureSpec) / 1.75f);

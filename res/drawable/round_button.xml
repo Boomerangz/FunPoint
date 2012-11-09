@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    
+    <item android:id="@+id/bar_background">
+        <shape>
+            <corners android:radius="5dp" />
+                <gradient android:startColor="#E24F3F"
+                    android:centerColor="#E24F3F" 
+                    android:endColor="#E24F3F" 
+                    android:centerY="0.25"
+                    android:angle="270"  />
+        </shape>
+    </item>
+    
+<item android:id="@+id/bar_value" >
+        <clip >
+            <shape >
+                <corners android:radius="5dp"/>
+                <gradient android:startColor="#f7e2ad"
+                    android:centerColor="#f8c12d" 
+                    android:endColor="#39362b" 
+                    android:centerY="0.75"
+                    android:angle="270" />
+                
+            </shape>
+        </clip>
+    </item>
+    
+    <item android:id="@+id/bar_value">
+        <clip>
+            <shape>
+                <corners android:radius="5dp" />
+                <gradient android:startColor="#eccfb7"
+                    android:centerColor="#c97e2b" 
+                    android:endColor="#502612" 
+                    android:centerY="0.75"
+                    android:angle="270" />
+            </shape>
+        </clip>
+    </item>   
+    
+</layer-list>

@@ -1,6 +1,7 @@
 package kz.crystalspring.cinema;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -8,14 +9,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.MainApplication;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.pointplus.ProjectUtils;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v4.view.ViewPager;
+import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,16 +67,14 @@ public class FilmLine
 		return title;
 	}
 
-	View v;
 
 	public View getView(final Activity context)
 	{
-		if (v != null)
-			return v;
+		View v;
 		LayoutInflater inflater = context.getLayoutInflater();
 		v = inflater.inflate(R.layout.cinema_line, null);
 		TextView filmTitle = (TextView) v.findViewById(R.id.text);
-		LinearLayout dateLayout = (LinearLayout) v.findViewById(R.id.date_list);
+		final LinearLayout dateLayout = (LinearLayout) v.findViewById(R.id.date_list);
 		final ViewFlipper switcher = (ViewFlipper) v.findViewById(R.id.switcher);
 
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
@@ -83,12 +84,22 @@ public class FilmLine
 		ViewPager.LayoutParams vlp = new ViewPager.LayoutParams();
 		vlp.width = ViewPager.LayoutParams.FILL_PARENT;
 		vlp.height = ViewPager.LayoutParams.WRAP_CONTENT;
-		for (int i = 0; i < dateList.keySet().toArray().length; i++)
+
+		Object[] array = dateList.keySet().toArray();
+		List<Date> dateArray = new ArrayList();
+		for (int i = 0; i < array.length; i++)
+		{
+			dateArray.add((Date) array[i]);
+		}
+
+		Collections.sort(dateArray);
+	//	Collections.reverse(dateArray);
+		for (int i = 0; i < dateArray.size(); i++)
 		{
 			if (i < 2)
 			{
-				Date dt = (Date) dateList.keySet().toArray()[i];
-				TextView tv = new TextView(context);
+				Date dt = dateArray.get(i);
+				final TextView tv = new TextView(context);
 				tv.setGravity(Gravity.CENTER_HORIZONTAL);
 				tv.setLayoutParams(lp);
 				tv.setText(ProjectUtils.dateToTomorrow(nowDate, dt));
@@ -96,11 +107,11 @@ public class FilmLine
 
 				TableLayout tl = new TableLayout(context);
 				tl.setLayoutParams(vlp);
-				((DateFilmLine) dateList.values().toArray()[i]).fillLayout(tl);
+				dateList.get(dt).fillLayout(tl,context);
 
 				if (i == 0)
 				{
-					//tv.setTextColor(context.getResources().getColor(R.color.))
+					tv.setTypeface(null, Typeface.BOLD);
 					tv.setOnClickListener(new OnClickListener()
 					{
 						@Override
@@ -112,11 +123,12 @@ public class FilmLine
 								switcher.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.slide_out_right));
 								switcher.showNext();
 								curr_position--;
+								minimizeTexts(dateLayout);
+								tv.setTypeface(null, Typeface.BOLD);
 							}
 						}
 					});
-				}
-				else
+				} else
 					tv.setOnClickListener(new OnClickListener()
 					{
 						@Override
@@ -128,6 +140,8 @@ public class FilmLine
 								switcher.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.slide_out_left));
 								switcher.showPrevious();
 								curr_position++;
+								minimizeTexts(dateLayout);
+								tv.setTypeface(null, Typeface.BOLD);
 							}
 						}
 					});
@@ -136,6 +150,15 @@ public class FilmLine
 		}
 		filmTitle.setText(title);
 		return v;
+	}
+	
+	private void minimizeTexts(LinearLayout layout)
+	{
+		for (int i=0;i<layout.getChildCount();i++)
+		{
+			TextView v=(TextView) layout.getChildAt(i);
+			v.setTypeface(null,Typeface.NORMAL);
+		}
 	}
 
 	int curr_position = 0;
@@ -152,11 +175,9 @@ class DateFilmLine
 		timeList = new ArrayList<CinemaTime>();
 	}
 
-	public void fillLayout(TableLayout tableLayout)
+	public void fillLayout(TableLayout tableLayout, Activity context)
 	{
 		tableLayout.removeAllViews();
-		Context context = tableLayout.getContext();
-
 		TableRow tr = new TableRow(context);
 		TableLayout.LayoutParams tlp = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT,
 				TableLayout.LayoutParams.WRAP_CONTENT);
@@ -164,7 +185,8 @@ class DateFilmLine
 		tableLayout.addView(tr);
 		int i = 0;
 		TableRow.LayoutParams ll = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.FILL_PARENT);
-		ll.setMargins(3, 0, 0, 3);
+		int margin = Math.round(6 * MainApplication.mDensity);
+		ll.setMargins(margin, 0, 0, margin);
 		for (CinemaTime ct : timeList)
 		{
 			if (i == 4)
@@ -207,7 +229,7 @@ class CinemaTime
 		this.hash = hash;
 	}
 
-	public View getView(final Context context)
+	public View getView(final Activity context)
 	{
 		TextView timeView;
 		if (ProjectUtils.ifnull(hash, "").equals(""))
@@ -216,7 +238,8 @@ class CinemaTime
 			timeView.setBackgroundColor(context.getResources().getColor(android.R.color.white));
 		} else
 		{
-			Button btn = new Button(context);
+			Button btn = (Button) context.getLayoutInflater().inflate(R.layout.cinema_button, null);
+			btn.getBackground().setAlpha(MainApplication.ALPHA);
 			btn.setOnClickListener(new OnClickListener()
 			{
 
@@ -235,13 +258,14 @@ class CinemaTime
 					wb.setWebViewClient(new WebViewClient());
 					wb.loadUrl(url);
 					System.out.println("..loading url..");
+					MainApplication.tracker.trackPageView("Ticketon_url="+url);
 					dialog.show();
+					
 				}
 			});
 			timeView = btn;
 		}
-		timeView.setGravity(Gravity.CENTER_HORIZONTAL);
-		timeView.setText(time + " ");
+		timeView.setText(time);
 		return timeView;
 	}
 

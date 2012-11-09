@@ -7,13 +7,13 @@ import com.viewpagerindicator.TabPageIndicator;
 import com.viewpagerindicator.ViewFragment;
 import com.viewpagerindicator.ViewFragmentAdapter;
 
+import kz.com.pack.jam.R;
 import kz.crystalspring.pointplus.ProjectUtils;
 import kz.crystalspring.views.CommentsWrapper;
 import kz.crystalspring.visualities.homescreen.TitleFragment;
 import kz.crystalspring.cinema.CinemaTimeTable2;
 import kz.crystalspring.cinema.FilmLine;
 import kz.crystalspring.funpoint.CinemaTimeTable.CinemaTime;
-import kz.crystalspring.funpoint.R;
 import kz.crystalspring.funpoint.events.FilmEvent;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
 
@@ -39,16 +39,13 @@ import android.widget.*;
 public class funCinemaController extends ActivityController
 {
 
-	private static final String[] CONTENT_TABS = new String[] { "Расписание",
-			"Инфо", "Комментарии" };
+	private static final String[] CONTENT_TABS = new String[] { "Расписание", "Инфо", "Отзывы" };
 	TextView tv1;
 	LinearLayout timeList;
 	ItemCinema cinema;
-	TextView titleTV;
 	TextView addressTV;
 	TextView lunchPriceTV;
 	TextView avgPriceTV;
-	TextView kitchenTV;
 	TextView hereNowTV;
 	RelativeLayout checkInBtn;
 	RelativeLayout mapInBtn;
@@ -59,7 +56,7 @@ public class funCinemaController extends ActivityController
 	LinearLayout phoneLayout;
 	View addCommentBtn;
 
-	View contexView;
+	View mainView;
 
 	Activity activitycontext;
 
@@ -88,14 +85,11 @@ public class funCinemaController extends ActivityController
 				@Override
 				protected Object doInBackground(Object... params)
 				{
-					contexView = inflater.inflate(R.layout.controller_cinema,
-							null);
-					cinema = (ItemCinema) MainApplication.mapItemContainer
-							.getSelectedItem();
+					mainView = inflater.inflate(R.layout.controller_cinema, null);
+					cinema = (ItemCinema) MainApplication.getMapItemContainer().getSelectedItem();
 
 					final int count = CONTENT_TABS.length;
-					List<TitleFragment> viewList = new ArrayList<TitleFragment>(
-							count);
+					List<TitleFragment> viewList = new ArrayList<TitleFragment>(count);
 
 					View page1 = loadTimePage();
 					viewList.add(new ViewFragment(page1, CONTENT_TABS[0]));
@@ -106,15 +100,38 @@ public class funCinemaController extends ActivityController
 					View page3 = loadCommentPage();
 					viewList.add(new ViewFragment(page3, CONTENT_TABS[2]));
 
-					ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(
-							context.getSupportFragmentManager(), viewList);
-					ViewPager viewPager = (ViewPager) contexView
-							.findViewById(R.id.pager);
+
+					View profileButton = mainView.findViewById(R.id.profile_button);
+					profileButton.setOnClickListener(new OnClickListener()
+					{
+						@Override
+						public void onClick(View v)
+						{
+							Intent intent=new Intent(context,ProfilePage.class);
+							context.startActivity(intent);
+						}
+					});
+					
+					View checkListButton = mainView.findViewById(R.id.fast_check_btn);
+					checkListButton.setOnClickListener(new OnClickListener()
+					{
+						@Override
+						public void onClick(View v)
+						{
+							Intent intent=new Intent(context,funObjectList.class);
+							intent.putExtra("fast_checkin", true);
+							context.startActivity(intent);
+						}
+					});
+					
+					ViewFragmentAdapter pagerAdapter = new ViewFragmentAdapter(context.getSupportFragmentManager(), viewList);
+					ViewPager viewPager = (ViewPager) mainView.findViewById(R.id.pager);
 					viewPager.setAdapter(pagerAdapter);
 					viewPager.setCurrentItem(0);
 
-					TabPageIndicator indicator = (TabPageIndicator) contexView
-							.findViewById(R.id.indicator);
+					TabPageIndicator indicator = (TabPageIndicator) mainView.findViewById(R.id.indicator);
+					tv1 = (TextView) mainView.findViewById(R.id.object_name);
+					
 					indicator.setViewPager(viewPager);
 
 					cinema.loadAdditionalInfo();
@@ -128,9 +145,7 @@ public class funCinemaController extends ActivityController
 					onContentLoaded();
 				}
 			};
-			if (cinema == null
-					|| !cinema.equals(MainApplication.mapItemContainer
-							.getSelectedItem()))
+			if (cinema == null || !cinema.equals(MainApplication.getMapItemContainer().getSelectedItem()))
 			{
 				context.setContentView(R.layout.waiting_layout);
 				loadingTask.execute();
@@ -145,7 +160,7 @@ public class funCinemaController extends ActivityController
 
 	private void onContentLoaded()
 	{
-		context.setContentView(contexView);
+		context.setContentView(mainView);
 		showCinema(cinema);
 	}
 
@@ -154,12 +169,10 @@ public class funCinemaController extends ActivityController
 		tv1.setText(cinema.getName());
 		if (cinema.isHallInfoFilled())
 		{
-			new CinemaTimeTableAdapter(cinema.getTimeTable(), activitycontext)
-					.fillLayout(timeList);
+			new CinemaTimeTableAdapter(cinema.getTimeTable(), activitycontext).fillLayout(timeList);
 		} else
 		{
 		}
-		titleTV.setText(cinema.getName());
 		if (cinema.getAddress() != null && !cinema.getAddress().equals(""))
 		{
 			addressTV.setText(cinema.getAddress());
@@ -167,7 +180,6 @@ public class funCinemaController extends ActivityController
 		} else
 			addressTV.setVisibility(View.GONE);
 		hereNowTV.setText(Integer.toString(cinema.getHereNow()));
-		kitchenTV.setText(cinema.getCategoriesString());
 
 		if (cinema.isCheckedIn())
 			setStateChecked();
@@ -187,8 +199,7 @@ public class funCinemaController extends ActivityController
 					@Override
 					public void onClick(View v)
 					{
-						Intent intent = new Intent(Intent.ACTION_DIAL, Uri
-								.parse("tel:" + phoneTV.getPhone()));
+						Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneTV.getPhone()));
 						context.startActivity(intent);
 					}
 				});
@@ -196,13 +207,13 @@ public class funCinemaController extends ActivityController
 			}
 		loadComments();
 	}
-	
+
 	private void loadComments()
 	{
-		if (cinema.getOptionalInfo()!=null)
+		if (cinema.getOptionalInfo() != null)
 		{
-			CommentsWrapper commentsWrapper=new CommentsWrapper(cinema,context);
-		//	commentsListLayout.addView(commentsWrapper.getView());
+			CommentsWrapper commentsWrapper = new CommentsWrapper(cinema, context);
+			// commentsListLayout.addView(commentsWrapper.getView());
 		}
 	}
 
@@ -215,7 +226,7 @@ public class funCinemaController extends ActivityController
 	private View loadTimePage()
 	{
 		View v = inflater.inflate(R.layout.controller_cinema_page1, null);
-		tv1 = (TextView) v.findViewById(R.id.object_name);
+
 		// timeTable = (TextView) context.findViewById(R.id.timetable);
 		timeList = (LinearLayout) v.findViewById(R.id.time_list_view);
 		return v;
@@ -224,7 +235,6 @@ public class funCinemaController extends ActivityController
 	private View loadTitlePage()
 	{
 		View v = inflater.inflate(R.layout.controller_cinema_page2, null);
-		titleTV = (TextView) v.findViewById(R.id.food_title);
 		addressTV = (TextView) v.findViewById(R.id.food_address);
 		lunchPriceTV = (TextView) v.findViewById(R.id.food_lunch_price);
 		avgPriceTV = (TextView) v.findViewById(R.id.food_avg_price);
@@ -232,7 +242,6 @@ public class funCinemaController extends ActivityController
 		checkInBtn = (RelativeLayout) v.findViewById(R.id.checkin_block);
 		mapInBtn = (RelativeLayout) v.findViewById(R.id.map_block);
 		todoBtn = (RelativeLayout) v.findViewById(R.id.todo_block);
-		kitchenTV = (TextView) v.findViewById(R.id.food_kitchen);
 		hereNowTV = (TextView) v.findViewById(R.id.here_now_tv);
 		phoneLayout = (LinearLayout) v.findViewById(R.id.phone_block);
 
@@ -275,8 +284,7 @@ public class funCinemaController extends ActivityController
 	private View loadCommentPage()
 	{
 		View v = inflater.inflate(R.layout.controller_food_page2, null);
-		commentsListLayout = (LinearLayout) v
-				.findViewById(R.id.comment_list_layout);
+		commentsListLayout = (LinearLayout) v.findViewById(R.id.comment_list_layout);
 		addCommentBtn = (View) v.findViewById(R.id.add_comment);
 		addCommentBtn.setOnClickListener(new OnClickListener()
 		{
@@ -286,6 +294,8 @@ public class funCinemaController extends ActivityController
 				openAddCommentActivity();
 			}
 		});
+		CommentsWrapper wrapper=new CommentsWrapper(cinema, context);
+		commentsListLayout.addView(wrapper.getView());
 		return v;
 	}
 
@@ -337,7 +347,7 @@ class CinemaTimeTableAdapter extends BaseAdapter
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent1)
 	{
-		convertView = ((FilmLine)table.getFilmStr(position)).getView(context);
+		convertView = ((FilmLine) table.getFilmStr(position)).getView(context);
 		convertView.setMinimumHeight(60);
 		return convertView;
 	}
@@ -351,6 +361,7 @@ class CinemaTimeTableAdapter extends BaseAdapter
 			layout.addView(v);
 		}
 	}
+
 	class ViewHolder
 	{
 		TextView text;
