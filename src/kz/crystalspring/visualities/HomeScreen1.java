@@ -3,6 +3,7 @@ package kz.crystalspring.visualities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.viewpagerindicator.TabPageIndicator;
 import com.viewpagerindicator.ViewFragment;
 import com.viewpagerindicator.ViewFragmentAdapter;
@@ -104,7 +105,7 @@ public class HomeScreen1 extends FragmentActivity implements RefreshableMapList
 				}
 			}
 		}, 10);
-		MainApplication.tracker.startNewSession(MainApplication.ANALYTIC_SESSION,20,this);
+		EasyTracker.getInstance().activityStop(this);
 	}
 
 	protected void runItemActivityWithFilter(String visibleFilter)
@@ -120,6 +121,7 @@ public class HomeScreen1 extends FragmentActivity implements RefreshableMapList
 	{
 		super.onStop();
 		Log.w("HomeScreen", "Stopped");
+		EasyTracker.getInstance().activityStop(this);
 	}
 
 	@Override
@@ -170,7 +172,6 @@ public class HomeScreen1 extends FragmentActivity implements RefreshableMapList
 	{
 		super.onDestroy();
 		Log.w("HomeScreen", "Destroyed");
-		MainApplication.tracker.stopSession();
 	}
 
 	private List<TitleFragment> fillObjectAndEventLists()

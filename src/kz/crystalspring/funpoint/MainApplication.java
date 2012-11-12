@@ -11,7 +11,7 @@ import org.apache.http.message.BasicNameValuePair;
 import net.londatiga.fsq.FoursquareApp;
 
 import com.boomerang.pending.PendingWorkAggregator;
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.google.android.maps.GeoPoint;
 
 import kz.crystalspring.android_client.C_NetHelper;
@@ -68,10 +68,6 @@ public class MainApplication extends Application
 	public static final int NO_CONNECTION = 4;
 	public static int internetConnection = -1;
 
-	
-	public static final String ANALYTIC_SESSION = "UA-32200316-5";
-	public static GoogleAnalyticsTracker tracker;
-	
 	LocationUpdater updater;
 
 	public static final int ALPHA = 100;
@@ -100,11 +96,7 @@ public class MainApplication extends Application
 		context = getApplicationContext();
 		FsqApp = new FoursquareApp(this, FSQConnector.CLIENT_ID, FSQConnector.CLIENT_SECRET);
 		cityManager = new CityManager(context);
-
-		tracker=GoogleAnalyticsTracker.getInstance();
-		
 		C_NetHelper.SyncData(getApplicationContext(), false, false); 
-		
 		updater = new LocationUpdater(this);
 		onResume();
 	}

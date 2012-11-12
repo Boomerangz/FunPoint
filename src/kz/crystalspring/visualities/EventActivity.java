@@ -1,5 +1,7 @@
 package kz.crystalspring.visualities;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.events.Event;
@@ -76,7 +78,6 @@ public class EventActivity extends Activity
 				protected void onPostExecute(Object result)
 				{
 					super.onPostExecute(result);
-					MainApplication.tracker.trackPageView("Event_Category="+event.getShortCharacteristic()+", Eventname="+event.getName());
 					setContentView(mainView);
 				};
 			};
@@ -86,6 +87,14 @@ public class EventActivity extends Activity
 			MainApplication.loadNoInternetPage();
 			finish();
 		}
+		EasyTracker.getInstance().activityStart(this);
+	}
+	
+	@Override 
+	public void onStop()
+	{
+		super.onStop();
+		EasyTracker.getInstance().activityStart(this);
 	}
 
 	private void showAdditionalInfo()

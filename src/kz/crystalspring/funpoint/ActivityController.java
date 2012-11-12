@@ -15,6 +15,8 @@ import kz.crystalspring.funpoint.venues.MapItem;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -45,7 +47,6 @@ public abstract class ActivityController
 	protected void onResume()
 	{
 		mapItem = (MapItem) MainApplication.getMapItemContainer().getSelectedItem();
-		MainApplication.tracker.trackPageView("/PlacePage Place_Name="+mapItem.toString()+", Place_Characteristic="+mapItem.toStringLong());
 	}
 
 	protected abstract void onPause();

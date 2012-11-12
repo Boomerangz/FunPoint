@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.viewpagerindicator.TabPageIndicator;
 import com.viewpagerindicator.ViewFragment;
 import com.viewpagerindicator.ViewFragmentAdapter;
@@ -137,13 +138,7 @@ public class funObjectList extends FragmentActivity implements RefreshableMapLis
 					searchEdit.setVisibility(View.GONE);
 			}
 		});
-		try
-		{
-			MainApplication.tracker.trackPageView("/PlacesList placeCategory=" + MainApplication.getMapItemContainer().getCategoryName());
-		} catch (NullPointerException e)
-		{
-			e.printStackTrace();
-		}
+		EasyTracker.getInstance().activityStart(this);
 	}
 
 	@Override
@@ -151,6 +146,7 @@ public class funObjectList extends FragmentActivity implements RefreshableMapLis
 	{
 		// super.onPause();
 		MainApplication.getMapItemContainer().setVisibleFilter(null);
+		EasyTracker.getInstance().activityStop(this);
 		finish();
 	}
 
@@ -427,7 +423,6 @@ class ObjectListFragment extends TitleFragment
 		objectListView.setLayoutParams(new ScrollView.LayoutParams(ScrollView.LayoutParams.FILL_PARENT,
 				ScrollView.LayoutParams.WRAP_CONTENT));
 		objectListView.setAdapter(adapter);
-		// objectListView.setFastScrollEnabled(true);
 		return objectListView;
 
 	}
@@ -435,7 +430,9 @@ class ObjectListFragment extends TitleFragment
 	@Override
 	public String getTitle()
 	{
-		return "Объекты";
+		if (MainApplication.getMapItemContainer().getCategoryName().toUpperCase().equals("КИНО"))
+			return "Кинотеатры";
+		return "Места";
 	}
 
 }

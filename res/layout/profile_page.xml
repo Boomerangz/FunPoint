@@ -109,7 +109,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/margin"
-                android:text="Подключитесь бла-бла-бла" />
+                android:text="Подключитесь бла-бла-бла"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/main_info_layout"

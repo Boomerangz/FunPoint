@@ -152,10 +152,14 @@ public class EventContainer
 	public List<Event> getUnFilteredEventsList()
 	{
 		List<Event> eventsWithoutCinema = new ArrayList();
-		for (Event event : eventsList)
+		synchronized (eventsList)
 		{
-			if (SimpleEvent.class.isInstance(event))
-				eventsWithoutCinema.add((SimpleEvent) event);
+			eventsWithoutCinema.addAll(eventsList);
+		}
+		for (Event event : eventsWithoutCinema)
+		{
+			if (!SimpleEvent.class.isInstance(event))
+				eventsWithoutCinema.remove(event);
 		}
 		Collections.sort(eventsWithoutCinema, new Comparator<Event>()
 		{

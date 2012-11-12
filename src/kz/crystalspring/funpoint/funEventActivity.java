@@ -1,5 +1,7 @@
 package kz.crystalspring.funpoint;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 import kz.com.pack.jam.R;
 import kz.crystalspring.cinema.CinemaTimeTable2;
 import kz.crystalspring.cinema.FilmLine;
@@ -85,7 +87,6 @@ public class funEventActivity extends Activity
 			{
 				super.onPostExecute(result);
 				setContentView(mainView);
-				MainApplication.tracker.trackPageView("Event_Category="+event.getShortCharacteristic()+", Eventname="+event.getName());
 				if (FilmEvent.class.isInstance(event))
 				{
 					FilmEvent fEvent = (FilmEvent) event;
@@ -95,6 +96,14 @@ public class funEventActivity extends Activity
 			}
 		};
 		task.execute();
+		EasyTracker.getInstance().activityStart(this);
+	}
+	
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		EasyTracker.getInstance().activityStart(this);
 	}
 }
 

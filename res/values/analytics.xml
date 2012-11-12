@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="https://schemas.android.com/tools" tools:ignore="TypographyDashes">
+
+    <string name="ga_trackingId">UA-32200316-5</string>
+
+    <bool name="ga_autoActivityTracking">true</bool>
+    <bool name="ga_reportUncaughtExceptions">true</bool>
+
+    <integer name="ga_sessionTimeout">60</integer>
+
+    <string name="kz.crystalspring.funpoint.funObjectDetail">Place Details</string>
+    <string name="kz.crystalspring.visualities.HomeScreen1">HomeScreen</string>
+    <string name="kz.crystalspring.visualities.RatingActvity">After Checkin</string>
+    <string name="kz.crystalspring.funpoint.funMap">Map</string>
+    <string name="kz.crystalspring.funpoint.funEventActivity">Event</string>
+    <string name="kz.crystalspring.funpoint.funObjectList">Places List</string>
+    <string name="kz.crystalspring.funpoint.WriteCommentActivity">Comment or Checkin</string>
+    <string name="kz.crystalspring.visualities.gallery.GalleryActvity">Gallery</string>
+	<bool name="ga_debug">true</bool>
+</resources>

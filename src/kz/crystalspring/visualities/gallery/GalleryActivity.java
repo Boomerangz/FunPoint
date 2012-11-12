@@ -1,5 +1,7 @@
 package kz.crystalspring.visualities.gallery;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.FullScrLoadingImageActivity;
 import kz.crystalspring.funpoint.MainApplication;
@@ -37,6 +39,7 @@ public class GalleryActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gallery_page);
 		galleryView = (WebViewGallery) findViewById(R.id.gallery);
+		EasyTracker.getInstance().activityStart(this);
 		// mainLayout = (LinearLayout) findViewById(R.id.main_layout);
 	}
 
@@ -55,6 +58,12 @@ public class GalleryActivity extends Activity
 				selectedImage = 0;
 			galleryView.setSelection(selectedImage);
 		}
+	}
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		EasyTracker.getInstance().activityStop(this);
 	}
 
 	private void fillLayout(ImageContainer item)

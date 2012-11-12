@@ -10,12 +10,50 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp" />
 
-    <Button
+    <LinearLayout
         android:id="@+id/login_view"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Необходимо подключиться"
-        android:visibility="gone" />
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/margin"
+        android:paddingLeft="@dimen/margin"
+        android:paddingRight="@dimen/margin"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:id="@+id/list_block"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.05"
+            android:background="@color/list_bg"
+            android:padding="@dimen/margin" >
+
+            <ImageView
+                android:id="@+id/loading_imageview"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/foursquare" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="6dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/user_action"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="Присоедините ваш аккаунт из Forsquare чтобы делиться впечатлениями с друзьями и читать их комментарии."
+                    android:textColor="@color/black"
+                    android:textSize="7pt" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/listView1"

@@ -1,5 +1,7 @@
 package kz.crystalspring.funpoint;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 import kz.crystalspring.funpoint.item_page.foodController;
 import kz.crystalspring.funpoint.item_page.simpleController;
 import kz.crystalspring.funpoint.venues.FSQItem;
@@ -20,6 +22,7 @@ public class funObjectDetail extends FragmentActivity
 	{
 		super.onCreate(savedInstanceState);
 		setcontroller();
+		EasyTracker.getInstance().activityStart(this);
 	}
 
 	private void setcontroller()
@@ -56,6 +59,12 @@ public class funObjectDetail extends FragmentActivity
 		controller.onResume();
 	}
 
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		EasyTracker.getInstance().activityStart(this);
+	}
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{

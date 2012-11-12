@@ -2,6 +2,9 @@ package kz.crystalspring.funpoint;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.analytics.tracking.android.EasyTracker;
+
 import net.londatiga.fsq.FoursquareApp;
 import net.londatiga.fsq.FoursquareApp.FsqAuthListener;
 import kz.com.pack.jam.R;
@@ -38,6 +41,8 @@ public class ProfilePage extends Activity implements RefreshableMapList
 		super.onCreate(null);
 		setContentView(R.layout.profile_page);
 
+		EasyTracker.getInstance().activityStart(this);
+		
 		spinner = (Spinner) findViewById(R.id.spinner_city);
 		View button1 = findViewById(R.id.button1);
 		
@@ -63,7 +68,6 @@ public class ProfilePage extends Activity implements RefreshableMapList
 			@Override
 			public void onClick(View v)
 			{
-				MainApplication.tracker.trackPageView("/ProfilePage authorization began");
 				mFsqApp.authorize(ProfilePage.this);
 			}
 		});
@@ -95,6 +99,13 @@ public class ProfilePage extends Activity implements RefreshableMapList
 			spinner.setSelection(dataAdapter.positionOf(MainApplication.getCityManager().getSelectedCity()) + 1);
 		else
 			spinner.setSelection(0);
+	}
+	
+	@Override
+	public void onStop()
+	{
+		super.onStop();
+		EasyTracker.getInstance().activityStop(this);
 	}
 
 	class CitySpinnerAdapter extends ArrayAdapter<String>
@@ -146,8 +157,6 @@ public class ProfilePage extends Activity implements RefreshableMapList
 		MainApplication.refreshable = this;
 		user = FSQUser.getInstance();
 		user.fillIfNot();
-		if (user.isFilled())
-			MainApplication.tracker.trackPageView("/ProfilePage User_Filled="+Boolean.valueOf(user.isFilled()).toString());
 		refreshMapItems();
 	}
 

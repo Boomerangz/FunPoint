@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.RefreshableMapList;
@@ -45,6 +47,13 @@ public class RatingActivity extends Activity implements RefreshableMapList
 		checkinPoints = (TextView) findViewById(R.id.points_view);
 		checkinMessage = (TextView) findViewById(R.id.message);
 		ratingLayout = (LinearLayout) findViewById(R.id.rating_layout);
+		EasyTracker.getInstance().activityStart(this);
+	}
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		EasyTracker.getInstance().activityStop(this);
 	}
 
 	@Override

@@ -206,15 +206,19 @@ class DateFilmLine
 	public void addCinemaTime(CinemaTime ct)
 	{
 		timeList.add(ct);
+		sort();
+	}
+	void sort()
+	{
 		Collections.sort(timeList, new Comparator<CinemaTime>()
-		{
+				{
 
-			@Override
-			public int compare(CinemaTime lhs, CinemaTime rhs)
-			{
-				return lhs.getTime().compareTo(rhs.getTime());
-			}
-		});
+					@Override
+					public int compare(CinemaTime lhs, CinemaTime rhs)
+					{
+						return lhs.getTime().compareTo(rhs.getTime());
+					}
+				});
 	}
 }
 
@@ -242,7 +246,6 @@ class CinemaTime
 			btn.getBackground().setAlpha(MainApplication.ALPHA);
 			btn.setOnClickListener(new OnClickListener()
 			{
-
 				@Override
 				public void onClick(View v)
 				{
@@ -258,9 +261,7 @@ class CinemaTime
 					wb.setWebViewClient(new WebViewClient());
 					wb.loadUrl(url);
 					System.out.println("..loading url..");
-					MainApplication.tracker.trackPageView("Ticketon_url="+url);
 					dialog.show();
-					
 				}
 			});
 			timeView = btn;

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
@@ -70,7 +71,7 @@ public class funMap extends MapActivity implements LocationListener, Refreshable
 		refreshMap();
 		if (MainApplication.getMapItemContainer().getSelectedItem() != null)
 			selectItem(MainApplication.getMapItemContainer().getSelectedMapItem());
-		MainApplication.tracker.trackPageView("/Map");
+		EasyTracker.getInstance().activityStart(this);
 	}
 
 	private void putItemsOnMap()
@@ -90,6 +91,7 @@ public class funMap extends MapActivity implements LocationListener, Refreshable
 	{
 		super.onPause();
 		mMyLocationOverlay.disableMyLocation();
+		EasyTracker.getInstance().activityStop(this);
 	}
 
 	public void refreshMap()

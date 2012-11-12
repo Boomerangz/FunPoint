@@ -127,7 +127,7 @@ public class ImageCache
 				Bitmap bitmap = null;
 				bitmap = BitmapFactory.decodeFile(fName);
 				pushBitmapToBuffer(sUrl, bitmap);
-				if (bitmap.isRecycled())
+				if (bitmap==null||bitmap.isRecycled())
 				{
 					Log.w("ImageCache","Loaded recycled Bitmap");
 					return null;

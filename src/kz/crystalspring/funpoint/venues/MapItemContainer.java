@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +34,7 @@ public class MapItemContainer
 {
 	private List<String> visibleFilterMap = new ArrayList<String>();
 	private List<MapItem> mapItemArray = new ArrayList<MapItem>();
+	private Map<String, MapItem> mapItemMap = new HashMap<String, MapItem>();
 
 	private Context context;
 	private GeoPoint point = null;
@@ -81,18 +84,14 @@ public class MapItemContainer
 		@Override
 		public int compare(MapItem lhs, MapItem rhs)
 		{
-			Float lDistance = lhs.distanceTo(MainApplication
-					.getCurrentLocation());
-			Float rDistance = rhs.distanceTo(MainApplication
-					.getCurrentLocation());
+			Float lDistance = lhs.distanceTo(MainApplication.getCurrentLocation());
+			Float rDistance = rhs.distanceTo(MainApplication.getCurrentLocation());
 			Float distance = Math.abs(lDistance - rDistance);
 			Integer checkinPriority = null;
 
-			if (FSQConnector.isInEverCheckList(lhs.getId())
-					&& !FSQConnector.isInEverCheckList(rhs.getId()))
+			if (FSQConnector.isInEverCheckList(lhs.getId()) && !FSQConnector.isInEverCheckList(rhs.getId()))
 				checkinPriority = LHS_WIN;
-			else if (!FSQConnector.isInEverCheckList(lhs.getId())
-					&& FSQConnector.isInEverCheckList(rhs.getId()))
+			else if (!FSQConnector.isInEverCheckList(lhs.getId()) && FSQConnector.isInEverCheckList(rhs.getId()))
 				checkinPriority = RHS_WIN;
 			else
 				checkinPriority = DRAW;
@@ -135,12 +134,11 @@ public class MapItemContainer
 	{
 		synchronized (visibleFilterMap)
 		{
-			if (visibleFilterMap.size()==0)
+			if (visibleFilterMap.size() == 0)
 				throw new Exception("Empty Filter List");
 			List<MapItem> filteredList = new ArrayList<MapItem>();
 			for (MapItem item : itemArray)
-				if (visibleFilterMap.contains(item.getObjTypeId())
-						|| visibleFilterMap.contains(MapItem.FSQ_UNDEFINED))
+				if (visibleFilterMap.contains(item.getObjTypeId()) || visibleFilterMap.contains(MapItem.FSQ_UNDEFINED))
 					filteredList.add(item);
 			return filteredList;
 		}
@@ -177,8 +175,11 @@ public class MapItemContainer
 
 	public void addItem(MapItem item)
 	{
-		if (!mapItemArray.contains(item))
+		if (!mapItemMap.containsKey(item.getId()))
+		{
 			mapItemArray.add(item);
+			mapItemMap.put(item.getId(), item);
+		}
 	}
 
 	public void addItemsList(List<MapItem> items)
@@ -189,42 +190,42 @@ public class MapItemContainer
 
 	private void saveItemListToFile()
 	{
-//		try
-//		{
-//			FileOutputStream fos = context.openFileOutput(FILENAME,
-//					Context.MODE_PRIVATE);
-//			ObjectOutputStream oos = new ObjectOutputStream(fos);
-//			oos.writeObject(mapItemArray);
-//			oos.close();
-//		} catch (Exception e)
-//		{
-//			e.printStackTrace();
-//		}
+		// try
+		// {
+		// FileOutputStream fos = context.openFileOutput(FILENAME,
+		// Context.MODE_PRIVATE);
+		// ObjectOutputStream oos = new ObjectOutputStream(fos);
+		// oos.writeObject(mapItemArray);
+		// oos.close();
+		// } catch (Exception e)
+		// {
+		// e.printStackTrace();
+		// }
 	}
 
 	private List<MapItem> itemListFromFile = null;
 
 	private List<MapItem> getMapItemListFromFile()
 	{
-//		if (itemListFromFile != null)
-//			return itemListFromFile;
-//		else
-//		{
-//			List<MapItem> itemArray = null;
-//			try
-//			{
-//				FileInputStream fos = context.openFileInput(FILENAME);
-//				ObjectInputStream ois = new ObjectInputStream(fos);
-//				itemArray = (List<MapItem>) ois.readObject();
-//				ois.close();
-//			} catch (Exception e)
-//			{
-//				itemArray = new ArrayList(0);
-//				e.printStackTrace();
-//			}
-//			itemListFromFile = itemArray;
-//			return itemArray;
-//		}
+		// if (itemListFromFile != null)
+		// return itemListFromFile;
+		// else
+		// {
+		// List<MapItem> itemArray = null;
+		// try
+		// {
+		// FileInputStream fos = context.openFileInput(FILENAME);
+		// ObjectInputStream ois = new ObjectInputStream(fos);
+		// itemArray = (List<MapItem>) ois.readObject();
+		// ois.close();
+		// } catch (Exception e)
+		// {
+		// itemArray = new ArrayList(0);
+		// e.printStackTrace();
+		// }
+		// itemListFromFile = itemArray;
+		// return itemArray;
+		// }
 		return new ArrayList(0);
 	}
 
@@ -243,10 +244,8 @@ public class MapItemContainer
 			{
 				try
 				{
-					addItemsList(FSQConnector.getByName(MainApplication
-							.getCurrentLocation().getLatitudeE6() / 1e6,
-							MainApplication.getCurrentLocation()
-									.getLongitudeE6() / 1e6, category, name));
+					addItemsList(FSQConnector.getByName(MainApplication.getCurrentLocation().getLatitudeE6() / 1e6, MainApplication
+							.getCurrentLocation().getLongitudeE6() / 1e6, category, name));
 					saveItemListToFile();
 				} catch (Exception e)
 				{
@@ -324,17 +323,19 @@ public class MapItemContainer
 
 	public MapItem getItemById(String VenueID)
 	{
-		MapItem item = null;
-		for (MapItem mItem : getUnFilteredItemList())
-		{
-			if (mItem.getId().equals(VenueID))
+		MapItem item = mapItemMap.get(VenueID);
+		if (item == null)
+			for (MapItem mItem : getUnFilteredItemList())
 			{
-				item = mItem;
-				break;
+				if (mItem.getId().equals(VenueID))
+				{
+					item = mItem;
+					break;
+				}
 			}
-		}
 		return item;
 	}
+	
 
 	public String getCategory()
 	{
@@ -358,8 +359,7 @@ public class MapItemContainer
 		String localCat = null;
 		try
 		{
-			localCat = place.getJSONArray("categories").getJSONObject(0)
-					.getString("id");
+			localCat = place.getJSONArray("categories").getJSONObject(0).getString("id");
 			String globalCat = FSQConnector.getGlobalCategory(localCat);
 			localCat = globalCat;
 		} catch (JSONException e)
@@ -396,5 +396,11 @@ public class MapItemContainer
 	public void clearContent()
 	{
 		mapItemArray = new ArrayList();
+		mapItemMap.clear();
+	}
+
+	public boolean hasItemById(String id)
+	{
+		return mapItemMap.containsKey(id);
 	}
 }

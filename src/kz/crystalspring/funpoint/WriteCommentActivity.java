@@ -8,6 +8,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 import kz.com.pack.jam.R;
 import kz.crystalspring.funpoint.venues.FSQConnector;
 import kz.crystalspring.funpoint.venues.FSQItem;
@@ -28,6 +30,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -68,25 +71,23 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 		mImageView = (ImageView) findViewById(R.id.imageView1);
 		_path = Environment.getExternalStorageDirectory() + "/images/make_machine_example.jpg";
 
-		String mode="";
+		String mode = "";
 		switch (getIntent().getExtras().getInt("requestCode"))
 		{
 		case COMMENT_MODE:
-			mode="Checkin";
+			mode = "Checkin";
 			header.setText("Комментарий");
 			break;
 		case CHECKIN_MODE:
-			mode="Write Comment";
+			mode = "Write Comment";
 			header.setText("Отметиться");
 			break;
 		}
-		String sPlaceName=MainApplication.getMapItemContainer().getSelectedMapItem().toString();
+		String sPlaceName = MainApplication.getMapItemContainer().getSelectedMapItem().toString();
 		placeName.setText(sPlaceName);
 
-		
-		MainApplication.tracker.trackPageView("/"+mode+"Page Place_Name="+placeName);
-		
-		
+		EasyTracker.getInstance().activityStart(this);
+
 		okButton.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -129,6 +130,13 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 			}
 		});
 
+	}
+
+	@Override
+	public void onStop()
+	{
+		super.onStop();
+		EasyTracker.getInstance().activityStop(this);
 	}
 
 	@Override
@@ -299,7 +307,13 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 					if (btm.getHeight() > 1000 || (btm.getWidth() > 1000))
 						btm = Bitmap.createScaledBitmap(btm, btm.getWidth() / 2, btm.getHeight() / 2, true);
 					mImageView.setImageBitmap(btm);
-					mImageView.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
+					DisplayMetrics metrics = new DisplayMetrics();
+					getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+					float K = (float) metrics.widthPixels / btm.getWidth();
+					mImageView.getLayoutParams().height = Math.round(btm.getHeight() * K);
+					mImageView.getLayoutParams().width = Math.round(btm.getWidth() * K);
+
 					imageBitmap = btm;
 					mImageView.setOnClickListener(openPhotoListner);
 					clearButton.setVisibility(View.VISIBLE);
@@ -324,10 +338,20 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 		Bitmap mLargeBitmap = null;
 		mLargeBitmap = BitmapFactory.decodeFile(_path, options);
 		Bitmap mImageBitmap = mLargeBitmap;// Bitmap
+
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+		if (metrics != null)
+		{
+			float K = (float) metrics.widthPixels / mImageBitmap.getWidth();
+			mImageView.getLayoutParams().height = Math.round(mImageBitmap.getHeight() * K);
+			mImageView.getLayoutParams().width = Math.round(mImageBitmap.getWidth() * K);
+		}
 		mImageView.setImageBitmap(mImageBitmap);
 		imageBitmap = mImageBitmap;
+
 		mImageView.setOnClickListener(openPhotoListner);
-		mImageView.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
 		clearButton.setVisibility(View.VISIBLE);
 	}
 
@@ -347,7 +371,7 @@ public class WriteCommentActivity extends Activity implements RefreshableMapList
 		{
 			Intent intent = new Intent(this, FullScrLoadingImageActivity.class);
 			UrlDrawable drwbl = new UrlDrawable();
-			drwbl.bigUrl="file://"+_path;
+			drwbl.bigUrl = "file://" + _path;
 
 			MainApplication.selectedItemPhoto = drwbl;
 

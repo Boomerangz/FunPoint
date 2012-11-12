@@ -155,10 +155,8 @@ public class OptionalInfo
 			{
 				VenueComment comment = new VenueComment();
 				comment = comment.loadFromJSON(jObject.getJSONObject("response").getJSONObject("tip"));
-				ProjectUtils.addToBeginOfArrayList((ArrayList) commentList, comment).add(comment);
-				GregorianCalendar date = null;
-				date.add(Calendar.SECOND, (int) -date.getTimeInMillis());
-
+				commentList.add(0, comment);
+			//	ProjectUtils.addToBeginOfArrayList((ArrayList) commentList, comment).add(comment);
 			}
 		} catch (JSONException e)
 		{
@@ -180,8 +178,12 @@ public class OptionalInfo
 		{
 			while (loadingStatus == LOADING_NOW)
 			{
-				for (int i=0;i<65000;i++)
+				try
 				{
+					Thread.sleep(100);
+				} catch (InterruptedException e)
+				{
+					e.printStackTrace();
 				}
 			}
 		}
@@ -194,9 +196,8 @@ public class OptionalInfo
 			loadPhotoUrls(fsqJObject.getJSONObject("photos"));
 			loadComments(fsqJObject.getJSONObject("tips"));
 			loadPhones(fsqJObject.getJSONObject("contact"));
-		} catch (JSONException e)
+		} catch (Exception e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
