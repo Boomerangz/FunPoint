@@ -166,6 +166,7 @@ public class FilmLine
 
 class DateFilmLine
 {
+	private static final int COUNT_IN_ROW = 5;
 	Date date;
 	List<CinemaTime> timeList;
 
@@ -189,7 +190,7 @@ class DateFilmLine
 		ll.setMargins(margin, 0, 0, margin);
 		for (CinemaTime ct : timeList)
 		{
-			if (i == 4)
+			if (i == COUNT_IN_ROW)
 			{
 				tr = new TableRow(tableLayout.getContext());
 				tr.setLayoutParams(tlp);

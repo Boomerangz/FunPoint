@@ -84,9 +84,9 @@ public class CinemaTimeTable2
 				try
 				{
 					// //Log.w("CinemaTimeTable1","begin getting object");
-					//Log.w("CinemaTimeTable1", "object accepting begin");
+					// Log.w("CinemaTimeTable1", "object accepting begin");
 					JSONObject jEvent = jsonArray.getJSONObject(i);
-					//Log.w("CinemaTimeTable1", "parseBegin");
+					// Log.w("CinemaTimeTable1", "parseBegin");
 					// //Log.w("CinemaTimeTable1","end getting object");
 					String id;
 					String title;
@@ -101,10 +101,10 @@ public class CinemaTimeTable2
 							id = null;
 						title = jEvent.getString("name");
 					}
-					//Log.w("CinemaTimeTable1", "id parsed");
+					// Log.w("CinemaTimeTable1", "id parsed");
 					if (id != null)
 					{
-						
+
 						Date clearDate;
 						try
 						{
@@ -114,14 +114,14 @@ public class CinemaTimeTable2
 							clearDate = new Date();
 							e.printStackTrace();
 						}
-						//Log.w("CinemaTimeTable1", "date parsed");
+						// Log.w("CinemaTimeTable1", "date parsed");
 						String filmTime = time_formatter.format(clearDate);
 						clearDate.setHours(0);
 						clearDate.setMinutes(0);
 						clearDate.setSeconds(0);
 						String sHash = jEvent.getString("url_mobile");// "3:128:1348659300";//"1:71:1340860800";//
 						CinemaTime ct = new CinemaTime(filmTime, sHash);
-						//Log.w("CinemaTimeTable1", "CinemaTime created");
+						// Log.w("CinemaTimeTable1", "CinemaTime created");
 						FilmLine filmLine;
 						if (filmMap.containsKey(id))
 							filmLine = filmMap.get(id);
@@ -130,10 +130,10 @@ public class CinemaTimeTable2
 							filmLine = new FilmLine(title, id);
 							filmMap.put(id, filmLine);
 						}
-						//Log.w("CinemaTimeTable1", "FilmLine accepted");
+						// Log.w("CinemaTimeTable1", "FilmLine accepted");
 						// //Log.w("CinemaTimeTable1","object created");
 						filmLine.addCinemaTime(ct, clearDate);
-						//Log.w("CinemaTimeTable1", "added to filmline");
+						// Log.w("CinemaTimeTable1", "added to filmline");
 						// //Log.w("CinemaTimeTable1","object added");
 					}
 
@@ -156,7 +156,10 @@ public class CinemaTimeTable2
 
 	public int getFilmsCount()
 	{
-		return filmMap.size();
+		if (filmMap != null)
+			return filmMap.size();
+		else
+			return 0;
 	}
 
 	public Object getFilmStr(int position)

@@ -1,45 +1,23 @@
 package kz.crystalspring.pointplus;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.zip.GZIPInputStream;
 
-import kz.crystalspring.android_client.C_FileHelper;
-import kz.crystalspring.funpoint.MainApplication;
 import kz.sbeyer.atmpoint1.types.ItemLangValues;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.android.maps.GeoPoint;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.telephony.PhoneNumberUtils;
 
 public class ProjectUtils
 {
@@ -510,28 +488,8 @@ public class ProjectUtils
 		return newList;
 	}
 
-	public static JSONObject XML2JSON(String xml)
-	{
-		org.json.JSONObject xmlJSONObj = null;
-		try
-		{
-			if (xml != null)
-			{
-				xmlJSONObj = org.json.XML.toJSONObject(xml);
-				String jsonPrettyPrintString = xmlJSONObj.toString();
-				JSONObject jObject = new JSONObject(jsonPrettyPrintString);
-				return jObject;
-			}
-		} catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	public static byte[] getBytes(InputStream is) throws IOException
 	{
-
 		int len;
 		int size = 1024;
 		byte[] buf;
@@ -552,15 +510,10 @@ public class ProjectUtils
 		return buf;
 	}
 
-	public static String formatPhone(String phone)
+	public static String formatPhone(String unformattedNumber)
 	{
-		if (phone.length() == 10)
-		{
-			phone = "+7" + phone;
-		}
-		if (phone.substring(0, 1).equals("7") || phone.substring(0, 1).equals("8"))
-			phone = "+7" + phone.substring(1);
-		return phone;
+		String formattedNumber = PhoneNumberUtils.formatNumber(unformattedNumber);
+		return formattedNumber;
 	}
 
 	public static Object ifnull(Object a, Object b)

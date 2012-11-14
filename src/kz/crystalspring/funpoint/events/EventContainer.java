@@ -149,17 +149,16 @@ public class EventContainer
 		return list;
 	}
 
-	public List<Event> getUnFilteredEventsList()
+	public synchronized List<Event> getUnFilteredEventsList()
 	{
 		List<Event> eventsWithoutCinema = new ArrayList();
-		synchronized (eventsList)
+		for (int i = 0; i < eventsList.size(); i++)
 		{
-			eventsWithoutCinema.addAll(eventsList);
-		}
-		for (Event event : eventsWithoutCinema)
-		{
-			if (!SimpleEvent.class.isInstance(event))
-				eventsWithoutCinema.remove(event);
+			Event event = eventsList.get(i);
+			if (SimpleEvent.class.isInstance(event))
+			{
+				eventsWithoutCinema.add(event);
+			}
 		}
 		Collections.sort(eventsWithoutCinema, new Comparator<Event>()
 		{
@@ -170,18 +169,6 @@ public class EventContainer
 					return ((SimpleEvent) lhs).getEventDate().compareTo(((SimpleEvent) rhs).getEventDate());
 				else
 					return lhs.getName().compareTo(rhs.getName());
-			}
-		});
-		Collections.sort(eventsWithoutCinema, new Comparator<Event>()
-		{
-
-			@Override
-			public int compare(Event lhs, Event rhs)
-			{
-				if (lhs != null && rhs != null)
-					return lhs.getName().compareTo(rhs.getName());
-				else
-					return 0;
 			}
 		});
 		return eventsWithoutCinema;
