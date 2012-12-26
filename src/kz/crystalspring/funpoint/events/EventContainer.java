@@ -165,13 +165,17 @@ public class EventContainer
 			@Override
 			public int compare(Event lhs, Event rhs)
 			{
-				if (SimpleEvent.class.isInstance(lhs) && SimpleEvent.class.isInstance(rhs))
-					return ((SimpleEvent) lhs).getEventDate().compareTo(((SimpleEvent) rhs).getEventDate());
-				else
-					return lhs.getName().compareTo(rhs.getName());
+				try
+				{
+					if (SimpleEvent.class.isInstance(lhs) && SimpleEvent.class.isInstance(rhs))
+						return ((SimpleEvent) lhs).getEventDate().compareTo(((SimpleEvent) rhs).getEventDate());
+				} catch (NullPointerException e)
+				{
+					e.printStackTrace();
+				}
+				return lhs.getName().compareTo(rhs.getName());
 			}
 		});
 		return eventsWithoutCinema;
 	}
-
 }

@@ -1,10 +1,5 @@
 package kz.crystalspring.funpoint.venues;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,10 +11,8 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import kz.crystalspring.funpoint.CinemaTimeTable;
 import kz.crystalspring.funpoint.MainApplication;
 import kz.crystalspring.funpoint.events.Event;
-import kz.crystalspring.visualities.gallery.ImageContainer;
 import kz.sbeyer.atmpoint1.types.ItemCinema;
 import kz.sbeyer.atmpoint1.types.ItemFood;
 import kz.sbeyer.atmpoint1.types.ItemHotel;
@@ -27,8 +20,6 @@ import kz.sbeyer.atmpoint1.types.ItemHotel;
 import com.google.android.maps.GeoPoint;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.widget.SlidingDrawer;
 
 public class MapItemContainer
 {

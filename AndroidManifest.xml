@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="kz.com.pack.jam"
     android:debuggable="false"
-    android:versionCode="10"
-    android:versionName="1.9.3" >
+    android:versionCode="14"
+    android:versionName="1.9.5" >
 
-    <uses-sdk android:minSdkVersion="7" />
+    <uses-sdk android:minSdkVersion="8" />
 
     <supports-screens
         android:anyDensity="true"

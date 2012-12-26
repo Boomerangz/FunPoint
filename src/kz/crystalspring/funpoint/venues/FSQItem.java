@@ -60,7 +60,6 @@ public class FSQItem extends MapItem implements ImageContainer
 			loadCategories(jObject.getJSONArray("categories"));
 			if (jObject.has("hereNow"))
 				setHereNow(jObject.getJSONObject("hereNow").getInt("count"));
-			getCategory();
 		} catch (JSONException e)
 		{
 			e.printStackTrace();

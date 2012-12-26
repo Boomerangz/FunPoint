@@ -29,7 +29,7 @@ public class Splash extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
 		context = getApplicationContext();
-		
+		MainApplication.getInstance().onResume();
 		Thread t = new Thread()
 		{
 			@Override
@@ -46,7 +46,6 @@ public class Splash extends Activity
 					e.printStackTrace();
 				} finally
 				{
-					
 					startActivity(openMainPage);
 				}
 			}

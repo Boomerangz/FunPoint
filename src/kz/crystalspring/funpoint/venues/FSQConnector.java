@@ -283,11 +283,16 @@ public class FSQConnector
 		JSONObject jsonObj;
 		try
 		{
-			System.out.println("информация о ресторане");
-			System.out.println(response);
+//			System.out.println("информация о ресторане");
+//			System.out.println(response);
 			jsonObj = (JSONObject) new JSONObject(response);
 			return jsonObj.getJSONObject("response").getJSONObject("venue");
 		} catch (JSONException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+		catch (NullPointerException e)
 		{
 			e.printStackTrace();
 			return null;

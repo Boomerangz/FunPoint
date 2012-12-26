@@ -125,11 +125,18 @@ public class ImageCache
 				String fName = imageFile.getAbsolutePath();
 				int i = 0;
 				Bitmap bitmap = null;
-				bitmap = BitmapFactory.decodeFile(fName);
-				pushBitmapToBuffer(sUrl, bitmap);
-				if (bitmap==null||bitmap.isRecycled())
+				try
 				{
-					Log.w("ImageCache","Loaded recycled Bitmap");
+					bitmap = BitmapFactory.decodeFile(fName);
+					pushBitmapToBuffer(sUrl, bitmap);
+				} catch (OutOfMemoryError e)
+				{
+					e.printStackTrace();
+					bitmap=null;
+				}
+				if (bitmap == null || bitmap.isRecycled())
+				{
+					Log.w("ImageCache", "Loaded recycled Bitmap");
 					return null;
 				} else
 					return bitmap;
@@ -165,7 +172,7 @@ public class ImageCache
 				if (!listBit.contains(btm1) && !mapBit.containsValue(btm1))
 				{
 					unUsedBitmaps.remove(btm1);
-					//btm1.recycle();
+					// btm1.recycle();
 					Log.w("ImageCache", "Recycled");
 				}
 			}
@@ -233,12 +240,12 @@ public class ImageCache
 
 	public void useBitmap(Bitmap btm)
 	{
-//		if (unUsedBitmaps.contains(btm))
-//		{
-//			//unUsedBitmaps.remove(btm);
-//			Log.w("ImageCache", "Removed from Unused");
-//			upBitmapinList(btm);
-//		}
+		// if (unUsedBitmaps.contains(btm))
+		// {
+		// //unUsedBitmaps.remove(btm);
+		// Log.w("ImageCache", "Removed from Unused");
+		// upBitmapinList(btm);
+		// }
 	}
 
 	private void upBitmapinList(Bitmap btm)
@@ -266,7 +273,7 @@ public class ImageCache
 	public void unUse(Bitmap btm)
 	{
 		Log.w("ImageCache", "Added to Unused");
-		//unUsedBitmaps.add(btm);
+		// unUsedBitmaps.add(btm);
 		Log.w("ImageCache", "unused_size=" + Integer.toString(unUsedBitmaps.size()));
 	}
 }

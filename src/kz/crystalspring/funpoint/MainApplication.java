@@ -96,9 +96,8 @@ public class MainApplication extends Application
 		context = getApplicationContext();
 		FsqApp = new FoursquareApp(this, FSQConnector.CLIENT_ID, FSQConnector.CLIENT_SECRET);
 		cityManager = new CityManager(context);
-		C_NetHelper.SyncData(getApplicationContext(), false, false); 
+		C_NetHelper.SyncData(getApplicationContext(), false, false);
 		updater = new LocationUpdater(this);
-		onResume();
 	}
 
 	@Override
@@ -114,10 +113,12 @@ public class MainApplication extends Application
 		super.onTerminate();
 		Log.w("MainApplication", "Terminated");
 	}
+	
+	public static boolean loading=false;
 
 	public void onResume()
 	{
-		contentService=ContentService.getSingletone();
+		contentService = ContentService.getSingletone();
 		pwAggregator.setAbleToDo(true);
 		if (checkInternetConnection())
 		{
@@ -128,6 +129,7 @@ public class MainApplication extends Application
 				@Override
 				protected Object doInBackground(Object... params)
 				{
+					loading=true;
 					MainApplication.loadFromProxy();
 					return null;
 				}
@@ -138,6 +140,7 @@ public class MainApplication extends Application
 					MainApplication.loadAdditionalContent();
 					MainApplication.loadPoints();
 					new FileConnector(getApplicationContext());
+					loading=false;
 				}
 			};
 			task.execute();
@@ -152,14 +155,14 @@ public class MainApplication extends Application
 
 	public static MapItemContainer getMapItemContainer()
 	{
-		contentService=ContentService.getSingletone();
-		return (MapItemContainer) ProjectUtils.ifnull(contentService.mapItemContainer,new MapItemContainer(context));
+		contentService = ContentService.getSingletone();
+		return (MapItemContainer) ProjectUtils.ifnull(contentService.mapItemContainer, new MapItemContainer(context));
 	}
 
 	public static EventContainer getEventContainer()
 	{
-		contentService=ContentService.getSingletone();
-		return (EventContainer) ProjectUtils.ifnull(contentService.eventContainer,new EventContainer(context));
+		contentService = ContentService.getSingletone();
+		return (EventContainer) ProjectUtils.ifnull(contentService.eventContainer, new EventContainer(context));
 	}
 
 	private static void loadPoints()
@@ -274,6 +277,16 @@ public class MainApplication extends Application
 		// loadJamContent();
 	}
 
+	public void enableLocationUpdating()
+	{
+		updater.enableUpdating();
+	}
+
+	public void disableLocationUpdating()
+	{
+		updater.disableUpdating();
+	}
+
 	public static void loadUserActivity()
 	{
 		FSQUser.getInstance().fillIfNot();
@@ -331,6 +344,7 @@ class LocationUpdater implements LocationListener
 {
 	MainApplication app;
 	LocationManager locationManager;
+	String provider;
 
 	LocationUpdater(MainApplication context)
 	{
@@ -339,10 +353,16 @@ class LocationUpdater implements LocationListener
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_COARSE);
 		criteria.setPowerRequirement(Criteria.POWER_LOW);
-		String provider = locationManager.getBestProvider(criteria, true);
-		provider=(String) ProjectUtils.ifnull(provider,LocationManager.NETWORK_PROVIDER);
+		provider = locationManager.getBestProvider(criteria, true);
+		provider = (String) ProjectUtils.ifnull(provider, LocationManager.NETWORK_PROVIDER);
 		Location location = locationManager.getLastKnownLocation(provider);
 		updateWithLocation(location);
+		enableUpdating();
+	}
+
+	public void enableUpdating()
+	{
+
 		locationManager.requestLocationUpdates(provider, 30 * 1000, 1000, this);
 	}
 

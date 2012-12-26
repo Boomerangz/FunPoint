@@ -157,6 +157,11 @@ public class HomeScreen1 extends FragmentActivity implements RefreshableMapList
 		Log.w("HomeScreen", "Resumed");
 		MainApplication.refreshable = this;
 		refreshMapItems();
+		MainApplication.getInstance().enableLocationUpdating();
+		if (MainApplication.getMapItemContainer().getUnFilteredItemList().size()==0&&!MainApplication.loading)
+		{
+			MainApplication.getInstance().onResume();
+		}
 	}
 
 	@Override
@@ -164,7 +169,7 @@ public class HomeScreen1 extends FragmentActivity implements RefreshableMapList
 	{
 		super.onPause();
 		Log.w("HomeScreen", "Paused");
-		// finish();
+		MainApplication.getInstance().disableLocationUpdating();
 	}
 
 	@Override

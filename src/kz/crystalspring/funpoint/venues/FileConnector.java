@@ -220,7 +220,7 @@ public class FileConnector
 		try
 		{
 			return new JSONArray(sResponse);
-		} catch (JSONException e)
+		} catch (Exception e)
 		{
 			e.printStackTrace();
 			return null;

@@ -158,6 +158,17 @@ public class funObjectList extends FragmentActivity implements RefreshableMapLis
 		super.onResume();
 		MainApplication.refreshable = this;
 		refreshMapItems();
+		MainApplication.getInstance().enableLocationUpdating();
+		if (MainApplication.getMapItemContainer().getUnFilteredItemList().size()==0&&!MainApplication.loading)
+		{
+			MainApplication.getInstance().onResume();
+		}
+	}
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		MainApplication.getInstance().disableLocationUpdating();
 	}
 
 	private void filterByString(String filter)
@@ -365,7 +376,7 @@ class ObjectAdapter extends BaseAdapter
 		if (filteredData.size() > 0)
 		{
 			int size = filteredData.size();
-			size = (size < 30) ? size - 1 : 30 - 1;
+			size = (size < 50) ? size - 1 : 50 - 1;
 			filteredData = filteredData.subList(0, size);
 		}
 	}
